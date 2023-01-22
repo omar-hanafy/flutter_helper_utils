@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:helper_repository/src/extensions/nums.dart';
+import '../src.dart';
 
 class ConvertTypes {
   static num? toNum(dynamic object, {String? info}) {
