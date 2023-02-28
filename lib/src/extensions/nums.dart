@@ -1,9 +1,9 @@
 import 'dart:async';
 
 extension TryGetNumUtils on num? {
-  int? get tryToInt => this != null ? this!.toInt() : null;
+  int? get tryToInt => this?.toInt();
 
-  double? get tryToDouble => this != null ? this!.toDouble() : null;
+  double? get tryToDouble => this?.toDouble();
 }
 
 extension GetNumUtils on num {
@@ -78,5 +78,4 @@ extension GetNumUtils on num {
 //    _delayMaps.remove(callback);
 //  }
 //}
-
 }

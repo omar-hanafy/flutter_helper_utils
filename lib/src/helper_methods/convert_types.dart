@@ -8,7 +8,7 @@ class ConvertTypes {
       return null;
     }
     try {
-      return object as num?;
+      return num.tryParse(object);
     } catch (e) {
       log('toNum() Unsupported object type: ${info != null ? 'info: $info, ' : ''}exception message -> $e');
       return null;
