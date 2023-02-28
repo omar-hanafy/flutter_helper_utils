@@ -5,6 +5,10 @@ extension PlatformExtension on BuildContext {
       Theme.of(this).platform == TargetPlatform.iOS ||
       Theme.of(this).platform == TargetPlatform.android;
 
+  bool get isIOS => Theme.of(this).platform == TargetPlatform.iOS;
+
+  bool get isAndroid => Theme.of(this).platform == TargetPlatform.android;
+
   bool get isDesktop =>
       Theme.of(this).platform == TargetPlatform.macOS ||
       Theme.of(this).platform == TargetPlatform.windows ||
@@ -14,6 +18,10 @@ extension PlatformExtension on BuildContext {
 extension TargetPlatformExtension on TargetPlatform {
   bool get isMobile =>
       this == TargetPlatform.iOS || this == TargetPlatform.android;
+
+  bool get isIOS => this == TargetPlatform.iOS;
+
+  bool get isAndroid => this == TargetPlatform.android;
 
   bool get isDesktop =>
       this == TargetPlatform.linux ||

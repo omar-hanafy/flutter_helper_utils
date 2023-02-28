@@ -25,6 +25,7 @@ extension MapExt on Map<String, dynamic> {
           result[newKey] = value;
           return;
         }
+
         if (value is Map<String, dynamic>) {
           return step(value, newKey, currentDepth + 1);
         }
