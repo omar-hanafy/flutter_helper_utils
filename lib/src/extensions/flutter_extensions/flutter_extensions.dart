@@ -1,4 +1,5 @@
 export 'align.dart';
+export 'brightness_extension.dart';
 export 'center.dart';
 export 'container.dart';
 export 'context_extensions/context.dart';
