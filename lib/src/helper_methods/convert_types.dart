@@ -8,14 +8,14 @@ class ConvertTypes {
       return null;
     }
     try {
-      return num.tryParse(object);
+      return num.tryParse('$object');
     } catch (e) {
       log('toNum() Unsupported object type: ${info != null ? 'info: $info, ' : ''}exception message -> $e');
       return null;
     }
   }
 
-  static int? toInt(var object) {
+  static int? toInt(dynamic object) {
     try {
       return toNum(object, info: 'from toInt()').tryToInt;
     } catch (e) {
@@ -24,7 +24,7 @@ class ConvertTypes {
     }
   }
 
-  static double? toDouble(var object) {
+  static double? toDouble(dynamic object) {
     try {
       return toNum(object, info: 'from toInt()').tryToDouble;
     } catch (e) {
@@ -33,35 +33,37 @@ class ConvertTypes {
     }
   }
 
-  static List<String> toStringList(dynamic object) {
-    if (object == null) {
-      return [];
-    }
-    if (object is String) {
-      return <String>[object];
-    } else {
-      try {
-        return object.cast<String>();
-      } catch (e) {
-        log('toStringList() Unsupported object type: exception message -> $e');
-        return [];
+  static Set<T> toSet<T>(dynamic object) {
+    try {
+      if (object == null) {
+        return <T>{};
       }
+      final temp = object as List? ?? <dynamic>[];
+      final set = <T>{};
+      for (final tmp in temp) {
+        set.add(tmp as T);
+      }
+      return set;
+    } catch (e) {
+      log('toSet() Unsupported object type ($T): exception message -> $e');
+      return {};
     }
   }
 
-  static List<int> toIntList(var object) {
-    if (object == null) {
-      return [];
-    }
-    if (object is int) {
-      return [object];
-    } else {
-      try {
-        return object.cast<int>();
-      } catch (e) {
-        log('toIntList() Unsupported object type: exception message -> $e');
-        return [];
+  static List<T> toList<T>(dynamic object) {
+    try {
+      if (object == null) {
+        return <T>[];
       }
+      final temp = object as List? ?? <dynamic>[];
+      final list = <T>[];
+      for (final tmp in temp) {
+        list.add(tmp as T);
+      }
+      return list;
+    } catch (e) {
+      log('toList() Unsupported object type ($T): exception message -> $e');
+      return [];
     }
   }
 }
