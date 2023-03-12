@@ -1,8 +1,6 @@
 import 'dart:collection';
 import 'dart:math';
 
-import 'package:quiver/iterables.dart';
-
 import 'data_structures/stack.dart';
 
 typedef IndexedPredicate<T> = bool Function(int index, T);
@@ -305,14 +303,6 @@ extension CollectionsExtensions<T> on Iterable<T> {
   ///  stack.push(5)
   ///
   StackX<T> toStack() => StackX<T>()..addAll(this);
-
-  /// Splits the Iterable into chunks of the specified size
-  ///
-  /// example:
-  /// [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].chunks(3))
-  /// result:
-  /// ([1, 2, 3], [4, 5, 6], [7, 8, 9], [10])
-  Iterable<List<T>> chunks(int size) => partition(this, size);
 
   /// Returns the first element matching the given [predicate], or `null`
   /// if element was not found.

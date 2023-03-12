@@ -1,30 +1,35 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 extension PlatformExtension on BuildContext {
   bool get isMobile =>
-      Theme.of(this).platform == TargetPlatform.iOS ||
-      Theme.of(this).platform == TargetPlatform.android;
+      !kIsWeb &&
+      (Theme.of(this).platform == TargetPlatform.iOS ||
+          Theme.of(this).platform == TargetPlatform.android);
 
-  bool get isIOS => Theme.of(this).platform == TargetPlatform.iOS;
+  bool get isIOS => !kIsWeb && Theme.of(this).platform == TargetPlatform.iOS;
 
-  bool get isAndroid => Theme.of(this).platform == TargetPlatform.android;
+  bool get isAndroid =>
+      !kIsWeb && Theme.of(this).platform == TargetPlatform.android;
 
   bool get isDesktop =>
-      Theme.of(this).platform == TargetPlatform.macOS ||
-      Theme.of(this).platform == TargetPlatform.windows ||
-      Theme.of(this).platform == TargetPlatform.linux;
+      !kIsWeb &&
+      (Theme.of(this).platform == TargetPlatform.macOS ||
+          Theme.of(this).platform == TargetPlatform.windows ||
+          Theme.of(this).platform == TargetPlatform.linux);
 }
 
 extension TargetPlatformExtension on TargetPlatform {
   bool get isMobile =>
-      this == TargetPlatform.iOS || this == TargetPlatform.android;
+      !kIsWeb && (this == TargetPlatform.iOS || this == TargetPlatform.android);
 
-  bool get isIOS => this == TargetPlatform.iOS;
+  bool get isIOS => !kIsWeb && this == TargetPlatform.iOS;
 
-  bool get isAndroid => this == TargetPlatform.android;
+  bool get isAndroid => !kIsWeb && this == TargetPlatform.android;
 
   bool get isDesktop =>
-      this == TargetPlatform.linux ||
-      this == TargetPlatform.macOS ||
-      this == TargetPlatform.windows;
+      !kIsWeb &&
+      (this == TargetPlatform.linux ||
+          this == TargetPlatform.macOS ||
+          this == TargetPlatform.windows);
 }
