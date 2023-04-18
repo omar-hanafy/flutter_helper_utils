@@ -5,10 +5,6 @@ class ParsingExceptions implements Exception {
     this.stackTrace,
   });
 
-  final String parsingInfo;
-  final String cause;
-  final StackTrace? stackTrace;
-
   factory ParsingExceptions.nullObject({
     required StackTrace stackTrace,
     required String parsingInfo,
@@ -16,8 +12,13 @@ class ParsingExceptions implements Exception {
     return ParsingExceptions(
       cause: 'Object Is Null',
       parsingInfo: parsingInfo,
+      stackTrace: stackTrace,
     );
   }
+
+  final String parsingInfo;
+  final String cause;
+  final StackTrace? stackTrace;
 
   @override
   String toString() {
