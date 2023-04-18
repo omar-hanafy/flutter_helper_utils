@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:flutter_helper/src/exceptions/exceptions.dart';
+import 'package:flutter_helper_utils/src/exceptions/exceptions.dart';
 
 import '../src.dart';
 

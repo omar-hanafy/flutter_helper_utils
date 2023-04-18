@@ -1,10 +1,11 @@
-name: flutter_helper
-description: helper repository that any flutter app needs
-version: 0.0.1
-publish_to: 'none'
+name: flutter_helper_utils
+description: The Flutter Helper Package is a valuable tool for developers who want to speed up their development process. It offers various extensions and helper methods that can make development more efficient.
+repository: https://github.com/omar-hanafy/flutter_helper_utils
+version: 1.0.0
 
 environment:
-  sdk: '>=2.19.2 <3.0.0'
+  sdk: '>=2.19.6 <3.0.0'
+  flutter: ">=1.17.0"
 
 dependencies:
   flutter:
@@ -12,4 +13,8 @@ dependencies:
   intl: 0.17.0
 
 dev_dependencies:
-  flutter_lints: ^2.0.1
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^4.0.0+1
+
+flutter:

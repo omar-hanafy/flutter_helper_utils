@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter_helper/src/src.dart';
+import 'package:flutter_helper_utils/src/src.dart';
 
 extension TryGetNumUtils on num? {
   int? get tryToInt => this?.toInt();
