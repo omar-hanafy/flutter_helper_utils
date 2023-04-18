@@ -1,39 +1,57 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Flutter Helper Utils
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+The Flutter Helper Utils is a valuable tool for developers who want to speed up their development process. It offers various extensions and helper methods that can make development more efficient.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+## Installation
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+To use this package, add `flutter_helper_utils` as a dependency in your `pubspec.yaml` file:
 
-## Features
+```
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_helper_utils: ^1.0.0
+```
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Then, run `flutter packages get` in your terminal.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+After installation, import the package in your dart file:
 
-```dart
-const like = 'sample';
+```
+import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 ```
 
-## Additional information
+You can now use any of the helper methods or extensions provided by the package. Some examples include:
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+```
+// Example of using the isNullOrEmpty extension on a String
+String name = '';
+if(name.isNullOrEmpty) {
+  print('Name is null or empty');
+}
+
+// Example of using the addHours extension on a date
+DateTime date = DateTime.now();
+DateTime extraTwoHours = date.addHours(2);
+
+// Example of using the ConvertObject helper methods to convert a map to User object.
+factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      id: ConvertObject.toInt(map['user']),
+      walletBalance: ConvertObject.tryToDouble(map['walletBalance']),
+      posts: ConvertObject.toList<Posts>(map['posts']);
+    );
+  }
+```
+
+## Contributions
+
+Contributions to this package are welcome. If you have any suggestions, issues, or feature requests, please create a pull request on the repository.
+
+## License
+
+`flutter_helper_utils` is available under the [BSD 3-Clause License.](https://opensource.org/license/bsd-3-clause/)
+
+<a href="https://www.buymeacoffee.com/omar.hanafy" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
