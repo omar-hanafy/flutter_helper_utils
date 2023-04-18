@@ -6,7 +6,7 @@ The Flutter Helper Utils is a valuable tool for developers who want to speed up 
 
 To use this package, add `flutter_helper_utils` as a dependency in your `pubspec.yaml` file:
 
-```
+```yaml
 dependencies:
   flutter:
     sdk: flutter
@@ -19,13 +19,13 @@ Then, run `flutter packages get` in your terminal.
 
 After installation, import the package in your dart file:
 
-```
+```dart
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 ```
 
 You can now use any of the helper methods or extensions provided by the package. Some examples include:
 
-```
+```dart
 // Example of using the isNullOrEmpty extension on a String
 String name = '';
 if(name.isNullOrEmpty) {
