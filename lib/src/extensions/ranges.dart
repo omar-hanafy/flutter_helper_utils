@@ -1,4 +1,4 @@
-import 'exceptions/range_exception.dart';
+import '../exceptions/range_exception.dart';
 
 extension RangeExtensions on int {
   /// Returns a sequence of integer, starting from [this],

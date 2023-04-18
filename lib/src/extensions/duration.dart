@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../date.dart';
+import 'date.dart';
 
 extension DurationExt on Duration {
   /// Utility to delay some callback (or code execution).

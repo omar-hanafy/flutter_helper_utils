@@ -1,80 +1,83 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
-enum Gender { male, female }
+extension StringExtensions on String {
+  String get capitalize =>
+      '${substring(0, 1).toUpperCase()}${substring(1).toLowerCase()}';
 
-class Message {
-  Message({required this.male, required this.female, required this.other})
-      // ignore: prefer_asserts_with_message
-      : assert(male.isEmptyOrNull),
-        // ignore: prefer_asserts_with_message
-        assert(female.isEmptyOrNull),
-        // ignore: prefer_asserts_with_message
-        assert(other.isEmptyOrNull);
-  final String male, female, other;
-}
+  String get capitalizeAll =>
+      [for (final e in toLowerCase().trim().split(' ')) e.capitalize].join(' ');
 
-extension StringExtensions on String? {
-  bool isNull(dynamic value) => value == null;
+  String get capitalizeFirstLetter =>
+      '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
 
-  /// Returns whether a dynamic value PROBABLY
-  /// has the isEmpty getter/method by checking
-  /// standard dart types that contains it.
-  ///
-  /// This is here to for the 'DRY'
-  bool? _isEmpty(dynamic value) {
-    if (value is String) {
-      return value.trim().isEmpty;
-    }
-    if (value is Iterable || value is Map) {
-      return value as bool?;
-    }
-    return false;
+  String get toTitleCase {
+    return toLowerCase().replaceAllMapped(
+        RegExp(
+          r'[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+',
+        ), (Match match) {
+      if (_titleCaseExceptions.contains(match[0])) {
+        return match[0]!;
+      }
+      return '${match[0]![0].toUpperCase()}${match[0]!.substring(1).toLowerCase()}';
+    }).replaceAll(RegExp(r'([_\-])+'), ' ');
   }
 
+  bool get isAlphanumeric => RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(this); // false
+
+  String get removeEmptyLines =>
+      replaceAll(RegExp(r'(?:[\t ]*(?:\r?\n|\r))+'), '\n');
+
+  String get convertToOneLine => replaceAll('\n', ' ');
+}
+
+extension NullSafeStringExtensions on String? {
+  bool get isEmptyOrNull => this == null || (this != null && this!.isEmpty);
+
+  bool get isNotEmptyOrNull => !isEmptyOrNull;
+
   /// Checks if string is a valid username.
-  bool isUsername(String s) =>
-      hasMatch(s, r'^[a-zA-Z0-9][a-zA-Z0-9_.]+[a-zA-Z0-9]$');
+  bool get isUsername => hasMatch(r'^[a-zA-Z0-9][a-zA-Z0-9_.]+[a-zA-Z0-9]$');
 
   /// Checks if string is Palindrom.
-  bool isPalindrom(String string) {
-    final cleanString = string
-        .toLowerCase()
-        .replaceAll(RegExp(r'\s+'), '')
-        .replaceAll(RegExp('[^0-9a-zA-Z]+'), '');
-
-    for (var i = 0; i < cleanString.length; i++) {
-      if (cleanString[i] != cleanString[cleanString.length - i - 1]) {
-        return false;
+  bool get isPalindrom {
+    if (isEmptyOrNull) {
+      return false;
+    } else {
+      final cleanString = this!
+          .toLowerCase()
+          .replaceAll(RegExp(r'\s+'), '')
+          .replaceAll(RegExp('[^0-9a-zA-Z]+'), '');
+      for (var i = 0; i < cleanString.length; i++) {
+        if (cleanString[i] != cleanString[cleanString.length - i - 1]) {
+          return false;
+        }
       }
+      return true;
     }
-
-    return true;
   }
 
   /// Checks if string is Currency.
-  bool isCurrency(String s) => hasMatch(s,
+  bool get isCurrency => hasMatch(
       r'^(S?\$|\₩|Rp|\¥|\€|\₹|\₽|fr|R\$|R)?[ ]?[-]?([0-9]{1,3}[,.]([0-9]{3}[,.])*[0-9]{3}|[0-9]+)([,.][0-9]{1,2})?( ?(USD?|AUD|NZD|CAD|CHF|GBP|CNY|EUR|JPY|IDR|MXN|NOK|KRW|TRY|INR|RUB|BRL|ZAR|SGD|MYR))?$');
 
   /// Checks if string is phone number.
-  bool isPhoneNumber(String s) {
-    if (s.length > 16 || s.length < 9) return false;
-    return hasMatch(s, r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
+  bool get isPhoneNumber {
+    if (isEmptyOrNull || this!.length > 16 || this!.length < 9) return false;
+    return hasMatch(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
   }
 
   /// Checks if string is email.
-  bool isEmail(String s) => hasMatch(s,
+  bool get isEmail => hasMatch(
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 
   /// Checks if string is an html file.
-  bool isHTML(String filePath) {
-    return filePath.toLowerCase().endsWith('.html');
-  }
+  bool get isHTML => (this ?? ' ').toLowerCase().endsWith('.html');
 
   /// Checks if string is an video file.
-  bool isVideo(String filePath) {
-    final ext = filePath.toLowerCase();
-
+  bool get isVideo {
+    final ext = (this ?? ' ').toLowerCase();
     return ext.endsWith('.mp4') ||
         ext.endsWith('.avi') ||
         ext.endsWith('.wmv') ||
@@ -85,9 +88,8 @@ extension StringExtensions on String? {
   }
 
   /// Checks if string is an audio file.
-  bool isAudio(String filePath) {
-    final ext = filePath.toLowerCase();
-
+  bool get isAudio {
+    final ext = (this ?? ' ').toLowerCase();
     return ext.endsWith('.mp3') ||
         ext.endsWith('.wav') ||
         ext.endsWith('.wma') ||
@@ -96,9 +98,8 @@ extension StringExtensions on String? {
   }
 
   /// Checks if string is an image file.
-  bool isImage(String filePath) {
-    final ext = filePath.toLowerCase();
-
+  bool get isImage {
+    final ext = (this ?? ' ').toLowerCase();
     return ext.endsWith('.jpg') ||
         ext.endsWith('.jpeg') ||
         ext.endsWith('.png') ||
@@ -106,32 +107,26 @@ extension StringExtensions on String? {
         ext.endsWith('.bmp');
   }
 
-  bool hasMatch(String? value, String pattern) =>
-      (value != null) ? RegExp(pattern).hasMatch(value) : value != null;
+  bool hasMatch(String pattern) =>
+      (this != null) ? RegExp(pattern).hasMatch(this!) : this != null;
 
   // Check if the string has any number in it, not accepting double, so don't
   // use "."
-  bool isNumericOnly(String s) => hasMatch(s, r'^\d+$');
+  bool get isNumericOnly => hasMatch(r'^\d+$');
 
   /// Checks if string consist only Alphabet. (No Whitespace)
-  bool isAlphabetOnly(String s) => hasMatch(s, r'^[a-zA-Z]+$');
+  bool get isAlphabetOnly => hasMatch(r'^[a-zA-Z]+$');
 
   /// Checks if string contains at least one Capital Letter
-  bool hasCapitalLetter(String s) => hasMatch(s, '[A-Z]');
-
-  /// Checks if data is null or blank (empty or only contains whitespace).
-  bool? isBlank(dynamic value) {
-    return _isEmpty(value);
-  }
+  bool get hasCapitalLetter => hasMatch('[A-Z]');
 
   /// Checks if string is boolean.
-  bool isBool(String value) {
-    if (isNull(value)) {
-      return false;
-    }
+  bool get isBool => this == 'true' || this == 'false';
 
-    return value == 'true' || value == 'false';
-  }
+  String get withoutWhiteSpaces =>
+      isEmptyOrNull ? '' : this!.replaceAll(' ', '');
+
+  // String get withoutWhiteSpaces => isEmptyOrNull ? '' : this!.replaceAll(RegExp(r'\s+\b|\b\s'), '');
 
   Size get getTextSize {
     final textPainter = TextPainter(
@@ -149,31 +144,15 @@ extension StringExtensions on String? {
   /// will print:
   /// Hi, my
   /// name is
-
   String wrapString(int afterWords) {
     final wordsArr = this?.split(' ') ?? [];
-
     if (wordsArr.length > 2) {
       final middle = (this?.indexOf(wordsArr[afterWords]) ?? 0) - 1;
       final prefix = this?.substring(0, middle);
       final postfix = this?.substring(middle + 1);
       return '$prefix\n$postfix';
     }
-
     return this ?? '';
-  }
-
-  String generateMessageByGender({Gender? gender, Message? message}) =>
-      Intl.gender(gender.toString(),
-          male: '$this ${message?.male}',
-          female: '$this ${message?.female}',
-          other: '$this ${message?.other}');
-
-  bool validateEmail() {
-    if (this == null) return false;
-    return RegExp(
-            r"""^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+""")
-        .hasMatch(this!);
   }
 
   bool equalsIgnoreCase(String? other) =>
@@ -196,9 +175,6 @@ extension StringExtensions on String? {
     return this;
   }
 
-  /// Return a bool if the string is null or empty
-  bool get isEmptyOrNull => this == null || this!.isEmpty;
-
   ///  Replace part of string after the first occurrence of given delimiter with the [replacement] string.
   ///  If the string does not contain the delimiter, returns [defaultValue] which defaults to the original string.
   String? replaceAfter(String delimiter, String replacement,
@@ -212,7 +188,6 @@ extension StringExtensions on String? {
         : this!.replaceRange(index + 1, this!.length, replacement);
   }
 
-  ///
   /// Replace part of string before the first occurrence of given delimiter with the [replacement] string.
   ///  If the string does not contain the delimiter, returns [missingDelimiterValue?] which defaults to the original string.
   String? replaceBefore(String delimiter, String replacement,
@@ -235,29 +210,19 @@ extension StringExtensions on String? {
   String get orEmpty => this ?? '';
 
 // if the string is empty perform an action
-  Function? ifEmpty(Function action) => this?.isEmpty == true ? action : null;
+  Future<T>? ifEmpty<T>(Future<T> Function() action) =>
+      isEmptyOrNull ? action() : null;
 
   String get lastIndex {
     if (isEmptyOrNull) return '';
     return this![this!.length - 1];
   }
 
-  /// prints to console this text if it's not empty or null
-  void printThis() {
-    if (isEmptyOrNull) return;
-    debugPrint(toString());
-  }
-
   /// Parses the string as an double or returns `null` if it is not a number.
-  double? toDoubleOrNull() => this == null ? null : double.tryParse(this!);
+  double? get tryToDouble => this == null ? null : double.tryParse(this!);
 
   /// Parses the string as an int or returns `null` if it is not a number.
-  int? toIntOrNull() => this == null ? null : int.tryParse(this!);
-
-  /// Returns a String without white space at all
-  /// "hello world" // helloworld
-  String? removeAllWhiteSpace() =>
-      isEmptyOrNull ? null : this!.replaceAll(RegExp(r'\s+\b|\b\s'), '');
+  int? get tryToInt => this == null ? null : int.tryParse(this!);
 
   /// Returns true if s is neither null, empty nor is solely made of whitespace characters.
   bool get isNotBlank => this != null && this!.trim().isNotEmpty;
@@ -300,3 +265,74 @@ extension StringExtensions on String? {
     return s == 'true' || s == 'yes' || n > 0;
   }
 }
+
+List<String> _titleCaseExceptions = [
+  'a',
+  'abaft',
+  'about',
+  'above',
+  'afore',
+  'after',
+  'along',
+  'amid',
+  'among',
+  'an',
+  'apud',
+  'as',
+  'aside',
+  'at',
+  'atop',
+  'below',
+  'but',
+  'by',
+  'circa',
+  'down',
+  'for',
+  'from',
+  'given',
+  'in',
+  'into',
+  'lest',
+  'like',
+  'mid',
+  'midst',
+  'minus',
+  'near',
+  'next',
+  'of',
+  'off',
+  'on',
+  'onto',
+  'out',
+  'over',
+  'pace',
+  'past',
+  'per',
+  'plus',
+  'pro',
+  'qua',
+  'round',
+  'sans',
+  'save',
+  'since',
+  'than',
+  'thru',
+  'till',
+  'times',
+  'to',
+  'under',
+  'until',
+  'unto',
+  'up',
+  'upon',
+  'via',
+  'vice',
+  'with',
+  'worth',
+  'the',
+  'and',
+  'nor',
+  'or',
+  'yet',
+  'so'
+];

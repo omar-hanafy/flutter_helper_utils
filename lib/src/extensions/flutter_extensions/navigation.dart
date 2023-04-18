@@ -32,3 +32,7 @@ extension NavigationStatelessExtensions on StatelessWidget {
           Object? args}) =>
       Navigator.pushNamed(context, routeName, arguments: args);
 }
+
+extension NavigatorExtension on BuildContext {
+  void pop<T extends Object?>([T? result]) => Navigator.pop(this, result);
+}

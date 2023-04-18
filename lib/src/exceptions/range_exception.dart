@@ -1,8 +1,8 @@
 /// Represents a range exception.
-class RException {
+class RException implements Exception {
   RException(this.message);
 
-  RException.steps() : message = 'The range must be more then 0';
+  RException.steps() : message = 'The range must be more than 0';
 
   final String? message;
 

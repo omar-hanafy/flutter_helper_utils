@@ -1,42 +1,60 @@
 import 'dart:developer';
 
+import 'package:flutter_helper/src/exceptions/exceptions.dart';
+
 import '../src.dart';
 
-class ConvertTypes {
-  static num? toNum(dynamic object, {String? info}) {
-    if (object == null) {
-      return null;
-    }
+abstract class ConvertObject {
+  static num? tryToNum(dynamic object) {
+    if (object == null) return null;
     try {
       return num.tryParse('$object');
-    } catch (e) {
-      log('toNum() Unsupported object type: ${info != null ? 'info: $info, ' : ''}exception message -> $e');
+    } catch (e, s) {
+      log(
+        'tryToNum() Unsupported object type, exception message -> $e',
+        stackTrace: s,
+        error: e,
+      );
       return null;
     }
   }
 
-  static int? toInt(dynamic object) {
+  static num toNum(dynamic object) {
+    if (object == null) {
+      throw ParsingExceptions.nullObject(
+          parsingInfo: 'to Num', stackTrace: StackTrace.current);
+    }
     try {
-      return toNum(object, info: 'from toInt()').tryToInt;
-    } catch (e) {
-      log('toInt() Unsupported object type: exception message -> $e');
-      return null;
+      return num.parse('$object');
+    } catch (e, s) {
+      log(
+        'toNum() Unsupported object type, exception message -> $e',
+        stackTrace: s,
+        error: e,
+      );
+      throw ParsingExceptions(
+        cause: '$e',
+        parsingInfo: 'to Num',
+        stackTrace: s,
+      );
     }
   }
 
-  static double? toDouble(dynamic object) {
-    try {
-      return toNum(object, info: 'from toInt()').tryToDouble;
-    } catch (e) {
-      log('toInt() Unsupported object type: exception message -> $e');
-      return null;
-    }
-  }
+  static int? tryToInt(dynamic object) => tryToNum(object).tryToInt;
+
+  static int toInt(dynamic object) => toNum(object).toInt();
+
+  static double? toDouble(dynamic object) => toNum(object).toDouble();
+
+  static double? tryToDouble(dynamic object) => tryToNum(object).tryToDouble;
 
   static Set<T> toSet<T>(dynamic object) {
     try {
       if (object == null) {
-        return <T>{};
+        throw ParsingExceptions.nullObject(
+          parsingInfo: 'toSet',
+          stackTrace: StackTrace.current,
+        );
       }
       final temp = object as List? ?? <dynamic>[];
       final set = <T>{};
@@ -44,26 +62,82 @@ class ConvertTypes {
         set.add(tmp as T);
       }
       return set;
-    } catch (e) {
-      log('toSet() Unsupported object type ($T): exception message -> $e');
+    } catch (e, s) {
+      log(
+        'toSet() Unsupported object type ($T): exception message -> $e',
+        stackTrace: s,
+        error: e,
+      );
+      throw ParsingExceptions(
+        cause: e.toString(),
+        parsingInfo: 'toSet',
+        stackTrace: s,
+      );
+    }
+  }
+
+  static Set<T> tryToSet<T>(dynamic object) {
+    try {
+      if (object == null) return <T>{};
+      final temp = object as List? ?? <dynamic>[];
+      final set = <T>{};
+      for (final tmp in temp) {
+        set.add(tmp as T);
+      }
+      return set;
+    } catch (e, s) {
+      log(
+        'toSet() Unsupported object type ($T): exception message -> $e',
+        stackTrace: s,
+        error: e,
+      );
       return {};
     }
   }
 
   static List<T> toList<T>(dynamic object) {
+    final list = <T>[];
     try {
       if (object == null) {
-        return <T>[];
+        throw ParsingExceptions.nullObject(
+          parsingInfo: 'toList',
+          stackTrace: StackTrace.current,
+        );
       }
       final temp = object as List? ?? <dynamic>[];
-      final list = <T>[];
       for (final tmp in temp) {
         list.add(tmp as T);
       }
-      return list;
-    } catch (e) {
-      log('toList() Unsupported object type ($T): exception message -> $e');
-      return [];
+    } catch (e, s) {
+      log(
+        'toList() Unsupported object type ($T): exception message -> $e',
+        stackTrace: s,
+        error: e,
+      );
+      throw ParsingExceptions(
+        cause: e.toString(),
+        parsingInfo: 'toList',
+        stackTrace: s,
+      );
     }
+    return list;
+  }
+
+  static List<T> tryToList<T>(dynamic object) {
+    final list = <T>[];
+    try {
+      if (object == null) return list;
+      final temp = object as List? ?? <dynamic>[];
+      for (final tmp in temp) {
+        list.add(tmp as T);
+      }
+    } catch (e, s) {
+      log(
+        'toList() Unsupported object type ($T): exception message -> $e',
+        stackTrace: s,
+        error: e,
+      );
+    }
+    return list;
   }
 }

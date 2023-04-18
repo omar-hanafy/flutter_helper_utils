@@ -1,27 +1,35 @@
 import 'dart:developer';
 
+import 'package:intl/intl.dart';
+
 extension DateString on String {
-  /// Parse string to [DateTime]
-  DateTime? toDateTime() {
+  /// Parse string to [DateTime] using null Safety
+  DateTime? tryToDateTime() {
     try {
-      return DateTime.parse(this);
-    } catch (e) {
-      log('toDateTime() Unsupported object type: exception message -> $e');
+      return DateTime.tryParse(this);
+    } catch (e, s) {
+      log(
+        'toDateTime() Unsupported object type: exception message -> $e',
+        stackTrace: s,
+      );
       return null;
     }
   }
+
+  /// Parse string to [DateTime]
+  DateTime toDateTime() => DateTime.parse(this);
 }
 
-extension DateInt on int {
-  Duration toMilliseconds() => Duration(milliseconds: this);
+extension ToDate on num {
+  String get toSmallMonthName => DateFormat('MMM').format(DateTime(0, toInt()));
 
-  Duration toSeconds() => Duration(seconds: this);
+  String get toFullMonthName => DateFormat('MMMM').format(DateTime(0, toInt()));
 
-  Duration toMinutes() => Duration(minutes: this);
+  String get toFullDayName =>
+      DateFormat('EEEE').format(DateTime(0, 0, toInt()));
 
-  Duration toHours() => Duration(hours: this);
-
-  Duration toDays() => Duration(days: this);
+  String get toSmallDayName =>
+      DateFormat('EEE').format(DateTime(0, 0, toInt()));
 }
 
 extension DateExtensions on DateTime {

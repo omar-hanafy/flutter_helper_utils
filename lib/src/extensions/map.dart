@@ -12,7 +12,6 @@ extension MapExt on Map<String, dynamic> {
     int? maxDepth,
   }) {
     final result = <String, dynamic>{};
-
     void step(
       Map<String, dynamic> obj, [
       String? previousKey,

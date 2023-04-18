@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'context.dart';
+import 'flutter_extensions.dart';
 
 extension ThemeExtension on BuildContext {
   ThemeData get theme => Theme.of(this);
@@ -25,4 +25,16 @@ extension ThemeModeEx on ThemeMode {
         return context.sysBrightness;
     }
   }
+
+  bool get isDark => this == ThemeMode.dark;
+
+  bool get isLight => this == ThemeMode.light;
+
+  bool get isSystem => this == ThemeMode.system;
+}
+
+extension BrightnessExtension on Brightness {
+  bool get isDark => this == Brightness.dark;
+
+  bool get isLight => this == Brightness.light;
 }
