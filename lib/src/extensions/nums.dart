@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter_helper_utils/src/src.dart';
 
-extension TryGetNumUtils on num? {
+extension NullSafeNumExtensions on num? {
   int? get tryToInt => this?.toInt();
 
   double? get tryToDouble => this?.toDouble();
@@ -16,7 +16,7 @@ extension TryGetNumUtils on num? {
   }
 }
 
-extension GetNumUtils on num {
+extension NumExtensions on num {
   /// Returns if the number is positive
   bool get isPositive => this > 0;
 
@@ -85,15 +85,15 @@ extension GetNumUtils on num {
         callback,
       );
 
-  Future<void> get daysDelay => Future.delayed(days);
+  Future<void> get daysDelay => Future.delayed(asDays);
 
-  Future<void> get hoursDelay => Future.delayed(hours);
+  Future<void> get hoursDelay => Future.delayed(asHours);
 
-  Future<void> get minDelay => Future.delayed(minutes);
+  Future<void> get minDelay => Future.delayed(asMinutes);
 
-  Future<void> get secDelay => Future.delayed(seconds);
+  Future<void> get secDelay => Future.delayed(asSeconds);
 
-  Future<void> get millisecondsDelay => Future.delayed(milliseconds);
+  Future<void> get millisecondsDelay => Future.delayed(asMilliseconds);
 
   /// Easy way to make Durations from numbers.
   ///
@@ -103,17 +103,17 @@ extension GetNumUtils on num {
   /// print(1.hours + 30.minutes);
   /// print(1.5.hours);
   ///```
-  Duration get milliseconds => Duration(microseconds: (this * 1000).round());
+  Duration get asMilliseconds => Duration(microseconds: (this * 1000).round());
 
-  Duration get seconds => Duration(milliseconds: (this * 1000).round());
+  Duration get asSeconds => Duration(milliseconds: (this * 1000).round());
 
-  Duration get minutes =>
+  Duration get asMinutes =>
       Duration(seconds: (this * Duration.secondsPerMinute).round());
 
-  Duration get hours =>
+  Duration get asHours =>
       Duration(minutes: (this * Duration.minutesPerHour).round());
 
-  Duration get days => Duration(hours: (this * Duration.hoursPerDay).round());
+  Duration get asDays => Duration(hours: (this * Duration.hoursPerDay).round());
 }
 
 extension IntExtensions on int {

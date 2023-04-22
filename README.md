@@ -10,7 +10,7 @@ To use this package, add `flutter_helper_utils` as a dependency in your `pubspec
 dependencies:
   flutter:
     sdk: flutter
-  flutter_helper_utils: ^1.0.0
+  flutter_helper_utils: ^1.0.1
 ```
 
 Then, run `flutter packages get` in your terminal.
@@ -27,7 +27,7 @@ You can now use any of the helper methods or extensions provided by the package.
 
 ```dart
 // Example of using the isNullOrEmpty extension on a String
-String name = '';
+String? name = '';
 if(name.isNullOrEmpty) {
   print('Name is null or empty');
 }
@@ -41,7 +41,7 @@ factory User.fromMap(Map<String, dynamic> map) {
     return User(
       id: ConvertObject.toInt(map['user']),
       walletBalance: ConvertObject.tryToDouble(map['walletBalance']),
-      posts: ConvertObject.toList<Posts>(map['posts']);
+      posts: Post.fromList(ConvertObject.toList(map['posts'])),
     );
   }
 ```

@@ -18,4 +18,21 @@ extension MediaQueryExtension on BuildContext {
   double get shortestSide => sizePx.shortestSide;
 
   double get longestSide => sizePx.longestSide;
+
+  /// similar to [MediaQuery.of(context).orientation]
+  Orientation get screenOrientation => mq.orientation;
+
+  /// similar to [MediaQuery.of(this).devicePixelRatio]
+  double get pixelRatio => mq.devicePixelRatio;
+
+  /// similar to [MediaQuery.of(this).textScaleFactor]
+  double get txtScaleFactor => mq.textScaleFactor;
+}
+
+extension OrientationEx on Orientation {
+  /// check if device is on landscape mode
+  bool get isLandscape => this == Orientation.landscape;
+
+  /// check if device is on portrait mode
+  bool get isPortrait => this == Orientation.portrait;
 }

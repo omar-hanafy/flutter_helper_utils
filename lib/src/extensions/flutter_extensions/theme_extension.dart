@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'flutter_extensions.dart';
 
 extension ThemeExtension on BuildContext {
-  ThemeData get theme => Theme.of(this);
+  ThemeData get themeData => Theme.of(this);
 
-  TextTheme get textTheme => theme.textTheme;
+  TextTheme get txtTheme => themeData.textTheme;
 
-  Brightness get brightness => theme.brightness;
+  Brightness get brightness => themeData.brightness;
 
   Brightness get sysBrightness => mq.platformBrightness;
 
