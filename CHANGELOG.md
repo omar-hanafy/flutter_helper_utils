@@ -17,3 +17,7 @@
 
 - **UPDATE**: update readme file
 
+## 1.0.5
+
+- **UPDATE**: change pop to popPage to solve conflicts with go_router package extensions.
+

@@ -34,5 +34,5 @@ extension NavigationStatelessExtensions on StatelessWidget {
 }
 
 extension NavigatorExtension on BuildContext {
-  void pop<T extends Object?>([T? result]) => Navigator.pop(this, result);
+  void popPage<T extends Object?>([T? result]) => Navigator.pop(this, result);
 }
