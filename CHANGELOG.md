@@ -21,3 +21,7 @@
 
 - **UPDATE**: change pop to popPage to solve conflicts with go_router package extensions.
 
+## 1.0.6
+
+- **UPDATE**: support null safety to ThemeMode and Brightness.
+
