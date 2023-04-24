@@ -14,7 +14,7 @@ extension ThemeExtension on BuildContext {
   bool get isDark => brightness == Brightness.dark;
 }
 
-extension ThemeModeEx on ThemeMode {
+extension ThemeModeEx on ThemeMode? {
   Brightness getBrightness(BuildContext context) {
     switch (this) {
       case ThemeMode.light:
@@ -22,6 +22,8 @@ extension ThemeModeEx on ThemeMode {
       case ThemeMode.dark:
         return Brightness.dark;
       case ThemeMode.system:
+        return context.sysBrightness;
+      case null:
         return context.sysBrightness;
     }
   }
@@ -33,7 +35,7 @@ extension ThemeModeEx on ThemeMode {
   bool get isSystem => this == ThemeMode.system;
 }
 
-extension BrightnessExtension on Brightness {
+extension BrightnessExtension on Brightness? {
   bool get isDark => this == Brightness.dark;
 
   bool get isLight => this == Brightness.light;
