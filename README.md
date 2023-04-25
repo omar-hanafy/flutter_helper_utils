@@ -10,7 +10,7 @@ To use this package, add `flutter_helper_utils` as a dependency in your `pubspec
 dependencies:
   flutter:
     sdk: flutter
-  flutter_helper_utils: ^1.0.6
+  flutter_helper_utils: ^1.0.8
 ```
 
 Then, run `flutter packages get` in your terminal.
@@ -35,6 +35,11 @@ if(name.isNullOrEmpty) {
 // Example of using the addHours extension on a date
 DateTime date = DateTime.now();
 DateTime extraTwoHours = date.addHours(2);
+
+// Example of converting hex string to color
+String hex = '#F7E5D7';
+bool isHex = hex.isHexColor; // true
+Color? color = hex.toColor;  // Color(xFFF7E5D7) || null
 
 // Example of using the ConvertObject helper methods to convert a map to User object.
 factory User.fromMap(Map<String, dynamic> map) {

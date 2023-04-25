@@ -25,3 +25,10 @@
 
 - **UPDATE**: support null safety to ThemeMode and Brightness.
 
+## 1.0.7
+
+- **UPDATE**: add new color extension to support converting Hex String to color and check if string is a Hex Color
+
+## 1.0.8
+
+- **UPDATE**: fix color extension bug
