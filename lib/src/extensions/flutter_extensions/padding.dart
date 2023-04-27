@@ -22,7 +22,11 @@ extension PaddingExtensions on Widget {
         child: this,
       );
 
-  Padding paddingSymmetric({Key? key, double v = 0.0, double h = 0.0}) =>
+  Padding paddingSymmetric({
+    Key? key,
+    double v = 0.0,
+    double h = 0.0,
+  }) =>
       Padding(
         key: key,
         padding: EdgeInsets.symmetric(
@@ -32,12 +36,13 @@ extension PaddingExtensions on Widget {
         child: this,
       );
 
-  Padding paddingOnly(
-          {Key? key,
-          double left = 0.0,
-          double right = 0.0,
-          double top = 0.0,
-          double bottom = 0.0}) =>
+  Padding paddingOnly({
+    Key? key,
+    double left = 0.0,
+    double right = 0.0,
+    double top = 0.0,
+    double bottom = 0.0,
+  }) =>
       Padding(
         key: key,
         padding:

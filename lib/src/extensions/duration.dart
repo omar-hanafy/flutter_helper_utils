@@ -12,11 +12,10 @@ extension DurationExt on Duration {
   ///   }
   ///
   ///```
-  Future<void> delay([FutureOr<void> Function()? callback]) async =>
-      Future.delayed(this, callback);
+  Future<T> delay<T>([FutureOr<T> Function()? callback]) async =>
+      Future<T>.delayed(this, callback);
 
   static const int daysPerWeek = 7;
-  static const int nanosecondsPerMicrosecond = 1000;
 
   /// Returns the representation in weeks
   int get inWeeks => (inDays / daysPerWeek).ceil();

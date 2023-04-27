@@ -4,7 +4,10 @@ extension MediaQueryExtension on BuildContext {
   MediaQueryData get mq => MediaQuery.of(this);
 
   /// Returns if Orientation is landscape
-  bool get isLandscape => mq.orientation == Orientation.landscape;
+  bool get isLandscape => mq.orientation.isLandscape;
+
+  /// Returns if Orientation is landscape
+  bool get isPortrait => mq.orientation.isPortrait;
 
   /// Returns same as MediaQuery.of(context).size
   Size get sizePx => mq.size;

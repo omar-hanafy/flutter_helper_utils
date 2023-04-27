@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 extension DateString on String {
   /// Parse string to [DateTime] using null Safety
-  DateTime? tryToDateTime() {
+  DateTime? get tryToDateTime {
     try {
       return DateTime.tryParse(this);
     } catch (e, s) {
@@ -17,7 +17,7 @@ extension DateString on String {
   }
 
   /// Parse string to [DateTime]
-  DateTime toDateTime() => DateTime.parse(this);
+  DateTime get toDateTime => DateTime.parse(this);
 }
 
 extension ToDate on num {
@@ -67,14 +67,6 @@ extension DateExtensions on DateTime {
   /// Does not account for timezones.
   bool isAtSameHourAs(DateTime other) =>
       isAtSameDayAs(other) && hour == other.hour;
-
-  /// Returns true if [other] is at the same minute as [this].
-  ///
-  /// This means the exact minute, including year, month, day and hour.
-  ///
-  /// Does not account for timezones.
-  bool disAtSameMinuteAs(DateTime other) =>
-      isAtSameHourAs(other) && minute == other.minute;
 
   /// Returns true if [other] is at the same minute as [this].
   ///
@@ -241,7 +233,7 @@ extension DateExtensions on DateTime {
       a.year == b.year && a.month == b.month && a.day == b.day;
 
   /// return true if the date is today
-  bool isToday() {
+  bool get isToday {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final currentDate = DateTime(year, month, day);
@@ -279,17 +271,17 @@ extension DateExtensions on DateTime {
   }
 
   ///  Start time of Date times
-  DateTime startOfDay() => DateTime(year, month, day);
+  DateTime get startOfDay => DateTime(year, month, day);
 
-  DateTime startOfMonth() => DateTime(year, month);
+  DateTime get startOfMonth => DateTime(year, month);
 
-  DateTime startOfYear() => DateTime(year);
+  DateTime get startOfYear => DateTime(year);
 
   /// next day
-  DateTime tomorrow() => DateTime(year, month, day + 1);
+  DateTime get tomorrow => DateTime(year, month, day + 1);
 
   /// last day
-  DateTime yesterday() => DateTime(year, month, day - 1);
+  DateTime get yesterday => DateTime(year, month, day - 1);
 
   /// return the smaller date between
   DateTime min(DateTime that) =>

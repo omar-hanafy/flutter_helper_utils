@@ -1,34 +1,39 @@
-## 1.0.0
+### 1.0.9
 
-- **INITIAL**: initial release
+- **UPDATE**: Re-organized changelog and updated readme file.
 
-## 1.0.1
+### 1.0.8
 
-- **UPDATE**: update readme file
+- **FIX**: Fixed bug in color extension.
 
-## 1.0.2
+### 1.0.7
 
-- **UPDATE**: rename some getters to fix conflicts with the `get` package
-## 1.0.3
+- **NEW**: Added new color extension to support converting hex string to color and checking if string is a hex color.
 
-- **UPDATE**: add capitalizeFirstLetter, toPascalCase, toTitleCase, and toCamelCase to String extension.
+### 1.0.6
 
-## 1.0.4
+- **UPDATE**: Supported null safety to ThemeMode and Brightness.
 
-- **UPDATE**: update readme file
+### 1.0.5
 
-## 1.0.5
+- **UPDATE**: Changed `pop` to `popPage` to solve conflicts with `go_router` package extensions.
 
-- **UPDATE**: change pop to popPage to solve conflicts with go_router package extensions.
+### 1.0.4
 
-## 1.0.6
+- **UPDATE**: Updated readme file.
 
-- **UPDATE**: support null safety to ThemeMode and Brightness.
+### 1.0.3
 
-## 1.0.7
+- **NEW**: Added `capitalizeFirstLetter`, `toPascalCase`, `toTitleCase`, and `toCamelCase` to String extension.
 
-- **UPDATE**: add new color extension to support converting Hex String to color and check if string is a Hex Color
+### 1.0.2
 
-## 1.0.8
+- **UPDATE**: Renamed some getters to fix conflicts with the `get` package.
 
-- **UPDATE**: fix color extension bug
+### 1.0.1
+
+- **UPDATE**: Updated readme file.
+
+### 1.0.0
+
+- **INITIAL**: Initial release.

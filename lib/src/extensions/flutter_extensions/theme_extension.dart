@@ -12,6 +12,8 @@ extension ThemeExtension on BuildContext {
   Brightness get sysBrightness => mq.platformBrightness;
 
   bool get isDark => brightness == Brightness.dark;
+
+  bool get isLight => brightness == Brightness.light;
 }
 
 extension ThemeModeEx on ThemeMode? {

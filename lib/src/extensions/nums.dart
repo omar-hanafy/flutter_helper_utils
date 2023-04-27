@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter_helper_utils/src/exceptions/exceptions.dart';
 import 'package:flutter_helper_utils/src/src.dart';
 
 extension NullSafeNumExtensions on num? {
@@ -99,9 +100,9 @@ extension NumExtensions on num {
   ///
   /// Sample:
   /// ```
-  /// print(1.seconds + 200.milliseconds);
-  /// print(1.hours + 30.minutes);
-  /// print(1.5.hours);
+  /// print(1.seconds + 200.asMilliseconds);
+  /// print(1.hours + 30.asMinutes);
+  /// print(1.5.asHours);
   ///```
   Duration get asMilliseconds => Duration(microseconds: (this * 1000).round());
 
@@ -114,6 +115,29 @@ extension NumExtensions on num {
       Duration(minutes: (this * Duration.minutesPerHour).round());
 
   Duration get asDays => Duration(hours: (this * Duration.hoursPerDay).round());
+
+  /// Returns a sequence of integer, starting from [this],
+  /// increments by [step] and ends at [end]
+  Iterable<num> until(int end, {int step = 1}) sync* {
+    if (step == 0) {
+      // ignore: only_throw_errors
+      throw RException.steps();
+    }
+
+    var currentNumber = this;
+
+    if (step > 0) {
+      while (currentNumber < end) {
+        yield currentNumber;
+        currentNumber += step;
+      }
+    } else {
+      while (currentNumber > end) {
+        yield currentNumber;
+        currentNumber += step;
+      }
+    }
+  }
 }
 
 extension IntExtensions on int {

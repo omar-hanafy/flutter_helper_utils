@@ -7,6 +7,5 @@ export 'iterable.dart';
 export 'map.dart';
 export 'nums.dart';
 export 'objects.dart';
-export 'ranges.dart';
 export 'sort_algorithms.dart';
 export 'string_ext.dart';

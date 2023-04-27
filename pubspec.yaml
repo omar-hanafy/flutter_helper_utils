@@ -1,7 +1,7 @@
 name: flutter_helper_utils
 description: The Flutter Helper Package is a valuable tool for developers who want to speed up their development process. It offers various extensions and helper methods that can make development more efficient.
 repository: https://github.com/omar-hanafy/flutter_helper_utils
-version: 1.0.8
+version: 1.0.9
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
