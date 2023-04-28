@@ -15,11 +15,6 @@ extension DurationExt on Duration {
   Future<T> delay<T>([FutureOr<T> Function()? callback]) async =>
       Future<T>.delayed(this, callback);
 
-  static const int daysPerWeek = 7;
-
-  /// Returns the representation in weeks
-  int get inWeeks => (inDays / daysPerWeek).ceil();
-
   /// Adds the Duration to the current DateTime and returns a DateTime in the future
   DateTime get fromNow => DateTime.now() + this;
 

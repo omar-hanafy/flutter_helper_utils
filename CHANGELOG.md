@@ -1,3 +1,11 @@
+### 1.1.1
+
+- **FIX**: Fixed a bug in camelCase conversion algorithm.
+
+### 1.1.0
+
+- **FIX**: Fixed logo does not appear in readme file.
+
 ### 1.0.9
 
 - **UPDATE**: Re-organized changelog and updated readme file.
@@ -5,6 +13,7 @@
 ### 1.0.8
 
 - **FIX**: Fixed bug in color extension.
+
 
 ### 1.0.7
 

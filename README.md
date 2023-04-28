@@ -1,19 +1,6 @@
-![](./logo.svg)
+![](https://raw.githubusercontent.com/omar-hanafy/flutter_helper_utils/9bb44613da240f408d02a6e745f92e5f88050265/logo.svg)
 
 The [flutter_helper_utils](https://pub.dev/packages/flutter_helper_utils) is a valuable tool for developers who want to speed up their development process. It offers various [extensions](https://dart.dev/language/extension-methods) and helper methods that can make development more efficient.
-
-## Installation
-
-To use this package, add `flutter_helper_utils` as a dependency in your `pubspec.yaml` file:
-
-```yaml
-dependencies:
-  flutter:
-    sdk: flutter
-  flutter_helper_utils: ^1.0.9
-```
-
-Then, run `flutter packages get` in your terminal.
 
 ## **Why I Created This Package**
 
@@ -24,6 +11,19 @@ For instance, instead of calling `MediaQuery.of(context);` to get the MediaQuery
 Or if you want to safeley cast dynamic list to list of strings you can use `ConvertObject.tryToList<String>(dynamicList);`
 
 If you want to learn more about extensions, click [here](https://dart.dev/language/extension-methods).
+
+## Installation
+
+To use this package, add `flutter_helper_utils` as a dependency in your `pubspec.yaml` file:
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_helper_utils: ^1.1.1
+```
+
+Then, run `flutter packages get` in your terminal.
 
 ## Usage
 
@@ -110,7 +110,7 @@ final brightness = context.isDark; // or `isLight`
 bool isHex = '#FF0000'.isHexColor; // true;
 
 // Get a color from a hexadecimal string
-Color color = '#FF0000'.toColor();
+Color color = '#FF0000'.toColor;
 
 // Get a hexadecimal string from Color
 String hexadecimal = color.toHex(leadingHashSign: false); // FF0000
@@ -137,7 +137,7 @@ DateTime nextDay = now.nextDay;
 bool isYesterday = now.isYesterday; // false
 
 // Returns true if the current date is today
-bool isToday = now.isToday(); // true
+bool isToday = now.isToday; // true
 
 // Returns the previous month from the current date
 DateTime previousMonth = now.previousMonth;
@@ -152,21 +152,17 @@ String fullMonthName = now.month.toFullMonthName; // e.g March
 ### `Duration` extension
 
 ```dart
-// Get a duration in minutes
-final duration = Duration(hours: 1, minutes: 30);
-final minutes = duration.toMinutes();
+const duration = Duration(hours: 1, minutes: 30);
 
-// run async delay
-await duration.delay();
-
-// Get a number of weeks in the duration
-int weeks = duration.inWeeks
-  
 // Adds the Duration to the current DateTime and returns a DateTime in the future.
 DateTime futureDate = duration.fromNow;
 
 // Subtracts the Duration from the current DateTime and returns a DateTime in the past
 DateTime pastDate = duration.ago;
+
+// run async delay
+await duration.delay<void>(); 
+
 ```
 
 ### `int, double, and num` extension

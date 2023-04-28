@@ -27,10 +27,13 @@ extension StringExtensions on String {
 
   /// flutter and dart => flutterAndDart
   String get toCamelCase {
-    final separatedWords = split(RegExp(r'[!@#<>?":`~;[\]\\|=+)(*&^%-\s_]+'));
+    final separatedWords = split(' ');
     final newString = StringBuffer();
     for (final word in separatedWords) {
-      newString.write(word[0].toUpperCase() + word.substring(1).toLowerCase());
+      if (word.isNotEmpty) {
+        newString
+            .write(word[0].toUpperCase() + word.substring(1).toLowerCase());
+      }
     }
     final tempString = newString.toString();
     return tempString[0].toLowerCase() + tempString.substring(1);
