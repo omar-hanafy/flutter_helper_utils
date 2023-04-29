@@ -139,7 +139,7 @@ extension NullSafeStringExtensions on String? {
   /// Checks if string is boolean.
   bool get isBool => this == 'true' || this == 'false';
 
-  String get withoutWhiteSpaces =>
+  String get removeWhiteSpaces =>
       isEmptyOrNull ? '' : this!.replaceAll(' ', '');
 
   // String get withoutWhiteSpaces => isEmptyOrNull ? '' : this!.replaceAll(RegExp(r'\s+\b|\b\s'), '');
@@ -233,11 +233,23 @@ extension NullSafeStringExtensions on String? {
     return this![this!.length - 1];
   }
 
+  /// Parses the string as an num or returns `null` if it is not a number.
+  num? get tryToNum => this == null ? null : double.tryParse(this!);
+
   /// Parses the string as an double or returns `null` if it is not a number.
   double? get tryToDouble => this == null ? null : double.tryParse(this!);
 
   /// Parses the string as an int or returns `null` if it is not a number.
   int? get tryToInt => this == null ? null : int.tryParse(this!);
+
+  /// Parses the string as an num or returns `null` if it is not a number.
+  num get toNum => num.parse(this!);
+
+  /// Parses the string as an double or returns `null` if it is not a number.
+  double get toDouble => double.parse(this!);
+
+  /// Parses the string as an int or returns `null` if it is not a number.
+  int get toInt => int.parse(this!);
 
   /// Returns true if s is neither null, empty nor is solely made of whitespace characters.
   bool get isNotBlank => this != null && this!.trim().isNotEmpty;
@@ -270,14 +282,8 @@ extension NullSafeStringExtensions on String? {
   ///
   /// Returns `true` if this string is any of these values: `"true"`, `"yes"`, `"1"`, or if the string is a number and greater than 0, `false` if less than 1. This is also case insensitive.
   bool get asBool {
-    final s = this?.trim().toLowerCase() ?? 'false';
-    num n;
-    try {
-      n = num.parse(s);
-    } catch (e) {
-      n = -1;
-    }
-    return s == 'true' || s == 'yes' || n > 0;
+    final s = this?.removeWhiteSpaces.removeEmptyLines.toLowerCase() ?? 'false';
+    return s == 'true' || s == 'yes' || (s.tryToNum ?? 0) > 0;
   }
 }
 

@@ -1,8 +1,6 @@
 import 'dart:collection';
 import 'dart:math';
 
-import 'data_structures/stack.dart';
-
 typedef IndexedPredicate<T> = bool Function(int index, T);
 
 extension CollectionsExtensions<T> on Iterable<T> {
@@ -295,14 +293,6 @@ extension CollectionsExtensions<T> on Iterable<T> {
   /// 1,2,3
 
   dynamic subtract(Iterable<T> other) => toSet()..removeAll(other);
-
-  /// will convert iterable into a Stack data structure
-  /// example:
-  ///  [1,2,3,4].toStack()
-  ///  stack.pop()
-  ///  stack.push(5)
-  ///
-  StackX<T> toStack() => StackX<T>()..addAll(this);
 
   /// Returns the first element matching the given [predicate], or `null`
   /// if element was not found.

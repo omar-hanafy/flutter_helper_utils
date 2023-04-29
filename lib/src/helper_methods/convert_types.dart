@@ -5,27 +5,15 @@ import 'package:flutter_helper_utils/src/exceptions/exceptions.dart';
 import '../src.dart';
 
 abstract class ConvertObject {
-  static num? tryToNum(dynamic object) {
-    if (object == null) return null;
-    try {
-      return num.tryParse('$object');
-    } catch (e, s) {
-      log(
-        'tryToNum() Unsupported object type, exception message -> $e',
-        stackTrace: s,
-        error: e,
-      );
-      return null;
-    }
-  }
-
   static num toNum(dynamic object) {
     if (object == null) {
       throw ParsingExceptions.nullObject(
-          parsingInfo: 'to Num', stackTrace: StackTrace.current);
+        parsingInfo: 'to Num',
+        stackTrace: StackTrace.current,
+      );
     }
     try {
-      return num.parse('$object');
+      return '$object'.toNum;
     } catch (e, s) {
       log(
         'toNum() Unsupported object type, exception message -> $e',
@@ -40,9 +28,11 @@ abstract class ConvertObject {
     }
   }
 
-  static int? tryToInt(dynamic object) => tryToNum(object).tryToInt;
+  static num? tryToNum(dynamic object) => num.tryParse('$object');
 
   static int toInt(dynamic object) => toNum(object).toInt();
+
+  static int? tryToInt(dynamic object) => tryToNum(object).tryToInt;
 
   static double? toDouble(dynamic object) => toNum(object).toDouble();
 
@@ -123,10 +113,10 @@ abstract class ConvertObject {
     return list;
   }
 
-  static List<T> tryToList<T>(dynamic object) {
+  static List<T>? tryToList<T>(dynamic object) {
     final list = <T>[];
     try {
-      if (object == null) return list;
+      if (object == null) return null;
       final temp = object as List? ?? <dynamic>[];
       for (final tmp in temp) {
         list.add(tmp as T);
@@ -137,6 +127,7 @@ abstract class ConvertObject {
         stackTrace: s,
         error: e,
       );
+      return null;
     }
     return list;
   }

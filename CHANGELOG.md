@@ -1,3 +1,7 @@
+### 1.1.2
+
+- **UPDATE**: Improve `asBool` implementation in the string extension. 
+
 ### 1.1.1
 
 - **FIX**: Fixed a bug in camelCase conversion algorithm.
