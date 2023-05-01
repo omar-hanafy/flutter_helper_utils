@@ -63,7 +63,7 @@ abstract class ConvertObject {
       );
       throw ParsingException(
         cause: '$e',
-        parsingInfo: 'to Num',
+        parsingInfo: 'toNum',
         stackTrace: s,
       );
     }
@@ -75,8 +75,21 @@ abstract class ConvertObject {
   }
 
   static int toInt(dynamic object) {
-    if (object is int) return object;
-    return toNum(object).toInt();
+    try {
+      if (object is int) return object;
+      return toNum(object).toInt();
+    } catch (e, s) {
+      log(
+        'toInt() Unsupported object type, exception message -> $e',
+        stackTrace: s,
+        error: e,
+      );
+      throw ParsingException(
+        cause: '$e',
+        parsingInfo: 'toInt',
+        stackTrace: s,
+      );
+    }
   }
 
   static int? tryToInt(dynamic object) {
@@ -85,8 +98,21 @@ abstract class ConvertObject {
   }
 
   static double toDouble(dynamic object) {
-    if (object is double) return object;
-    return toNum(object).toDouble();
+    try {
+      if (object is double) return object;
+      return toNum(object).toDouble();
+    } catch (e, s) {
+      log(
+        'toInt() Unsupported object type, exception message -> $e',
+        stackTrace: s,
+        error: e,
+      );
+      throw ParsingException(
+        cause: '$e',
+        parsingInfo: 'toInt',
+        stackTrace: s,
+      );
+    }
   }
 
   static double? tryToDouble(dynamic object) {
@@ -109,6 +135,29 @@ abstract class ConvertObject {
   static bool? tryToBool(dynamic object) {
     if (object is bool?) return object;
     return '$object'.asBool;
+  }
+
+  static DateTime toDateTime(dynamic object) {
+    try {
+      if (object is DateTime) return object;
+      return DateTime.parse(toString1(object));
+    } catch (e, s) {
+      log(
+        'toDateTime() Unsupported object type, exception message -> $e',
+        stackTrace: s,
+        error: e,
+      );
+      throw ParsingException(
+        cause: '$e',
+        parsingInfo: 'toDateTime',
+        stackTrace: s,
+      );
+    }
+  }
+
+  static DateTime? tryToDateTime(dynamic object) {
+    if (object is DateTime?) return object;
+    return DateTime.tryParse(tryToString(object) ?? '');
   }
 
   static Map<K, V> toMap<K, V>(dynamic object) {

@@ -1,3 +1,7 @@
+### 1.1.7
+
+- **NEW**:  Added `toDateTime` and `tryToDateTime` in `ConvertObject` class.
+- 
 ### 1.1.6
 
 - **NEW**:  Added `toMap` and `tryToMap` in `ConvertObject` class, and  add `isValidSVG` in String extension.
