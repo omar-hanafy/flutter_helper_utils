@@ -1,12 +1,13 @@
 import 'dart:developer';
 
+import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 import 'package:intl/intl.dart';
 
-extension DateString on String {
+extension DateString on String? {
   /// Parse string to [DateTime] using null Safety
   DateTime? get tryToDateTime {
     try {
-      return DateTime.tryParse(this);
+      return DateTime.tryParse('$this');
     } catch (e, s) {
       log(
         'toDateTime() Unsupported object type: exception message -> $e',
@@ -17,7 +18,9 @@ extension DateString on String {
   }
 
   /// Parse string to [DateTime]
-  DateTime get toDateTime => DateTime.parse(this);
+  DateTime get toDateTime => DateTime.parse(this!);
+
+  DateTime get timestampToDate => DateTime.fromMillisecondsSinceEpoch(toInt);
 }
 
 extension ToDate on num {
@@ -30,6 +33,8 @@ extension ToDate on num {
 
   String get toSmallDayName =>
       DateFormat('EEE').format(DateTime(0, 0, toInt()));
+
+  DateTime get timestampToDate => DateTime.fromMillisecondsSinceEpoch(toInt());
 }
 
 extension DateExtensions on DateTime {

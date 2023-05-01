@@ -136,12 +136,19 @@ class _ColorConverterState extends State<ColorConverter> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Container(
+            height: 100,
+            width: 100,
+            color: Colors.grey,
+            child: Icon(Icons.favorite),
+          ).alignAtBottomRight(),
           Expanded(
             flex: 2,
             child: TextField(
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter any Hex color to show it'),
+                border: OutlineInputBorder(),
+                hintText: 'Enter any Hex color to show it',
+              ),
               onChanged: (value) {
                 setState(() {
                   color = value.toColor;

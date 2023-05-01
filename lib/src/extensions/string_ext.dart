@@ -45,6 +45,8 @@ extension StringExtensions on String {
       replaceAll(RegExp(r'(?:[\t ]*(?:\r?\n|\r))+'), '\n');
 
   String get toOneLine => replaceAll('\n', ' ');
+
+  String get removeWhiteSpaces => replaceAll(' ', '');
 }
 
 extension NullSafeStringExtensions on String? {
@@ -123,6 +125,9 @@ extension NullSafeStringExtensions on String? {
         ext.endsWith('.bmp');
   }
 
+  /// Checks if string is an svg file.
+  bool get isValidSVG => (this ?? ' ').split('.').last.toLowerCase() == 'svg';
+
   bool hasMatch(String pattern) =>
       (this != null) ? RegExp(pattern).hasMatch(this!) : this != null;
 
@@ -139,8 +144,7 @@ extension NullSafeStringExtensions on String? {
   /// Checks if string is boolean.
   bool get isBool => this == 'true' || this == 'false';
 
-  String get removeWhiteSpaces =>
-      isEmptyOrNull ? '' : this!.replaceAll(' ', '');
+  String? get removeWhiteSpaces => this?.replaceAll(' ', '');
 
   // String get withoutWhiteSpaces => isEmptyOrNull ? '' : this!.replaceAll(RegExp(r'\s+\b|\b\s'), '');
   Size get textSize {

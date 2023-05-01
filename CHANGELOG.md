@@ -1,10 +1,27 @@
+### 1.1.6
+
+- **NEW**:  Added `toMap` and `tryToMap` in `ConvertObject` class, and  add `isValidSVG` in String extension.
+
+### 1.1.5
+
+- **NEW**:  Added `toBool` and `tryToBool` in `ConvertObject` class.
+- **UPDATE**:  Improved all implementations of static methods in `ConvertObject` class.
+
+### 1.1.4
+
+- **NEW**:  Supported converting timestamp milliseconds to `DateTime` and added `tryToString` in `ConvertObject` class.
+
+### 1.1.3
+
+- **FIX**: Added missing `pushNamedAndRemoveUntil` in the navigation extension.
+
 ### 1.1.2
 
-- **UPDATE**: Improve `asBool` implementation in the string extension. 
+- **UPDATE**: Improved `asBool` implementation in the string extension.
 
 ### 1.1.1
 
-- **FIX**: Fixed a bug in camelCase conversion algorithm.
+- **FIX**: Fixed a bug in `camelCase` conversion algorithm.
 
 ### 1.1.0
 
@@ -16,8 +33,7 @@
 
 ### 1.0.8
 
-- **FIX**: Fixed bug in color extension.
-
+- **FIX**: Fixed bug with `isHexColor` in color extension.
 
 ### 1.0.7
 

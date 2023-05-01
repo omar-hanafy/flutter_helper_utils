@@ -1,14 +1,20 @@
 import 'dart:collection';
 import 'dart:math';
 
+import 'package:flutter_helper_utils/flutter_helper_utils.dart';
+
 typedef IndexedPredicate<T> = bool Function(int index, T);
+
+extension NullableCollectionsExtensions<T> on Iterable<T>? {
+  ///Returns `true` if this nullable iterable is either null or empty.
+  bool get isEmptyOrNull => isNull || this!.isEmpty;
+
+  bool get isNotEmptyOrNull => !isEmptyOrNull;
+}
 
 extension CollectionsExtensions<T> on Iterable<T> {
   /// Returns this Iterable if it's not `null` and the empty list otherwise.
   Iterable<T> orEmpty() => this;
-
-  ///Returns `true` if this nullable iterable is either null or empty.
-  bool get isEmptyOrNull => isEmpty;
 
   /// Returns `true` if at least one element matches the given [predicate].
   bool any(bool Function(T element) predicate) {

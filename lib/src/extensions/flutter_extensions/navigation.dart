@@ -94,18 +94,29 @@ extension NavigatorExtension on BuildContext {
           ),
           (Route<dynamic> route) => routes);
 
+  /// perform push and remove route with routeName
+  Future<T?> pushNamedAndRemoveUntil<T extends Object?>(
+    String screenName,
+    RoutePredicate predicate, {
+    bool allowSnapshotting = true,
+    Object? arguments,
+  }) async =>
+      Navigator.of(this).pushNamedAndRemoveUntil<T>(
+        screenName,
+        (route) => false,
+        arguments: arguments,
+      );
+
   /// perform push with routeName
   Future<T?> pushNamed<T extends Object?>(
     String screenName, {
-    bool allowSnapshotting = true,
     Object? arguments,
   }) async =>
       Navigator.of(this).pushNamed<T>(screenName, arguments: arguments);
 
-  /// perform replash with routeName
+  /// perform replace with routeName
   Future<T?> pushReplacementNamed<T extends Object?, TO extends Object?>(
     String screenName, {
-    bool allowSnapshotting = true,
     Object? arguments,
     TO? result,
   }) =>
@@ -115,7 +126,7 @@ extension NavigatorExtension on BuildContext {
         result: result,
       );
 
-  /// perform replash with routeName
+  /// perform replace with routeName
   void popUntil(String screenName) =>
       Navigator.of(this).popUntil(ModalRoute.withName(screenName));
 }

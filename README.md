@@ -20,7 +20,7 @@ To use this package, add `flutter_helper_utils` as a dependency in your `pubspec
 dependencies:
   flutter:
     sdk: flutter
-  flutter_helper_utils: ^1.1.2
+  flutter_helper_utils: ^1.1.6
 ```
 
 Then, run `flutter packages get` in your terminal.
@@ -59,7 +59,7 @@ final mediaQuery = context.mq;
 // Get the screen width, height, and size.
 final screenWidth = context.widthPx;
 final screenHeight = context.heightPx;
-final screenHeight = context.sizePx;
+final screenSize = context.sizePx;
 
 // Check if the screen is in landscape mode.
 final isLandscape = context.isLandscape;
@@ -224,13 +224,14 @@ String? limitFromStart = text.limitFromStart(3); // limitFromEnd also available
 ### `Align` extension
 
 ```dart
-// Align an icon to the bottom right of a container (alignAtBottomCenter, alignAtCenterRight, and alignAtTopRight are also available) 
-Container (
-height: 100,
-width: 100,
-color: Colors.grey,
-child: Icon(Icons.favorite)
-).alignAtBottomRight();
+// Align an icon to the bottom right of a container. 
+Container(
+  height: 100,
+  width: 100,
+  color: Colors.grey,
+  child: Icon(Icons.favorite),
+).alignAtBottomRight(),
+// alignAtBottomCenter, alignAtCenterRight, and alignAtTopRight are also available
 ```
 
 ### `List` extension
@@ -239,7 +240,18 @@ child: Icon(Icons.favorite)
 // convert and list of widgets to Column, Row, ListView, or stack.
 final list = <Widget>[];
 
-final column = list.toColumnWidget;
+final column = list.toColumnWidget(
+  mainAxisAlignment: MainAxisAlignment.center,
+);
+
+final listBuilder = list.toListViewBuilder(
+  // itemCount: 1, // default to list.length. 
+  itemBuilder: (context, index) => Container(
+    color: context.themeData.primaryColor,
+    width: context.widthPx,
+    height: 100,
+  ),
+);
 ```
 
 ### `Padding` extension
@@ -259,8 +271,7 @@ AnyWidget(
 
 ## Contributions
 
-Contributions to this package are welcome. If you have any suggestions, issues, or feature requests, please create a
-pull request on the [repository](https://github.com/omar-hanafy/flutter_helper_utils).
+Contributions to this package are welcome. If you have any suggestions, issues, or feature requests, please create a pull request on the [repository](https://github.com/omar-hanafy/flutter_helper_utils).
 
 ## License
 

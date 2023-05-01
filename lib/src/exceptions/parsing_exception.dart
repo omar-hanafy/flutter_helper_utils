@@ -1,15 +1,15 @@
-class ParsingExceptions implements Exception {
-  const ParsingExceptions({
+class ParsingException implements Exception {
+  const ParsingException({
     required this.cause,
     required this.parsingInfo,
     this.stackTrace,
   });
 
-  factory ParsingExceptions.nullObject({
+  factory ParsingException.nullObject({
     required StackTrace stackTrace,
     required String parsingInfo,
   }) {
-    return ParsingExceptions(
+    return ParsingException(
       cause: 'Object Is Null',
       parsingInfo: parsingInfo,
       stackTrace: stackTrace,

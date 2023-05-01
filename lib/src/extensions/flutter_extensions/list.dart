@@ -10,7 +10,6 @@ extension ListExtensions<E> on List<Widget> {
     TextDirection? textDirection,
     VerticalDirection verticalDirection = VerticalDirection.down,
     TextBaseline? textBaseline,
-    List<Widget> children = const <Widget>[],
   }) =>
       Row(
         key: key,
@@ -29,7 +28,6 @@ extension ListExtensions<E> on List<Widget> {
     TextDirection? textDirection,
     StackFit fit = StackFit.loose,
     Clip clip = Clip.hardEdge,
-    List<Widget> children = const <Widget>[],
   }) =>
       Stack(
         key: key,
@@ -48,7 +46,6 @@ extension ListExtensions<E> on List<Widget> {
     TextDirection? textDirection,
     VerticalDirection verticalDirection = VerticalDirection.down,
     TextBaseline? textBaseline,
-    List<Widget> children = const <Widget>[],
   }) =>
       Column(
         key: key,
@@ -69,7 +66,6 @@ extension ListExtensions<E> on List<Widget> {
     bool? primary,
     ScrollPhysics? physics,
     bool shrinkWrap = false,
-    List<Widget> children = const <Widget>[],
     EdgeInsetsGeometry? padding,
     double? itemExtent,
     Widget? prototypeItem,
@@ -115,7 +111,6 @@ extension ListExtensions<E> on List<Widget> {
     bool? primary,
     ScrollPhysics? physics,
     bool shrinkWrap = false,
-    List<Widget> children = const <Widget>[],
     EdgeInsetsGeometry? padding,
     double? itemExtent,
     Widget? prototypeItem,
