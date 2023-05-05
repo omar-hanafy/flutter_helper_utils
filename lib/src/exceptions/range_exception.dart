@@ -1,6 +1,6 @@
 /// Represents a range exception.
 class RException implements Exception {
-  RException(this.message);
+  const RException(this.message);
 
   RException.steps() : message = 'The range must be more than 0';
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
 extension StringExtensions on String {
   /// flutter and dart => Flutter and dart
@@ -15,14 +16,14 @@ extension StringExtensions on String {
   /// flutter and dart => Flutter and Dart
   String get toTitleCase {
     return toLowerCase().replaceAllMapped(
-        RegExp(
-          r'[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+',
-        ), (Match match) {
-      if (_titleCaseExceptions.contains(match[0])) {
-        return match[0]!;
-      }
-      return '${match[0]![0].toUpperCase()}${match[0]!.substring(1).toLowerCase()}';
-    }).replaceAll(RegExp(r'([_\-])+'), ' ');
+      RegExp(
+        r'[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+',
+      ),
+      (Match match) {
+        if (_titleCaseExceptions.contains(match[0])) return match[0]!;
+        return '${match[0]![0].toUpperCase()}${match[0]!.substring(1).toLowerCase()}';
+      },
+    ).replaceAll(RegExp(r'([_\-])+'), ' ');
   }
 
   /// flutter and dart => flutterAndDart
@@ -51,7 +52,8 @@ extension StringExtensions on String {
 
 extension NullSafeStringExtensions on String? {
   bool get isEmptyOrNull =>
-      this == null || this!.toOneLine.removeWhiteSpaces.isEmpty;
+      this == null ||
+      this!.removeEmptyLines.toOneLine.removeWhiteSpaces.isEmpty;
 
   bool get isNotEmptyOrNull => !isEmptyOrNull;
 
@@ -290,7 +292,7 @@ extension NullSafeStringExtensions on String? {
     try {
       final s =
           this?.removeWhiteSpaces.removeEmptyLines.toLowerCase() ?? 'false';
-      return s == 'true' || s == 'yes' || (s.tryToNum ?? 0) > 0;
+      return s == 'true' || s == 'yes' || s.tryToNum.asBool;
     } catch (_) {
       return false;
     }

@@ -1,3 +1,9 @@
+### 1.1.9
+
+- **FIX**: Fixed a bug with `isZero` bool in numbers extensions.
+- **UPDATE**: `asBool` support null safety on numbers extensions.
+- **UPDATE**: Updated `ParsingException` implementation.
+
 ### 1.1.8
 
 - **NEW**: Added `isPositiveOrNull`, `isZeroOrNull`, and `isNegativeOrNull` to all numbers extensions.

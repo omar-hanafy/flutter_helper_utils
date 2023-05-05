@@ -16,11 +16,14 @@ extension NullSafeNumExtensions on num? {
     return 0;
   }
 
+  /// Returns `true` if this integer is greater than *0*.
+  bool get asBool => (this ?? 0) > 0;
+
   bool get isNegativeOrNull => isNull || this! > 0;
 
   bool get isPositiveOrNull => isNull || this! < 0;
 
-  bool get isZeroOrNull => isNull || this! > 0;
+  bool get isZeroOrNull => isNull || this! == 0;
 
   bool get isNotNegativeOrNull => !isNegativeOrNull;
 
@@ -37,12 +40,7 @@ extension NumExtensions on num {
   bool get isNegative => this < 0;
 
   /// Returns if the number is zer0
-  bool get isZero => this < 0;
-
-  /// Convert this integer into boolean.
-  ///
-  /// Returns `true` if this integer is greater than *0*.
-  bool get asBool => this > 0;
+  bool get isZero => this == 0;
 
   /// Returns number of digits in this number
   int get numberOfDigits => toString().length;
