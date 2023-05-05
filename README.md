@@ -24,6 +24,9 @@ dependencies:
 ```
 
 Then, run `flutter pub get` in your terminal.
+```bash
+flutter pub get
+```
 
 ## Usage
 

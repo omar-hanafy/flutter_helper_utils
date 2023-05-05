@@ -104,6 +104,7 @@ extension ListExtensions<E> on List<Widget> {
       );
 
   Widget toListViewBuilder({
+    required NullableIndexedWidgetBuilder itemBuilder,
     Key? key,
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
@@ -124,7 +125,6 @@ extension ListExtensions<E> on List<Widget> {
     bool addRepaintBoundaries = true,
     bool addSemanticIndexes = true,
     int? semanticChildCount,
-    required NullableIndexedWidgetBuilder itemBuilder,
     ChildIndexGetter? findChildIndexCallback,
     int? itemCount,
   }) =>

@@ -1,3 +1,5 @@
+// ignore_for_file: omit_local_variable_types, unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
@@ -140,7 +142,7 @@ class _ColorConverterState extends State<ColorConverter> {
             height: 100,
             width: 100,
             color: Colors.grey,
-            child: Icon(Icons.favorite),
+            child: const Icon(Icons.favorite),
           ).alignAtBottomRight(),
           Expanded(
             flex: 2,
