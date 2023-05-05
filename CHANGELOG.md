@@ -1,10 +1,15 @@
+### 1.1.8
+
+- **NEW**: Added `isPositiveOrNull`, `isZeroOrNull`, and `isNegativeOrNull` to all numbers extensions.
+- **UPDATE**: on String extension, `isEmptyOrNull` now returns true if string has only empty lines.
+
 ### 1.1.7
 
 - **NEW**:  Added `toDateTime` and `tryToDateTime` in `ConvertObject` class.
-- 
+
 ### 1.1.6
 
-- **NEW**:  Added `toMap` and `tryToMap` in `ConvertObject` class, and  add `isValidSVG` in String extension.
+- **NEW**:  Added `toMap` and `tryToMap` in `ConvertObject` class, and add `isValidSVG` in String extension.
 
 ### 1.1.5
 

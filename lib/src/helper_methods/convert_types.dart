@@ -17,13 +17,8 @@ abstract class ConvertObject {
         if (object is String) return object;
         return object.toString();
       } catch (e, s) {
-        log(
-          'toString() Unsupported object type: exception message -> $e',
-          stackTrace: s,
-          error: e,
-        );
         throw ParsingException(
-          cause: e.toString(),
+          error: e,
           parsingInfo: 'toString',
           stackTrace: s,
         );
@@ -31,6 +26,7 @@ abstract class ConvertObject {
     }
   }
 
+  /// convert any object to string or return null.
   static String? tryToString(dynamic object) {
     try {
       if (object is String?) return object;
@@ -56,13 +52,8 @@ abstract class ConvertObject {
       if (object is num) return object;
       return '$object'.toNum;
     } catch (e, s) {
-      log(
-        'toNum() Unsupported object type, exception message -> $e',
-        stackTrace: s,
-        error: e,
-      );
       throw ParsingException(
-        cause: '$e',
+        error: e,
         parsingInfo: 'toNum',
         stackTrace: s,
       );
@@ -70,8 +61,17 @@ abstract class ConvertObject {
   }
 
   static num? tryToNum(dynamic object) {
-    if (object is num?) return object;
-    return num.tryParse('$object');
+    try {
+      if (object is num?) return object;
+      return num.tryParse('$object');
+    } catch (e, s) {
+      log(
+        'tryToNum() Unsupported object type: exception message -> $e',
+        stackTrace: s,
+        error: e,
+      );
+      return null;
+    }
   }
 
   static int toInt(dynamic object) {
@@ -79,13 +79,8 @@ abstract class ConvertObject {
       if (object is int) return object;
       return toNum(object).toInt();
     } catch (e, s) {
-      log(
-        'toInt() Unsupported object type, exception message -> $e',
-        stackTrace: s,
-        error: e,
-      );
       throw ParsingException(
-        cause: '$e',
+        error: e,
         parsingInfo: 'toInt',
         stackTrace: s,
       );
@@ -93,8 +88,17 @@ abstract class ConvertObject {
   }
 
   static int? tryToInt(dynamic object) {
-    if (object is int?) return object;
-    return tryToNum(object).tryToInt;
+    try {
+      if (object is int?) return object;
+      return tryToNum(object).tryToInt;
+    } catch (e, s) {
+      log(
+        'tryToInt() Unsupported object type: exception message -> $e',
+        stackTrace: s,
+        error: e,
+      );
+      return null;
+    }
   }
 
   static double toDouble(dynamic object) {
@@ -102,22 +106,26 @@ abstract class ConvertObject {
       if (object is double) return object;
       return toNum(object).toDouble();
     } catch (e, s) {
-      log(
-        'toInt() Unsupported object type, exception message -> $e',
-        stackTrace: s,
-        error: e,
-      );
       throw ParsingException(
-        cause: '$e',
-        parsingInfo: 'toInt',
+        error: e,
+        parsingInfo: 'toDouble',
         stackTrace: s,
       );
     }
   }
 
   static double? tryToDouble(dynamic object) {
-    if (object is double?) return object;
-    return tryToNum(object).tryToDouble;
+    try {
+      if (object is double?) return object;
+      return tryToNum(object).tryToDouble;
+    } catch (e, s) {
+      log(
+        'tryToDouble() Unsupported object type: exception message -> $e',
+        stackTrace: s,
+        error: e,
+      );
+      return null;
+    }
   }
 
   /// return true if the object is bool and equal to true
@@ -142,13 +150,8 @@ abstract class ConvertObject {
       if (object is DateTime) return object;
       return DateTime.parse(toString1(object));
     } catch (e, s) {
-      log(
-        'toDateTime() Unsupported object type, exception message -> $e',
-        stackTrace: s,
-        error: e,
-      );
       throw ParsingException(
-        cause: '$e',
+        error: e,
         parsingInfo: 'toDateTime',
         stackTrace: s,
       );
@@ -157,7 +160,16 @@ abstract class ConvertObject {
 
   static DateTime? tryToDateTime(dynamic object) {
     if (object is DateTime?) return object;
-    return DateTime.tryParse(tryToString(object) ?? '');
+    try {
+      return DateTime.tryParse(tryToString(object) ?? '');
+    } catch (e, s) {
+      log(
+        'tryToDateTime() Unsupported object type: exception message -> $e',
+        stackTrace: s,
+        error: e,
+      );
+      return null;
+    }
   }
 
   static Map<K, V> toMap<K, V>(dynamic object) {
@@ -181,7 +193,7 @@ abstract class ConvertObject {
         error: e,
       );
       throw ParsingException(
-        cause: e.toString(),
+        error: e.toString(),
         parsingInfo: 'toSet',
         stackTrace: s,
       );
@@ -198,7 +210,7 @@ abstract class ConvertObject {
           .map((key, value) => MapEntry(key as K, value as V));
     } catch (e, s) {
       log(
-        'toMap() Unsupported Map type <$K, $V>: exception message -> $e',
+        'tryToMap() Unsupported Map type <$K, $V>: exception message -> $e',
         stackTrace: s,
         error: e,
       );
@@ -228,7 +240,7 @@ abstract class ConvertObject {
         error: e,
       );
       throw ParsingException(
-        cause: e.toString(),
+        error: e.toString(),
         parsingInfo: 'toSet',
         stackTrace: s,
       );
@@ -276,7 +288,7 @@ abstract class ConvertObject {
         error: e,
       );
       throw ParsingException(
-        cause: e.toString(),
+        error: e.toString(),
         parsingInfo: 'toList',
         stackTrace: s,
       );

@@ -50,7 +50,8 @@ extension StringExtensions on String {
 }
 
 extension NullSafeStringExtensions on String? {
-  bool get isEmptyOrNull => this == null || (this != null && this!.isEmpty);
+  bool get isEmptyOrNull =>
+      this == null || this!.toOneLine.removeWhiteSpaces.isEmpty;
 
   bool get isNotEmptyOrNull => !isEmptyOrNull;
 
@@ -286,8 +287,13 @@ extension NullSafeStringExtensions on String? {
   ///
   /// Returns `true` if this string is any of these values: `"true"`, `"yes"`, `"1"`, or if the string is a number and greater than 0, `false` if less than 1. This is also case insensitive.
   bool get asBool {
-    final s = this?.removeWhiteSpaces.removeEmptyLines.toLowerCase() ?? 'false';
-    return s == 'true' || s == 'yes' || (s.tryToNum ?? 0) > 0;
+    try {
+      final s =
+          this?.removeWhiteSpaces.removeEmptyLines.toLowerCase() ?? 'false';
+      return s == 'true' || s == 'yes' || (s.tryToNum ?? 0) > 0;
+    } catch (_) {
+      return false;
+    }
   }
 }
 

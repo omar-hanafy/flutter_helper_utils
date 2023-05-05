@@ -15,6 +15,18 @@ extension NullSafeNumExtensions on num? {
     }
     return 0;
   }
+
+  bool get isNegativeOrNull => isNull || this! > 0;
+
+  bool get isPositiveOrNull => isNull || this! < 0;
+
+  bool get isZeroOrNull => isNull || this! > 0;
+
+  bool get isNotNegativeOrNull => !isNegativeOrNull;
+
+  bool get isNotPositiveOrNull => !isPositiveOrNull;
+
+  bool get isNotZeroOrNull => !isZeroOrNull;
 }
 
 extension NumExtensions on num {
@@ -23,6 +35,9 @@ extension NumExtensions on num {
 
   /// Returns if the number is negative
   bool get isNegative => this < 0;
+
+  /// Returns if the number is zer0
+  bool get isZero => this < 0;
 
   /// Convert this integer into boolean.
   ///

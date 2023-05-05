@@ -1,6 +1,6 @@
 class ParsingException implements Exception {
   const ParsingException({
-    required this.cause,
+    required this.error,
     required this.parsingInfo,
     this.stackTrace,
   });
@@ -10,18 +10,24 @@ class ParsingException implements Exception {
     required String parsingInfo,
   }) {
     return ParsingException(
-      cause: 'Object Is Null',
+      error: 'Object Is Null',
       parsingInfo: parsingInfo,
       stackTrace: stackTrace,
     );
   }
 
   final String parsingInfo;
-  final String cause;
+  final Object? error;
   final StackTrace? stackTrace;
 
   @override
   String toString() {
-    return 'ParsingException{parsingInfo: $parsingInfo, cause: $cause${stackTrace != null ? ', stackTrace: $stackTrace' : ''}';
+    return '''
+ParsingException {
+  parsingInfo: $parsingInfo,
+  error: $error,
+  ${stackTrace != null ? ', stackTrace: $stackTrace' : ''}
+}
+''';
   }
 }
