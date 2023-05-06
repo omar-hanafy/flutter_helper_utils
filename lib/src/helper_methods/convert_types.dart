@@ -130,9 +130,11 @@ abstract class ConvertObject {
 
   /// return true if the object is bool and equal to true
   /// or object is string and equal to 'yes' or 'true'.
+  /// or object is num, int, or double and is larger than zero
   /// false is default even if object is null
   static bool toBool(dynamic object) {
     if (object is bool) return object;
+    if (object is num?) return object.asBool;
     return '$object'.asBool;
   }
 
@@ -173,6 +175,7 @@ abstract class ConvertObject {
   }
 
   static Map<K, V> toMap<K, V>(dynamic object) {
+    if (object is Map && object.isEmpty) return <K, V>{};
     if (object is Map<K, V>) return object;
     if (object == null) {
       throw ParsingException.nullObject(
@@ -201,6 +204,7 @@ abstract class ConvertObject {
   }
 
   static Map<K, V>? tryToMap<K, V>(dynamic object) {
+    if (object is Map && object.isEmpty) return <K, V>{};
     if (object is Map<K, V>?) return object;
     try {
       return object as Map<K, V>;
@@ -227,8 +231,9 @@ abstract class ConvertObject {
         );
       }
       if (object is Set<T>) return object;
-      final temp = object as List? ?? <dynamic>[];
       final set = <T>{};
+      if (object is Set && object.isEmpty) return set;
+      final temp = object as List? ?? <dynamic>[];
       for (final tmp in temp) {
         set.add(tmp as T);
       }
@@ -250,6 +255,7 @@ abstract class ConvertObject {
   static Set<T>? tryToSet<T>(dynamic object) {
     if (object is Set<T>?) return object;
     final set = <T>{};
+    if (object is Set && object.isEmpty) return set;
     try {
       if (object == null) return null;
       final temp = object as List? ?? <dynamic>[];
@@ -270,6 +276,7 @@ abstract class ConvertObject {
   static List<T> toList<T>(dynamic object) {
     if (object is List<T>) return object;
     final list = <T>[];
+    if (object is List && object.isEmpty) return list;
     try {
       if (object == null) {
         throw ParsingException.nullObject(
@@ -299,6 +306,7 @@ abstract class ConvertObject {
   static List<T>? tryToList<T>(dynamic object) {
     if (object is List<T>?) return object;
     final list = <T>[];
+    if (object is List && object.isEmpty) return list;
     try {
       if (object == null) return null;
       final temp = object as List? ?? <dynamic>[];

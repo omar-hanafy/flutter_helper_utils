@@ -20,7 +20,7 @@ To use this package, add `flutter_helper_utils` as a dependency in your `pubspec
 dependencies:
   flutter:
     sdk: flutter
-  flutter_helper_utils: ^1.1.9
+  flutter_helper_utils: ^1.2.0
 ```
 
 Then, run `flutter pub get` in your terminal.
@@ -271,6 +271,100 @@ AnyWidget(
 ).paddingSymmetric(v: 12, h: 15);
 // paddingAll, paddingLTRB, paddingSymmetric, and paddingOnly are also available.
 ```
+
+## `ConvertObject` Class
+
+The `ConvertObject` class provides a set of static methods for converting objects to different data types in Dart. It can convert objects to `String`, `int`, `double`, `DateTime`, `bool`, `List`, `Set`, and `Map` data types.
+
+#### Why?
+
+While Dart provides some built-in conversion tools, such as `toString`, `int.parse()`, and `DateTime.parse()`, these methods do not always provide detailed error messages or stack traces when errors occur during conversion.
+
+The `ConvertObject` class, on the other hand, not only provides an efficient way to convert objects, but it also helps to handle any errors that may occur during the conversion process. Specifically, the class includes a `ParsingException` class that provides detailed explanations of any errors that occur during conversion, including where the error occurred in the code (line number) and a stack trace for debugging purposes.
+
+This class can be particularly useful when dealing with JSON data from an API that needs to be parsed into a Dart object. With the conversion methods provided in the `ConvertObject` class, we can efficiently and effectively handle conversions and ensure our code is robust and reliable 😄.
+
+### Convert any Object to numbers or Return Null
+
+The `tryToDouble` and `tryToInt` methods of the `ConvertObject` class can be used to convert any object to an `int` or return null if the object is null or conversions throws any exceptions.
+
+```dart
+var value = '10.5';
+var intValue = ConvertObject.tryToInt(value); // return 10
+
+var doubleValue = ConvertObject.toDouble(value); // returns 10.5
+```
+
+### Convert any Object to bool
+
+The `toBool` method of the `ConvertObject` class can be used to convert any object to a `bool`. If the object is null, the method returns `false` by default.
+
+* return true if
+  * object is bool and equal to true.
+  * object is string and equal to 'yes' or 'true'.
+  * object is num, int, or double and is larger than zero.
+
+```dart
+var value = 'true';
+var boolValue = ConvertObject.toBool(value); // tryToBool also available. It's used to return null (not false) if object is null.
+```
+
+### Convert any Object to DateTime
+
+The `toDateTime` method of the `ConvertObject` class can be used to convert any object to a `DateTime`. If the object is null, a `ParsingException` is thrown
+
+* `toInt`, `toDouble`, `toNum`, `toBool`, and `toString1` are also available.
+
+```dart
+var value = '2022-05-06';
+DateTime date = ConvertObject.toDateTime(value);
+```
+
+### Convert any Object to List
+
+The `toList` method of the `ConvertObject` class can be used to convert any object to a `List`. It can be useful when we want to cast a list of type to a list of another type. If the object is null, a `ParsingException` is thrown.
+
+```dart
+List<String> strings = ["1", "2", "3"];
+List<int> numbers = ConvertObject.toList<int>(value); // returns <int>[1, 2, 3];
+// tryToList also available
+```
+
+### Convert any Object to Map
+
+The `toMap` method of the `ConvertObject` class can be used to convert any object to a `Map`. If the object is null, a `ParsingException` is thrown. If the object is not a `Map` data type, a `ParsingException` is also thrown.
+
+```dart
+Map<String, String> value = {'key': 'value'};
+Map<String, dynamic> mapValue = ConvertObject.tryToMap<String, dynamic>(value); // tryToMap also availbale.
+```
+
+Here is a table explaining each method in the `ConvertObject` class:
+
+| Method Name                                    | Description                                                                                                         |
+|------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
+| `toString1(dynamic object) => String`          | Converts any object to a `String` if the object is not null. Throws a `ParsingException` if the object is null.     |
+| `tryToString(dynamic object) => String?`       | Converts any object to a `String` or returns null if the object is null.                                            |
+| `toNum(dynamic object) => num`                 | Converts any object to a `num`. Throws a `ParsingException` if the object is null or if the conversion fails.       |
+| `tryToNum(dynamic object) => num?`             | Converts any object to a `num` or returns null if the object is null or if the conversion fails.                    |
+| `toInt(dynamic object) => int`                 | Converts any object to an `int`. Throws a `ParsingException` if the object is null or if the conversion fails.      |
+| `tryToInt(dynamic object) => int?`             | Converts any object to an `int` or returns null if the object is null or if the conversion fails.                   |
+| `toDouble(dynamic object) => double`           | Converts any object to a `double`. Throws a `ParsingException` if the object is null or if the conversion fails.    |
+| `tryToDouble(dynamic object) => double?`       | Converts any object to a `double` or returns null if the object is null or if the conversion fails.                 |
+| `toBool(dynamic object) => bool`               | Converts any object to a `bool`. Returns `false` by default.                                                        |
+| `tryToBool(dynamic object) => bool?`           | Converts any object to a `bool` or returns null if the conversion fails. Returns `false` by default.                |
+| `toDateTime(dynamic object) => DateTime`       | Converts any object to a `DateTime`. Throws a `ParsingException` if the object is null or if the conversion fails.  |
+| `tryToDateTime(dynamic object) => DateTime?`   | Converts any object to a `DateTime` or returns null if the object is null or if the conversion fails.               |
+| `toMap<K, V>(dynamic object) => Map<K, V>`     | Converts any object to a `Map<K, V>`. Throws a `ParsingException` if the object is null or if the conversion fails. |
+| `tryToMap<K, V>(dynamic object) => Map<K, V>?` | Converts any object to a `Map<K, V>` or returns null if the object is null or if the conversion fails.              |
+| `toSet<T>(dynamic object) => Set<T>`           | Converts any object to a `Set<T>`. Throws a `ParsingException` if the object is null or if the conversion fails.    |
+| `tryToSet<T>(dynamic object) => Set<T>?`       | Converts any object to a `Set<T>` or returns null if the object is null or if the conversion fails.                 |
+| `toList<T>(dynamic object) => List<T>`         | Converts any object to a `List<T>`. Throws a `ParsingException` if the object is null or if the conversion fails.   |
+| `tryToList<T>(dynamic object) => List<T>?`     | Converts any object to a `List<T>` or returns null if the object is null or if the conversion fails.                |
+
+## Exceptions
+
+The `ConvertObject` class throws a `ParsingException` if there is an error while converting an object. This exception provides information about the type of the object and the method used for conversion.
 
 ## Contributions
 

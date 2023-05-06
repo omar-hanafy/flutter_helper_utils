@@ -1,3 +1,7 @@
+### 1.2.0
+
+- **UPDATE**: Update documentation.
+
 ### 1.1.9
 
 - **FIX**: Fixed a bug with `isZero` bool in numbers extensions.
