@@ -1,3 +1,7 @@
+### 1.2.1
+
+- **NEW**: Added `isEmptyOrNull` and `isNotEmptyOrNull` to Map and Set extensions.
+
 ### 1.2.0
 
 - **UPDATE**: Update documentation.

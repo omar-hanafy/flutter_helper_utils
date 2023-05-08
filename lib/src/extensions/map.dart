@@ -1,3 +1,9 @@
+extension MapNullSafteyExt on Map<dynamic, dynamic>? {
+  bool get isEmptyOrNull => this == null || this!.isEmpty;
+
+  bool get isNotEmptyOrNull => !isEmptyOrNull;
+}
+
 extension MapExt on Map<String, dynamic> {
   /// Flatten a nested Map into a single level map
   ///

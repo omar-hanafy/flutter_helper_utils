@@ -197,7 +197,7 @@ abstract class ConvertObject {
       );
       throw ParsingException(
         error: e.toString(),
-        parsingInfo: 'toSet',
+        parsingInfo: 'toMap',
         stackTrace: s,
       );
     }

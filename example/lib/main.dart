@@ -23,11 +23,11 @@ Future<void> main() async {
   await duration.delay<void>(); // run async delay
 
 // NUMBERS:
-  const int number = 100;
-  String greeks = number.asGreeks; // 10k
-  Duration seconds = number.asSeconds; //  Duration(seconds: 100)
-  int numberOfDigits = number.numberOfDigits; // 3
-  int doubled = number.doubled; // 200
+  const int number = 1000;
+  String greeks = number.asGreeks; // 1k
+  Duration seconds = number.asSeconds; //  Duration(seconds: 1000)
+  int numberOfDigits = number.numberOfDigits; // 4
+  int doubled = number.doubled; // 2000
 
 // TEXT:
   const text = 'hello there!';

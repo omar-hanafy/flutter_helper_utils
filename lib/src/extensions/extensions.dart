@@ -6,4 +6,5 @@ export 'iterable.dart';
 export 'map.dart';
 export 'numbers.dart';
 export 'objects.dart';
+export 'set.dart';
 export 'string_ext.dart';

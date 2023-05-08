@@ -20,7 +20,7 @@ To use this package, add `flutter_helper_utils` as a dependency in your `pubspec
 dependencies:
   flutter:
     sdk: flutter
-  flutter_helper_utils: ^1.2.0
+  flutter_helper_utils: ^1.2.1
 ```
 
 Then, run `flutter pub get` in your terminal.
@@ -171,21 +171,21 @@ await duration.delay<void>();
 ### `int, double, and num` extension
 
 ```dart
-final int number = 100;
+final int number = 1000;
 
 // convert numbers to greeks.
   // e.g 1000 => 1k
   //     20000 => 20k
   //     1000000 => 1M
-String greeks = number.asGreeks; // 10k
+String greeks = number.asGreeks; // 1k
 
 // Easy way to make Durations from numbers.
-Duration seconds = number.asSeconds; //  Duration(seconds: 100)
+Duration seconds = number.asSeconds; //  Duration(seconds: 1000)
   
-int numberOfDigits = number.numberOfDigits; // 3
+int numberOfDigits = number.numberOfDigits; // 4
 
 // Return this number time two (tripled, quadrupled, and squared are also available).
-int doubled = number.doubled; // 200
+int doubled = number.doubled; // 2000
 ```
 
 ### `String` extension:
