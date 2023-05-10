@@ -4,7 +4,6 @@ import 'flutter_extensions.dart';
 
 extension ThemeExtension on BuildContext {
   ThemeData get themeData => Theme.of(this);
-
   TextTheme get txtTheme => themeData.textTheme;
 
   Brightness get brightness => themeData.brightness;

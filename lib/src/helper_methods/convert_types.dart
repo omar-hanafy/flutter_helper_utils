@@ -285,6 +285,9 @@ abstract class ConvertObject {
         );
       }
       final temp = object as List? ?? <dynamic>[];
+      try {
+        temp.cast<T>();
+      } catch (_) {}
       for (final tmp in temp) {
         list.add(tmp as T);
       }
@@ -310,6 +313,9 @@ abstract class ConvertObject {
     try {
       if (object == null) return null;
       final temp = object as List? ?? <dynamic>[];
+      try {
+        temp.cast<T>();
+      } catch (_) {}
       for (final tmp in temp) {
         list.add(tmp as T);
       }

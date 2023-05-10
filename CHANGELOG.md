@@ -1,3 +1,8 @@
+### 1.2.3
+
+- **NEW**: Added `scaffoldMessenger` getter in the `BuildContext` extension to easily call `ScaffoldMessenger.of(context)` 
+- **UPDATE**: Improved implementation of the `toList` and `tryToList` in the `ConvertObject` class.
+
 ### 1.2.2
 
 - **NEW**: Added `toUtcIso` (supports null safety) that convert any date `toUtc()` and `toIso8601String()` in the Date
