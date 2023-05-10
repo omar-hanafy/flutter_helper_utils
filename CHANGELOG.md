@@ -1,3 +1,8 @@
+### 1.2.2
+
+- **NEW**: Added `toUtcIso` (supports null safety) that convert any date `toUtc()` and `toIso8601String()` in the Date
+  extensions.
+
 ### 1.2.1
 
 - **NEW**: Added `isEmptyOrNull` and `isNotEmptyOrNull` to Map and Set extensions.

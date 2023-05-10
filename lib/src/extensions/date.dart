@@ -37,7 +37,13 @@ extension ToDate on num {
   DateTime get timestampToDate => DateTime.fromMillisecondsSinceEpoch(toInt());
 }
 
+extension NullableDateExtensions on DateTime? {
+  String? get toUtcIso => this?.toUtc().toIso8601String();
+}
+
 extension DateExtensions on DateTime {
+  String get toUtcIso => toUtc().toIso8601String();
+
   /// Adds this DateTime and Duration and returns the sum as a new DateTime object.
   DateTime operator +(Duration duration) => add(duration);
 
