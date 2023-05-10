@@ -1,6 +1,15 @@
+### 1.2.4
+
+- **NEW**: Added `DatesHelper` class that provide a set of static methods for DateTime such
+  as `isSameHour`, `diffInDays`, and `daysInRange`.
+- **NEW**: Added the getters `isPresent`, `isPast`, `passedDuration`, `remainingDays`, and more to the `DateTime`
+  extension.
+  - Now you can get formatted date using the format method directly in any date e.g `DateTime.now().format('EEE')`
+
 ### 1.2.3
 
-- **NEW**: Added `scaffoldMessenger` getter in the `BuildContext` extension to easily call `ScaffoldMessenger.of(context)` 
+- **NEW**: Added `scaffoldMessenger` getter in the `BuildContext` extension to easily
+  call `ScaffoldMessenger.of(context)`
 - **UPDATE**: Improved implementation of the `toList` and `tryToList` in the `ConvertObject` class.
 
 ### 1.2.2
