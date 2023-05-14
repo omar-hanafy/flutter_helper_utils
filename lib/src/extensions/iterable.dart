@@ -4,12 +4,80 @@ import 'dart:math';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
 typedef IndexedPredicate<T> = bool Function(int index, T);
+typedef Predicate<T> = bool Function(T);
 
-extension NullableCollectionsExtensions<T> on Iterable<T>? {
-  ///Returns `true` if this nullable iterable is either null or empty.
+extension ListExtensionsNS<T> on List<T>? {
+  /// same behavior as [removeAt] but it is null safe which means
+  /// it do nothing when [List] return [isEmptyOrNull] to true.
+  void tryRemoveAt(int index) {
+    if (isNotEmptyOrNull) this!.removeAt(index);
+  }
+
+  /// same behavior as [indexOf] but it is null safe which means
+  /// it do nothing when [List] return [isEmptyOrNull] to true.
+  int? indexOfOrNull(T element) =>
+      isEmptyOrNull ? null : this!.indexOf(element);
+
+  /// same behavior as [indexWhere] but it is null safe which means
+  /// it do nothing when [List] return [isEmptyOrNull] to true.
+  int? indexWhereOrNull(Predicate<T> test, [int start = 0]) =>
+      isEmptyOrNull ? null : this!.indexWhere(test, start);
+
+  /// same behavior as [removeWhere] but it is null safe which means
+  /// it do nothing when [List] return [isEmptyOrNull] to true.
+  void tryRemoveWhere(int element) =>
+      isEmptyOrNull ? null : this!.removeWhere((element) => false);
+}
+
+extension CollectionsExtensionsNS<T> on Iterable<T>? {
+  ///Returns [true] if this nullable iterable is either null or empty.
   bool get isEmptyOrNull => isNull || this!.isEmpty;
 
+  ///Returns [false] if this nullable iterable is either null or empty.
   bool get isNotEmptyOrNull => !isEmptyOrNull;
+
+  // get an element at specific index or return null
+  T? _elementAtOrNull(int index) {
+    return _elementOrNull(index, (_) => null);
+  }
+
+  T? _elementOrNull(int index, T? Function(int index) defaultElement) {
+    if (isEmptyOrNull) return null;
+    if (index < 0) return defaultElement(index);
+    var counter = 0;
+    for (final element in this!) {
+      if (index == counter++) {
+        return element;
+      }
+    }
+    return defaultElement(index);
+  }
+
+  /// get the first element return null
+  T? get firstOrNull => _elementAtOrNull(0);
+
+  /// get the last element if the list is not empty or return null
+  T? get lastOrNull => isNotEmptyOrNull ? this!.last : null;
+
+  T? firstOrNullWhere(Predicate<T> predicate) {
+    if (isEmptyOrNull) return null;
+    for (final element in this!) {
+      if (predicate(element)) return element;
+    }
+    return null;
+  }
+
+  /// get the last element or provider default
+  /// example:
+  /// var name = [danny, ronny, james].lastOrDefault["jack"]; // james
+  /// var name = [].lastOrDefault["jack"]; // jack
+  T? lastOrDefault(T defaultValue) => lastOrNull ?? defaultValue;
+
+  /// get the first element or provider default
+  /// example:
+  /// var name = [danny, ronny, james].firstOrDefault["jack"]; // danny
+  /// var name = [].firstOrDefault["jack"]; // jack
+  T firstOrDefault(T defaultValue) => firstOrNull ?? defaultValue;
 }
 
 extension CollectionsExtensions<T> on Iterable<T> {
@@ -17,7 +85,7 @@ extension CollectionsExtensions<T> on Iterable<T> {
   Iterable<T> orEmpty() => this;
 
   /// Returns `true` if at least one element matches the given [predicate].
-  bool any(bool Function(T element) predicate) {
+  bool any(Predicate<T> predicate) {
     if (isEmptyOrNull) return false;
     for (final element in orEmpty()) {
       if (predicate(element)) return true;
@@ -61,7 +129,7 @@ extension CollectionsExtensions<T> on Iterable<T> {
   }
 
   /// Returns a list containing only elements matching the given [predicate].
-  List<T> filter(bool Function(T element) test) {
+  List<T> filter(Predicate<T> test) {
     final result = <T>[];
     forEach((e) {
       if (e != null && test(e)) {
@@ -72,7 +140,7 @@ extension CollectionsExtensions<T> on Iterable<T> {
   }
 
   /// Returns a list containing all elements not matching the given [predicate] and will filter nulls as well.
-  List<T> filterNot(bool Function(T element) test) {
+  List<T> filterNot(Predicate<T> test) {
     final result = <T>[];
     forEach((e) {
       if (e != null && !test(e)) {
@@ -145,27 +213,6 @@ extension CollectionsExtensions<T> on Iterable<T> {
     return toList()[index];
   }
 
-  /// get the first element return null
-  T? get firstOrNull => _elementAtOrNull(0);
-
-  /// get the last element if the list is not empty or return null
-  T? get lastOrNull => isNotEmpty ? last : null;
-
-  T? lastOrDefault(T defaultValue) => lastOrNull ?? defaultValue;
-
-  T? firstOrNullWhere(bool Function(T element) predicate) {
-    for (final element in this) {
-      if (predicate(element)) return element;
-    }
-    return null;
-  }
-
-  /// get the first element or provider default
-  /// example:
-  /// var name = [danny, ronny, james].firstOrDefault["jack"]; // danny
-  /// var name = [].firstOrDefault["jack"]; // jack
-  T firstOrDefault(T defaultValue) => firstOrNull ?? defaultValue;
-
   /// Will retrun new [Iterable] with all elements that satisfy the predicate [predicate],
   Iterable<T> whereIndexed(IndexedPredicate<T> predicate) =>
       _IndexedWhereIterable(this, predicate);
@@ -211,7 +258,7 @@ extension CollectionsExtensions<T> on Iterable<T> {
   ///    User(45, "ronit"),
   ///    User(19, "amsalam"),
   ///  ].count((user) => user.age > 20); // 2
-  int count([bool Function(T element)? predicate]) {
+  int count([Predicate<T>? predicate]) {
     var count = 0;
     if (predicate == null) {
       return length;
@@ -230,7 +277,7 @@ extension CollectionsExtensions<T> on Iterable<T> {
   /// Example:
   /// [5, 19, 2].all(isEven), isFalse)
   /// [6, 12, 2].all(isEven), isTrue)
-  bool all(bool Function(T pred)? predicate) {
+  bool all(Predicate<T>? predicate) {
     for (final e in this) {
       if (!predicate!(e)) return false;
     }
@@ -257,7 +304,7 @@ extension CollectionsExtensions<T> on Iterable<T> {
   /// 30 Josh
   /// 36 Ran
   // ignore: inference_failure_on_function_return_type
-  List<T> distinctBy(Function(T selector) predicate) {
+  List<T> distinctBy(Predicate<T> predicate) {
     // ignore: inference_failure_on_instance_creation
     final set = HashSet();
     final list = <T>[];
@@ -267,24 +314,6 @@ extension CollectionsExtensions<T> on Iterable<T> {
       }
     });
     return list;
-  }
-
-// get an element at specific index or return null
-  T? _elementAtOrNull(int index) {
-    return _elementOrNull(index, (_) => null);
-  }
-
-  T? _elementOrNull(int index, T? Function(int index) defaultElement) {
-// if our index is smaller then 0 return the default
-    if (index < 0) return defaultElement(index);
-    var counter = 0;
-    for (final element in this) {
-      if (index == counter++) {
-        return element;
-      }
-    }
-
-    return defaultElement(index);
   }
 
   /// Returns a set containing all elements that are contained by this collection
@@ -302,7 +331,7 @@ extension CollectionsExtensions<T> on Iterable<T> {
 
   /// Returns the first element matching the given [predicate], or `null`
   /// if element was not found.
-  T? find(bool Function(T selector) predicate) {
+  T? find(Predicate<T> predicate) {
     for (final element in this) {
       if (predicate(element)) {
         return element;
@@ -325,7 +354,7 @@ class _IndexedWhereIterable<E> extends Iterable<E> {
 }
 
 /// [Iterator] for [_IndexedWhereIterable]
-class _IndexedWhereIterator<E> extends Iterator<E> {
+class _IndexedWhereIterator<E> implements Iterator<E> {
   _IndexedWhereIterator(this._iterator, this._f);
 
   final Iterator<E> _iterator;

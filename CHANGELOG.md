@@ -1,3 +1,9 @@
+### 1.2.5
+
+- **NEW**: Added `tryRemoveAt`, `indexOfOrNull`, `indexWhereOrNull`, and `tryRemoveWhere` on `List<T>?` extension.
+- **UPDATE**: Update the package to [FlutterSDK 3.10](https://docs.flutter.dev/release/release-notes/release-notes-3.10.0).
+- **FIX**: Fixed a bug with `isNotNull` on `Object` extension.
+
 ### 1.2.4
 
 - **NEW**: Added `DatesHelper` class that provide a set of static methods for DateTime such
