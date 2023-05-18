@@ -20,7 +20,7 @@ To use this package, add `flutter_helper_utils` as a dependency in your `pubspec
 dependencies:
   flutter:
     sdk: flutter
-  flutter_helper_utils: ^1.2.5
+  flutter_helper_utils: ^1.2.6
 ```
 
 Then, run `flutter pub get` in your terminal.

@@ -1,3 +1,7 @@
+### 1.2.6
+
+- **NEW**: Added `local` getter in datetime that call toLocal() on any dat, but it respects null safety.
+
 ### 1.2.5
 
 - **NEW**: Added `tryRemoveAt`, `indexOfOrNull`, `indexWhereOrNull`, and `tryRemoveWhere` on `List<T>?` extension.

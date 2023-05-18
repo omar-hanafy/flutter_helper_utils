@@ -36,6 +36,8 @@ extension ToDate on num {
 }
 
 extension NullableDateExtensions on DateTime? {
+  DateTime? get local => this?.toLocal();
+
   String? get toUtcIso => this?.toUtc().toIso8601String();
 
   bool get isTomorrow {
@@ -98,6 +100,8 @@ extension NullableDateExtensions on DateTime? {
 }
 
 extension DateExtensions on DateTime {
+  DateTime get local => toLocal();
+
   String format(String format) => DateFormat(format).format(this);
 
   String get toUtcIso => toUtc().toIso8601String();
