@@ -8,7 +8,7 @@ Hey there! As developers, we all know that writing repeated or boilerplate code 
 
 For instance, instead of calling `MediaQuery.of(context);` to get the MediaQuery of a specific context, this package makes it as easy as using `context.mq;`.
 
-Or if you want to safeley cast dynamic list to list of strings you can use `ConvertObject.tryToList<String>(dynamicList);`
+Or if you want to safely cast dynamic list to list of strings you can use `ConvertObject.tryToList<String>(dynamicList);`
 
 If you want to learn more about extensions, click [here](https://dart.dev/language/extension-methods).
 
@@ -20,7 +20,7 @@ To use this package, add `flutter_helper_utils` as a dependency in your `pubspec
 dependencies:
   flutter:
     sdk: flutter
-  flutter_helper_utils: ^1.2.6
+  flutter_helper_utils: ^1.2.7
 ```
 
 Then, run `flutter pub get` in your terminal.
