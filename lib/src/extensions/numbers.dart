@@ -16,20 +16,14 @@ extension NullSafeNumExtensions on num? {
     return 0;
   }
 
-  /// Returns `true` if this integer is greater than *0*.
-  bool get asBool => (this ?? 0) > 0;
+  bool get isNegative => isNotNull && this! > 0;
 
-  bool get isNegativeOrNull => isNull || this! > 0;
-
-  bool get isPositiveOrNull => isNull || this! < 0;
+  bool get isPositive => isNotNull && this! > 0;
 
   bool get isZeroOrNull => isNull || this! == 0;
 
-  bool get isNotNegativeOrNull => !isNegativeOrNull;
-
-  bool get isNotPositiveOrNull => !isPositiveOrNull;
-
-  bool get isNotZeroOrNull => !isZeroOrNull;
+  /// Returns `true` if this integer is greater than *0*.
+  bool get asBool => (this ?? 0) > 0;
 }
 
 extension NumExtensions on num {

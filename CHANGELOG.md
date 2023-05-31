@@ -1,3 +1,8 @@
+### 1.2.8
+
+- **UPDATE**: replace `isNegativeOrNull`, `isPositiveOrNull`, `isNotNegativeOrNull`, `isNotPositiveOrNull`,
+  and `isNotZeroOrNull` with just `isNegative`, `isPositive`, and `isZeroOrNull` in nullable numbers.
+
 ### 1.2.7
 
 - **NEW**: Added an option to check the device type when running on web, e.g. `isMobileWeb` or `isDesktopWeb`.
@@ -9,7 +14,8 @@
 ### 1.2.5
 
 - **NEW**: Added `tryRemoveAt`, `indexOfOrNull`, `indexWhereOrNull`, and `tryRemoveWhere` on `List<T>?` extension.
-- **UPDATE**: Update the package to [FlutterSDK 3.10](https://docs.flutter.dev/release/release-notes/release-notes-3.10.0).
+- **UPDATE**: Update the package
+  to [FlutterSDK 3.10](https://docs.flutter.dev/release/release-notes/release-notes-3.10.0).
 - **FIX**: Fixed a bug with `isNotNull` on `Object` extension.
 
 ### 1.2.4
@@ -18,7 +24,7 @@
   as `isSameHour`, `diffInDays`, and `daysInRange`.
 - **NEW**: Added the getters `isPresent`, `isPast`, `passedDuration`, `remainingDays`, and more to the `DateTime`
   extension.
-  - Now you can get formatted date using the format method directly in any date e.g `DateTime.now().format('EEE')`
+    - Now you can get formatted date using the format method directly in any date e.g `DateTime.now().format('EEE')`
 
 ### 1.2.3
 
