@@ -4,21 +4,37 @@ import 'package:flutter/material.dart';
 extension PlatformExtension on BuildContext {
   TargetPlatform get targetPlatform => Theme.of(this).platform;
 
-  bool get isMobile =>
-      !kIsWeb &&
-      (Theme.of(this).platform == TargetPlatform.iOS ||
-          Theme.of(this).platform == TargetPlatform.android);
+  bool get isMobile => targetPlatform.isMobile;
 
-  bool get isIOS => !kIsWeb && Theme.of(this).platform == TargetPlatform.iOS;
+  bool get isIOS => targetPlatform.isIOS;
 
-  bool get isAndroid =>
-      !kIsWeb && Theme.of(this).platform == TargetPlatform.android;
+  bool get isAndroid => targetPlatform.isAndroid;
 
-  bool get isDesktop =>
-      !kIsWeb &&
-      (Theme.of(this).platform == TargetPlatform.macOS ||
-          Theme.of(this).platform == TargetPlatform.windows ||
-          Theme.of(this).platform == TargetPlatform.linux);
+  bool get isDesktop => targetPlatform.isDesktop;
+
+  bool get isMacOS => targetPlatform.isMacOS;
+
+  bool get isWindows => targetPlatform.isWindows;
+
+  bool get isLinux => targetPlatform.isLinux;
+
+  bool get isApple => targetPlatform.isApple;
+
+  bool get isMobileWeb => targetPlatform.isMobileWeb;
+
+  bool get isIOSWeb => targetPlatform.isIOSWeb;
+
+  bool get isAndroidWeb => targetPlatform.isAndroidWeb;
+
+  bool get isDesktopWeb => targetPlatform.isDesktopWeb;
+
+  bool get isMacOsWeb => targetPlatform.isMacOsWeb;
+
+  bool get isWindowsWeb => targetPlatform.isWindowsWeb;
+
+  bool get isLinuxWeb => targetPlatform.isLinuxWeb;
+
+  bool get isAppleWeb => targetPlatform.isAppleWeb;
 }
 
 extension TargetPlatformExtension on TargetPlatform {
@@ -29,26 +45,27 @@ extension TargetPlatformExtension on TargetPlatform {
 
   bool get isAndroid => !kIsWeb && this == TargetPlatform.android;
 
-  bool get isLinux => !kIsWeb && this == TargetPlatform.linux;
-
-  bool get isMacOs => !kIsWeb && this == TargetPlatform.macOS;
-
-  bool get isWindows => !kIsWeb && this == TargetPlatform.windows;
-
   bool get isDesktop =>
       !kIsWeb &&
       (this == TargetPlatform.linux ||
           this == TargetPlatform.macOS ||
           this == TargetPlatform.windows);
 
+  bool get isMacOS => !kIsWeb && this == TargetPlatform.macOS;
+
+  bool get isWindows => !kIsWeb && this == TargetPlatform.windows;
+
+  bool get isLinux => !kIsWeb && this == TargetPlatform.linux;
+
+  bool get isApple =>
+      !kIsWeb && (this == TargetPlatform.macOS || this == TargetPlatform.iOS);
+
   bool get isMobileWeb =>
       kIsWeb && (this == TargetPlatform.iOS || this == TargetPlatform.android);
 
-  bool get isiOSWeb =>
-      kIsWeb && (this == TargetPlatform.iOS || this == TargetPlatform.android);
+  bool get isIOSWeb => kIsWeb && this == TargetPlatform.iOS;
 
-  bool get isAndroidWeb =>
-      kIsWeb && (this == TargetPlatform.iOS || this == TargetPlatform.android);
+  bool get isAndroidWeb => kIsWeb && this == TargetPlatform.android;
 
   bool get isDesktopWeb =>
       kIsWeb &&
@@ -56,9 +73,12 @@ extension TargetPlatformExtension on TargetPlatform {
           this == TargetPlatform.macOS ||
           this == TargetPlatform.windows);
 
-  bool get isLinuxWeb => kIsWeb && (this == TargetPlatform.linux);
+  bool get isMacOsWeb => kIsWeb && this == TargetPlatform.macOS;
 
-  bool get isMacOsWeb => kIsWeb && (this == TargetPlatform.macOS);
+  bool get isWindowsWeb => kIsWeb && this == TargetPlatform.windows;
 
-  bool get isWindowsWeb => kIsWeb && (this == TargetPlatform.windows);
+  bool get isLinuxWeb => kIsWeb && this == TargetPlatform.linux;
+
+  bool get isAppleWeb =>
+      kIsWeb && (this == TargetPlatform.macOS || this == TargetPlatform.iOS);
 }

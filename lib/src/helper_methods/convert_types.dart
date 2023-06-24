@@ -6,6 +6,8 @@ import '../src.dart';
 
 abstract class ConvertObject {
   /// convert any object to string if the object is not null only.
+  /// I used [toString1] instead of [toString]
+  /// to avoid conflicts with [Object.toString]
   static String toString1(dynamic object) {
     if (object == null) {
       throw ParsingException.nullObject(
@@ -133,9 +135,8 @@ abstract class ConvertObject {
   /// or object is num, int, or double and is larger than zero
   /// false is default even if object is null
   static bool toBool(dynamic object) {
-    if (object is bool) return object;
     if (object is num?) return object.asBool;
-    return '$object'.asBool;
+    return (object as Object?).asBool;
   }
 
   /// return null if object is null
@@ -275,6 +276,8 @@ abstract class ConvertObject {
 
   static List<T> toList<T>(dynamic object) {
     if (object is List<T>) return object;
+    if (object is T) return <T>[object];
+    if (object is Map<dynamic, T>) return object.values.toList();
     final list = <T>[];
     if (object is List && object.isEmpty) return list;
     try {
@@ -286,7 +289,7 @@ abstract class ConvertObject {
       }
       final temp = object as List? ?? <dynamic>[];
       try {
-        temp.cast<T>();
+        return temp.cast<T>();
       } catch (_) {}
       for (final tmp in temp) {
         list.add(tmp as T);
@@ -308,13 +311,15 @@ abstract class ConvertObject {
 
   static List<T>? tryToList<T>(dynamic object) {
     if (object is List<T>?) return object;
+    if (object is T) return <T>[object];
+    if (object is Map<dynamic, T>) return object.values.toList();
     final list = <T>[];
     if (object is List && object.isEmpty) return list;
     try {
       if (object == null) return null;
       final temp = object as List? ?? <dynamic>[];
       try {
-        temp.cast<T>();
+        return temp.cast<T>();
       } catch (_) {}
       for (final tmp in temp) {
         list.add(tmp as T);

@@ -4,6 +4,15 @@ import 'dart:math';
 import 'package:flutter_helper_utils/src/exceptions/exceptions.dart';
 import 'package:flutter_helper_utils/src/src.dart';
 
+// TODO(ANY): add more http helpers from response code.
+extension HttpEx on num? {
+  bool get isSuccessHttpResCode => this == 200 || this == 201;
+
+  HttpResStatus get toHttpResStatus =>
+      HttpResStatus.values.firstOrNullWhere((s) => this == s.code) ??
+      HttpResStatus.notFound;
+}
+
 extension NullSafeNumExtensions on num? {
   int? get tryToInt => this?.toInt();
 

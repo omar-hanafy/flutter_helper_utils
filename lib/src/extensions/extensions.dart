@@ -1,3 +1,4 @@
+export 'bool.dart';
 export 'colors_ext.dart';
 export 'date.dart';
 export 'duration.dart';

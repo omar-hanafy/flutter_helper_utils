@@ -1,3 +1,85 @@
+### 1.3.6
+
+- **UPDATE**: The `toList<T>` and `tryToList<T>` functions now support converting map values to a list if the value's
+  type matches `T`. This enhancement adds more flexibility and convenience when working with collections.
+
+### 1.3.5
+
+- **NEW**:
+  Added `showMaterialBanner`, `showSnackBar`, `hideCurrentMaterialBanner`, `hideCurrentSnackBar`, `removeCurrentMaterialBanner`, `removeCurrentSnackBar`, `clearMaterialBanners`, `clearSnackBars`
+  on `BuildContext`. Usage example could be as easy as `context.removeCurrentSnackBar`.
+
+- **NEW**: Added `focusScope`, `hasFocus`, `unFocus`, and `requestFocus` call back on BuildContext. `requestFocus` is
+  commonly used to
+  hide keyboard on onTap/onPress call. Usage could be `onTap: () => context.requestFocus`
+  or `onTap: context.requestFocusCall`.
+
+- **NEW**: Added new enum called `HttpResStatus` that contains all http response codes with description to each one, and
+  also some helper getters such as `isSuccessful`.
+  &nbsp;
+  *Usage with http package could be*:
+  ```dart
+  final res = await http.post(...); // assume it retrun res code 505
+  print(res.statusCode.toHttpResStatus); // will print "Insufficient Storage"
+  ```
+
+- **UPDATE**: Used MediaQuery as InheritedModel to improve performance, see
+  this [pull](https://github.com/flutter/flutter/pull/114459) in flutter for more info.
+
+### 1.3.4
+
+- **NEW**: Added `isValidHttpCode` in `num?` extension that returns true if the http response code is 200 or 201.
+- **NEW**: Added `toDateWithFormat` in String extension that converts string to `DateTime` with specific format
+  e.g, `d-M-y`.
+
+&nbsp;
+*Usage*:
+
+  ```dart
+
+final dateTime = '14-12-2030'.toDateWithFormat('d-M-y');
+  ```
+
+### 1.3.3
+
+- **NEW**: Added `binary` in bool extension that returns `1` if true and `0` if false as `int`.
+
+### 1.3.2
+
+- **FIX**: Fixed a bug when detecting `isIOSWeb` and `isAndroidWeb` using `TargetPlatform`.
+- **NEW**: Added `isApple` that detects if the running device is made by apple e.g. MacOS, iPadOS, or iOS.
+
+&nbsp;
+*Usage*:
+
+  ```dart
+context.isApple
+// OR without context
+defaultTargetPlatform.isApple // import 'package:flutter/foundation.dart';
+  ```
+
+### 1.3.1
+
+- **NEW**: Added `toBool` to nullable `Object?`.
+
+&nbsp;
+*Rules*:
+
+* Object is true only if
+    1. Object is bool and true.
+    2. Object is num and is greater than zero.
+    3. Object is string and is equal to 'yes', 'true', or '1'.
+* any other conditions including null will return false.
+
+### 1.3.0
+
+- **HOT FIX**: Fixed bool extension is not exported.
+
+### 1.2.9
+
+- **NEW**: Added `isTrue`, and `isFalse` on nullable boolean, now if bool? is null the check will always return false
+  instead of showing compile error.
+
 ### 1.2.8
 
 - **UPDATE**: replace `isNegativeOrNull`, `isPositiveOrNull`, `isNotNegativeOrNull`, `isNotPositiveOrNull`,

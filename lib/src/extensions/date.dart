@@ -20,6 +20,15 @@ extension DateString on String? {
   /// Parse string to [DateTime]
   DateTime get toDateTime => DateTime.parse(this!);
 
+  DateFormat get dateFormat => DateFormat(this);
+
+  /// Parse string to [DateTime] but with a specific format, e.g, 'd-M-y'.
+  DateTime toDateWithFormat(String format) => format.dateFormat.parse(this!);
+
+  /// Parse string to nullable [DateTime] but with a specific format, e.g, 'd-M-y'.
+  DateTime? tryToDateWithFormat(String format) =>
+      isEmptyOrNull ? null : format.dateFormat.parse(this!);
+
   DateTime get timestampToDate => DateTime.fromMillisecondsSinceEpoch(toInt);
 }
 
@@ -93,7 +102,7 @@ extension NullableDateExtensions on DateTime? {
       isNull ? null : DateTime.now().difference(this!);
 
   String? tryFormat(String format) =>
-      isNotNull ? DateFormat(format).format(this!) : null;
+      isNotNull ? format.dateFormat.format(this!) : null;
 
   int? get remainingDays =>
       isNotNull ? DatesHelper.diffInDays(this!, DateTime.now()) : null;
@@ -102,7 +111,7 @@ extension NullableDateExtensions on DateTime? {
 extension DateExtensions on DateTime {
   DateTime get local => toLocal();
 
-  String format(String format) => DateFormat(format).format(this);
+  String format(String format) => format.dateFormat.format(this);
 
   String get toUtcIso => toUtc().toIso8601String();
 

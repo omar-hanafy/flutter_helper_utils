@@ -292,7 +292,7 @@ extension NullSafeStringExtensions on String? {
     try {
       final s =
           this?.removeWhiteSpaces.removeEmptyLines.toLowerCase() ?? 'false';
-      return s == 'true' || s == 'yes' || s.tryToNum.asBool;
+      return s == 'true' || s == 'yes' || s == '1' || s.tryToNum.asBool;
     } catch (_) {
       return false;
     }
