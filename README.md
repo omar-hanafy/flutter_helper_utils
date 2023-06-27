@@ -2,7 +2,7 @@
 
 The [flutter_helper_utils](https://pub.dev/packages/flutter_helper_utils) is a valuable tool for developers who want to speed up their development process. It offers various [extensions](https://dart.dev/language/extension-methods) and helper methods that can make development more efficient.
 
-*NOTE*: In versions `'1.3.7'` I introduced a faster way of converting dynamic values to popular dart types using the
+**NOTE**: In versions `'1.3.7'` I introduced a faster way of converting dynamic values to popular dart types using the
 new [global functions](#global-functions) called [`toType`](#global-functions) and [`tryToType`](#global-functions), to
 learn more, move to global functions [docs](#global-functions)
 
