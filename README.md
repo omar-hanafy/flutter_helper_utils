@@ -2,6 +2,10 @@
 
 The [flutter_helper_utils](https://pub.dev/packages/flutter_helper_utils) is a valuable tool for developers who want to speed up their development process. It offers various [extensions](https://dart.dev/language/extension-methods) and helper methods that can make development more efficient.
 
+*NOTE*: In versions `'1.3.7'` I introduced a faster way of converting dynamic values to popular dart types using the
+new [global functions](#global-functions) called [`toType`](#global-functions) and [`tryToType`](#global-functions), to
+learn more, move to global functions [docs](#global-functions)
+
 ## **Why I Created This Package**
 
 Hey there! As developers, we all know that writing repeated or boilerplate code can really slow down the development process. That's why I wanted to share all the helper methods and [extensions](https://dart.dev/language/extension-methods) I've created in my previous projects within this package.
@@ -20,7 +24,7 @@ To use this package, add `flutter_helper_utils` as a dependency in your `pubspec
 dependencies:
   flutter:
     sdk: flutter
-  flutter_helper_utils: ^1.3.6
+  flutter_helper_utils: ^1.3.8
 ```
 
 Then, run `flutter pub get` in your terminal.
@@ -42,15 +46,15 @@ You can now use any of the helper methods or extensions provided by the package.
 
 ```dart
 // Navigate to a new screen and remove all previous screens from the stack.
-context.pushReplacementNamed('/home');
+context.pReplacementNamed('/home');
 
 // Navigate to a new screen and remove it from the stack after it's closed.
-context.pushNamedAndRemoveUntil('/login', ModalRoute.withName('/home'));
+context.pNamedAndRemoveUntil('/login', ModalRoute.withName('/home'));
 
 // Navigate to a new screen and pass/recieve data from/to it.
-final data = await context.pushNamed<String?>('/details', arguments: {'id': 123});
+final data = await context.pNamed<String?>('/details', arguments: {'id': 123});
 
-// push, pushReplacement, popPage, popUntil and canPop are also available.
+// pushPage, pReplacement, popPage, popUntil and canPop are also available.
 ```
 
 ### `MediaQuery` extension
@@ -361,6 +365,49 @@ Here is a table explaining each method in the `ConvertObject` class:
 | `tryToSet<T>(dynamic object) => Set<T>?`       | Converts any object to a `Set<T>` or returns null if the object is null or if the conversion fails.                 |
 | `toList<T>(dynamic object) => List<T>`         | Converts any object to a `List<T>`. Throws a `ParsingException` if the object is null or if the conversion fails.   |
 | `tryToList<T>(dynamic object) => List<T>?`     | Converts any object to a `List<T>` or returns null if the object is null or if the conversion fails.                |
+
+## Global Functions
+
+### `toType` and `tryToType` for null safe.
+
+Converts dynamic values to a specified type with one line of code.
+
+Supported conversion types:
+
+- `bool`
+- `int`
+- `BigInt`
+- `double`
+- `num`
+- `String`
+- `DateTime`
+- `Map`
+- `Set`
+- `List`
+
+Throws a `ParsingException` if the object cannot be converted to the specified type.
+
+**Example usage:**
+
+```dart
+
+final dynamicValue = '42.3';
+final intValue = toType<int>(dynamicValue); // 42
+
+final dynamicValue2 = 'Hello';
+final intValue2 = toType<int>(dynamicValue2); // Throws ParsingException
+
+final dynamicValue3 = 'true';
+final intValue2 = toType<int>(dynamicValue2); // Throws ParsingException
+final boolValue2 = toType<bool>(dynamicValue3); // true
+
+final dynamicValue5 = null;
+final intValue3 = toType<int>(dynamicValue5); // Throws ParsingException with nullObject error
+final intValue4 = tryToType<int>(dynamicValue5); // return null without errors
+
+final dynamicValue6 = {1, 2, 3, 4}; // set of int
+final list = toType<List<String>>(dynamicValue6); // return ["1", "2", "3", "4"];
+```
 
 ## Exceptions
 

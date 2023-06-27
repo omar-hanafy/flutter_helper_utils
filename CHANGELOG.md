@@ -1,3 +1,52 @@
+### 1.3.8
+
+- **BREAKING CHANGES**: The navigation extension methods have been renamed to avoid conflicts with other packages, such
+  as `go_router`. Please update your codebase to use the new method names accordingly.
+- Renamed navigation extension methods:
+  - `context.push` changed to `context.pushPage`
+  - `context.pushReplacement` changed to `context.pReplacement`
+  - `context.pushAndRemoveUntil` changed to `context.pAndRemoveUntil`
+  - `context.pushNamedAndRemoveUntil` changed to `context.pNamedAndRemoveUntil`
+  - `context.pushNamed` changed to `context.pNamed`
+  - `context.pushReplacementNamed` changed to `context.pReplacementNamed`
+  - The `context.popPage` method remains unchanged since it has already been resolved in a previous [version](#105).
+
+We apologize for any inconvenience caused by this breaking change. If you encounter any issues or need assistance, please don't hesitate to reach out.
+
+### 1.3.7
+
+- **NEW**: Introducing `toType` and `tryToType` global functions. They allow converting a dynamic object to a specific
+  type `T` and automatically detect the type, invoking the appropriate function from the `ConvertObject` class.
+
+&nbsp;
+*Sample*:
+
+  ```dart
+
+dynamic data = 12.4;
+final myInt = toType<int>(data); // tryToType behaves similarly but is null-safe
+  ```
+
+- **NEW**: Added `BigInt` and `tryBigInt` in the ConvertObject class. `BigInt` represents arbitrarily large
+  integers. It is used when you need to perform operations on integers that exceed the maximum value that can be
+  represented by the int type. It's IMPORTANT to note that BigInt operations can be computationally expensive,
+  especially for very large integers. Therefore, use BigInt only when necessary, and be mindful of performance
+  implications.
+
+&nbsp;
+*Sample*:
+
+  ```dart
+
+String largeNum = '12434535367326235634';
+final BigInt myBigInt = ConvertObject.toBigInt(largeNum);
+// OR
+final BigInt myBigInt = toType<BigInt>(largeNum);
+  ```
+
+- **UPDATE**:  The `toList<T>`, `tryToList<T>`, `toSet<T>` and `tryToSet<T>` functions now support converting any type
+  of `Iterable`.
+
 ### 1.3.6
 
 - **UPDATE**: The `toList<T>` and `tryToList<T>` functions now support converting map values to a list if the value's

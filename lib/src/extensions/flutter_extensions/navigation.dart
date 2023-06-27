@@ -40,7 +40,7 @@ extension NavigatorExtension on BuildContext {
   bool get canPop => Navigator.canPop(this);
 
   /// performs a simple [Navigator.push] action with given [route]
-  Future<T?> push<T extends Object?>(
+  Future<T?> pushPage<T extends Object?>(
     Widget screen, {
     RouteSettings? settings,
     bool maintainState = true,
@@ -58,7 +58,7 @@ extension NavigatorExtension on BuildContext {
       );
 
   /// performs a simple [Navigator.pushReplacement] action with given [route]
-  Future<T?> pushReplacement<T extends Object?, TO extends Object?>(
+  Future<T?> pReplacement<T extends Object?, TO extends Object?>(
     Widget screen, {
     bool allowSnapshotting = true,
     RouteSettings? settings,
@@ -76,7 +76,7 @@ extension NavigatorExtension on BuildContext {
       );
 
   /// perform push and remove route
-  Future<T?> pushAndRemoveUntil<T extends Object?>(
+  Future<T?> pAndRemoveUntil<T extends Object?>(
     Widget screen, {
     bool allowSnapshotting = true,
     RouteSettings? settings,
@@ -95,7 +95,7 @@ extension NavigatorExtension on BuildContext {
           (Route<dynamic> route) => routes);
 
   /// perform push and remove route with routeName
-  Future<T?> pushNamedAndRemoveUntil<T extends Object?>(
+  Future<T?> pNamedAndRemoveUntil<T extends Object?>(
     String screenName,
     RoutePredicate predicate, {
     bool allowSnapshotting = true,
@@ -108,14 +108,14 @@ extension NavigatorExtension on BuildContext {
       );
 
   /// perform push with routeName
-  Future<T?> pushNamed<T extends Object?>(
+  Future<T?> pNamed<T extends Object?>(
     String screenName, {
     Object? arguments,
   }) async =>
       Navigator.of(this).pushNamed<T>(screenName, arguments: arguments);
 
   /// perform replace with routeName
-  Future<T?> pushReplacementNamed<T extends Object?, TO extends Object?>(
+  Future<T?> pReplacementNamed<T extends Object?, TO extends Object?>(
     String screenName, {
     Object? arguments,
     TO? result,
