@@ -603,13 +603,8 @@ abstract class ConvertObject {
         );
       }
       if (object is Set<T>) return object;
-      final set = <T>{};
-      if (object is Set && object.isEmpty) return set;
-      final temp = (object as Iterable? ?? []).toSet();
-      for (final tmp in temp) {
-        set.add(tmp as T);
-      }
-      return set;
+      if (object is Set && object.isEmpty) return <T>{};
+      return (object as Iterable).map((tmp) => toType<T>(tmp)).toSet();
     } catch (e, s) {
       log(
         'toSet() Unsupported object type ($T): exception message -> $e',
@@ -646,14 +641,10 @@ abstract class ConvertObject {
   /// ```
   static Set<T>? tryToSet<T>(dynamic object) {
     if (object is Set<T>?) return object;
-    final set = <T>{};
-    if (object is Set && object.isEmpty) return set;
+    if (object is Set && object.isEmpty) return <T>{};
     try {
       if (object == null) return null;
-      final temp = (object as Iterable? ?? []).toSet();
-      for (final tmp in temp) {
-        set.add(tmp as T);
-      }
+      return (object as Iterable).map((tmp) => toType<T>(tmp)).toSet();
     } catch (e, s) {
       log(
         'toSet() Unsupported object type ($T): exception message -> $e',
@@ -662,7 +653,6 @@ abstract class ConvertObject {
       );
       return null;
     }
-    return set;
   }
 
   /// Convert an object to a [List] of type `T`.
@@ -690,8 +680,7 @@ abstract class ConvertObject {
     if (object is List<T>) return object;
     if (object is T) return <T>[object];
     if (object is Map<dynamic, T>) return object.values.toList();
-    final list = <T>[];
-    if (object is List && object.isEmpty) return list;
+    if (object is List && object.isEmpty) return <T>[];
     try {
       if (object == null) {
         throw ParsingException.nullObject(
@@ -699,13 +688,7 @@ abstract class ConvertObject {
           stackTrace: StackTrace.current,
         );
       }
-      final temp = (object as Iterable? ?? []).toList();
-      try {
-        return temp.cast<T>();
-      } catch (_) {}
-      for (final tmp in temp) {
-        list.add(toType<T>(tmp));
-      }
+      return (object as Iterable).map((tmp) => toType<T>(tmp)).toList();
     } catch (e, s) {
       log(
         'toList() Unsupported object type ($T): exception message -> $e',
@@ -718,7 +701,6 @@ abstract class ConvertObject {
         stackTrace: s,
       );
     }
-    return list;
   }
 
   /// Convert an object to a [List] of type `T`, or return `null` if the object is `null`.
@@ -749,25 +731,18 @@ abstract class ConvertObject {
     if (object is List<T>?) return object;
     if (object is T) return <T>[object];
     if (object is Map<dynamic, T>) return object.values.toList();
-    final list = <T?>[];
-    if (object is List && object.isEmpty) return list;
+    if (object is List && object.isEmpty) return <T?>[];
     try {
       if (object == null) return null;
-      final temp = (object as Iterable? ?? []).toList();
-      try {
-        return temp.cast<T>();
-      } catch (_) {}
-      for (final tmp in temp) {
-        list.add(tryToType<T?>(tmp));
-      }
+      return (object as Iterable).map((tmp) => toType<T>(tmp)).toList();
     } catch (e, s) {
       log(
         'tryToList() Unsupported object type ($T): exception message -> $e',
         stackTrace: s,
         error: e,
       );
+      return null;
     }
-    return list;
   }
 }
 
@@ -809,13 +784,13 @@ T toType<T>(dynamic object) {
     );
   }
   try {
-    if (T is bool) return ConvertObject.toBool(object) as T;
-    if (T is int) return ConvertObject.toInt(object) as T;
-    if (T is double) return ConvertObject.toDouble(object) as T;
-    if (T is num) return ConvertObject.toNum(object) as T;
-    if (T is BigInt) return ConvertObject.toBigInt(object) as T;
-    if (T is String) return ConvertObject.toString1(object) as T;
-    if (T is DateTime) return ConvertObject.toDateTime(object) as T;
+    if (T == bool) return ConvertObject.toBool(object) as T;
+    if (T == int) return ConvertObject.toInt(object) as T;
+    if (T == double) return ConvertObject.toDouble(object) as T;
+    if (T == num) return ConvertObject.toNum(object) as T;
+    if (T == BigInt) return ConvertObject.toBigInt(object) as T;
+    if (T == String) return ConvertObject.toString1(object) as T;
+    if (T == DateTime) return ConvertObject.toDateTime(object) as T;
   } catch (e, s) {
     throw ParsingException(
       error: e,
@@ -857,13 +832,13 @@ T? tryToType<T>(dynamic object) {
   if (object is T) return object;
   if (object == null) return null;
   try {
-    if (T is bool?) return ConvertObject.tryToBool(object) as T?;
-    if (T is int?) return ConvertObject.tryToInt(object) as T?;
-    if (T is BigInt?) return ConvertObject.tryToBigInt(object) as T?;
-    if (T is double?) return ConvertObject.tryToDouble(object) as T?;
-    if (T is num?) return ConvertObject.tryToNum(object) as T?;
-    if (T is String?) return ConvertObject.tryToString(object) as T?;
-    if (T is DateTime?) return ConvertObject.tryToDateTime(object) as T?;
+    if (T == bool) return ConvertObject.tryToBool(object) as T?;
+    if (T == int) return ConvertObject.tryToInt(object) as T?;
+    if (T == BigInt) return ConvertObject.tryToBigInt(object) as T?;
+    if (T == double) return ConvertObject.tryToDouble(object) as T?;
+    if (T == num) return ConvertObject.tryToNum(object) as T?;
+    if (T == String) return ConvertObject.tryToString(object) as T?;
+    if (T == DateTime) return ConvertObject.tryToDateTime(object) as T?;
   } catch (e, s) {
     throw ParsingException(
       error: e,
