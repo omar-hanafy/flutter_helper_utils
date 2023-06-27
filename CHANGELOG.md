@@ -1,17 +1,34 @@
+### 1.4.0
+
+- **UPDATE**: Removing support of Iterables and Maps from `toType` and `tryToType` functions due to some restrictions in dart generics. Here is the list of the supported conversion types:
+  - `bool`
+  - `int`
+  - `BigInt`
+  - `double`
+  - `num`
+  - `String`
+  - `DateTime`
+
+- For Iterables and Maps, use the preferred methods from the `ConvertObject` class:
+  - To convert to a `List`, use `ConvertObject.toList<String>(dynamicIterableData)`.
+  - To convert to a `Set`, use `ConvertObject.toSet<String>(dynamicIterableData)`.
+  - To convert to a `Map`, use `ConvertObject.toMap<String, int>(dynamicMapData)`.
+
 ### 1.3.8
 
 - **BREAKING CHANGES**: The navigation extension methods have been renamed to avoid conflicts with other packages, such
   as `go_router`. Please update your codebase to use the new method names accordingly.
 - Renamed navigation extension methods:
-  - `context.push` changed to `context.pushPage`
-  - `context.pushReplacement` changed to `context.pReplacement`
-  - `context.pushAndRemoveUntil` changed to `context.pAndRemoveUntil`
-  - `context.pushNamedAndRemoveUntil` changed to `context.pNamedAndRemoveUntil`
-  - `context.pushNamed` changed to `context.pNamed`
-  - `context.pushReplacementNamed` changed to `context.pReplacementNamed`
-  - The `context.popPage` method remains unchanged since it has already been resolved in a previous [version](#105).
+    - `context.push` changed to `context.pushPage`
+    - `context.pushReplacement` changed to `context.pReplacement`
+    - `context.pushAndRemoveUntil` changed to `context.pAndRemoveUntil`
+    - `context.pushNamedAndRemoveUntil` changed to `context.pNamedAndRemoveUntil`
+    - `context.pushNamed` changed to `context.pNamed`
+    - `context.pushReplacementNamed` changed to `context.pReplacementNamed`
+    - The `context.popPage` method remains unchanged since it has already been resolved in a previous [version](#105).
 
-We apologize for any inconvenience caused by this breaking change. If you encounter any issues or need assistance, please don't hesitate to reach out.
+We apologize for any inconvenience caused by this breaking change. If you encounter any issues or need assistance,
+please don't hesitate to reach out.
 
 ### 1.3.7
 

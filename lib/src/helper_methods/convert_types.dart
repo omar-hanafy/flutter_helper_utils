@@ -783,11 +783,9 @@ abstract class ConvertObject {
 ///   - [int]
 ///   - [BigInt]
 ///   - [double]
+///   - [num]
 ///   - [String]
 ///   - [DateTime]
-///   - [Map]
-///   - [Set]
-///   - [List]
 ///
 /// Throws a [ParsingException] if it cannot be converted to the specified type.
 ///
@@ -818,9 +816,6 @@ T toType<T>(dynamic object) {
     if (T is BigInt) return ConvertObject.toBigInt(object) as T;
     if (T is String) return ConvertObject.toString1(object) as T;
     if (T is DateTime) return ConvertObject.toDateTime(object) as T;
-    if (T is Map) return ConvertObject.toMap(object) as T;
-    if (T is Set) return ConvertObject.toSet(object) as T;
-    if (T is List) return ConvertObject.toList(object) as T;
   } catch (e, s) {
     throw ParsingException(
       error: e,
@@ -845,11 +840,9 @@ T toType<T>(dynamic object) {
 ///   - [int]
 ///   - [BigInt]
 ///   - [double]
+///   - [num]
 ///   - [String]
 ///   - [DateTime]
-///   - [Map]
-///   - [Set]
-///   - [List]
 /// Throws a [ParsingException] if the object cannot be converted to the specified type.
 ///
 /// Example usage:
@@ -871,9 +864,6 @@ T? tryToType<T>(dynamic object) {
     if (T is num?) return ConvertObject.tryToNum(object) as T?;
     if (T is String?) return ConvertObject.tryToString(object) as T?;
     if (T is DateTime?) return ConvertObject.tryToDateTime(object) as T?;
-    if (T is Map?) return ConvertObject.tryToMap(object) as T?;
-    if (T is Set?) return ConvertObject.tryToSet(object) as T?;
-    if (T is List?) return ConvertObject.tryToList(object) as T?;
   } catch (e, s) {
     throw ParsingException(
       error: e,
