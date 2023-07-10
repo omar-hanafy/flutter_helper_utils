@@ -25,7 +25,11 @@ abstract class ConvertObject {
   /// final object4 = null;
   /// final string4 = ConvertObject.toString1(object4); // throws ParsingException
   /// ```
-  static String toString1(dynamic object) {
+  static String toString1(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     if (object == null) {
       throw ParsingException.nullObject(
         parsingInfo: 'toString',
@@ -33,6 +37,9 @@ abstract class ConvertObject {
       );
     } else {
       try {
+        if (mapKey != null) {
+          return toMap<dynamic, dynamic>(object)[mapKey].toString();
+        }
         if (object is String) return object;
         return object.toString();
       } catch (e, s) {
@@ -63,8 +70,15 @@ abstract class ConvertObject {
   /// final object4 = null;
   /// final string4 = ConvertObject.tryToString(object4); // null
   /// ```
-  static String? tryToString(dynamic object) {
+  static String? tryToString(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     try {
+      if (mapKey != null && object != null) {
+        return toMap<dynamic, dynamic>(object)[mapKey].toString();
+      }
       if (object is String?) return object;
       return object != null ? '$object' : null;
     } catch (e, s) {
@@ -99,7 +113,11 @@ abstract class ConvertObject {
   /// final object5 = null;
   /// final num5 = ConvertObject.toNum(object5); // throws ParsingException
   /// ```
-  static num toNum(dynamic object) {
+  static num toNum(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     if (object == null) {
       throw ParsingException.nullObject(
         parsingInfo: 'toNum',
@@ -107,6 +125,9 @@ abstract class ConvertObject {
       );
     }
     try {
+      if (mapKey != null) {
+        return toMap<dynamic, dynamic>(object)[mapKey].toString().toNum;
+      }
       if (object is num) return object;
       return '$object'.toNum;
     } catch (e, s) {
@@ -139,8 +160,15 @@ abstract class ConvertObject {
   /// final object5 = null;
   /// final num5 = ConvertObject.tryToNum(object5); // null
   /// ```
-  static num? tryToNum(dynamic object) {
+  static num? tryToNum(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     try {
+      if (mapKey != null) {
+        return num.tryParse('${tryToMap<dynamic, dynamic>(object)?[mapKey]}');
+      }
       if (object is num?) return object;
       return num.tryParse('$object');
     } catch (e, s) {
@@ -171,8 +199,15 @@ abstract class ConvertObject {
   /// final object4 = 'abc';
   /// final int4 = ConvertObject.toInt(object4); // throws ParsingException
   /// ```
-  static int toInt(dynamic object) {
+  static int toInt(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     try {
+      if (mapKey != null) {
+        return toNum(toMap<dynamic, dynamic>(object)[mapKey]).toInt();
+      }
       if (object is int) return object;
       return toNum(object).toInt();
     } catch (e, s) {
@@ -205,8 +240,15 @@ abstract class ConvertObject {
   /// final object5 = null;
   /// final int5 = ConvertObject.tryToInt(object5); // null
   /// ```
-  static int? tryToInt(dynamic object) {
+  static int? tryToInt(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     try {
+      if (mapKey != null) {
+        return tryToNum(tryToMap<dynamic, dynamic>(object)?[mapKey]).tryToInt;
+      }
       if (object is int?) return object;
       return tryToNum(object).tryToInt;
     } catch (e, s) {
@@ -242,7 +284,11 @@ abstract class ConvertObject {
   /// final object4 = null;
   /// final bigInt4 = ConvertObject.toBigInt(object4); // throws ParsingException
   /// ```
-  static BigInt toBigInt(dynamic object) {
+  static BigInt toBigInt(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     if (object == null) {
       throw ParsingException.nullObject(
         parsingInfo: 'toBigInt',
@@ -250,9 +296,12 @@ abstract class ConvertObject {
       );
     }
     try {
+      if (mapKey != null) {
+        return BigInt.parse('${toMap<dynamic, dynamic>(object)[mapKey]}');
+      }
       if (object is BigInt) return object;
       if (object is num) return BigInt.from(object);
-      return BigInt.parse(toString1(object));
+      return BigInt.parse('$object');
     } catch (e, s) {
       throw ParsingException(
         error: e,
@@ -284,11 +333,19 @@ abstract class ConvertObject {
   /// final object4 = null;
   /// final bigInt4 = ConvertObject.tryToBigInt(object4); // null
   /// ```
-  static BigInt? tryToBigInt(dynamic object) {
+  static BigInt? tryToBigInt(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     try {
+      if (mapKey != null) {
+        return BigInt.tryParse(
+            '${tryToMap<dynamic, dynamic>(object)?[mapKey]}');
+      }
       if (object is BigInt?) return object;
       if (object is num) return BigInt.from(object);
-      return BigInt.tryParse(toString1(object));
+      return BigInt.tryParse('$object');
     } catch (e, s) {
       log(
         'tryToBigInt() Unsupported object type: exception message -> $e',
@@ -317,8 +374,15 @@ abstract class ConvertObject {
   /// final object4 = 'abc';
   /// final double4 = ConvertObject.toDouble(object4); // throws ParsingException
   /// ```
-  static double toDouble(dynamic object) {
+  static double toDouble(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     try {
+      if (mapKey != null) {
+        return toNum(toMap<dynamic, dynamic>(object)[mapKey]).toDouble();
+      }
       if (object is double) return object;
       return toNum(object).toDouble();
     } catch (e, s) {
@@ -351,8 +415,16 @@ abstract class ConvertObject {
   /// final object5 = null;
   /// final double5 = ConvertObject.tryToDouble(object5); // null
   /// ```
-  static double? tryToDouble(dynamic object) {
+  static double? tryToDouble(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     try {
+      if (mapKey != null) {
+        return tryToNum(tryToMap<dynamic, dynamic>(object)?[mapKey])
+            .tryToDouble;
+      }
       if (object is double?) return object;
       return tryToNum(object).tryToDouble;
     } catch (e, s) {
@@ -390,7 +462,16 @@ abstract class ConvertObject {
   /// final object6 = null;
   /// final bool6 = ConvertObject.toBool(object6); // false
   /// ```
-  static bool toBool(dynamic object) => (object as Object?).asBool;
+  static bool toBool(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
+    if (mapKey != null) {
+      return (tryToMap<dynamic, dynamic>(object)?[mapKey] as Object?).asBool;
+    }
+    return (object as Object?).asBool;
+  }
 
   /// Return `null` if the object is `null`,
   /// or return `true` if the object is a `bool` and equal to `true`,
@@ -417,8 +498,20 @@ abstract class ConvertObject {
   /// final object6 = null;
   /// final bool6 = ConvertObject.tryToBool(object6); // null
   /// ```
-  static bool? tryToBool(dynamic object) =>
-      object == null ? null : (object as Object?).asBool;
+  static bool? tryToBool(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
+    if (object == null) {
+      return null;
+    } else {
+      if (mapKey != null) {
+        return (tryToMap<dynamic, dynamic>(object)?[mapKey] as Object?).asBool;
+      }
+      return (object as Object?).asBool;
+    }
+  }
 
   /// Convert an object to a [DateTime].
   ///
@@ -439,10 +532,17 @@ abstract class ConvertObject {
   /// final object4 = null;
   /// final dateTime4 = ConvertObject.toDateTime(object4); // ParsingException (null object)
   /// ```
-  static DateTime toDateTime(dynamic object) {
+  static DateTime toDateTime(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     try {
+      if (mapKey != null) {
+        return DateTime.parse('${toMap<dynamic, dynamic>(object)[mapKey]}');
+      }
       if (object is DateTime) return object;
-      return DateTime.parse(toString1(object));
+      return DateTime.parse('$object');
     } catch (e, s) {
       throw ParsingException(
         error: e,
@@ -470,10 +570,19 @@ abstract class ConvertObject {
   /// final object4 = null;
   /// final dateTime4 = ConvertObject.tryToDateTime(object4); // null
   /// ```
-  static DateTime? tryToDateTime(dynamic object) {
+  static DateTime? tryToDateTime(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     if (object is DateTime?) return object;
     try {
-      return DateTime.tryParse(tryToString(object) ?? '');
+      if (mapKey != null) {
+        return DateTime.tryParse(
+          '${tryToMap<dynamic, dynamic>(object)?[mapKey]}',
+        );
+      }
+      return DateTime.tryParse('$object');
     } catch (e, s) {
       log(
         'tryToDateTime() Unsupported object type: exception message -> $e',
@@ -594,13 +703,20 @@ abstract class ConvertObject {
   /// final object4 = null;
   /// final set4 = ConvertObject.toSet<int>(object4); // ParsingException (null object)
   /// ```
-  static Set<T> toSet<T>(dynamic object) {
+  static Set<T> toSet<T>(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     try {
       if (object == null) {
         throw ParsingException.nullObject(
           parsingInfo: 'toSet',
           stackTrace: StackTrace.current,
         );
+      }
+      if (mapKey != null) {
+        return toSet(toMap<dynamic, dynamic>(object)[mapKey]);
       }
       if (object is Set<T>) return object;
       if (object is Set && object.isEmpty) return <T>{};
@@ -639,10 +755,17 @@ abstract class ConvertObject {
   /// final object4 = null;
   /// final set4 = ConvertObject.tryToSet<int>(object4); // null
   /// ```
-  static Set<T>? tryToSet<T>(dynamic object) {
+  static Set<T>? tryToSet<T>(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     if (object is Set<T>?) return object;
     if (object is Set && object.isEmpty) return <T>{};
     try {
+      if (mapKey != null) {
+        return tryToSet(tryToMap<dynamic, dynamic>(object)?[mapKey]);
+      }
       if (object == null) return null;
       return (object as Iterable).map((tmp) => toType<T>(tmp)).toSet();
     } catch (e, s) {
@@ -676,12 +799,19 @@ abstract class ConvertObject {
   /// final object4 = 'Hello';
   /// final list4 = ConvertObject.toList<int>(object4); // throws ParsingException
   /// ```
-  static List<T> toList<T>(dynamic object) {
+  static List<T> toList<T>(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     if (object is List<T>) return object;
     if (object is T) return <T>[object];
     if (object is Map<dynamic, T>) return object.values.toList();
     if (object is List && object.isEmpty) return <T>[];
     try {
+      if (mapKey != null) {
+        toList<T>(toMap<dynamic, dynamic>(object)[mapKey]);
+      }
       if (object == null) {
         throw ParsingException.nullObject(
           parsingInfo: 'toList',
@@ -727,12 +857,19 @@ abstract class ConvertObject {
   /// final object5 = null;
   /// final list5 = ConvertObject.tryToList<int>(object5); // null
   /// ```
-  static List<T?>? tryToList<T>(dynamic object) {
+  static List<T?>? tryToList<T>(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    Object? mapKey,
+  }) {
     if (object is List<T>?) return object;
     if (object is T) return <T>[object];
     if (object is Map<dynamic, T>) return object.values.toList();
     if (object is List && object.isEmpty) return <T?>[];
     try {
+      if (mapKey != null) {
+        tryToList<T>(tryToMap<dynamic, dynamic>(object)?[mapKey]);
+      }
       if (object == null) return null;
       return (object as Iterable).map((tmp) => toType<T>(tmp)).toList();
     } catch (e, s) {

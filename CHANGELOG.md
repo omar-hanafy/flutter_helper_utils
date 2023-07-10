@@ -1,3 +1,21 @@
+### 1.4.2
+- **UPDATE**: Updated Documentation.
+
+### 1.4.1
+
+- **NEW**: The convert object methods now include an optional `mapKey` parameter, enabling the conversion of specific
+  values within a Map object. This enhancement provides flexibility by allowing developers to extract and convert
+  targeted values based on the specified `mapKey`.
+
+  For example:
+```dart
+
+dynamic object1 = {'name': 'John', 'age': '30', 'isHuman': 'yes'};
+
+final double age = ConvertObject.toDouble(object1, mapKey: 'age'); // 30.0
+final bool isHuman = ConvertObject.toBool(object1, mapKey: 'isHuman'); // true
+```
+
 ### 1.4.0
 
 - **UPDATE**: Removing support of Iterables and Maps from `toType` and `tryToType` functions due to some restrictions in dart generics. Here is the list of the supported conversion types:

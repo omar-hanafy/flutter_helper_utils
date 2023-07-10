@@ -24,7 +24,7 @@ To use this package, add `flutter_helper_utils` as a dependency in your `pubspec
 dependencies:
   flutter:
     sdk: flutter
-  flutter_helper_utils: ^1.4.0
+  flutter_helper_utils: ^1.4.2
 ```
 
 Then, run `flutter pub get` in your terminal.
@@ -343,6 +343,27 @@ Map<String, String> value = {'key': 'value'};
 Map<String, dynamic> mapValue = ConvertObject.tryToMap<String, dynamic>(value); // tryToMap also availbale.
 ```
 
+
+### Converting Values within a Map using `mapKey`
+
+The convert object methods now include an optional `mapKey` parameter, enabling the conversion of specific values within
+a Map object. This enhancement provides flexibility by allowing developers to extract and convert targeted values based on the specified `mapKey`.
+
+  For example:
+```dart
+dynamic object1 = {'name': 'John', 'age': '30', 'isHuman': 'yes'};
+
+final double age = ConvertObject.toDouble(object1, mapKey: 'age'); // 30.0
+final bool isHuman = ConvertObject.toBool(object1, mapKey: 'isHuman'); // true
+```
+
+With the `mapKey` parameter, developers can convert specific values within Map objects to different data types as needed. This improvement expands the functionality of the convert object methods, facilitating convenient and flexible operations on Map objects.
+```dart
+
+final map = {'name': 'John', 'age': 30};
+final string = ConvertObject.toString1(object1, mapKey: 'name'); // 'John'
+final double = ConvertObject.toDouble(object1, mapKey: 'age'); // 30.0
+```
 Here is a table explaining each method in the `ConvertObject` class:
 
 | Method Name                                    | Description                                                                                                         |
