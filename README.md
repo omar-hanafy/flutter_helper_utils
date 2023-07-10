@@ -24,7 +24,7 @@ To use this package, add `flutter_helper_utils` as a dependency in your `pubspec
 dependencies:
   flutter:
     sdk: flutter
-  flutter_helper_utils: ^1.4.2
+  flutter_helper_utils: ^1.4.3
 ```
 
 Then, run `flutter pub get` in your terminal.
@@ -344,50 +344,20 @@ Map<String, dynamic> mapValue = ConvertObject.tryToMap<String, dynamic>(value); 
 ```
 
 
-### Converting Values within a Map using `mapKey`
+### Converting Values within a Map/List using `mapKey` or `listIndex`
 
-The convert object methods now include an optional `mapKey` parameter, enabling the conversion of specific values within
-a Map object. This enhancement provides flexibility by allowing developers to extract and convert targeted values based on the specified `mapKey`.
+as of version `'1.4.3'` The convert object methods include an optional `mapKey` and `listIndex` parameters, enabling the conversion of specific values within
+a Map/List. This enhancement provides flexibility by allowing developers to extract and convert targeted values based on the specified `mapKey` or `listIndex`.
 
   For example:
 ```dart
-dynamic object1 = {'name': 'John', 'age': '30', 'isHuman': 'yes'};
+dynamic map = {'name': 'John', 'age': '30', 'isHuman': 'yes'};
+dynamic list = ['John', '30', 'yes'];
 
 final double age = ConvertObject.toDouble(object1, mapKey: 'age'); // 30.0
-final bool isHuman = ConvertObject.toBool(object1, mapKey: 'isHuman'); // true
+final bool isHuman = ConvertObject.toBool(object2, listIndex: 2); // true
 ```
-
-With the `mapKey` parameter, developers can convert specific values within Map objects to different data types as needed. This improvement expands the functionality of the convert object methods, facilitating convenient and flexible operations on Map objects.
-```dart
-
-final map = {'name': 'John', 'age': 30};
-final string = ConvertObject.toString1(object1, mapKey: 'name'); // 'John'
-final double = ConvertObject.toDouble(object1, mapKey: 'age'); // 30.0
-```
-Here is a table explaining each method in the `ConvertObject` class:
-
-| Method Name                                    | Description                                                                                                         |
-|------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
-| `toString1(dynamic object) => String`          | Converts any object to a `String` if the object is not null. Throws a `ParsingException` if the object is null.     |
-| `tryToString(dynamic object) => String?`       | Converts any object to a `String` or returns null if the object is null.                                            |
-| `toNum(dynamic object) => num`                 | Converts any object to a `num`. Throws a `ParsingException` if the object is null or if the conversion fails.       |
-| `tryToNum(dynamic object) => num?`             | Converts any object to a `num` or returns null if the object is null or if the conversion fails.                    |
-| `toInt(dynamic object) => int`                 | Converts any object to an `int`. Throws a `ParsingException` if the object is null or if the conversion fails.      |
-| `tryToInt(dynamic object) => int?`             | Converts any object to an `int` or returns null if the object is null or if the conversion fails.                   |
-| `toDouble(dynamic object) => double`           | Converts any object to a `double`. Throws a `ParsingException` if the object is null or if the conversion fails.    |
-| `tryToDouble(dynamic object) => double?`       | Converts any object to a `double` or returns null if the object is null or if the conversion fails.                 |
-| `toBool(dynamic object) => bool`               | Converts any object to a `bool`. Returns `false` by default.                                                        |
-| `tryToBool(dynamic object) => bool?`           | Converts any object to a `bool` or returns null if the conversion fails. Returns `false` by default.                |
-| `toDateTime(dynamic object) => DateTime`       | Converts any object to a `DateTime`. Throws a `ParsingException` if the object is null or if the conversion fails.  |
-| `tryToDateTime(dynamic object) => DateTime?`   | Converts any object to a `DateTime` or returns null if the object is null or if the conversion fails.               |
-| `toMap<K, V>(dynamic object) => Map<K, V>`     | Converts any object to a `Map<K, V>`. Throws a `ParsingException` if the object is null or if the conversion fails. |
-| `tryToMap<K, V>(dynamic object) => Map<K, V>?` | Converts any object to a `Map<K, V>` or returns null if the object is null or if the conversion fails.              |
-| `toSet<T>(dynamic object) => Set<T>`           | Converts any object to a `Set<T>`. Throws a `ParsingException` if the object is null or if the conversion fails.    |
-| `tryToSet<T>(dynamic object) => Set<T>?`       | Converts any object to a `Set<T>` or returns null if the object is null or if the conversion fails.                 |
-| `toList<T>(dynamic object) => List<T>`         | Converts any object to a `List<T>`. Throws a `ParsingException` if the object is null or if the conversion fails.   |
-| `tryToList<T>(dynamic object) => List<T>?`     | Converts any object to a `List<T>` or returns null if the object is null or if the conversion fails.                |
-
-Sure! Here's the updated documentation for the `toType`, `tryToType`, `toIterable`, and `tryToIterable` functions:
+**Note**: If the `mapKey` or `listIndex` is provided but the object is not of type Map/List, the `mapKey`/`listIndex` will be ignored and The object will be converted into the desired type instead.
 
 ## Global Functions
 
@@ -423,6 +393,30 @@ final dynamicValue5 = null;
 final intValue3 = toType<int>(dynamicValue5); // Throws ParsingException with nullObject error
 final intValue4 = tryToType<int>(dynamicValue5); // Returns null without errors
 ```
+
+Here is a list of all supported conversions in the `ConvertObject` class:
+
+| Method Name                                                                      | Description                                                                                                           |
+|----------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| `toString1(dynamic object, {Object? mapKey, int? listIndex}) => String`          | Converts dynamic data to a `String` if the object is not null. Throws a `ParsingException` if the object is null.     |
+| `tryToString(dynamic object, {Object? mapKey, int? listIndex}) => String?`       | Converts dynamic data to a `String` or returns null if the object is null.                                            |
+| `toNum(dynamic object, {Object? mapKey, int? listIndex}) => num`                 | Converts dynamic data to a `num`. Throws a `ParsingException` if the object is null or if the conversion fails.       |
+| `tryToNum(dynamic object, {Object? mapKey, int? listIndex}) => num?`             | Converts dynamic data to a `num` or returns null if the object is null or if the conversion fails.                    |
+| `toInt(dynamic object, {Object? mapKey, int? listIndex}) => int`                 | Converts dynamic data to an `int`. Throws a `ParsingException` if the object is null or if the conversion fails.      |
+| `tryToInt(dynamic object, {Object? mapKey, int? listIndex}) => int?`             | Converts dynamic data to an `int` or returns null if the object is null or if the conversion fails.                   |
+| `toDouble(dynamic object, {Object? mapKey, int? listIndex}) => double`           | Converts dynamic data to a `double`. Throws a `ParsingException` if the object is null or if the conversion fails.    |
+| `tryToDouble(dynamic object, {Object? mapKey, int? listIndex}) => double?`       | Converts dynamic data to a `double` or returns null if the object is null or if the conversion fails.                 |
+| `toBool(dynamic object, {Object? mapKey, int? listIndex}) => bool`               | Converts dynamic data to a `bool`. Returns `false` by default.                                                        |
+| `tryToBool(dynamic object, {Object? mapKey, int? listIndex}) => bool?`           | Converts dynamic data to a `bool` or returns null if the conversion fails. Returns `false` by default.                |
+| `toDateTime(dynamic object, {Object? mapKey, int? listIndex}) => DateTime`       | Converts dynamic data to a `DateTime`. Throws a `ParsingException` if the object is null or if the conversion fails.  |
+| `tryToDateTime(dynamic object, {Object? mapKey, int? listIndex}) => DateTime?`   | Converts dynamic data to a `DateTime` or returns null if the object is null or if the conversion fails.               |
+| `toMap<K, V>(dynamic object, {Object? mapKey, int? listIndex}) => Map<K, V>`     | Converts dynamic data to a `Map<K, V>`. Throws a `ParsingException` if the object is null or if the conversion fails. |
+| `tryToMap<K, V>(dynamic object, {Object? mapKey, int? listIndex}) => Map<K, V>?` | Converts dynamic data to a `Map<K, V>` or returns null if the object is null or if the conversion fails.              |
+| `toSet<T>(dynamic object, {Object? mapKey, int? listIndex}) => Set<T>`           | Converts dynamic data to a `Set<T>`. Throws a `ParsingException` if the object is null or if the conversion fails.    |
+| `tryToSet<T>(dynamic object, {Object? mapKey, int? listIndex}) => Set<T>?`       | Converts dynamic data to a `Set<T>` or returns null if the object is null or if the conversion fails.                 |
+| `toList<T>(dynamic object, {Object? mapKey, int? listIndex}) => List<T>`         | Converts dynamic data to a `List<T>`. Throws a `ParsingException` if the object is null or if the conversion fails.   |
+| `tryToList<T>(dynamic object, {Object? mapKey, int? listIndex}) => List<T>?`     | Converts dynamic data to a `List<T>` or returns null if the object is null or if the conversion fails.                |
+
 
 ## Exceptions
 

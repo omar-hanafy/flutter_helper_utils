@@ -7,6 +7,14 @@ typedef IndexedPredicate<T> = bool Function(int index, T);
 typedef Predicate<T> = bool Function(T);
 
 extension ListExtensionsNS<T> on List<T>? {
+  /// alternative to list[index] but it is null safe.
+  T? fromIndex(int index) {
+    if (isNotEmptyOrNull && this!.length < index) {
+      return this![index];
+    }
+    return null;
+  }
+
   /// same behavior as [removeAt] but it is null safe which means
   /// it do nothing when [List] return [isEmptyOrNull] to true.
   void tryRemoveAt(int index) {

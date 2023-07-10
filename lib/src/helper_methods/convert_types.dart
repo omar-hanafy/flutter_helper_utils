@@ -28,7 +28,12 @@ abstract class ConvertObject {
   static String toString1(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
     if (object == null) {
       throw ParsingException.nullObject(
@@ -36,11 +41,14 @@ abstract class ConvertObject {
         stackTrace: StackTrace.current,
       );
     } else {
+      if (object is String) return object;
+      if (mapKey != null && object is Map<dynamic, dynamic>) {
+        return object[mapKey].toString();
+      }
+      if (listIndex != null && object is List<dynamic>) {
+        return toString1(object.fromIndex(listIndex));
+      }
       try {
-        if (mapKey != null) {
-          return toMap<dynamic, dynamic>(object)[mapKey].toString();
-        }
-        if (object is String) return object;
         return object.toString();
       } catch (e, s) {
         throw ParsingException(
@@ -73,13 +81,21 @@ abstract class ConvertObject {
   static String? tryToString(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
+    if (object is String?) return object;
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return object[mapKey].toString();
+    }
+    if (listIndex != null && object is List<dynamic>) {
+      return tryToString(object.fromIndex(listIndex));
+    }
     try {
-      if (mapKey != null && object != null) {
-        return toMap<dynamic, dynamic>(object)[mapKey].toString();
-      }
-      if (object is String?) return object;
       return object != null ? '$object' : null;
     } catch (e, s) {
       log(
@@ -116,7 +132,12 @@ abstract class ConvertObject {
   static num toNum(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
     if (object == null) {
       throw ParsingException.nullObject(
@@ -124,11 +145,14 @@ abstract class ConvertObject {
         stackTrace: StackTrace.current,
       );
     }
+    if (object is num) return object;
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return toNum(object[mapKey]);
+    }
+    if (listIndex != null && object is List<dynamic>) {
+      return toNum(object.fromIndex(listIndex));
+    }
     try {
-      if (mapKey != null) {
-        return toMap<dynamic, dynamic>(object)[mapKey].toString().toNum;
-      }
-      if (object is num) return object;
       return '$object'.toNum;
     } catch (e, s) {
       throw ParsingException(
@@ -163,13 +187,22 @@ abstract class ConvertObject {
   static num? tryToNum(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
+    if (object is num?) return object;
+
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return tryToNum(object[mapKey]);
+    }
+    if (listIndex != null && object is List<dynamic>) {
+      return tryToNum(object.fromIndex(listIndex));
+    }
     try {
-      if (mapKey != null) {
-        return num.tryParse('${tryToMap<dynamic, dynamic>(object)?[mapKey]}');
-      }
-      if (object is num?) return object;
       return num.tryParse('$object');
     } catch (e, s) {
       log(
@@ -202,13 +235,21 @@ abstract class ConvertObject {
   static int toInt(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
+    if (object is int) return object;
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return toInt(object[mapKey]);
+    }
+    if (listIndex != null && object is List<dynamic>) {
+      return toInt(object.fromIndex(listIndex));
+    }
     try {
-      if (mapKey != null) {
-        return toNum(toMap<dynamic, dynamic>(object)[mapKey]).toInt();
-      }
-      if (object is int) return object;
       return toNum(object).toInt();
     } catch (e, s) {
       throw ParsingException(
@@ -243,13 +284,22 @@ abstract class ConvertObject {
   static int? tryToInt(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
+    if (object is int?) return object;
+
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return tryToInt(object[mapKey]);
+    }
+    if (listIndex != null && object is List<dynamic>) {
+      return tryToInt(object.fromIndex(listIndex));
+    }
     try {
-      if (mapKey != null) {
-        return tryToNum(tryToMap<dynamic, dynamic>(object)?[mapKey]).tryToInt;
-      }
-      if (object is int?) return object;
       return tryToNum(object).tryToInt;
     } catch (e, s) {
       log(
@@ -287,7 +337,12 @@ abstract class ConvertObject {
   static BigInt toBigInt(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
     if (object == null) {
       throw ParsingException.nullObject(
@@ -295,11 +350,14 @@ abstract class ConvertObject {
         stackTrace: StackTrace.current,
       );
     }
+    if (object is BigInt) return object;
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return toBigInt(object[mapKey]);
+    }
+    if (listIndex != null && object is List<dynamic>) {
+      return toBigInt(object.fromIndex(listIndex));
+    }
     try {
-      if (mapKey != null) {
-        return BigInt.parse('${toMap<dynamic, dynamic>(object)[mapKey]}');
-      }
-      if (object is BigInt) return object;
       if (object is num) return BigInt.from(object);
       return BigInt.parse('$object');
     } catch (e, s) {
@@ -336,14 +394,21 @@ abstract class ConvertObject {
   static BigInt? tryToBigInt(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
+    if (object is BigInt?) return object;
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return tryToBigInt(object[mapKey]);
+    }
+    if (listIndex != null && object is List<dynamic>) {
+      return tryToBigInt(object.fromIndex(listIndex));
+    }
     try {
-      if (mapKey != null) {
-        return BigInt.tryParse(
-            '${tryToMap<dynamic, dynamic>(object)?[mapKey]}');
-      }
-      if (object is BigInt?) return object;
       if (object is num) return BigInt.from(object);
       return BigInt.tryParse('$object');
     } catch (e, s) {
@@ -377,13 +442,21 @@ abstract class ConvertObject {
   static double toDouble(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
+    if (object is double) return object;
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return toDouble(object[mapKey]);
+    }
+    if (listIndex != null && object is List<dynamic>) {
+      return toDouble(object.fromIndex(listIndex));
+    }
     try {
-      if (mapKey != null) {
-        return toNum(toMap<dynamic, dynamic>(object)[mapKey]).toDouble();
-      }
-      if (object is double) return object;
       return toNum(object).toDouble();
     } catch (e, s) {
       throw ParsingException(
@@ -418,14 +491,21 @@ abstract class ConvertObject {
   static double? tryToDouble(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
+    if (object is double?) return object;
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return tryToDouble(object[mapKey]);
+    }
+    if (listIndex != null && object is List<dynamic>) {
+      return tryToDouble(object.fromIndex(listIndex));
+    }
     try {
-      if (mapKey != null) {
-        return tryToNum(tryToMap<dynamic, dynamic>(object)?[mapKey])
-            .tryToDouble;
-      }
-      if (object is double?) return object;
       return tryToNum(object).tryToDouble;
     } catch (e, s) {
       log(
@@ -465,10 +545,18 @@ abstract class ConvertObject {
   static bool toBool(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
-    if (mapKey != null) {
-      return (tryToMap<dynamic, dynamic>(object)?[mapKey] as Object?).asBool;
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return (object[mapKey] as Object?).asBool;
+    }
+    if (listIndex != null && object is List<dynamic>) {
+      return (object.fromIndex(listIndex) as Object?).asBool;
     }
     return (object as Object?).asBool;
   }
@@ -501,13 +589,21 @@ abstract class ConvertObject {
   static bool? tryToBool(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
     if (object == null) {
       return null;
     } else {
-      if (mapKey != null) {
-        return (tryToMap<dynamic, dynamic>(object)?[mapKey] as Object?).asBool;
+      if (mapKey != null && object is Map<dynamic, dynamic>) {
+        return (object[mapKey] as Object?).asBool;
+      }
+      if (listIndex != null && object is List<dynamic>) {
+        return (object.fromIndex(listIndex) as Object?).asBool;
       }
       return (object as Object?).asBool;
     }
@@ -535,13 +631,21 @@ abstract class ConvertObject {
   static DateTime toDateTime(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
+    if (object is DateTime) return object;
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return toDateTime(object[mapKey]);
+    }
+    if (listIndex != null && object is List<dynamic>) {
+      return toDateTime(object.fromIndex(listIndex));
+    }
     try {
-      if (mapKey != null) {
-        return DateTime.parse('${toMap<dynamic, dynamic>(object)[mapKey]}');
-      }
-      if (object is DateTime) return object;
       return DateTime.parse('$object');
     } catch (e, s) {
       throw ParsingException(
@@ -573,15 +677,21 @@ abstract class ConvertObject {
   static DateTime? tryToDateTime(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
     if (object is DateTime?) return object;
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return tryToDateTime(object[mapKey]);
+    }
+    if (listIndex != null && object is List<dynamic>) {
+      return tryToDateTime(object.fromIndex(listIndex));
+    }
     try {
-      if (mapKey != null) {
-        return DateTime.tryParse(
-          '${tryToMap<dynamic, dynamic>(object)?[mapKey]}',
-        );
-      }
       return DateTime.tryParse('$object');
     } catch (e, s) {
       log(
@@ -614,15 +724,30 @@ abstract class ConvertObject {
   /// final object4 = null;
   /// final map4 = ConvertObject.toMap<String, int>(object4); // ParsingException (null object)
   /// ```
-  static Map<K, V> toMap<K, V>(dynamic object) {
-    if (object is Map && object.isEmpty) return <K, V>{};
-    if (object is Map<K, V>) return object;
+  static Map<K, V> toMap<K, V>(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
+  }) {
     if (object == null) {
       throw ParsingException.nullObject(
         parsingInfo: 'toMap',
         stackTrace: StackTrace.current,
       );
     }
+    if (object is Map && object.isEmpty) return <K, V>{};
+    if (listIndex != null && object is List<dynamic>) {
+      return toMap<K, V>(object.fromIndex(listIndex));
+    }
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return toMap<K, V>(object[mapKey]);
+    }
+    if (object is Map<K, V>) return object;
     try {
       return object as Map<K, V>;
     } catch (_) {}
@@ -663,8 +788,23 @@ abstract class ConvertObject {
   /// final object4 = null;
   /// final map4 = ConvertObject.tryToMap<String, int>(object4); // null
   /// ```
-  static Map<K, V>? tryToMap<K, V>(dynamic object) {
+  static Map<K, V>? tryToMap<K, V>(
+    dynamic object, {
+    /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
+  }) {
     if (object is Map && object.isEmpty) return <K, V>{};
+    if (listIndex != null && object is List<dynamic>) {
+      return tryToMap<K, V>(object.fromIndex(listIndex));
+    }
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return tryToMap<K, V>(object[mapKey]);
+    }
     if (object is Map<K, V>?) return object;
     try {
       return object as Map<K, V>;
@@ -706,20 +846,30 @@ abstract class ConvertObject {
   static Set<T> toSet<T>(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
+    if (object == null) {
+      throw ParsingException.nullObject(
+        parsingInfo: 'toSet',
+        stackTrace: StackTrace.current,
+      );
+    }
+    if (object is Iterable && object.isEmpty) return <T>{};
+    if (listIndex != null && object is List<dynamic>) {
+      return toSet<T>(object.fromIndex(listIndex));
+    }
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return toSet<T>(object[mapKey]);
+    }
+    if (object is Set<T>) return object;
+    if (object is T) return <T>{object};
+    if (object is Map<dynamic, T>) return object.values.toSet();
     try {
-      if (object == null) {
-        throw ParsingException.nullObject(
-          parsingInfo: 'toSet',
-          stackTrace: StackTrace.current,
-        );
-      }
-      if (mapKey != null) {
-        return toSet(toMap<dynamic, dynamic>(object)[mapKey]);
-      }
-      if (object is Set<T>) return object;
-      if (object is Set && object.isEmpty) return <T>{};
       return (object as Iterable).map((tmp) => toType<T>(tmp)).toSet();
     } catch (e, s) {
       log(
@@ -758,13 +908,26 @@ abstract class ConvertObject {
   static Set<T>? tryToSet<T>(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
+    if (object is Iterable && object.isEmpty) return <T>{};
+    if (listIndex != null && object is List<dynamic>) {
+      return tryToSet<T>(object.fromIndex(listIndex));
+    }
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return tryToSet<T>(object[mapKey]);
+    }
     if (object is Set<T>?) return object;
-    if (object is Set && object.isEmpty) return <T>{};
+    if (object is T) return <T>{object};
+    if (object is Map<dynamic, T>) return object.values.toSet();
     try {
-      if (mapKey != null) {
-        return tryToSet(tryToMap<dynamic, dynamic>(object)?[mapKey]);
+      if (mapKey != null && object is Map<dynamic, dynamic>) {
+        return tryToSet(object[mapKey]);
       }
       if (object == null) return null;
       return (object as Iterable).map((tmp) => toType<T>(tmp)).toSet();
@@ -802,22 +965,30 @@ abstract class ConvertObject {
   static List<T> toList<T>(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
+    if (object == null) {
+      throw ParsingException.nullObject(
+        parsingInfo: 'toList',
+        stackTrace: StackTrace.current,
+      );
+    }
+    if (object is Iterable && object.isEmpty) return <T>[];
+    if (listIndex != null && object is List<dynamic>) {
+      return toList<T>(object.fromIndex(listIndex));
+    }
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return toList<T>(object[mapKey]);
+    }
     if (object is List<T>) return object;
     if (object is T) return <T>[object];
     if (object is Map<dynamic, T>) return object.values.toList();
-    if (object is List && object.isEmpty) return <T>[];
     try {
-      if (mapKey != null) {
-        toList<T>(toMap<dynamic, dynamic>(object)[mapKey]);
-      }
-      if (object == null) {
-        throw ParsingException.nullObject(
-          parsingInfo: 'toList',
-          stackTrace: StackTrace.current,
-        );
-      }
       return (object as Iterable).map((tmp) => toType<T>(tmp)).toList();
     } catch (e, s) {
       log(
@@ -857,19 +1028,27 @@ abstract class ConvertObject {
   /// final object5 = null;
   /// final list5 = ConvertObject.tryToList<int>(object5); // null
   /// ```
-  static List<T?>? tryToList<T>(
+  static List<T>? tryToList<T>(
     dynamic object, {
     /// The map key used for converting objects within a map.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
+
+    /// The index used for converting objects within a list.
+    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
+    int? listIndex,
   }) {
+    if (object is Iterable && object.isEmpty) return <T>[];
+    if (listIndex != null && object is List<dynamic>) {
+      return tryToList<T>(object.fromIndex(listIndex));
+    }
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return tryToList<T>(object[mapKey]);
+    }
     if (object is List<T>?) return object;
     if (object is T) return <T>[object];
     if (object is Map<dynamic, T>) return object.values.toList();
-    if (object is List && object.isEmpty) return <T?>[];
     try {
-      if (mapKey != null) {
-        tryToList<T>(tryToMap<dynamic, dynamic>(object)?[mapKey]);
-      }
       if (object == null) return null;
       return (object as Iterable).map((tmp) => toType<T>(tmp)).toList();
     } catch (e, s) {

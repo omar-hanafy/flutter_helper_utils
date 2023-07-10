@@ -1,3 +1,20 @@
+### 1.4.3
+
+- **NEW**: The convert object methods now include an optional `listIndex` parameter, enabling the conversion of specific
+  values within a `List`. This enhancement provides flexibility by allowing developers to extract and convert
+  targeted values based on the specified `listIndex`.
+
+  For example:
+
+```dart
+
+dynamic object1 = ['John', '30', 'yes'];
+final double age = ConvertObject.toDouble(object1, listIndex: 1); // 30.0
+```
+
+- **NEW**: The `List` extension now includes the `fromIndex` method, providing null-safe retrieval of values at specific
+  indices within a list. It returns null if the index is out of bounds or if the list is empty or null.
+
 ### 1.4.2
 - **UPDATE**: Updated Documentation.
 
