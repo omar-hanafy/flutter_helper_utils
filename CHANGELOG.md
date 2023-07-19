@@ -1,3 +1,12 @@
+### 1.4.4
+
+- **NEW**: Added new extensions to the `String?` class: `isValidIp4`, `isValidIp6`, and `isValidUrl`. These extensions
+  provide convenient methods to check the validity of IPv4 addresses, IPv6 addresses, and URLs respectively.
+
+- **NEW**: Introduced a new method called `popRoot` to the `NavigatorExtension`. This method calls the normal `pop`
+  method but with the `rootNavigator` parameter set to `true` under the hood. This feature proves to be useful
+  in scenarios where dialogs need to be dismissed.
+
 ### 1.4.3
 
 - **NEW**: The convert object methods now include an optional `listIndex` parameter, enabling the conversion of specific
@@ -16,6 +25,7 @@ final double age = ConvertObject.toDouble(object1, listIndex: 1); // 30.0
   indices within a list. It returns null if the index is out of bounds or if the list is empty or null.
 
 ### 1.4.2
+
 - **UPDATE**: Updated Documentation.
 
 ### 1.4.1
@@ -25,6 +35,7 @@ final double age = ConvertObject.toDouble(object1, listIndex: 1); // 30.0
   targeted values based on the specified `mapKey`.
 
   For example:
+
 ```dart
 
 dynamic object1 = {'name': 'John', 'age': '30', 'isHuman': 'yes'};
@@ -35,19 +46,20 @@ final bool isHuman = ConvertObject.toBool(object1, mapKey: 'isHuman'); // true
 
 ### 1.4.0
 
-- **UPDATE**: Removing support of Iterables and Maps from `toType` and `tryToType` functions due to some restrictions in dart generics. Here is the list of the supported conversion types:
-  - `bool`
-  - `int`
-  - `BigInt`
-  - `double`
-  - `num`
-  - `String`
-  - `DateTime`
+- **UPDATE**: Removing support of Iterables and Maps from `toType` and `tryToType` functions due to some restrictions in
+  dart generics. Here is the list of the supported conversion types:
+    - `bool`
+    - `int`
+    - `BigInt`
+    - `double`
+    - `num`
+    - `String`
+    - `DateTime`
 
 - For Iterables and Maps, use the preferred methods from the `ConvertObject` class:
-  - To convert to a `List`, use `ConvertObject.toList<String>(dynamicIterableData)`.
-  - To convert to a `Set`, use `ConvertObject.toSet<String>(dynamicIterableData)`.
-  - To convert to a `Map`, use `ConvertObject.toMap<String, int>(dynamicMapData)`.
+    - To convert to a `List`, use `ConvertObject.toList<String>(dynamicIterableData)`.
+    - To convert to a `Set`, use `ConvertObject.toSet<String>(dynamicIterableData)`.
+    - To convert to a `Map`, use `ConvertObject.toMap<String, int>(dynamicMapData)`.
 
 ### 1.3.8
 

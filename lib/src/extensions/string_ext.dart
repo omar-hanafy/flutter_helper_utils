@@ -57,10 +57,6 @@ extension NullSafeStringExtensions on String? {
 
   bool get isNotEmptyOrNull => !isEmptyOrNull;
 
-  /// Checks if string is a valid username.
-  bool get isValidUsername =>
-      hasMatch(r'^[a-zA-Z0-9][a-zA-Z0-9_.]+[a-zA-Z0-9]$');
-
   /// Checks if string is Palindrom.
   bool get isPalindrom {
     if (isEmptyOrNull) {
@@ -79,6 +75,15 @@ extension NullSafeStringExtensions on String? {
     }
   }
 
+  /// check if String contains any digits.
+  /// f1rstDate -> true
+  /// firstDate -> false
+  bool get containsDigits => hasMatch(r'\d');
+
+  /// Checks if string is a valid username.
+  bool get isValidUsername =>
+      hasMatch(r'^[a-zA-Z0-9][a-zA-Z0-9_.]+[a-zA-Z0-9]$');
+
   /// Checks if string is Currency.
   bool get isValidCurrency => hasMatch(
       r'^(S?\$|\₩|Rp|\¥|\€|\₹|\₽|fr|R\$|R)?[ ]?[-]?([0-9]{1,3}[,.]([0-9]{3}[,.])*[0-9]{3}|[0-9]+)([,.][0-9]{1,2})?( ?(USD?|AUD|NZD|CAD|CHF|GBP|CNY|EUR|JPY|IDR|MXN|NOK|KRW|TRY|INR|RUB|BRL|ZAR|SGD|MYR))?$');
@@ -95,6 +100,43 @@ extension NullSafeStringExtensions on String? {
 
   /// Checks if string is an html file.
   bool get isValidHTML => (this ?? ' ').toLowerCase().endsWith('.html');
+
+  /// check if the string is an IP Version 4
+  /// Accept:
+  ///   127.0.0.1
+  ///   192.168.1.1
+  ///   192.168.1.255
+  ///   255.255.255.255
+  ///   0.0.0.0
+  ///   1.1.1.01 -> This is an invalid IP address!
+  /// Reject:
+  ///   30.168.1.255.1
+  ///   127.1
+  ///   192.168.1.256
+  ///   -1.2.3.4
+  ///   1.1.1.1.
+  ///   3...3
+  bool get isValidIp4 => hasMatch(
+      r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$');
+
+  /// Handle all condition for ipv6
+  /// Accepts:
+  /// FE80::8329
+  /// FE80::FFFF:8329
+  /// FE80::B3FF:FFFF:8329
+  /// FE80::0202:B3FF:FFFF:8329
+  /// FE80::0000:0202:B3FF:FFFF:8329
+  /// FE80::0000:0000:0202:B3FF:FFFF:8329
+  /// FE80:0000:0000:0000:0202:B3FF:FFFF:8329
+  ///
+  /// Test this RegEx here -> https://regex101.com/r/aL7tV3/1
+  bool get isValidIp6 => hasMatch(
+      r'/(?<protocol>(?:http|ftp|irc)s?:\/\/)?(?:(?<user>[^:\n\r]+):(?<pass>[^@\n\r]+)@)?(?<host>(?:www\.)?(?:[^:\/\n\r]+)(?::(?<port>\d+))?)\/?(?<request>[^?#\n\r]+)?\??(?<query>[^#\n\r]*)?\#?(?<anchor>[^\n\r]*)?/');
+
+  bool get isValidUrl => isEmptyOrNull
+      ? isNotEmptyOrNull
+      : this!.toLowerCase().removeEmptyLines.removeWhiteSpaces.hasMatch(
+          r'^(http|ftp|https)?(\:\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^!=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])+$');
 
   /// Checks if string is an video file.
   bool get isValidVideo {

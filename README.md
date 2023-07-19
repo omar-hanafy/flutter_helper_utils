@@ -24,7 +24,7 @@ To use this package, add `flutter_helper_utils` as a dependency in your `pubspec
 dependencies:
   flutter:
     sdk: flutter
-  flutter_helper_utils: ^1.4.3
+  flutter_helper_utils: ^1.4.4
 ```
 
 Then, run `flutter pub get` in your terminal.
@@ -53,6 +53,11 @@ context.pNamedAndRemoveUntil('/login', ModalRoute.withName('/home'));
 
 // Navigate to a new screen and pass/recieve data from/to it.
 final data = await context.pNamed<String?>('/details', arguments: {'id': 123});
+
+// pop current page.
+context.popPage(result);
+// pop current dialog.
+context.popRoot(result);
 
 // pushPage, pReplacement, popPage, popUntil and canPop are also available.
 ```
@@ -347,7 +352,7 @@ Map<String, dynamic> mapValue = ConvertObject.tryToMap<String, dynamic>(value); 
 ### Converting Values within a Map/List using `mapKey` or `listIndex`
 
 as of version `'1.4.3'` The convert object methods include an optional `mapKey` and `listIndex` parameters, enabling the conversion of specific values within
-a Map/List. This enhancement provides flexibility by allowing developers to extract and convert targeted values based on the specified `mapKey` or `listIndex`.
+a Map/List.
 
   For example:
 ```dart

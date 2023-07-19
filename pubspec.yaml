@@ -1,7 +1,7 @@
 name: flutter_helper_utils
 description: The Flutter Helper Package offers various extensions and helper methods that can make development more efficient.
 repository: https://github.com/omar-hanafy/flutter_helper_utils
-version: 1.4.3
+version: 1.4.4
 
 environment:
   sdk: '>=3.0.5 <4.0.0'

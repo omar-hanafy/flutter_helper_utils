@@ -34,7 +34,17 @@ extension NavigationStatelessExtensions on StatelessWidget {
 }
 
 extension NavigatorExtension on BuildContext {
-  void popPage<T extends Object?>([T? result]) => Navigator.pop(this, result);
+  void popPage<T extends Object?>([T? result]) =>
+      Navigator.pop<T>(this, result);
+
+  /// This method allows for popping dialogs by calling
+  /// the pop method with the rootNavigator parameter set to true.
+  /// This feature proves to be useful in scenarios where dialogs need to be dismissed.
+  void popRoot<T extends Object?>([T? result]) =>
+      navigator(rootNavigator: true).pop<T>(result);
+
+  NavigatorState navigator({bool rootNavigator = false}) =>
+      Navigator.of(this, rootNavigator: rootNavigator);
 
   ///  just call this [canPop()] method and it would return true if this route can be popped and false if it’s not possible.
   bool get canPop => Navigator.canPop(this);
