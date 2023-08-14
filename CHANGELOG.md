@@ -1,3 +1,9 @@
+### 1.4.5
+
+- **UPDATE**: Enhanced the `asGreeks` getter to include all available Greek symbols for converting large numbers.
+  Now, the symbols used are `['K', 'M', 'B', 'T', 'Q', 'P', 'E', 'Z', 'Y']`.
+  This allows for more accurate representation of large numbers, such as converting 1000000000 to 1.0B.
+
 ### 1.4.4
 
 - **NEW**: Added new extensions to the `String?` class: `isValidIp4`, `isValidIp6`, and `isValidUrl`. These extensions

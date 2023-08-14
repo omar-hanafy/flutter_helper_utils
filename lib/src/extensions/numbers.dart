@@ -68,17 +68,29 @@ extension NumExtensions on num {
   /// Returns half of the number
   double get half => this / 2;
 
-  /// convert numbers to greeks
-  /// e.g 1000 => 1k
-  ///     20000 => 20k
-  ///     1000000 => 1M
+  /// Converts a number to a format that includes Greek symbols for thousands, millions, and beyond.
+  ///
+  /// Example usage:
+  ///   print(1000.asGreeks); // Output: 1.0K
+  ///   print(1500000.asGreeks); // Output: 1.5M
+  ///   print(2500000000.asGreeks); // Output: 2.5B
+  ///
+  /// Here is a list of all symbols along with their corresponding names and values.
+  /// k: Kilo, 10^3
+  /// M: Mega, 10^6
+  /// G: Giga, 10^9
+  /// T: Tera, 10^12
+  /// P: Peta, 10^15
+  /// E: Exa, 10^18
+  /// Z: Zetta, 10^21
+  /// Y: Yotta, 10^24
   String get asGreeks {
-    if (this < 1000) {
-      return removeTrailingZero;
-    } else if (this < 1000000) {
-      return '${(this / 1000).removeTrailingZero}K';
-    }
-    return '${(this / 1000000).removeTrailingZero}M';
+    const greekSymbols = <String>['K', 'M', 'B', 'T', 'Q', 'P', 'E', 'Z', 'Y'];
+    if (this < 1000) return toString();
+    final magnitude = (toString().length - 1) ~/ 3;
+    final scaledNumber = this / pow(1000, magnitude);
+    final symbol = greekSymbols[magnitude - 1];
+    return scaledNumber.toStringAsFixed(1) + symbol;
   }
 
   /// Utility to delay some callback (or code execution).
