@@ -1,3 +1,11 @@
+### 1.4.7
+
+- **NEW**: Added new function `toTitle` on String Extension which is similar to `toTitleCase` but ignores the '-'
+  and '_' characters.
+  This is useful when users name events, products, etc.
+  and want these characters to be shown in the correct format.
+  For example, `flutter-and-dart` becomes `Flutter-And-Dart` when using `toTitle`.
+
 ### 1.4.6
 
 - **FIX**: Fixed a bug when using `listIndex` on ConvertObject functions that may cause the list return null.

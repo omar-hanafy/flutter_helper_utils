@@ -26,6 +26,22 @@ extension StringExtensions on String {
     ).replaceAll(RegExp(r'([_\-])+'), ' ');
   }
 
+  /// similar to [toTitleCase] but [toTitle] ignores the `-` and `_`.
+  /// e.g. flutter-and-dart Flutter-And-Dart.
+  /// Useful in some cases when naming events,
+  /// products etc and want these characters to be shown.
+  String get toTitle {
+    return toLowerCase().replaceAllMapped(
+      RegExp(
+        r'[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+',
+      ),
+      (Match match) {
+        if (_titleCaseExceptions.contains(match[0])) return match[0]!;
+        return '${match[0]![0].toUpperCase()}${match[0]!.substring(1).toLowerCase()}';
+      },
+    );
+  }
+
   /// flutter and dart => flutterAndDart
   String get toCamelCase {
     final separatedWords = split(' ');
@@ -341,7 +357,7 @@ extension NullSafeStringExtensions on String? {
   }
 }
 
-List<String> _titleCaseExceptions = [
+const _titleCaseExceptions = <String>[
   'a',
   'abaft',
   'about',
