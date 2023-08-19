@@ -46,7 +46,7 @@ abstract class ConvertObject {
         return object[mapKey].toString();
       }
       if (listIndex != null && object is List<dynamic>) {
-        return toString1(object.fromIndex(listIndex));
+        return toString1(object.of(listIndex));
       }
       try {
         return object.toString();
@@ -93,7 +93,7 @@ abstract class ConvertObject {
       return object[mapKey].toString();
     }
     if (listIndex != null && object is List<dynamic>) {
-      return tryToString(object.fromIndex(listIndex));
+      return tryToString(object.of(listIndex));
     }
     try {
       return object != null ? '$object' : null;
@@ -150,7 +150,7 @@ abstract class ConvertObject {
       return toNum(object[mapKey]);
     }
     if (listIndex != null && object is List<dynamic>) {
-      return toNum(object.fromIndex(listIndex));
+      return toNum(object.of(listIndex));
     }
     try {
       return '$object'.toNum;
@@ -200,7 +200,7 @@ abstract class ConvertObject {
       return tryToNum(object[mapKey]);
     }
     if (listIndex != null && object is List<dynamic>) {
-      return tryToNum(object.fromIndex(listIndex));
+      return tryToNum(object.of(listIndex));
     }
     try {
       return num.tryParse('$object');
@@ -247,7 +247,7 @@ abstract class ConvertObject {
       return toInt(object[mapKey]);
     }
     if (listIndex != null && object is List<dynamic>) {
-      return toInt(object.fromIndex(listIndex));
+      return toInt(object.of(listIndex));
     }
     try {
       return toNum(object).toInt();
@@ -297,7 +297,7 @@ abstract class ConvertObject {
       return tryToInt(object[mapKey]);
     }
     if (listIndex != null && object is List<dynamic>) {
-      return tryToInt(object.fromIndex(listIndex));
+      return tryToInt(object.of(listIndex));
     }
     try {
       return tryToNum(object).tryToInt;
@@ -355,7 +355,7 @@ abstract class ConvertObject {
       return toBigInt(object[mapKey]);
     }
     if (listIndex != null && object is List<dynamic>) {
-      return toBigInt(object.fromIndex(listIndex));
+      return toBigInt(object.of(listIndex));
     }
     try {
       if (object is num) return BigInt.from(object);
@@ -406,7 +406,7 @@ abstract class ConvertObject {
       return tryToBigInt(object[mapKey]);
     }
     if (listIndex != null && object is List<dynamic>) {
-      return tryToBigInt(object.fromIndex(listIndex));
+      return tryToBigInt(object.of(listIndex));
     }
     try {
       if (object is num) return BigInt.from(object);
@@ -454,7 +454,7 @@ abstract class ConvertObject {
       return toDouble(object[mapKey]);
     }
     if (listIndex != null && object is List<dynamic>) {
-      return toDouble(object.fromIndex(listIndex));
+      return toDouble(object.of(listIndex));
     }
     try {
       return toNum(object).toDouble();
@@ -503,7 +503,7 @@ abstract class ConvertObject {
       return tryToDouble(object[mapKey]);
     }
     if (listIndex != null && object is List<dynamic>) {
-      return tryToDouble(object.fromIndex(listIndex));
+      return tryToDouble(object.of(listIndex));
     }
     try {
       return tryToNum(object).tryToDouble;
@@ -556,7 +556,7 @@ abstract class ConvertObject {
       return (object[mapKey] as Object?).asBool;
     }
     if (listIndex != null && object is List<dynamic>) {
-      return (object.fromIndex(listIndex) as Object?).asBool;
+      return (object.of(listIndex) as Object?).asBool;
     }
     return (object as Object?).asBool;
   }
@@ -603,7 +603,7 @@ abstract class ConvertObject {
         return (object[mapKey] as Object?).asBool;
       }
       if (listIndex != null && object is List<dynamic>) {
-        return (object.fromIndex(listIndex) as Object?).asBool;
+        return (object.of(listIndex) as Object?).asBool;
       }
       return (object as Object?).asBool;
     }
@@ -643,7 +643,7 @@ abstract class ConvertObject {
       return toDateTime(object[mapKey]);
     }
     if (listIndex != null && object is List<dynamic>) {
-      return toDateTime(object.fromIndex(listIndex));
+      return toDateTime(object.of(listIndex));
     }
     try {
       return DateTime.parse('$object');
@@ -689,7 +689,7 @@ abstract class ConvertObject {
       return tryToDateTime(object[mapKey]);
     }
     if (listIndex != null && object is List<dynamic>) {
-      return tryToDateTime(object.fromIndex(listIndex));
+      return tryToDateTime(object.of(listIndex));
     }
     try {
       return DateTime.tryParse('$object');
@@ -742,7 +742,7 @@ abstract class ConvertObject {
     }
     if (object is Map && object.isEmpty) return <K, V>{};
     if (listIndex != null && object is List<dynamic>) {
-      return toMap<K, V>(object.fromIndex(listIndex));
+      return toMap<K, V>(object.of(listIndex));
     }
     if (mapKey != null && object is Map<dynamic, dynamic>) {
       return toMap<K, V>(object[mapKey]);
@@ -800,7 +800,7 @@ abstract class ConvertObject {
   }) {
     if (object is Map && object.isEmpty) return <K, V>{};
     if (listIndex != null && object is List<dynamic>) {
-      return tryToMap<K, V>(object.fromIndex(listIndex));
+      return tryToMap<K, V>(object.of(listIndex));
     }
     if (mapKey != null && object is Map<dynamic, dynamic>) {
       return tryToMap<K, V>(object[mapKey]);
@@ -861,7 +861,7 @@ abstract class ConvertObject {
     }
     if (object is Iterable && object.isEmpty) return <T>{};
     if (listIndex != null && object is List<dynamic>) {
-      return toSet<T>(object.fromIndex(listIndex));
+      return toSet<T>(object.of(listIndex));
     }
     if (mapKey != null && object is Map<dynamic, dynamic>) {
       return toSet<T>(object[mapKey]);
@@ -917,7 +917,7 @@ abstract class ConvertObject {
   }) {
     if (object is Iterable && object.isEmpty) return <T>{};
     if (listIndex != null && object is List<dynamic>) {
-      return tryToSet<T>(object.fromIndex(listIndex));
+      return tryToSet<T>(object.of(listIndex));
     }
     if (mapKey != null && object is Map<dynamic, dynamic>) {
       return tryToSet<T>(object[mapKey]);
@@ -980,7 +980,7 @@ abstract class ConvertObject {
     }
     if (object is Iterable && object.isEmpty) return <T>[];
     if (listIndex != null && object is List<dynamic>) {
-      return toList<T>(object.fromIndex(listIndex));
+      return toList<T>(object.of(listIndex));
     }
     if (mapKey != null && object is Map<dynamic, dynamic>) {
       return toList<T>(object[mapKey]);
@@ -1040,7 +1040,7 @@ abstract class ConvertObject {
   }) {
     if (object is Iterable && object.isEmpty) return <T>[];
     if (listIndex != null && object is List<dynamic>) {
-      return tryToList<T>(object.fromIndex(listIndex));
+      return tryToList<T>(object.of(listIndex));
     }
     if (mapKey != null && object is Map<dynamic, dynamic>) {
       return tryToList<T>(object[mapKey]);

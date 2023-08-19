@@ -7,9 +7,9 @@ typedef IndexedPredicate<T> = bool Function(int index, T);
 typedef Predicate<T> = bool Function(T);
 
 extension ListExtensionsNS<T> on List<T>? {
-  /// alternative to list[index] but it is null safe.
-  T? fromIndex(int index) {
-    if (isNotEmptyOrNull && this!.length < index) {
+  /// similar to list[index] but it is null safe.
+  T? of(int index) {
+    if (isNotEmptyOrNull && index >= 0 && this!.length > index) {
       return this![index];
     }
     return null;

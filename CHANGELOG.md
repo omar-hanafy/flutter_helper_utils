@@ -1,3 +1,7 @@
+### 1.4.6
+
+- **FIX**: Fixed a bug when using `listIndex` on ConvertObject functions that may cause the list return null.
+
 ### 1.4.5
 
 - **UPDATE**: Enhanced the `asGreeks` getter to include all available Greek symbols for converting large numbers.
