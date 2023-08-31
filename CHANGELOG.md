@@ -1,3 +1,18 @@
+### 1.4.8
+
+- **BREAKING CHANGE**: Renamed the `delay` function in the Duration extension to be `delayed` to avoid conflicts with other packages
+
+- **UPDATE**: Updated the `remainingDays` getter in the DateTime extension to correctly consider the day ending at midnight.
+
+- **NEW**: Added the `remainingDuration` getter to the DateTime extension for calculating the remaining duration between two dates.
+  For example:
+
+```dart
+
+final date = DateTime(2030);
+final remainingDuration = date.remainingDuration(DateTime.now());
+```
+
 ### 1.4.7
 
 - **NEW**: Added new function `toTitle` on String Extension which is similar to `toTitleCase` but ignores the '-'

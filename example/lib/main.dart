@@ -20,7 +20,7 @@ Future<void> main() async {
   DateTime futureDate = duration.fromNow;
   // Subtracts the Duration from the current DateTime and returns a DateTime in the past
   DateTime pastDate = duration.ago;
-  await duration.delay<void>(); // run async delay
+  await duration.delayed<void>(); // run async delay
 
 // NUMBERS:
   const int number = 1000;

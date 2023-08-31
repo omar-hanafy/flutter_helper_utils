@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
@@ -28,8 +29,15 @@ extension ListExtensionsNS<T> on List<T>? {
 
   /// same behavior as [indexWhere] but it is null safe which means
   /// it do nothing when [List] return [isEmptyOrNull] to true.
-  int? indexWhereOrNull(Predicate<T> test, [int start = 0]) =>
-      isEmptyOrNull ? null : this!.indexWhere(test, start);
+  int? indexWhereOrNull(Predicate<T> test, [int start = 0]) {
+    if (isEmptyOrNull) return null;
+    try {
+      return this!.indexWhere(test, start);
+    } catch (e, s) {
+      dev.log('$e', stackTrace: s);
+      return null;
+    }
+  }
 
   /// same behavior as [removeWhere] but it is null safe which means
   /// it do nothing when [List] return [isEmptyOrNull] to true.

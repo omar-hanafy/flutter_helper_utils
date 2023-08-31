@@ -105,7 +105,11 @@ extension NullableDateExtensions on DateTime? {
       isNotNull ? format.dateFormat.format(this!) : null;
 
   int? get remainingDays =>
-      isNotNull ? DatesHelper.diffInDays(this!, DateTime.now()) : null;
+      isNotNull ? DatesHelper.diffInDays(to: this!) : null;
+
+  int? get passedDays => isNotNull
+      ? DatesHelper.diffInDays(from: DateTime.now(), to: this!)
+      : null;
 }
 
 extension DateExtensions on DateTime {
@@ -123,7 +127,11 @@ extension DateExtensions on DateTime {
 
   Duration get passedDuration => DateTime.now().difference(this);
 
-  int get remainingDays => DatesHelper.diffInDays(this, DateTime.now());
+  int get passedDays => DatesHelper.diffInDays(from: DateTime.now(), to: this);
+
+  Duration get remainingDuration => difference(DateTime.now());
+
+  int get remainingDays => DatesHelper.diffInDays(to: this);
 
   /// Returns true if [other] is in the same year as [this].
   ///
@@ -376,8 +384,17 @@ abstract class DatesHelper {
     return max.weekday % 7 - min.weekday % 7 >= 0;
   }
 
-  /// returns the different days between two dates
-  static int diffInDays(DateTime l, DateTime r) => l.difference(r).inDays;
+  /// Returns the absolute value of the difference in days between two dates.
+  /// The difference is calculated by comparing only the year, month, and day values of the dates.
+  /// The hour, minute, second, and millisecond values are ignored.
+  /// For example, if date1 is August 22nd at 11 p.m. and date2 is August 24th at 12 a.m. midnight,
+  /// the difference in days is 2, not a fraction of a day.
+  static int diffInDays({required DateTime to, DateTime? from}) {
+    final f = from ?? DateTime.now();
+    return DateTime(to.year, to.month, to.day)
+        .difference(DateTime(f.year, f.month, f.day))
+        .inDays;
+  }
 
   /// Returns a [DateTime] for each day the given range.
   ///
