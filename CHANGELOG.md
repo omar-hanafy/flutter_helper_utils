@@ -1,10 +1,30 @@
+### 1.5.1
+
+- **NEW**: Added `dismissActivePopup` method to the `NavigatorExtension` extension on `BuildContext`.
+  This method programmatically and recursively dismisses any active pop-up elements like dialogs, modal bottom sheets,
+  and Cupertino modal popups.
+  It checks for the types `PopupRoute`, `DialogRoute`, `RawDialogRoute`, `ModalBottomSheetRoute`,
+  and `CupertinoModalPopupRoute` to determine if a pop-up is currently displayed and closes it.
+  If multiple pop-ups are stacked, the method will recursively close all of them.
+
+### 1.5.0
+
+- **UPDATE**: update flutter version boundaries to be `  sdk: '>=3.0.6 <4.0.0'`
+
+### 1.4.9
+
+- **FIX**: Fixed `isTomorrow`, `isToday`, `isYesterday` getters in DateTime extensions.
+
 ### 1.4.8
 
-- **BREAKING CHANGE**: Renamed the `delay` function in the Duration extension to be `delayed` to avoid conflicts with other packages
+- **BREAKING CHANGE**: Renamed the `delay` function in the Duration extension to be `delayed` to avoid conflicts with
+  other packages
 
-- **UPDATE**: Updated the `remainingDays` getter in the DateTime extension to correctly consider the day ending at midnight.
+- **UPDATE**: Updated the `remainingDays`, `passedDays` getter in the DateTime extension to correctly consider the day
+  ending at midnight.
 
-- **NEW**: Added the `remainingDuration` getter to the DateTime extension for calculating the remaining duration between two dates.
+- **NEW**: Added the `remainingDuration`, `passedDuration` getter to the DateTime extension for calculating the
+  remaining duration between two dates.
   For example:
 
 ```dart

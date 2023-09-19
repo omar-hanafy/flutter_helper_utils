@@ -65,9 +65,13 @@ class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);
   static final GlobalKey<TooltipState> tooltipKey = GlobalKey<TooltipState>();
   static final GlobalKey<TooltipState> tooltipKey2 = GlobalKey<TooltipState>();
-
   @override
   Widget build(BuildContext context) {
+    print('/home_h?id=4'.toCamelCase);
+    print('/home_h?id=4'.toCamelCase.split('?').first);
+    print('');
+    print('home_h?id=4'.toCamelCase);
+    print('home_h?id=4'.toCamelCase.split('?').first);
     final theme = context.themeData;
     final txtTheme = theme.textTheme;
     return Scaffold(
@@ -203,9 +207,7 @@ class _ToGreekNumbersState extends State<ToGreekNumbers> {
           Expanded(
             flex: 2,
             child: TextField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter any number to convert it'),
+              decoration: const InputDecoration(border: OutlineInputBorder(), hintText: 'Enter any number to convert it'),
               onChanged: (value) {
                 setState(() {
                   greekNumber = value.tryToInt?.asGreeks;
@@ -215,14 +217,81 @@ class _ToGreekNumbersState extends State<ToGreekNumbers> {
           ),
           Flexible(
             child: Text(
-              greekNumber != null
-                  ? greekNumber!
-                  : 'Please Enter A valid Number',
+              greekNumber != null ? greekNumber! : 'Please Enter A valid Number',
               style: txtTheme.headlineSmall,
             ).paddingOnly(left: 20),
           ),
         ],
       ),
     );
+  }
+}
+
+extension DateTimeExt on DateTime {
+  String get dateChat {
+    if (isToday) return 'Today';
+    if (isYesterday) return 'Yesterday';
+    if (isInPastWeek) return format('EEEE');
+    if (isInThisYear) return format('E, MMM d');
+    return format('E, MMM d, yyyy');
+  }
+
+  String get oldDateFormat => switch (remainingDays) {
+        -1 => 'Yesterday',
+        0 => 'Today',
+        1 => 'Tomorrow',
+        _ => format('MMM dd, ' 'yyyy'),
+      };
+
+  String get postTime2 {
+    final pd = passedDuration;
+    final hours = pd.inHours;
+    if (hours < 1) {
+      final minutes = pd.inMinutes;
+      if (minutes < 1) {
+        final seconds = pd.inSeconds;
+        if (seconds < 5) return 'Now';
+        return '${seconds}s';
+      }
+      return '${minutes}m';
+    }
+    if (hours < 24) return '${hours}h';
+    final days = pd.inDays;
+    return days < 7 ? '${days}d' : '${days ~/ 7}w';
+  }
+
+  String get postTime {
+    final pd = passedDuration;
+    final hours = pd.inHours;
+    final minutes = pd.inMinutes;
+    final seconds = pd.inSeconds;
+    return hours < 1
+        ? minutes < 1
+            ? seconds < 5
+                ? 'Now'
+                : '${seconds}s'
+            : '${minutes}m'
+        : hours < 24
+            ? '${hours}h'
+            : '${pd.inDays < 7 ? pd.inDays : pd.inDays ~/ 7}${pd.inDays < 7 ? 'd' : 'w'}';
+  }
+
+  String get time => format('hh:mm aa');
+
+  String get getEventDate => switch (remainingDays) {
+        -1 => 'Yesterday',
+        0 => 'Today',
+        1 => 'Tomorrow ${format('EEEE dd/MM')}',
+        _ => format('EEEE dd/MM'),
+      };
+
+  String get getEventDateTime {
+    final time = format('hh:mm a');
+    return switch (remainingDays) {
+      -1 => 'Yesterday - $time',
+      0 => 'Today - $time',
+      1 => 'Tomorrow - $time',
+      _ => '${format('EEEE dd, MMM yyyy')} - $time',
+    };
   }
 }

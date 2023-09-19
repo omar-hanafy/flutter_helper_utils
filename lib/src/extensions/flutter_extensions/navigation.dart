@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 extension NavigationStateExtensions on State {
@@ -139,4 +140,23 @@ extension NavigatorExtension on BuildContext {
   /// perform replace with routeName
   void popUntil(String screenName) =>
       Navigator.of(this).popUntil(ModalRoute.withName(screenName));
+
+  void dismissActivePopup() {
+    try {
+      // Get the current route
+      final currentRoute = ModalRoute.of(this);
+      // Check if the current route is a dialog or a modal bottom sheet
+      if ((currentRoute is PopupRoute ||
+              currentRoute is DialogRoute ||
+              currentRoute is RawDialogRoute ||
+              currentRoute is ModalBottomSheetRoute ||
+              currentRoute is CupertinoModalPopupRoute) &&
+          Navigator.of(this).canPop()) {
+        // Pop the current dialog, modal, etc...
+        Navigator.pop(this);
+        // Recursively call this function to pop any other dialogs or modal sheets
+        dismissActivePopup();
+      }
+    } catch (_) {}
+  }
 }

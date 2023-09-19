@@ -13,17 +13,31 @@ extension StringExtensions on String {
         for (final e in toLowerCase().trim().split(' ')) e.capitalizeFirstLetter
       ].join();
 
+  /// flutter and dart => flutterAndDart
+  String get toCamelCase {
+    if (isEmpty) return '';
+    final result = splitMapJoin(
+      RegExp(r'[\s\-_.]'),
+      onMatch: (m) => '',
+      onNonMatch: (n) {
+        if (n.isEmpty) return '';
+        return n.substring(0, 1).toUpperCase() + n.substring(1).toLowerCase();
+      },
+    );
+    return result[0].toLowerCase() + result.substring(1);
+  }
+
   /// flutter and dart => Flutter and Dart
   String get toTitleCase {
-    return toLowerCase().replaceAllMapped(
-      RegExp(
-        r'[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+',
-      ),
-      (Match match) {
-        if (_titleCaseExceptions.contains(match[0])) return match[0]!;
-        return '${match[0]![0].toUpperCase()}${match[0]!.substring(1).toLowerCase()}';
+    if (isEmpty) return '';
+    return splitMapJoin(
+      RegExp(r'[\s\-_.]'), // Changed regular expression
+      onMatch: (m) => ' ',
+      onNonMatch: (n) {
+        if (n.isEmpty || shouldIgnoreCapitalization) return n;
+        return n.substring(0, 1).toUpperCase() + n.substring(1).toLowerCase();
       },
-    ).replaceAll(RegExp(r'([_\-])+'), ' ');
+    );
   }
 
   /// similar to [toTitleCase] but [toTitle] ignores the `-` and `_`.
@@ -31,32 +45,19 @@ extension StringExtensions on String {
   /// Useful in some cases when naming events,
   /// products etc and want these characters to be shown.
   String get toTitle {
-    return toLowerCase().replaceAllMapped(
-      RegExp(
-        r'[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+',
-      ),
-      (Match match) {
-        if (_titleCaseExceptions.contains(match[0])) return match[0]!;
-        return '${match[0]![0].toUpperCase()}${match[0]!.substring(1).toLowerCase()}';
+    if (isEmpty) return '';
+    return splitMapJoin(
+      RegExp(r'(\s|-|_|\b)'),
+      onMatch: (m) => m[0]!,
+      onNonMatch: (n) {
+        if (n.isEmpty || shouldIgnoreCapitalization) return n;
+        return n.substring(0, 1).toUpperCase() + n.substring(1).toLowerCase();
       },
     );
   }
 
-  /// flutter and dart => flutterAndDart
-  String get toCamelCase {
-    final separatedWords = split(' ');
-    final newString = StringBuffer();
-    for (final word in separatedWords) {
-      if (word.isNotEmpty) {
-        newString
-            .write(word[0].toUpperCase() + word.substring(1).toLowerCase());
-      }
-    }
-    final tempString = newString.toString();
-    return tempString[0].toLowerCase() + tempString.substring(1);
-  }
-
-  bool get isAlphanumeric => RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(this); // false
+  bool get shouldIgnoreCapitalization =>
+      startsWithNumber || _titleCaseExceptions.contains(toLowerCase());
 
   String get removeEmptyLines =>
       replaceAll(RegExp(r'(?:[\t ]*(?:\r?\n|\r))+'), '\n');
@@ -90,6 +91,10 @@ extension NullSafeStringExtensions on String? {
       return true;
     }
   }
+
+  bool get isAlphanumeric => hasMatch(r'^[a-zA-Z0-9 ]+$');
+
+  bool get startsWithNumber => hasMatch(r'^\d');
 
   /// check if String contains any digits.
   /// f1rstDate -> true
@@ -133,7 +138,8 @@ extension NullSafeStringExtensions on String? {
   ///   1.1.1.1.
   ///   3...3
   bool get isValidIp4 => hasMatch(
-      r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$');
+        r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
+      );
 
   /// Handle all condition for ipv6
   /// Accepts:

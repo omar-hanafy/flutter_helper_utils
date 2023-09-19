@@ -49,30 +49,12 @@ extension NullableDateExtensions on DateTime? {
 
   String? get toUtcIso => this?.toUtc().toIso8601String();
 
-  bool get isTomorrow {
-    if (isNull) return false;
-    final nowDate = DateTime.now();
-    return this!.year == nowDate.year &&
-        this!.month == nowDate.month &&
-        this!.day == nowDate.day + 1;
-  }
+  bool get isTomorrow => remainingDays == 1;
 
   /// return true if the date is today
-  bool get isToday {
-    if (isNull) return false;
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final currentDate = DateTime(this!.year, this!.month, this!.day);
-    return today.isAtSameMomentAs(currentDate);
-  }
+  bool get isToday => remainingDays == 0;
 
-  bool get isYesterday {
-    if (isNull) return false;
-    final nowDate = DateTime.now();
-    return this!.year == nowDate.year &&
-        this!.month == nowDate.month &&
-        this!.day == nowDate.day - 1;
-  }
+  bool get isYesterday => passedDays == 1;
 
   bool get isPresent => isNotNull && this!.isAfter(DateTime.now());
 
@@ -98,18 +80,19 @@ extension NullableDateExtensions on DateTime? {
         ((this!.year % 100 != 0) || (this!.year % 400 == 0));
   }
 
-  Duration? get passedDuration =>
-      isNull ? null : DateTime.now().difference(this!);
-
   String? tryFormat(String format) =>
       isNotNull ? format.dateFormat.format(this!) : null;
 
-  int? get remainingDays =>
-      isNotNull ? DatesHelper.diffInDays(to: this!) : null;
+  Duration? get passedDuration =>
+      isNull ? null : DateTime.now().difference(this!);
 
-  int? get passedDays => isNotNull
-      ? DatesHelper.diffInDays(from: DateTime.now(), to: this!)
-      : null;
+  Duration? get remainingDuration =>
+      isNull ? null : this!.difference(DateTime.now());
+
+  int? get remainingDays => isNull ? null : DatesHelper.diffInDays(to: this!);
+
+  int? get passedDays =>
+      isNull ? null : DatesHelper.diffInDays(to: DateTime.now(), from: this);
 }
 
 extension DateExtensions on DateTime {
@@ -127,7 +110,7 @@ extension DateExtensions on DateTime {
 
   Duration get passedDuration => DateTime.now().difference(this);
 
-  int get passedDays => DatesHelper.diffInDays(from: DateTime.now(), to: this);
+  int get passedDays => DatesHelper.diffInDays(to: DateTime.now(), from: this);
 
   Duration get remainingDuration => difference(DateTime.now());
 
