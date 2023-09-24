@@ -207,7 +207,9 @@ class _ToGreekNumbersState extends State<ToGreekNumbers> {
           Expanded(
             flex: 2,
             child: TextField(
-              decoration: const InputDecoration(border: OutlineInputBorder(), hintText: 'Enter any number to convert it'),
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter any number to convert it'),
               onChanged: (value) {
                 setState(() {
                   greekNumber = value.tryToInt?.asGreeks;
@@ -217,7 +219,9 @@ class _ToGreekNumbersState extends State<ToGreekNumbers> {
           ),
           Flexible(
             child: Text(
-              greekNumber != null ? greekNumber! : 'Please Enter A valid Number',
+              greekNumber != null
+                  ? greekNumber!
+                  : 'Please Enter A valid Number',
               style: txtTheme.headlineSmall,
             ).paddingOnly(left: 20),
           ),
