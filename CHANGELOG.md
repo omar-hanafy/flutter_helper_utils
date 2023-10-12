@@ -1,3 +1,18 @@
+### 1.5.2
+
+- Added global conversion functions mirroring the static methods in `ConvertObject`, providing alternative easy less
+  code usage options.
+
+
+For example:
+
+```dart
+// Use this shorter way to convert values.
+final stringList = toList<String>(dynamicValue);
+// If 'toList' name is already defined in your code, use this way to avoid conflicts.
+final stringList = ConvertObject.toList<String>(dynamicValue);
+```
+
 ### 1.5.1
 
 - **NEW**: Added `dismissActivePopup` method to the `NavigatorExtension` extension on `BuildContext`.
@@ -25,6 +40,8 @@
 
 - **NEW**: Added the `remainingDuration`, `passedDuration` getter to the DateTime extension for calculating the
   remaining duration between two dates.
+
+
   For example:
 
 ```dart
@@ -196,7 +213,7 @@ final BigInt myBigInt = toType<BigInt>(largeNum);
 
 - **NEW**: Added `isValidHttpCode` in `num?` extension that returns true if the http response code is 200 or 201.
 - **NEW**: Added `toDateWithFormat` in String extension that converts string to `DateTime` with specific format
-  e.g, `d-M-y`.
+  e.g., `d-M-y`.
 
 &nbsp;
 *Usage*:
