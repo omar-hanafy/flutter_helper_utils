@@ -1,5 +1,10 @@
 ### 1.5.4
 
+- Added a new `format` argument to the `toDateTime` and `tryDateTime` methods, allowing you to specify the converted date format.
+- Updated and enhanced the entire documentation
+
+### 1.5.3
+
 - Added global conversion functions mirroring the static methods in `ConvertObject`, providing alternative easy less
   code usage options.
 
