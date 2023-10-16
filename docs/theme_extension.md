@@ -4,7 +4,7 @@
 
 The `ThemeExtension` in the `flutter_helper_utils` package provides a set of extensions on `BuildContext` that simplify access to various theme properties. This makes working with themes more intuitive and reduces boilerplate code.
 
-### Access to ThemeData
+### themeData
 
 Quickly get the current `ThemeData` from the nearest `Theme` widget ancestor in the widget tree.
 
@@ -12,7 +12,7 @@ Quickly get the current `ThemeData` from the nearest `Theme` widget ancestor in 
 final theme = context.themeData;
 ```
 
-### Text Theme Access
+### txtTheme
 
 Effortlessly obtain the `TextTheme` for your context.
 
@@ -20,7 +20,7 @@ Effortlessly obtain the `TextTheme` for your context.
 final textTheme = context.txtTheme;
 ```
 
-### System and Theme Brightness
+### brightness
 
 Determine the brightness setting of the system and the app theme. This is useful for toggling between light and dark modes.
 
@@ -29,7 +29,16 @@ final themeBrightness = context.brightness;
 final systemBrightness = context.sysBrightness;
 ```
 
-### Brightness Checks
+### sysBrightness
+
+Determine the brightness setting of the system and the app theme. This is useful for toggling between light and dark modes.
+
+```dart
+final themeBrightness = context.brightness;
+final systemBrightness = context.sysBrightness;
+```
+
+### isDark and isLight
 
 Convenient booleans to quickly check if the current theme is dark or light.
 
@@ -37,6 +46,7 @@ Convenient booleans to quickly check if the current theme is dark or light.
 final isDarkMode = context.isDark;
 final isLightMode = context.isLight;
 ```
+
 
 ## Example Usage
 

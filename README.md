@@ -95,23 +95,18 @@ Our package provides a variety of extensions on Dart and Flutter's built-in type
 * [`txtTheme`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/theme_extension.md#txtTheme) - Effortlessly obtain the `TextTheme` for your context.
 * [`brightness`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/theme_extension.md#brightness) - Determine the brightness setting of the app theme.
 * [`sysBrightness`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/theme_extension.md#sysBrightness) - Determine the brightness setting of the system.
-* [`isDark`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/theme_extension.md#isDark) - Convenient boolean to quickly check if the current theme is dark.
-* [`isLight`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/theme_extension.md#isLight) - Convenient boolean to quickly check if the current theme is light.
+* [`isDark & isLight`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/theme_extension.md#isDark-and-isLight) - Convenient boolean to quickly check if the current theme is light or dark.
 
 ### [MediaQueryExtensions](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md)
 
-- [`mq`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#mq) - Fetches the closest `MediaQueryData` instance.
-- [`nullableMQ`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#nullableMQ) - Optionally fetches `MediaQueryData`.
-- [`deviceOrientation`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#deviceOrientation) - Gets device orientation.
-- [`navigationMode`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#navigationMode) - Retrieves the navigation mode.
-- [`padding`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#padding) - Gets padding due to system UI.
-- [`platformBrightness`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#platformBrightness) - Fetches the platform brightness.
-- [`viewPadding`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#viewPadding) - Provides padding independent of view insets.
-- [`sizePx`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#sizePx) - Gets the screen size.
-- [`isLandscape`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#isLandscape) - Checks for landscape orientation.
-- [`isPortrait`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#isPortrait) - Checks for portrait orientation.
-- [`widthPx`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#widthPx), [`heightPx`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#heightPx) - Screen dimensions in pixels.
-- [`shortestSide`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#shortestSide), [`longestSide`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#longestSide) - Smaller and larger screen dimensions.
+* [`mq`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#mq) - Quick Access to MediaQueryData
+* [`nullableMQ`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#nullableMQ) - Nullable MediaQueryData Access
+* [`deviceOrientation`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#deviceOrientation) - Device Orientation
+* [`navigationMode`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#navigationMode) - Navigation Mode
+* [`padding and viewInsets`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#padding-and-viewInsets) - Screen Padding and Insets
+* [`screenDimensions`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#screenDimensions) - Screen Dimensions
+* [`additionalFeatures`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#additionalFeatures) - Additional Features
+* [View All Media Query Extensions](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md)
 
 ### [FocusScopeExtensions](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/flutter_ui_extension.md)
 
@@ -124,18 +119,19 @@ Our package provides a variety of extensions on Dart and Flutter's built-in type
 
 ### [Navigator Extensions](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md)
 
-* [`popPage`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#popPage) - Pop the current page and optionally pass back a result.
-* [`popRoot`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#popRoot) - Pop the root navigator, useful for dismissing dialogs.
-* [`navigator`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#navigator) - Get the `NavigatorState` of the current or root navigator.
-* [`canPop`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#canPop) - Check if the current route can be popped.
-* [`pushPage`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#pushPage) - Push a new page onto the navigation stack.
-* [`pReplacement`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#pReplacement) - Replace the current page with a new one.
-* [`pAndRemoveUntil`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#pAndRemoveUntil) - Push a page and remove all routes below it.
-* [`pNamedAndRemoveUntil`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#pNamedAndRemoveUntil) - Push a named route and remove all routes below it.
-* [`pNamed`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#pNamed) - Push a named route.
-* [`pReplacementNamed`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#pReplacementNamed) - Replace the current route with a named one.
-* [`popUntil`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#popUntil) - Pop routes until a specific named route is reached.
-* [`dismissActivePopup`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#dismissActivePopup) - Dismiss any active pop-up like dialogs, modal bottom sheets, or Cupertino modal popups.
+* [`popPage`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#popPage) - Pop Page
+* [`popRoot`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#popRoot) - Pop Root
+* [`navigator`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#navigator) - Navigator State
+* [`canPop`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#canPop) - Can Pop
+* [`pushPage`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#pushPage) - Push Page
+* [`pushReplacement`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#pushReplacement) - Push Replacement
+* [`pushAndRemoveUntil`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#pushAndRemoveUntil) - Push And Remove Until
+* [`pushNamedAndRemoveUntil`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#pushNamedAndRemoveUntil) - Push Named And Remove Until
+* [`pushNamed`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#pushNamed) - Push Named
+* [`pushReplacementNamed`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#pushReplacementNamed) - Push Replacement Named
+* [`popUntil`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#popUntil) - Pop Until
+* [`dismissActivePopup`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md#dismissActivePopup) - Dismiss Active Popup
+* [View All Navigator Extensions](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/navigator_extension.md)
 
 # Helper Methods
 

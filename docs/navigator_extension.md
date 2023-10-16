@@ -1,10 +1,8 @@
-# Documentation for NavigatorExtension in flutter_helper_utils
-
-## NavigatorExtension on BuildContext
+# NavigatorExtension in `flutter_helper_utils`
 
 The `NavigatorExtension` is an extension on `BuildContext`, providing a rich set of methods to interact with navigation stacks in Flutter. It encapsulates common navigation actions such as `pop`, `push`, and `replace` in an intuitive API that can be used directly on a `BuildContext`.
 
-### Pop Page
+### popPage
 
 To pop the current page and optionally pass back a result.
 
@@ -12,7 +10,7 @@ To pop the current page and optionally pass back a result.
 context.popPage();
 ```
 
-### Pop Root
+### popRoot
 
 To pop the root navigator, useful for dismissing dialogs.
 
@@ -20,7 +18,7 @@ To pop the root navigator, useful for dismissing dialogs.
 context.popRoot();
 ```
 
-### Navigator State
+### navigator
 
 Get the `NavigatorState` of the current or root navigator.
 
@@ -29,7 +27,7 @@ var navState = context.navigator();
 var rootNavState = context.navigator(rootNavigator: true);
 ```
 
-### Can Pop
+### canPop
 
 Check if the current route can be popped.
 
@@ -37,7 +35,7 @@ Check if the current route can be popped.
 bool canPop = context.canPop;
 ```
 
-### Push Page
+### pushPage
 
 To push a new page onto the navigation stack.
 
@@ -45,47 +43,47 @@ To push a new page onto the navigation stack.
 context.pushPage(MyNewPage());
 ```
 
-### Push Replacement
+### pushReplacement
 
 To replace the current page with a new one.
 
 ```dart
-context.pReplacement(MyNewPage());
+context.pushReplacement(MyNewPage());
 ```
 
-### Push And Remove Until
+### pushAndRemoveUntil
 
 To push a page and remove all routes below it.
 
 ```dart
-context.pAndRemoveUntil(MyNewPage());
+context.pushAndRemoveUntil(MyNewPage());
 ```
 
-### Push Named And Remove Until
+### pushNamedAndRemoveUntil
 
 To push a named route and remove all routes below it.
 
 ```dart
-context.pNamedAndRemoveUntil('/myNewPage');
+context.pushNamedAndRemoveUntil('/myNewPage');
 ```
 
-### Push Named
+### pushNamed
 
 To push a named route.
 
 ```dart
-context.pNamed('/myNewPage');
+context.pushNamed('/myNewPage');
 ```
 
-### Push Replacement Named
+### pushReplacementNamed
 
 To replace the current route with a named one.
 
 ```dart
-context.pReplacementNamed('/myNewPage');
+context.pushReplacementNamed('/myNewPage');
 ```
 
-### Pop Until
+### popUntil
 
 To pop routes until a specific named route is reached.
 
@@ -93,7 +91,7 @@ To pop routes until a specific named route is reached.
 context.popUntil('/home');
 ```
 
-### Dismiss Active Popup
+### dismissActivePopup
 
 To dismiss any active pop-up like dialogs, modal bottom sheets, or Cupertino modal popups.
 
