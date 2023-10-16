@@ -1,4 +1,5 @@
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
+import 'package:flutter_helper_utils/src/exceptions/exceptions.dart';
 
 String toString1(
   dynamic object, {
@@ -88,15 +89,27 @@ DateTime toDateTime(
   dynamic object, {
   Object? mapKey,
   int? listIndex,
+  String? format,
 }) =>
-    ConvertObject.toDateTime(object, mapKey: mapKey, listIndex: listIndex);
+    ConvertObject.toDateTime(
+      object,
+      mapKey: mapKey,
+      listIndex: listIndex,
+      format: format,
+    );
 
 DateTime? tryToDateTime(
   dynamic object, {
   Object? mapKey,
   int? listIndex,
+  String? format,
 }) =>
-    ConvertObject.tryToDateTime(object, mapKey: mapKey, listIndex: listIndex);
+    ConvertObject.tryToDateTime(
+      object,
+      mapKey: mapKey,
+      listIndex: listIndex,
+      format: format,
+    );
 
 Map<K, V> toMap<K, V>(
   dynamic object, {
@@ -139,3 +152,109 @@ List<T>? tryToList<T>(
   int? listIndex,
 }) =>
     ConvertObject.tryToList(object, mapKey: mapKey, listIndex: listIndex);
+
+/// Global function that allow Convert an object to a specified type.
+///
+/// - If the object is already of type [T], it will be returned.
+/// - If the object is null, a [ParsingException] with a `nullObject` error will
+///     be thrown. If you want to ensure null safe values, consider using [tryToType] instead.
+/// - If the object cannot be converted to the specified type, a [ParsingException] will be thrown.
+///
+/// - Supported conversion types:
+///   - [bool]
+///   - [int]
+///   - [BigInt]
+///   - [double]
+///   - [num]
+///   - [String]
+///   - [DateTime]
+///
+/// Throws a [ParsingException] if it cannot be converted to the specified type.
+///
+/// Example usage:
+/// ```dart
+/// final dynamicValue = '42';
+/// final intValue = ConvertObject.toType<int>(dynamicValue); // 42
+///
+/// final dynamicValue2 = 'Hello';
+/// final intValue2 = ConvertObject.toType<int>(dynamicValue2); // Throws ParsingException
+///
+/// final dynamicValue3 = null;
+/// final intValue3 = ConvertObject.toType<int>(dynamicValue3); // Throws ParsingException with nullObject error
+/// ```
+T toType<T>(dynamic object) {
+  if (object is T) return object;
+  if (object == null) {
+    throw ParsingException.nullObject(
+      parsingInfo: 'toType',
+      stackTrace: StackTrace.current,
+    );
+  }
+  try {
+    if (T == bool) return ConvertObject.toBool(object) as T;
+    if (T == int) return ConvertObject.toInt(object) as T;
+    if (T == double) return ConvertObject.toDouble(object) as T;
+    if (T == num) return ConvertObject.toNum(object) as T;
+    if (T == BigInt) return ConvertObject.toBigInt(object) as T;
+    if (T == String) return ConvertObject.toString1(object) as T;
+    if (T == DateTime) return ConvertObject.toDateTime(object) as T;
+  } catch (e, s) {
+    throw ParsingException(
+      error: e,
+      parsingInfo: 'toType',
+      stackTrace: s,
+    );
+  }
+  throw ParsingException(
+    parsingInfo: 'toType',
+    error: 'Unsupported type: $T',
+  );
+}
+
+/// Global function that allow Convert an object to a specified type or return null.
+///
+/// If the object is already of type [T], it will be returned.
+/// If the object is null, a null value will be returned. If you want to ensure non-nullable values, consider using [toType] instead.
+/// If the object cannot be converted to the specified type, a [ParsingException] will be thrown.
+///
+/// Supported conversion types:
+///   - [bool]
+///   - [int]
+///   - [BigInt]
+///   - [double]
+///   - [num]
+///   - [String]
+///   - [DateTime]
+/// Throws a [ParsingException] if the object cannot be converted to the specified type.
+///
+/// Example usage:
+/// ```dart
+/// final dynamicValue = '42';
+/// final intValue = ConvertObject.tryToType<int>(dynamicValue); // 42
+///
+/// final dynamicValue2 = 'Hello';
+/// final intValue2 = ConvertObject.tryToType<int>(dynamicValue2); // Throws ParsingException
+/// ```
+T? tryToType<T>(dynamic object) {
+  if (object is T) return object;
+  if (object == null) return null;
+  try {
+    if (T == bool) return ConvertObject.tryToBool(object) as T?;
+    if (T == int) return ConvertObject.tryToInt(object) as T?;
+    if (T == BigInt) return ConvertObject.tryToBigInt(object) as T?;
+    if (T == double) return ConvertObject.tryToDouble(object) as T?;
+    if (T == num) return ConvertObject.tryToNum(object) as T?;
+    if (T == String) return ConvertObject.tryToString(object) as T?;
+    if (T == DateTime) return ConvertObject.tryToDateTime(object) as T?;
+  } catch (e, s) {
+    throw ParsingException(
+      error: e,
+      parsingInfo: 'toType',
+      stackTrace: s,
+    );
+  }
+  throw ParsingException(
+    parsingInfo: 'toType',
+    error: 'Unsupported type: $T',
+  );
+}

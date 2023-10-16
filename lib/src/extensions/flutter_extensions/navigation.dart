@@ -141,11 +141,16 @@ extension NavigatorExtension on BuildContext {
   void popUntil(String screenName) =>
       Navigator.of(this).popUntil(ModalRoute.withName(screenName));
 
+  /// This method programmatically and recursively dismisses any active pop-up elements like dialogs, modal bottom sheets,
+  ///   and Cupertino modal popups.
+  ///   It checks for the types [PopupRoute], [DialogRoute], [RawDialogRoute], [ModalBottomSheetRoute],
+  ///   and [CupertinoModalPopupRoute] to determine if a pop-up is currently displayed and closes it.
+  ///   If multiple pop-ups are stacked, the method will recursively close all of them.
   void dismissActivePopup() {
     try {
       // Get the current route
       final currentRoute = ModalRoute.of(this);
-      // Check if the current route is a dialog or a modal bottom sheet
+      // Check if the current route is a dialog, modal, etc...
       if ((currentRoute is PopupRoute ||
               currentRoute is DialogRoute ||
               currentRoute is RawDialogRoute ||

@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:flutter_helper_utils/flutter_helper_utils.dart';
+import 'package:flutter_helper_utils/src/extensions/extensions.dart';
 import 'package:intl/intl.dart';
 
 extension DateString on String? {

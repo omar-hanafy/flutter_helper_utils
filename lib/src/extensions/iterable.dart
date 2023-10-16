@@ -2,7 +2,7 @@ import 'dart:collection';
 import 'dart:developer' as dev;
 import 'dart:math';
 
-import 'package:flutter_helper_utils/flutter_helper_utils.dart';
+import 'package:flutter_helper_utils/src/extensions/extensions.dart';
 
 typedef IndexedPredicate<T> = bool Function(int index, T);
 typedef Predicate<T> = bool Function(T);

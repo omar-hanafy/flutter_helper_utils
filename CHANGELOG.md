@@ -1,8 +1,7 @@
-### 1.5.2
+### 1.5.4
 
 - Added global conversion functions mirroring the static methods in `ConvertObject`, providing alternative easy less
   code usage options.
-
 
 For example:
 

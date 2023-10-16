@@ -2,7 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 extension PlatformExtension on BuildContext {
-  TargetPlatform get targetPlatform => Theme.of(this).platform;
+  TargetPlatform? get targetPlatform => Theme.of(this).platform;
+}
+
+extension PlatformExtensionNullable on BuildContext? {
+  TargetPlatform? get targetPlatform =>
+      this == null ? null : Theme.of(this!).platform;
 
   bool get isMobile => targetPlatform.isMobile;
 
@@ -37,7 +42,7 @@ extension PlatformExtension on BuildContext {
   bool get isAppleWeb => targetPlatform.isAppleWeb;
 }
 
-extension TargetPlatformExtension on TargetPlatform {
+extension TargetPlatformExtension on TargetPlatform? {
   bool get isMobile =>
       !kIsWeb && (this == TargetPlatform.iOS || this == TargetPlatform.android);
 

@@ -65,6 +65,8 @@ extension StringExtensions on String {
   String get toOneLine => replaceAll('\n', ' ');
 
   String get removeWhiteSpaces => replaceAll(' ', '');
+
+  String get clean => removeWhiteSpaces.toOneLine;
 }
 
 extension NullSafeStringExtensions on String? {
