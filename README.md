@@ -1,6 +1,16 @@
+![](https://raw.githubusercontent.com/omar-hanafy/flutter_helper_utils/9bb44613da240f408d02a6e745f92e5f88050265/logo.svg)
 # Flutter Helper Utils
 
 Flutter Helper Utils is a comprehensive package aimed to augment Dart and Flutter's core functionalities. With a rich set of extensions and helper methods, this package boosts productivity and simplifies coding in Flutter projects.
+
+# Getting Started
+
+To get started, add the package to your `pubspec.yaml`:
+
+```yaml
+dependencies:
+  flutter_helper_utils: 1.5.5
+```
 
 ## Table of Contents
 
@@ -50,18 +60,17 @@ Our package provides a variety of extensions on Dart and Flutter's built-in type
 * [`binary`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/bool_extension.md#binary) - Returns 1 if the Boolean is true and 0 if it is false or null.
 * [`binaryText`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/bool_extension.md#binarytext) - Returns '1' if the Boolean is true and '0' if it is false or null.
 
-### [DateTime Extensions](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/docs/date_time_extension.md)
+### [DateTime Extensions](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md)
 
-* [`tryToDateTime`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md#tryToDateTime) - Safely attempts to convert a string to a DateTime object. Returns null if the conversion fails.
+* [`format & tryFormat`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md#format-and-tryFormat) - format a DateTime object as a string using a specified format (e.g. "yyyy-MM-dd"), while tryFormat attempts to do the same but returns null if unsuccessful.
+* [`tryToDateTime`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md#format) - Safely attempts to convert a string to a DateTime object. Returns null if the conversion fails.
 * [`toDateTime`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md#toDateTime) - Converts a string to a DateTime object. Throw an exception if the conversion fails.
 * [`dateFormat`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md#dateFormat) - Returns a DateFormat object based on the string format provided.
 * [`toDateWithFormat`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md#toDateWithFormat) - Converts a string to a DateTime object using a specific format.
 * [`tryToDateWithFormat`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md#tryToDateWithFormat) - Safely attempts to convert a string to a DateTime object using a specific format. Returns null if the conversion fails.
 * [`timestampToDate`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md#timestampToDate) - Converts a timestamp string to a DateTime object.
-* [`toSmallMonthName`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md#toSmallMonthName) - Convert an integer representing a month to its abbreviated name.
-* [`toFullMonthName`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md#toFullMonthName) - Convert an integer representing a month to its full name.
-* [`toSmallDayName`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md#toSmallDayName) - Convert an integer representing a day of the week to its abbreviated name.
-* [`toFullDayName`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md#toFullDayName) - Convert an integer representing a day of the week to its full name.
+* [`toSmallMonthName & toFullMonthName`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md#toSmallMonthName-and-toFullMonthName) - Convert an integer representing a month to its abbreviated name.
+* [`toSmallDayName & toFullDayName`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md#toSmallDayName-and-toFullDayName) - Convert an integer representing a day of the week to its abbreviated name.
 * [View All DateTime Extensions](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/date_time_extension.md)
 
 ### [Duration Extensions](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/duration_extension.md)
@@ -80,7 +89,7 @@ Our package provides a variety of extensions on Dart and Flutter's built-in type
 
 ## Flutter Extensions
 
-### [ThemeExtensions](https://chat.openai.com/c/docs/flutter/theme_extension.md)
+### [ThemeExtensions](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/theme_extension.md)
 
 * [`themeData`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/theme_extension.md#themeData) - Quickly get the current `ThemeData` from the nearest `Theme` widget ancestor.
 * [`txtTheme`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/theme_extension.md#txtTheme) - Effortlessly obtain the `TextTheme` for your context.
@@ -89,20 +98,20 @@ Our package provides a variety of extensions on Dart and Flutter's built-in type
 * [`isDark`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/theme_extension.md#isDark) - Convenient boolean to quickly check if the current theme is dark.
 * [`isLight`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/theme_extension.md#isLight) - Convenient boolean to quickly check if the current theme is light.
 
-### [MediaQueryExtensions](https://chat.openai.com/c/docs/flutter/media_query_extension.md)
+### [MediaQueryExtensions](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md)
 
-- [`mq`](https://chat.openai.com/c/docs/flutter/media_query_extension.md#mq) - Fetches the closest `MediaQueryData` instance.
-- [`nullableMQ`](https://chat.openai.com/c/docs/flutter/media_query_extension.md#nullableMQ) - Optionally fetches `MediaQueryData`.
-- [`deviceOrientation`](https://chat.openai.com/c/docs/flutter/media_query_extension.md#deviceOrientation) - Gets device orientation.
-- [`navigationMode`](https://chat.openai.com/c/docs/flutter/media_query_extension.md#navigationMode) - Retrieves the navigation mode.
-- [`padding`](https://chat.openai.com/c/docs/flutter/media_query_extension.md#padding) - Gets padding due to system UI.
-- [`platformBrightness`](https://chat.openai.com/c/docs/flutter/media_query_extension.md#platformBrightness) - Fetches the platform brightness.
-- [`viewPadding`](https://chat.openai.com/c/docs/flutter/media_query_extension.md#viewPadding) - Provides padding independent of view insets.
-- [`sizePx`](https://chat.openai.com/c/docs/flutter/media_query_extension.md#sizePx) - Gets the screen size.
-- [`isLandscape`](https://chat.openai.com/c/docs/flutter/media_query_extension.md#isLandscape) - Checks for landscape orientation.
-- [`isPortrait`](https://chat.openai.com/c/docs/flutter/media_query_extension.md#isPortrait) - Checks for portrait orientation.
-- [`widthPx`](https://chat.openai.com/c/docs/flutter/media_query_extension.md#widthPx), [`heightPx`](https://chat.openai.com/c/docs/flutter/media_query_extension.md#heightPx) - Screen dimensions in pixels.
-- [`shortestSide`](https://chat.openai.com/c/docs/flutter/media_query_extension.md#shortestSide), [`longestSide`](https://chat.openai.com/c/docs/flutter/media_query_extension.md#longestSide) - Smaller and larger screen dimensions.
+- [`mq`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#mq) - Fetches the closest `MediaQueryData` instance.
+- [`nullableMQ`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#nullableMQ) - Optionally fetches `MediaQueryData`.
+- [`deviceOrientation`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#deviceOrientation) - Gets device orientation.
+- [`navigationMode`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#navigationMode) - Retrieves the navigation mode.
+- [`padding`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#padding) - Gets padding due to system UI.
+- [`platformBrightness`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#platformBrightness) - Fetches the platform brightness.
+- [`viewPadding`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#viewPadding) - Provides padding independent of view insets.
+- [`sizePx`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#sizePx) - Gets the screen size.
+- [`isLandscape`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#isLandscape) - Checks for landscape orientation.
+- [`isPortrait`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#isPortrait) - Checks for portrait orientation.
+- [`widthPx`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#widthPx), [`heightPx`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#heightPx) - Screen dimensions in pixels.
+- [`shortestSide`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#shortestSide), [`longestSide`](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/media_query_extension.md#longestSide) - Smaller and larger screen dimensions.
 
 ### [FocusScopeExtensions](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/flutter_ui_extension.md)
 
@@ -146,11 +155,17 @@ final strList = toList<String>(map['colors']);
 
 [More Details here](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/docs/convert_object.md)
 
-# Getting Started
 
-To get started, add the package to your `pubspec.yaml`:
+## Exceptions
 
-```yaml
-dependencies:
-  flutter_helper_utils: latest_version
-```
+The `ConvertObject` class throws a `ParsingException` if there is an error while converting an object. This exception provides information about the type of the object and the method used for conversion.
+
+## Contributions
+
+Contributions to this package are welcome. If you have any suggestions, issues, or feature requests, please create a pull request on the [repository](https://github.com/omar-hanafy/flutter_helper_utils).
+
+## License
+
+`flutter_helper_utils` is available under the [BSD 3-Clause License.](https://opensource.org/license/bsd-3-clause/)
+
+<a href="https://www.buymeacoffee.com/omar.hanafy" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>

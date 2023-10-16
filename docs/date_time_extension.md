@@ -150,12 +150,12 @@ DateTime date = DateTime(2024, 1, 1);
 print(date.isLeapYear);  // Output: true
 ```
 
-### tryFormat, format
-Safely attempts to format the date into a string using the given format.
+### format and tryFormat
+format a DateTime object as a string using a specified format, while tryFormat attempts to do the same but returns null if unsuccessful.
 ```dart
 DateTime date = DateTime.now();
-print(date.tryFormat("yMd"));  // Output: "2023-01-01" or null
 print(date.format("yMd"));  // Output: "2023-01-01"
+print(date.tryFormat("yMd"));  // Output: "2023-01-01" or null
 ```
 
 ### passedDuration
