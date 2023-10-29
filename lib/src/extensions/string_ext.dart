@@ -160,7 +160,9 @@ extension NullSafeStringExtensions on String? {
   bool get isValidUrl => isEmptyOrNull
       ? isNotEmptyOrNull
       : this!.toLowerCase().removeEmptyLines.removeWhiteSpaces.hasMatch(
-          r'^(http|ftp|https)?(\:\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^!=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])+$');
+            r'^(http|ftp|https)?(\:\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^!=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])+$',
+            caseSensitive: false,
+          );
 
   /// Checks if string is an video file.
   bool get isValidVideo {
@@ -197,8 +199,9 @@ extension NullSafeStringExtensions on String? {
   /// Checks if string is an svg file.
   bool get isValidSVG => (this ?? ' ').split('.').last.toLowerCase() == 'svg';
 
-  bool hasMatch(String pattern) =>
-      (this != null) ? RegExp(pattern).hasMatch(this!) : this != null;
+  bool hasMatch(String pattern, {bool caseSensitive = true}) => (this != null)
+      ? RegExp(pattern, caseSensitive: caseSensitive).hasMatch(this!)
+      : this != null;
 
   // Check if the string has any number in it, not accepting double, so don't
   // use "."

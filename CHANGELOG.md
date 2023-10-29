@@ -1,7 +1,11 @@
+### 1.5.5
+- Added New Uri extension to help convert string (supports nullable strings) link to uri, `toUri` and `toPhoneUri`.
+- Hosted new documentation [website](https://flutter-helper-utils.web.app/)
+
 ### 1.5.4
 
 - Added a new `format` argument to the `toDateTime` and `tryDateTime` methods, allowing you to specify the converted date format.
-- Updated and enhanced the entire documentation
+- Updated and enhanced the entire documentation.
 
 ### 1.5.3
 
