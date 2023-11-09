@@ -65,6 +65,7 @@ class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);
   static final GlobalKey<TooltipState> tooltipKey = GlobalKey<TooltipState>();
   static final GlobalKey<TooltipState> tooltipKey2 = GlobalKey<TooltipState>();
+
   @override
   Widget build(BuildContext context) {
     print('/home_h?id=4'.toCamelCase);
@@ -74,6 +75,13 @@ class MyHomePage extends StatelessWidget {
     print('home_h?id=4'.toCamelCase.split('?').first);
     final theme = context.themeData;
     final txtTheme = theme.textTheme;
+
+    print(233.percentage(430));
+    bool? toToggleNull;
+    bool toToggle = true;
+    print(toToggle.toggled);
+    print(toToggleNull.toggled);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Utils Samples'),

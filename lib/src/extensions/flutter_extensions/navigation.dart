@@ -17,20 +17,25 @@ extension NavigationStateExtensions on State {
 
 extension NavigationStatelessExtensions on StatelessWidget {
   /// Navigate to another widget
-  Future<T?> navigateTo<T>(
-          {required BuildContext context, required Route<T> route}) =>
+  Future<T?> navigateTo<T>({
+    required BuildContext context,
+    required Route<T> route,
+  }) =>
       Navigator.push(context, route);
 
   /// Navigate to another widget and replace remove the current one
-  Future<T?> navigatePushReplacement<T>(
-          {required BuildContext context, required Route<T> route}) =>
+  Future<T?> navigatePushReplacement<T>({
+    required BuildContext context,
+    required Route<T> route,
+  }) =>
       Navigator.pushReplacement(context, route);
 
   /// Navigate to widget by the route name
-  Future<T?> navigateByRouteName<T>(
-          {required BuildContext context,
-          required String routeName,
-          Object? args}) =>
+  Future<T?> navigateByRouteName<T>({
+    required BuildContext context,
+    required String routeName,
+    Object? args,
+  }) =>
       Navigator.pushNamed(context, routeName, arguments: args);
 }
 
@@ -96,14 +101,15 @@ extension NavigatorExtension on BuildContext {
     bool routes = false,
   }) async =>
       Navigator.of(this).pushAndRemoveUntil<T>(
-          MaterialPageRoute(
-            allowSnapshotting: allowSnapshotting,
-            builder: (_) => screen,
-            settings: settings,
-            maintainState: maintainState,
-            fullscreenDialog: fullscreenDialog,
-          ),
-          (Route<dynamic> route) => routes);
+        MaterialPageRoute(
+          allowSnapshotting: allowSnapshotting,
+          builder: (_) => screen,
+          settings: settings,
+          maintainState: maintainState,
+          fullscreenDialog: fullscreenDialog,
+        ),
+        (Route<dynamic> route) => routes,
+      );
 
   /// perform push and remove route with routeName
   Future<T?> pNamedAndRemoveUntil<T extends Object?>(
@@ -140,6 +146,12 @@ extension NavigatorExtension on BuildContext {
   /// perform replace with routeName
   void popUntil(String screenName) =>
       Navigator.of(this).popUntil(ModalRoute.withName(screenName));
+
+  /// This method calls [Navigator.maybePop] to attempt to pop the current route if possible.
+  /// It is useful when you want to handle back navigation and check if the route can be popped
+  /// without causing any errors.
+  Future<void> maybePop<T extends Object?>([T? result]) async =>
+      Navigator.of(this).maybePop<T>(result);
 
   /// This method programmatically and recursively dismisses any active pop-up elements like dialogs, modal bottom sheets,
   ///   and Cupertino modal popups.

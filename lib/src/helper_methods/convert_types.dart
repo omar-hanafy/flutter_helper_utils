@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter_helper_utils/src/exceptions/exceptions.dart';
 
-import '../src.dart';
+import 'package:flutter_helper_utils/src/src.dart';
 
 /// A utility class for converting objects to different types.
 abstract class ConvertObject {

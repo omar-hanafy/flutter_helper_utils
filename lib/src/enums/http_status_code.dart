@@ -256,6 +256,16 @@ enum HttpResStatus {
 
   bool get isSuccess => this == ok || this == created;
 
+  bool get isClientError => code >= 400 && code < 500;
+
+  bool get isServerError => code >= 500 && code < 600;
+
+  bool get isRedirection => code >= 300 && code < 400;
+
+  bool get isInformational => code >= 100 && code < 200;
+
   @override
-  String toString() => desc;
+  String toString() => '($code) $desc';
+
+  String get name => desc;
 }

@@ -18,7 +18,8 @@ extension ScaffoldMessengerExtension on BuildContext {
   /// If there are several registered scaffolds the snack bar is shown
   /// simultaneously on all of them.
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(
-          SnackBar snackBar) =>
+    SnackBar snackBar,
+  ) =>
       scaffoldMessenger.showSnackBar(snackBar);
 
   /// Removes the current [MaterialBanner] by running its normal exit animation.

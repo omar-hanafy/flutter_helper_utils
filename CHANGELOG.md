@@ -1,10 +1,16 @@
-### 1.5.5
-- Added New Uri extension to help convert string (supports nullable strings) link to uri, `toUri` and `toPhoneUri`.
+### 1.5.7
+
+- added `maybePop` to the Navigation extension to respect `onWillPop` widget action.
 - Hosted new documentation [website](https://flutter-helper-utils.web.app/)
+
+### 1.5.6
+
+- Added New Uri extension to help convert string (supports nullable strings) link to uri, `toUri` and `toPhoneUri`.
 
 ### 1.5.4
 
-- Added a new `format` argument to the `toDateTime` and `tryDateTime` methods, allowing you to specify the converted date format.
+- Added a new `format` argument to the `toDateTime` and `tryDateTime` methods, allowing you to specify the converted
+  date format.
 - Updated and enhanced the entire documentation.
 
 ### 1.5.3
@@ -49,8 +55,7 @@ final stringList = ConvertObject.toList<String>(dynamicValue);
 - **NEW**: Added the `remainingDuration`, `passedDuration` getter to the DateTime extension for calculating the
   remaining duration between two dates.
 
-
-  For example:
+For example:
 
 ```dart
 

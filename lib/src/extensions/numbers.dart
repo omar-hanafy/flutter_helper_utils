@@ -4,13 +4,43 @@ import 'dart:math';
 import 'package:flutter_helper_utils/src/exceptions/exceptions.dart';
 import 'package:flutter_helper_utils/src/src.dart';
 
+/* SUGGESTIONS
+1. **Status Code Ranges:**
+   - Methods to check for various HTTP status code ranges, such as informational responses, redirection messages, client errors, and server errors. For example, methods like `isInformational`, `isSuccess`, `isRedirection`, `isClientError`, and `isServerError`.
+
+2. **Specific Status Checks:**
+   - Methods for commonly checked status codes, such as `isBadRequest`, `isUnauthorized`, `isForbidden`, `isNotFound`, `isMethodNotAllowed`, `isNotAcceptable`, `isRequestTimeout`, `isConflict`, `isGone`, `isInternalServerError`, `isNotImplemented`, `isBadGateway`, `isServiceUnavailable`, and `isGatewayTimeout`.
+
+3. **Category-Based Extensions:**
+   - You could also categorize the status codes by their first digit and create properties like `is1xx`, `is2xx`, `is3xx`, `is4xx`, and `is5xx` for a quick range check.
+
+4. **Custom Status Code Creators:**
+   - Functions that allow users to create custom status codes that might not be part of the standard HTTP statuses, which can be useful for APIs that use custom codes.
+
+5. **Retriable Status Check:**
+   - A method like `isRetriable` that returns true for status codes where a retry might be appropriate, such as network-related errors or server errors (503 Service Unavailable, 504 Gateway Timeout).
+
+6. **Redirection Helpers:**
+   - Additional helpers for common redirection status codes, like `isPermanentRedirect` and `isTemporaryRedirect`.
+
+7. **More Informative Enums:**
+   - Expanding the `HttpResStatus` enum to include more descriptive fields for each status, such as a human-readable message or description. For example, `success` could have a description like "The request has succeeded."
+
+8. **Conversion to Exception:**
+   - A method that converts a non-successful status code to an appropriate exception, which can be thrown in the application to handle HTTP errors more effectively.
+
+9. **Deprecation Notice:**
+   - If your API or application plans to deprecate certain endpoints, a method to mark status codes as deprecated could also be helpful, prompting developers to take notice and potentially update their code.
+
+10. **Retry-After Duration:**
+    - If the number represents a `Retry-After` status, you could include a method to parse this and provide a `Duration` object, suggesting after how much time one should retry the request.
+*/
 // TODO(ANY): add more http helpers from response code.
 extension HttpEx on num? {
   bool get isSuccessHttpResCode => this == 200 || this == 201;
 
-  HttpResStatus get toHttpResStatus =>
-      HttpResStatus.values.firstOrNullWhere((s) => this == s.code) ??
-      HttpResStatus.notFound;
+  HttpResStatus? get toHttpResStatus =>
+      HttpResStatus.values.firstOrNullWhere((s) => this == s.code);
 }
 
 extension NullSafeNumExtensions on num? {
@@ -18,9 +48,14 @@ extension NullSafeNumExtensions on num? {
 
   double? get tryToDouble => this?.toDouble();
 
-  num percentage(num total) {
+  num percentage(num total, {bool allowDecimals = true}) {
     if (this != null) {
-      return this! >= total ? 100 : max((this! / total) * 100, 0).floor();
+      final result = this! >= total ? 100 : max((this! / total) * 100, 0);
+      if (allowDecimals) {
+        return double.parse(result.toStringAsFixed(2));
+      } else {
+        return result.toInt();
+      }
     }
     return 0;
   }

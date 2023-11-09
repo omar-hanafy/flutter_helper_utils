@@ -10,7 +10,8 @@ extension StringExtensions on String {
 
   /// flutter and dart => FlutterAndDart
   String get toPascalCase => [
-        for (final e in toLowerCase().trim().split(' ')) e.capitalizeFirstLetter
+        for (final e in toLowerCase().trim().split(' '))
+          e.capitalizeFirstLetter,
       ].join();
 
   /// flutter and dart => flutterAndDart
@@ -109,7 +110,8 @@ extension NullSafeStringExtensions on String? {
 
   /// Checks if string is Currency.
   bool get isValidCurrency => hasMatch(
-      r'^(S?\$|\₩|Rp|\¥|\€|\₹|\₽|fr|R\$|R)?[ ]?[-]?([0-9]{1,3}[,.]([0-9]{3}[,.])*[0-9]{3}|[0-9]+)([,.][0-9]{1,2})?( ?(USD?|AUD|NZD|CAD|CHF|GBP|CNY|EUR|JPY|IDR|MXN|NOK|KRW|TRY|INR|RUB|BRL|ZAR|SGD|MYR))?$');
+        r'^(S?\$|\₩|Rp|\¥|\€|\₹|\₽|fr|R\$|R)?[ ]?[-]?([0-9]{1,3}[,.]([0-9]{3}[,.])*[0-9]{3}|[0-9]+)([,.][0-9]{1,2})?( ?(USD?|AUD|NZD|CAD|CHF|GBP|CNY|EUR|JPY|IDR|MXN|NOK|KRW|TRY|INR|RUB|BRL|ZAR|SGD|MYR))?$',
+      );
 
   /// Checks if string is phone number.
   bool get isValidPhoneNumber {
@@ -119,7 +121,8 @@ extension NullSafeStringExtensions on String? {
 
   /// Checks if string is email.
   bool get isValidEmail => hasMatch(
-      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
+      );
 
   /// Checks if string is an html file.
   bool get isValidHTML => (this ?? ' ').toLowerCase().endsWith('.html');
@@ -155,7 +158,8 @@ extension NullSafeStringExtensions on String? {
   ///
   /// Test this RegEx here -> https://regex101.com/r/aL7tV3/1
   bool get isValidIp6 => hasMatch(
-      r'/(?<protocol>(?:http|ftp|irc)s?:\/\/)?(?:(?<user>[^:\n\r]+):(?<pass>[^@\n\r]+)@)?(?<host>(?:www\.)?(?:[^:\/\n\r]+)(?::(?<port>\d+))?)\/?(?<request>[^?#\n\r]+)?\??(?<query>[^#\n\r]*)?\#?(?<anchor>[^\n\r]*)?/');
+        r'/(?<protocol>(?:http|ftp|irc)s?:\/\/)?(?:(?<user>[^:\n\r]+):(?<pass>[^@\n\r]+)@)?(?<host>(?:www\.)?(?:[^:\/\n\r]+)(?::(?<port>\d+))?)\/?(?<request>[^?#\n\r]+)?\??(?<query>[^#\n\r]*)?\#?(?<anchor>[^\n\r]*)?/',
+      );
 
   bool get isValidUrl => isEmptyOrNull
       ? isNotEmptyOrNull
@@ -268,8 +272,11 @@ extension NullSafeStringExtensions on String? {
 
   ///  Replace part of string after the first occurrence of given delimiter with the [replacement] string.
   ///  If the string does not contain the delimiter, returns [defaultValue] which defaults to the original string.
-  String? replaceAfter(String delimiter, String replacement,
-      [String? defaultValue]) {
+  String? replaceAfter(
+    String delimiter,
+    String replacement, [
+    String? defaultValue,
+  ]) {
     if (this == null) return null;
     final index = this!.indexOf(delimiter);
     return (index == -1)
@@ -281,8 +288,11 @@ extension NullSafeStringExtensions on String? {
 
   /// Replace part of string before the first occurrence of given delimiter with the [replacement] string.
   ///  If the string does not contain the delimiter, returns [missingDelimiterValue?] which defaults to the original string.
-  String? replaceBefore(String delimiter, String replacement,
-      [String? defaultValue]) {
+  String? replaceBefore(
+    String delimiter,
+    String replacement, [
+    String? defaultValue,
+  ]) {
     if (this == null) return null;
     final index = this!.indexOf(delimiter);
     return (index == -1)
@@ -436,5 +446,5 @@ const _titleCaseExceptions = <String>[
   'nor',
   'or',
   'yet',
-  'so'
+  'so',
 ];
