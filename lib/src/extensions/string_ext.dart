@@ -164,9 +164,9 @@ extension NullSafeStringExtensions on String? {
   bool get isValidUrl => isEmptyOrNull
       ? isNotEmptyOrNull
       : this!.toLowerCase().removeEmptyLines.removeWhiteSpaces.hasMatch(
-            r'^(http|ftp|https)?(\:\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^!=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])+$',
-            caseSensitive: false,
-          );
+          r'''^((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))+$''',
+          caseSensitive: false,
+        );
 
   /// Checks if string is an video file.
   bool get isValidVideo {

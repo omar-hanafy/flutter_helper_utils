@@ -81,7 +81,10 @@ class MyHomePage extends StatelessWidget {
     bool toToggle = true;
     print(toToggle.toggled);
     print(toToggleNull.toggled);
-
+    print('google.com/[]()[]()');
+    print(
+      'google.com/[]()[]()'.isValidUrl ? 'Url Is Valid' : 'Url Is not Valid',
+    );
     return Scaffold(
       appBar: AppBar(
         title: const Text('Utils Samples'),

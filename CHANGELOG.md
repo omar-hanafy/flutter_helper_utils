@@ -1,3 +1,12 @@
+### 1.5.8
+
+- **NEW**: Added `makeMapEncodable` to our global helper methods. This function provides a convenient way to ensure all
+  elements within a map are encodable to JSON format.
+
+- **UPDATE**: Updated the `isValidUrl` function's regular expression to handle URLs with special characters like `[]`
+  and `()`. This update addresses the issue of catastrophic backtracking, Which might cause freezing or performance
+  issues.
+
 ### 1.5.7
 
 - added `maybePop` to the Navigation extension to respect `onWillPop` widget action.

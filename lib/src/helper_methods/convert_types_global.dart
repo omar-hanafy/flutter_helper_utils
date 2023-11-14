@@ -258,3 +258,31 @@ T? tryToType<T>(dynamic object) {
     error: 'Unsupported type: $T',
   );
 }
+
+Map<String, dynamic> makeMapEncodable(Map<dynamic, dynamic> inputMap) {
+  final result = <String, dynamic>{};
+  inputMap.forEach((key, value) {
+    result[key.toString()] = _makeValueEncodable(value);
+  });
+  return result;
+}
+
+dynamic _makeValueEncodable(dynamic value) {
+  if (value is String ||
+      value is int ||
+      value is double ||
+      value is bool ||
+      value == null) {
+    return value;
+  } else if (value is Enum) {
+    return value.name;
+  } else if (value is List) {
+    return value.map(_makeValueEncodable).toList();
+  } else if (value is Set) {
+    return value.map(_makeValueEncodable).toSet();
+  } else if (value is Map) {
+    return makeMapEncodable(value);
+  } else {
+    return value.toString();
+  }
+}
