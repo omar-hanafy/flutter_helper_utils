@@ -1,17 +1,16 @@
-<a href="https://flutter-helper-utils.web.app/" target="_blank">
 <table style="border:none;">
   <tr style="border:none;">
     <td style="vertical-align:top; border:none;">
       <h1 style="border:none;" "min-width:400px;">Flutter Helper Utils</h1>
-      <p style="min-width:500px;">Make Flutter development easier with Flutter Helper Utils! This toolkit is packed with helper methods and extensions that boost your productivity and help you write less code and build apps faster.</p>
+      <p style="min-width:400px;">Make Flutter development easier with Flutter Helper Utils! This toolkit is packed with helper methods and extensions that boost your productivity and help you write less code and build apps faster.</p>
     </td>
     <td style="vertical-align:top; border:none;">
-        <img src="./dash-tools.png" alt="Flutter Helper Utils Logo" style="max-width:400px;"/>
+      <a href="https://flutter-helper-utils.web.app/" target="_blank">
+        <img src="./dash-tools.png" alt="Flutter Helper Utils Logo" style="max-width:400;"/>
+      </a>
     </td>
   </tr>
 </table>
-
-</a>
 
 ## Table of Contents
 
@@ -32,7 +31,6 @@ perform accurate type conversions. here is a sample:
 Map = {score: "12.4"};
 
 ```dart
-
 int score = double.parse(map['key']).toInt();
 ```
 
@@ -41,7 +39,6 @@ Notice that we need to parse to double first then to int.
 ### With Package:
 
 ```dart
-
 int score = toInt(map['key']);
 ```
 
