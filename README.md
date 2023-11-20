@@ -1,11 +1,17 @@
-<a href="https://flutter-helper-utils.web.app/">
-  <img src="https://raw.githubusercontent.com/omar-hanafy/flutter_helper_utils/9bb44613da240f408d02a6e745f92e5f88050265/logo.svg" alt="Flutter Helper Utils Logo">
+<a href="https://flutter-helper-utils.web.app/" target="_blank">
+<table style="border:none;">
+  <tr style="border:none;">
+    <td style="vertical-align:top; border:none;">
+      <h1 style="border:none;" "min-width:400px;">Flutter Helper Utils</h1>
+      <p style="min-width:500px;">Make Flutter development easier with Flutter Helper Utils! This toolkit is packed with helper methods and extensions that boost your productivity and help you write less code and build apps faster.</p>
+    </td>
+    <td style="vertical-align:top; border:none;">
+        <img src="./dash-tools.png" alt="Flutter Helper Utils Logo" style="max-width:400px;"/>
+    </td>
+  </tr>
+</table>
+
 </a>
-
-# Flutter Helper Utils
-
-Flutter Helper Utils is a comprehensive package aimed to augment Dart and Flutter's core functionalities. With a rich
-set of extensions and helper methods, this package boosts productivity and simplifies coding in Flutter projects.
 
 ## Table of Contents
 

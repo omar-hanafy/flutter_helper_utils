@@ -1,3 +1,11 @@
+### 1.6.0
+
+- **BREAKING CHANGE**: Upgraded to Flutter 3.16 and resolved a deprecation on the BuildContext extension for MediaQuery
+  by changing `context.textScaleFactor` to `context.textScaler`.
+
+- **NEW**: added New getters to the BuildContext extension for MediaQuery to support all properties on MediaQuery even
+  the nullable.
+
 ### 1.5.8
 
 - **NEW**: Added `makeMapEncodable` to our global helper methods. This function provides a convenient way to ensure all

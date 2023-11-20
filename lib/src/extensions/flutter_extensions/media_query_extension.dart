@@ -71,10 +71,10 @@ extension MediaQueryExtension on BuildContext {
   double get longestSide => sizePx.longestSide;
 
   /// similar to [MediaQuery.of(this).devicePixelRatio]
-  double get pixelRatio => mq.devicePixelRatio;
+  double get pixelRatio => MediaQuery.devicePixelRatioOf(this);
 
-  /// similar to [MediaQuery.of(this).textScaleFactor]
-  double get txtScaleFactor => mq.textScaleFactor;
+  /// similar to [MediaQuery.of(this).textScaler]
+  TextScaler get textScaler => MediaQuery.textScalerOf(this);
 
   /// Returns accessibleNavigationOf for the nearest MediaQuery ancestor or
   /// throws an exception, if no such ancestor exists.
@@ -106,6 +106,104 @@ extension MediaQueryExtension on BuildContext {
   /// Returns highContrast for the nearest MediaQuery ancestor or false, if no
   /// such ancestor exists.
   bool get invertColors => MediaQuery.invertColorsOf(this);
+
+  /// Returns the size of the nearest [MediaQuery] ancestor or null if no such
+  /// ancestor exists.
+  Size? get nullableSize => MediaQuery.maybeSizeOf(this);
+
+  /// Returns the orientation for the nearest [MediaQuery] ancestor or null if
+  /// no such ancestor exists.
+  Orientation? get nullableOrientation => MediaQuery.maybeOrientationOf(this);
+
+  /// Returns the device pixel ratio for the nearest [MediaQuery] ancestor or
+  /// null if no such ancestor exists.
+  double? get nullableDevicePixelRatio =>
+      MediaQuery.maybeDevicePixelRatioOf(this);
+
+  /// Returns the [TextScaler] for the nearest [MediaQuery] ancestor or null if
+  /// no such ancestor exists.
+  TextScaler? get nullableTextScaler => MediaQuery.maybeTextScalerOf(this);
+
+  /// Returns the platform brightness for the nearest [MediaQuery] ancestor or
+  /// null if no such ancestor exists.
+  Brightness? get nullablePlatformBrightness =>
+      MediaQuery.maybePlatformBrightnessOf(this);
+
+  /// Returns the padding for the nearest [MediaQuery] ancestor or throws an
+  /// exception if no such ancestor exists.
+  EdgeInsets? get nullablePadding => MediaQuery.maybePaddingOf(this);
+
+  /// Returns the view insets for the nearest [MediaQuery] ancestor or throws
+  /// an exception if no such ancestor exists.
+  EdgeInsets? get nullableViewInsets => MediaQuery.maybeViewInsetsOf(this);
+
+  /// Returns the system gesture insets for the nearest [MediaQuery] ancestor or
+  /// throws an exception if no such ancestor exists.
+  EdgeInsets get systemGestureInsets => MediaQuery.systemGestureInsetsOf(this);
+
+  /// Returns the system gesture insets for the nearest [MediaQuery] ancestor or
+  /// null if no such ancestor exists.
+  EdgeInsets? get nullableSystemGestureInsets =>
+      MediaQuery.maybeSystemGestureInsetsOf(this);
+
+  /// Returns the view padding for the nearest [MediaQuery] ancestor or throws
+  /// an exception if no such ancestor exists.
+  EdgeInsets? get nullableViewPadding => MediaQuery.maybeViewPaddingOf(this);
+
+  /// Returns whether to always use the 24-hour format for the nearest
+  /// [MediaQuery] ancestor or throws an exception if no such ancestor exists.
+  bool get alwaysUse24HourFormat => MediaQuery.alwaysUse24HourFormatOf(this);
+
+  /// Returns whether to always use the 24-hour format for the nearest
+  /// [MediaQuery] ancestor or null if no such ancestor exists.
+  bool? get nullableAlwaysUse24HourFormat =>
+      MediaQuery.maybeAlwaysUse24HourFormatOf(this);
+
+  /// Returns whether accessible navigation is enabled for the nearest
+  /// [MediaQuery] ancestor or null if no such ancestor exists.
+  bool? get nullableAccessibleNavigation =>
+      MediaQuery.maybeAccessibleNavigationOf(this);
+
+  /// Returns whether to invert colors for the nearest [MediaQuery] ancestor or
+  /// null if no such ancestor exists.
+  bool? get nullableInvertColors => MediaQuery.maybeInvertColorsOf(this);
+
+  /// Returns whether high contrast mode is enabled for the nearest [MediaQuery]
+  /// ancestor or null if no such ancestor exists.
+  bool? get nullableHighContrast => MediaQuery.maybeHighContrastOf(this);
+
+  /// Returns whether to show on/off labels inside switches for the nearest
+  /// [MediaQuery] ancestor or throws an exception if no such ancestor exists.
+  bool get onOffSwitchLabels => MediaQuery.onOffSwitchLabelsOf(this);
+
+  /// Returns whether to show on/off labels inside switches for the nearest
+  /// [MediaQuery] ancestor or null if no such ancestor exists.
+  bool? get nullableOnOffSwitchLabels =>
+      MediaQuery.maybeOnOffSwitchLabelsOf(this);
+
+  /// Returns whether to disable animations for the nearest [MediaQuery] ancestor
+  /// or null if no such ancestor exists.
+  bool? get nullableDisableAnimations =>
+      MediaQuery.maybeDisableAnimationsOf(this);
+
+  /// Returns whether bold text is enabled for the nearest [MediaQuery] ancestor
+  /// or null if no such ancestor exists.
+  bool? get nullableBoldText => MediaQuery.maybeBoldTextOf(this);
+
+  /// Returns the navigation mode for the nearest [MediaQuery] ancestor or
+  /// null if no such ancestor exists.
+  NavigationMode? get nullableNavigationMode =>
+      MediaQuery.maybeNavigationModeOf(this);
+
+  /// Returns the device gesture settings for the nearest [MediaQuery] ancestor or
+  /// null if no such ancestor exists.
+  DeviceGestureSettings? get nullableGestureSettings =>
+      MediaQuery.maybeGestureSettingsOf(this);
+
+  /// Returns the display features for the nearest [MediaQuery] ancestor or
+  /// throws an exception if no such ancestor exists.
+  List<DisplayFeature>? get nullableDisplayFeatures =>
+      MediaQuery.maybeDisplayFeaturesOf(this);
 }
 
 extension OrientationEx on Orientation {
