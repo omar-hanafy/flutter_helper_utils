@@ -68,11 +68,6 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('/home_h?id=4'.toCamelCase);
-    print('/home_h?id=4'.toCamelCase.split('?').first);
-    print('');
-    print('home_h?id=4'.toCamelCase);
-    print('home_h?id=4'.toCamelCase.split('?').first);
     final theme = context.themeData;
     final txtTheme = theme.textTheme;
 
@@ -85,6 +80,7 @@ class MyHomePage extends StatelessWidget {
     print(
       'google.com/[]()[]()'.isValidUrl ? 'Url Is Valid' : 'Url Is not Valid',
     );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Utils Samples'),

@@ -13,3 +13,9 @@ extension URIExtensions on String {
 
   Uri get toPhoneUri => Uri.parse(startsWith('tel://') ? this : 'tel://$clean');
 }
+
+extension UriEx on Uri {
+  UriWatcher get watch {
+    return UriWatcher(this);
+  }
+}

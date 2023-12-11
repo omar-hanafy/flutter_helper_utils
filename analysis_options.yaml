@@ -10,6 +10,6 @@ linter:
     comment_references: false
     only_throw_errors: false
     unnecessary_library_directive: false
+    avoid_positional_boolean_parameters: false
 #    avoid_dynamic_calls: false
-#    avoid_positional_boolean_parameters: false
 #    use_build_context_synchronously: false

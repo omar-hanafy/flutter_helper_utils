@@ -68,11 +68,16 @@ extension StringExtensions on String {
   String get removeWhiteSpaces => replaceAll(' ', '');
 
   String get clean => removeWhiteSpaces.toOneLine;
+
+  StringWatcher get watch {
+    return StringWatcher(this);
+  }
 }
 
 extension NullSafeStringExtensions on String? {
   bool get isEmptyOrNull =>
       this == null ||
+      this!.isEmpty ||
       this!.removeEmptyLines.toOneLine.removeWhiteSpaces.isEmpty;
 
   bool get isNotEmptyOrNull => !isEmptyOrNull;

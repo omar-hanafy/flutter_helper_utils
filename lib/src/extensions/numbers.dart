@@ -201,6 +201,10 @@ extension NumExtensions on num {
       }
     }
   }
+
+  NumWatcher get watch {
+    return NumWatcher(this);
+  }
 }
 
 extension IntExtensions on int {
@@ -230,6 +234,10 @@ extension IntExtensions on int {
 
   /// Return squared number
   int get squared => this * this;
+
+  IntWatcher get watch {
+    return IntWatcher(this);
+  }
 }
 
 extension DoubleExtensions on double {
@@ -259,4 +267,8 @@ extension DoubleExtensions on double {
 
   /// Return squared number
   double get squared => this * this;
+
+  DoubleWatcher get watch {
+    return DoubleWatcher(this);
+  }
 }

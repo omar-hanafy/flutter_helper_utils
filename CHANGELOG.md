@@ -1,3 +1,9 @@
+### 2.0.1
+
+- **NEW**: Introducing Watcher state management, It's designed to be efficient, lightweight, and leverages native
+  Flutter state management mechanisms.
+  [more here](https://flutter-helper-utils.web.app/documentation/watcher-state-management.html)
+
 ### 1.6.0
 
 - **BREAKING CHANGE**: Upgraded to Flutter 3.16 and resolved a deprecation on the BuildContext extension for MediaQuery

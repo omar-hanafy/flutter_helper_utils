@@ -1,4 +1,12 @@
-extension MapNullSafteyExt on Map<dynamic, dynamic>? {
+import 'package:flutter_helper_utils/flutter_helper_utils.dart';
+
+extension GeneralMap<K, V> on Map<K, V> {
+  MapWatcher<K, V> get watch {
+    return MapWatcher<K, V>(this);
+  }
+}
+
+extension GeneralNullableMap<K, V> on Map<K, V>? {
   bool get isEmptyOrNull => this == null || this!.isEmpty;
 
   bool get isNotEmptyOrNull => !isEmptyOrNull;

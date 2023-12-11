@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_helper_utils/src/extensions/date.dart';
+import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
 extension DurationExt on Duration {
   /// Utility to delay some callback (or code execution).
@@ -20,4 +20,8 @@ extension DurationExt on Duration {
 
   /// Subtracts the Duration from the current DateTime and returns a DateTime in the past
   DateTime get ago => DateTime.now() - this;
+
+  DurationWatcher get watch {
+    return DurationWatcher(this);
+  }
 }

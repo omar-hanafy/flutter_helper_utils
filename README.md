@@ -2,11 +2,11 @@
   <tr style="border:none;">
     <td style="vertical-align:top; border:none;">
       <h1 style="border:none;" "min-width:400px;">Flutter Helper Utils</h1>
-      <p style="min-width:400px;">Make Flutter development easier with Flutter Helper Utils! This toolkit is packed with helper methods and extensions that boost your productivity and help you write less code and build apps faster.</p>
+      <p style="min-width:400px;">Make Flutter development easier with Flutter Helper Utils! This toolkit is packed with state management, helper methods and extensions that boost your productivity and help you write less code and build apps faster.</p>
     </td>
     <td style="vertical-align:top; border:none;">
-      <a href="https://flutter-helper-utils.web.app/" target="_blank">
-        <img src="./dash-tools.png" alt="Flutter Helper Utils Logo" style="max-width:400;"/>
+      <a href="https://flutter-helper-utils.web.app/" target="blank">
+        <img src="https://raw.githubusercontent.com/omar-hanafy/flutter_helper_utils/main/dash-tools.png" alt="Flutter Helper Utils Logo" style="max-width:400;"/>
       </a>
     </td>
   </tr>
@@ -18,19 +18,63 @@
 - [Helper Methods](#helper-methods)
 - [Extensions](#extensions)
 
+# Watcher (State Management):
+
+Watcher is a simple state management that utilizes Flutter's native `ValueListenableBuilder` and `ValueNotifier`,
+providing a lightweight, efficient, and straightforward way to manage state
+changes.
+[Detailed Documentation here](https://flutter-helper-utils.web.app/documentation/watcher-state-management.html).
+
+here's a quick example to showcase its simplicity:
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_helper_utils/flutter_helper_utils.dart';
+
+main() => runApp(MyCounter());
+
+class MyCounter extends StatelessWidget {
+
+  final IntWatcher counter = 0.watch;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Watch Counter',
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Watch Counter')),
+        body: Center(
+          child: ValueWatcher(
+            watcher: counter,
+            builder: (context, value) {
+              return Text('Counter: $value');
+            },
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => counter.increment(1),
+          child: const Icon(Icons.add),
+        ),
+      ),
+    );
+  }
+}
+```
+
 # Helper Methods
 
 ## [Converting Objects](https://flutter-helper-utils.web.app/documentation/convert-object.html):
 
-convert objects to various types, such as `int`, `double`, `bool`, `String`, `List`, `Set` and `Map`, They are handy
+Convert objects to various types, such as `int`, `double`, `bool`, `String`, `List`, `Set` and `Map`, They are handy
 when working with data from APIs, where you often encounter dynamic types. They offer simple and flexible methods to
-perform accurate type conversions. here is a sample:
+perform accurate type conversions. Here is a sample:
 
 ### Before:
 
 Map = {score: "12.4"};
 
 ```dart
+
 int score = double.parse(map['key']).toInt();
 ```
 
@@ -39,6 +83,7 @@ Notice that we need to parse to double first then to int.
 ### With Package:
 
 ```dart
+
 int score = toInt(map['key']);
 ```
 
@@ -62,7 +107,7 @@ extensions, sorted by their functionalities:
 * [`isBool`](https://flutter-helper-utils.web.app/documentation/string-extension.html#isbool) - Checks if the string is
   a boolean value.
 * [`removeWhiteSpaces`](https://flutter-helper-utils.web.app/documentation/string-extension.html#removewhitespaces) -
-  Removes all white spaces from the string.
+  Removes all space from the string.
 * [`textSize`](https://flutter-helper-utils.web.app/documentation/string-extension.html#textsize) - Returns the size of
   the text using TextPainter.
 * [`wrapString`](https://flutter-helper-utils.web.app/documentation/string-extension.html#wrapstring) - Adds a new line
@@ -108,7 +153,7 @@ extensions, sorted by their functionalities:
 * [`val`](https://flutter-helper-utils.web.app/documentation/bool-extension.html#val) - Returns the Boolean value or
   false if it is null.
 * [`binary`](https://flutter-helper-utils.web.app/documentation/bool-extension.html#binary) - Returns 1 if the Boolean
-  is true and 0 if it is false or null.
+  is true and zero if it is false or null.
 * [`binaryText`](https://flutter-helper-utils.web.app/documentation/bool-extension.html#binarytext) - Returns '1' if the
   Boolean is true and '0' if it is false or null.
 

@@ -1,6 +1,12 @@
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
-extension ObjectExtensions on Object? {
+extension ObjectExtensions on Object {
+  ObjectWatcher get watch {
+    return ObjectWatcher(this);
+  }
+}
+
+extension ObjectNullableExtensions on Object? {
   bool get isNull => this == null;
 
   bool get isNotNull => this != null;
