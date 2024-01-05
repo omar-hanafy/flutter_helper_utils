@@ -1,15 +1,22 @@
 import 'dart:developer';
 
 import 'package:flutter_helper_utils/src/exceptions/exceptions.dart';
-
 import 'package:flutter_helper_utils/src/src.dart';
 
 /// A utility class for converting objects to different types.
 abstract class ConvertObject {
-  /// Convert any object to a string if the object is not `null`.
+  /// Converts any object to a string if the object is not `null`.
   ///
-  /// If the object is `null`, a [ParsingException] with a `nullObject` error will be thrown.
-  /// If the conversion to string fails, a [ParsingException] will be thrown.
+  /// - Converts various object types to their string representation.
+  /// - If the object is `null`, throws a [ParsingException] with a `nullObject` error.
+  /// - If the conversion to string fails, throws a [ParsingException].
+  ///
+  /// [object] The object to be converted to a string.
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a string if conversion is successful.
+  /// Throws a [ParsingException] if the conversion fails or the object is `null`.
   ///
   /// Example usage:
   /// ```dart
@@ -27,12 +34,7 @@ abstract class ConvertObject {
   /// ```
   static String toString1(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object == null) {
@@ -60,9 +62,16 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert any object to a string, or return `null` if the object is `null`.
+  /// Converts any object to a string, or returns `null` if the object is `null`.
   ///
-  /// If the conversion to string fails, it will log an error and return `null`.
+  /// - Converts various object types to their string representation.
+  /// - If the conversion to string fails, logs an error and returns `null`.
+  ///
+  /// [object] The object to be converted to a string.
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a string if conversion is successful, otherwise `null`.
   ///
   /// Example usage:
   /// ```dart
@@ -80,12 +89,7 @@ abstract class ConvertObject {
   /// ```
   static String? tryToString(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object is String?) return object;
@@ -107,10 +111,18 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert an object to a [num].
+  /// Converts an object to a [num].
   ///
-  /// If the object is `null`, a [ParsingException] with a `nullObject` error will be thrown.
-  /// If the conversion to [num] fails, a [ParsingException] will be thrown.
+  /// - Converts numeric types and strings that represent valid numbers to [num].
+  /// - If the object is `null`, throws a [ParsingException] with a `nullObject` error.
+  /// - If the conversion to [num] fails, throws a [ParsingException].
+  ///
+  /// [object] The object to be converted to a [num].
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [num] if conversion is successful.
+  /// Throws a [ParsingException] if the conversion fails or the object is `null`.
   ///
   /// Example usage:
   /// ```dart
@@ -131,12 +143,7 @@ abstract class ConvertObject {
   /// ```
   static num toNum(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object == null) {
@@ -163,9 +170,16 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert an object to a [num], or return `null` if the object is `null`.
+  /// Attempts to convert an object to a [num], or returns `null` if the object is `null` or conversion fails.
   ///
-  /// If the conversion to [num] fails, it will log an error and return `null`.
+  /// - Converts numeric types and strings that represent valid numbers to [num].
+  /// - If the conversion to [num] fails (e.g., non-numeric string), logs an error and returns `null`.
+  ///
+  /// [object] The object to be converted to a [num].
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [num] if conversion is successful, otherwise `null`.
   ///
   /// Example usage:
   /// ```dart
@@ -186,12 +200,7 @@ abstract class ConvertObject {
   /// ```
   static num? tryToNum(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object is num?) return object;
@@ -214,9 +223,17 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert an object to an [int].
+  /// Converts an object to an [int].
   ///
-  /// If the conversion to [int] fails, a [ParsingException] will be thrown.
+  /// - Converts numeric types and strings that represent valid integers to [int].
+  /// - If the conversion to [int] fails (e.g., non-integer string), throws a [ParsingException].
+  ///
+  /// [object] The object to be converted to an [int].
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns an [int] if conversion is successful.
+  /// Throws a [ParsingException] if the conversion fails.
   ///
   /// Example usage:
   /// ```dart
@@ -234,12 +251,7 @@ abstract class ConvertObject {
   /// ```
   static int toInt(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object is int) return object;
@@ -260,9 +272,16 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert an object to an [int], or return `null` if the object is `null`.
+  /// Attempts to convert an object to an [int], or returns `null` if the object is `null` or conversion fails.
   ///
-  /// If the conversion to [int] fails, it will log an error and return `null`.
+  /// - Converts numeric types and strings that represent valid integers to [int].
+  /// - If the conversion to [int] fails (e.g., non-integer string), logs an error and returns `null`.
+  ///
+  /// [object] The object to be converted to an [int].
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns an [int] if conversion is successful, otherwise `null`.
   ///
   /// Example usage:
   /// ```dart
@@ -283,12 +302,7 @@ abstract class ConvertObject {
   /// ```
   static int? tryToInt(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object is int?) return object;
@@ -311,14 +325,19 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert an object to a [BigInt].
+  /// Converts an object to a [BigInt].
   ///
-  /// It's IMPORTANT to note that BigInt operations can be computationally expensive,
-  /// especially for very large integers. Therefore, use BigInt only when necessary,
-  /// and be mindful of performance implications.
+  /// - Converts numeric types and strings that represent valid large integers to [BigInt].
+  /// - IMPORTANT: BigInt operations can be computationally expensive, especially for very large integers.
+  ///   Use BigInt only when necessary, and be mindful of performance implications.
+  /// - If the conversion to [BigInt] fails or the object is `null`, throws a [ParsingException].
   ///
-  /// If the object is `null`, a [ParsingException] with a `nullObject` error will be thrown.
-  /// If the conversion to [BigInt] fails, a [ParsingException] will be thrown.
+  /// [object] The object to be converted to a [BigInt].
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [BigInt] if conversion is successful.
+  /// Throws a [ParsingException] if the conversion fails or the object is `null`.
   ///
   /// Example usage:
   /// ```dart
@@ -336,12 +355,7 @@ abstract class ConvertObject {
   /// ```
   static BigInt toBigInt(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object == null) {
@@ -369,13 +383,18 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert an object to a [BigInt], or return `null` if the object is `null`.
+  /// Attempts to convert an object to a [BigInt], or returns `null` if the object is `null` or conversion fails.
   ///
-  /// It's IMPORTANT to note that BigInt operations can be computationally expensive,
-  /// especially for very large integers. Therefore, use BigInt only when necessary,
-  /// and be mindful of performance implications.
+  /// - Converts numeric types and strings that represent valid large integers to [BigInt].
+  /// - IMPORTANT: BigInt operations can be computationally expensive, especially for very large integers.
+  ///   Use BigInt only when necessary, and be mindful of performance implications.
+  /// - If the conversion to [BigInt] fails (e.g., non-numeric string), logs an error and returns `null`.
   ///
-  /// If the conversion to [BigInt] fails, it will log an error and return `null`.
+  /// [object] The object to be converted to a [BigInt].
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [BigInt] if conversion is successful, otherwise `null`.
   ///
   /// Example usage:
   /// ```dart
@@ -393,12 +412,7 @@ abstract class ConvertObject {
   /// ```
   static BigInt? tryToBigInt(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object is BigInt?) return object;
@@ -421,9 +435,17 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert an object to a [double].
+  /// Converts an object to a [double].
   ///
-  /// If the conversion to [double] fails, a [ParsingException] will be thrown.
+  /// - Converts numeric types and strings that represent valid numbers to [double].
+  /// - If the conversion to [double] fails (e.g., non-numeric string), throws a [ParsingException].
+  ///
+  /// [object] The object to be converted to a [double].
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [double] if conversion is successful.
+  /// Throws a [ParsingException] if the conversion fails.
   ///
   /// Example usage:
   /// ```dart
@@ -441,12 +463,7 @@ abstract class ConvertObject {
   /// ```
   static double toDouble(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object is double) return object;
@@ -467,9 +484,16 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert an object to a [double], or return `null` if the object is `null`.
+  /// Attempts to convert an object to a [double], or returns `null` if the object is `null` or conversion fails.
   ///
-  /// If the conversion to [double] fails, it will log an error and return `null`.
+  /// - Converts numeric types and strings that represent valid numbers to [double].
+  /// - If the conversion to [double] fails (e.g., non-numeric string), logs an error and returns `null`.
+  ///
+  /// [object] The object to be converted to a [double].
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [double] if conversion is successful, otherwise `null`.
   ///
   /// Example usage:
   /// ```dart
@@ -490,12 +514,7 @@ abstract class ConvertObject {
   /// ```
   static double? tryToDouble(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object is double?) return object;
@@ -517,10 +536,18 @@ abstract class ConvertObject {
     }
   }
 
-  /// Return `true` if the object is a `bool` and equal to `true`,
-  /// or the object is a `String` and equal to 'yes' or 'true',
-  /// or the object is a `num`, `int`, or `double` and is larger than zero.
-  /// The default value is `false`, even if the object is `null`.
+  /// Converts an object to a `bool`.
+  ///
+  /// - Returns `true` if the object is a `bool` and equal to `true`.
+  /// - Returns `true` if the object is a `String` and equal to 'yes' or 'true' (case-insensitive).
+  /// - Returns `true` if the object is a `num`, `int`, or `double` and is larger than zero.
+  /// - Returns `false` for other types or if the object is `null`.
+  ///
+  /// [object] The object to be converted to a `bool`.
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a `bool`, with a default value of `false`.
   ///
   /// Example usage:
   /// ```dart
@@ -544,12 +571,7 @@ abstract class ConvertObject {
   /// ```
   static bool toBool(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (mapKey != null && object is Map<dynamic, dynamic>) {
@@ -561,10 +583,17 @@ abstract class ConvertObject {
     return (object as Object?).asBool;
   }
 
-  /// Return `null` if the object is `null`,
-  /// or return `true` if the object is a `bool` and equal to `true`,
-  /// or return `true` if the object is a `String` and equal to 'yes' or 'true'.
-  /// The default value is `false`.
+  /// Attempts to convert an object to a `bool`, or returns `null` if the object is `null` or conversion is not applicable.
+  ///
+  /// - Returns `true` if the object is a `bool` and equal to `true`.
+  /// - Returns `true` if the object is a `String` and equal to 'yes' or 'true' (case-insensitive).
+  /// - Returns `null` for other types or if the object is `null`.
+  ///
+  /// [object] The object to be converted to a `bool`.
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a `bool` if conversion is applicable, otherwise `null`.
   ///
   /// Example usage:
   /// ```dart
@@ -588,12 +617,7 @@ abstract class ConvertObject {
   /// ```
   static bool? tryToBool(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object == null) {
@@ -609,10 +633,20 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert an object to a [DateTime].
+  /// Converts an object to a [DateTime].
   ///
-  /// If the object is null, a [ParsingException] with a `nullObject` error will be thrown.
-  /// If the conversion to [DateTime] fails, a [ParsingException] will be thrown.
+  /// - If the object is a string representing a valid DateTime, it converts it to a [DateTime] object.
+  /// - If the object is already a [DateTime], it is returned as-is.
+  /// - If the object is `null`, throws a [ParsingException] with a `nullObject` error.
+  /// - If the conversion to [DateTime] fails (e.g., invalid format), throws a [ParsingException].
+  ///
+  /// [object] The object to be converted to a [DateTime].
+  /// [format] (Optional) Specify the format if the object is a string representing a DateTime.
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [DateTime] if conversion is successful.
+  /// Throws a [ParsingException] if the conversion fails or the object is `null`.
   ///
   /// Example usage:
   /// ```dart
@@ -630,15 +664,8 @@ abstract class ConvertObject {
   /// ```
   static DateTime toDateTime(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
-
-    /// get the output date formatted with specific pattern.
     String? format,
   }) {
     if (object == null) {
@@ -666,9 +693,18 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert an object to a [DateTime], or return null if the object is null.
+  /// Attempts to convert an object to a [DateTime], or returns `null` if the object is `null` or conversion fails.
   ///
-  /// If the conversion to [DateTime] fails, it will log an error and return null.
+  /// - If the object is a string representing a valid DateTime, it converts it to a [DateTime] object.
+  /// - If the object is already a [DateTime], it is returned as-is.
+  /// - If the conversion to [DateTime] fails (e.g., invalid format), logs an error and returns `null`.
+  ///
+  /// [object] The object to be converted to a [DateTime].
+  /// [format] (Optional) Specify the format if the object is a string representing a DateTime.
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [DateTime] if conversion is successful, otherwise `null`.
   ///
   /// Example usage:
   /// ```dart
@@ -686,15 +722,8 @@ abstract class ConvertObject {
   /// ```
   static DateTime? tryToDateTime(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
-
-    /// get the output date formatted with specific pattern.
     String? format,
   }) {
     if (object is DateTime?) return object;
@@ -717,12 +746,124 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert an object to a [Map].
+  /// Converts an object to a [Uri].
   ///
-  /// If the object is an empty [Map], an empty [Map] will be returned.
-  /// If the object is already a [Map], it will be returned.
-  /// If the object is null, a [ParsingException] with a `nullObject` error will be thrown.
-  /// If the object cannot be converted to a [Map], a [ParsingException] will be thrown.
+  /// - If the object is a string representing a valid URI, it converts it to a [Uri] object.
+  /// - If the object is `null`, throws a [ParsingException] with a `nullObject` error.
+  /// - If the conversion to [Uri] fails (e.g., if the string is not a valid URI), throws a [ParsingException].
+  ///
+  /// [object] The object to be converted to a [Uri]. Expected to be a string representing a URI.
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [Uri] if conversion is successful.
+  /// Throws a [ParsingException] if the conversion fails or the object is null.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final object1 = 'https://www.example.com';
+  /// final uri1 = ConvertObject.toUri(object1); // Uri.parse('https://www.example.com')
+  ///
+  /// final object2 = 'invalid_uri';
+  /// final uri2 = ConvertObject.toUri(object2); // throws ParsingException
+  ///
+  /// final object3 = null;
+  /// final uri3 = ConvertObject.toUri(object3); // throws ParsingException
+  /// ```
+  static Uri toUri(
+    dynamic object, {
+    Object? mapKey,
+    int? listIndex,
+  }) {
+    if (object == null) {
+      throw ParsingException.nullObject(
+        parsingInfo: 'toUri',
+        stackTrace: StackTrace.current,
+      );
+    }
+    if (object is Uri) return object;
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return toUri(object[mapKey]);
+    }
+    if (listIndex != null && object is List<dynamic>) {
+      return toUri(object.of(listIndex));
+    }
+    try {
+      final ob = object.toString();
+      if (ob.isValidPhoneNumber) return ob.toPhoneUri;
+      return ob.toUri;
+    } catch (e, s) {
+      throw ParsingException(
+        error: e,
+        parsingInfo: 'toUri',
+        stackTrace: s,
+      );
+    }
+  }
+
+  /// Attempts to convert an object to a [Uri], or returns `null` if the object is `null` or conversion fails.
+  ///
+  /// - If the object is a string representing a valid URI, it converts it to a [Uri] object.
+  /// - If the conversion to [Uri] fails (e.g., if the string is not a valid URI), it logs an error and returns `null`.
+  /// - If the object is null, returns null.
+  ///
+  /// [object] The object to be converted to a [Uri]. Expected to be a string representing a URI.
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [Uri] if conversion is successful, otherwise null.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final object1 = 'https://www.example.com';
+  /// final uri1 = ConvertObject.tryToUri(object1); // Uri.parse('https://www.example.com')
+  ///
+  /// final object2 = 'invalid_uri';
+  /// final uri2 = ConvertObject.tryToUri(object2); // null (logs an error)
+  ///
+  /// final object3 = null;
+  /// final uri3 = ConvertObject.tryToUri(object3); // null
+  /// ```
+  static Uri? tryToUri(
+    dynamic object, {
+    Object? mapKey,
+    int? listIndex,
+  }) {
+    if (object is Uri?) return object;
+
+    if (mapKey != null && object is Map<dynamic, dynamic>) {
+      return tryToUri(object[mapKey]);
+    }
+    if (listIndex != null && object is List<dynamic>) {
+      return tryToUri(object.of(listIndex));
+    }
+    try {
+      final ob = object.toString();
+      if (ob.isValidPhoneNumber) return ob.toPhoneUri;
+      return ob.toUri;
+    } catch (e, s) {
+      log(
+        'tryToUri() Unsupported object type: exception message -> $e',
+        stackTrace: s,
+        error: e,
+      );
+      return null;
+    }
+  }
+
+  /// Converts an object to a [Map] with keys of type `K` and values of type `V`.
+  ///
+  /// - If the object is already a [Map] with the correct key and value types, it is returned as-is.
+  /// - If the object is an empty [Map], an empty [Map] is returned.
+  /// - If the object is null, throws a [ParsingException] with a `nullObject` error.
+  /// - If the object cannot be converted to a [Map] with the specified types, throws a [ParsingException].
+  ///
+  /// [object] The object to be converted to a [Map] with keys of type `K` and values of type `V`.
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [Map<K, V>] if conversion is successful.
+  /// Throws a [ParsingException] if the conversion fails.
   ///
   /// Example usage:
   /// ```dart
@@ -730,7 +871,7 @@ abstract class ConvertObject {
   /// final map1 = ConvertObject.toMap<String, String>(object1); // {'key1': 'value1', 'key2': 'value2'}
   ///
   /// final object2 = {'key1': 1, 'key2': 2};
-  /// final map2 = ConvertObject.toMap<String, int>(object2); // {'key1': 1, 'key2': 2}
+  /// final map2 = ConvertObject.toMap<String, int>(object2); // {'key1': 1, 'key2': 2'}
   ///
   /// final object3 = 'Hello';
   /// final map3 = ConvertObject.toMap<String, int>(object3); // ParsingException (logs an error)
@@ -740,12 +881,7 @@ abstract class ConvertObject {
   /// ```
   static Map<K, V> toMap<K, V>(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object == null) {
@@ -782,11 +918,18 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert an object to a [Map], or return null if the object is null.
+  /// Attempts to convert an object to a [Map] with keys of type `K` and values of type `V`.
   ///
-  /// If the object is an empty [Map], an empty [Map] will be returned.
-  /// If the object is already a [Map], it will be returned.
-  /// If the object cannot be converted to a [Map], it will log an error and return null.
+  /// - If the object is already a [Map] with the correct key and value types, it is returned as-is.
+  /// - If the object is an empty [Map], an empty [Map] is returned.
+  /// - If the object is null, returns null.
+  /// - If the object cannot be converted to a [Map] with the specified types, logs an error and returns null.
+  ///
+  /// [object] The object to be converted to a [Map] with keys of type `K` and values of type `V`.
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [Map<K, V>] if conversion is successful, otherwise null.
   ///
   /// Example usage:
   /// ```dart
@@ -804,12 +947,7 @@ abstract class ConvertObject {
   /// ```
   static Map<K, V>? tryToMap<K, V>(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object is Map && object.isEmpty) return <K, V>{};
@@ -836,12 +974,19 @@ abstract class ConvertObject {
     return null;
   }
 
-  /// Convert an object to a [Set].
+  /// Converts an object to a [Set] of type `T`.
   ///
-  /// If the object is an empty [Set], an empty [Set] will be returned.
-  /// If the object is already a [Set], it will be returned.
-  /// If the object is null, a [ParsingException] with a `nullObject` error will be thrown.
-  /// If the object cannot be converted to a [Set], a [ParsingException] will be thrown.
+  /// - If the object is already a [Set] of type `T`, it is returned as-is.
+  /// - If the object is an [Iterable], it converts it to a [Set] of type `T`.
+  /// - If the object is null, throws a [ParsingException] with a `nullObject` error.
+  /// - If the object cannot be converted to a [Set] of type `T`, throws a [ParsingException].
+  ///
+  /// [object] The object to be converted to a [Set] of type `T`.
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [Set] of type `T` if conversion is successful.
+  /// Throws a [ParsingException] if the conversion fails.
   ///
   /// Example usage:
   /// ```dart
@@ -859,12 +1004,7 @@ abstract class ConvertObject {
   /// ```
   static Set<T> toSet<T>(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object == null) {
@@ -899,11 +1039,18 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert an object to a [Set], or return null if the object is null.
+  /// Attempts to convert an object to a [Set] of type `T`, or returns null if conversion is not possible.
   ///
-  /// If the object is an empty [Set], an empty [Set] will be returned.
-  /// If the object is already a [Set], it will be returned.
-  /// If the object cannot be converted to a [Set], it will log an error and return null.
+  /// - If the object is already a [Set] of type `T`, it is returned as-is.
+  /// - If the object is an [Iterable], it converts it to a [Set] of type `T`.
+  /// - If the object is null, returns null.
+  /// - If the object cannot be converted to a [Set] of type `T`, logs an error and returns null.
+  ///
+  /// [object] The object to be converted to a [Set] of type `T`.
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [Set] of type `T` if conversion is successful, otherwise null.
   ///
   /// Example usage:
   /// ```dart
@@ -921,12 +1068,7 @@ abstract class ConvertObject {
   /// ```
   static Set<T>? tryToSet<T>(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object is Iterable && object.isEmpty) return <T>{};
@@ -955,12 +1097,21 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert an object to a [List] of type `T`.
+  /// Converts an object to a [List] of type `T`.
   ///
-  /// If the object is already a [List] of type `T`, it will be returned.
-  /// If the object is of type `T`, a [List] containing the object as a single element will be returned.
-  /// If the object is a [Map] with values of type `T`, a [List] containing the values of the [Map] will be returned.
-  /// If the object cannot be converted to a [List] of type `T`, it will throw a [ParsingException].
+  /// - If the object is already a [List] of type `T`, it is returned as-is.
+  /// - If the object is a single instance of type `T`, it returns a [List] containing that object.
+  /// - If the object is a [Map], and `mapKey` is provided, it returns a [List] of the values for that key across all map entries.
+  /// - If the object is a [Map] with values of type `T` and no `mapKey` is provided, it returns a [List] of all the map's values.
+  /// - If the object is a [List], and `listIndex` is provided, it attempts to return a [List] containing the element at that index from each list in the original list.
+  /// - If the object cannot be converted to a [List] of type `T`, a [ParsingException] is thrown.
+  ///
+  /// [object] The object to be converted to a [List] of type `T`.
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [List] of type `T` if conversion is successful.
+  /// Throws a [ParsingException] if the conversion fails.
   ///
   /// Example usage:
   /// ```dart
@@ -973,17 +1124,18 @@ abstract class ConvertObject {
   /// final object3 = {'a': 1, 'b': 2};
   /// final list3 = ConvertObject.toList<int>(object3); // [1, 2]
   ///
-  /// final object4 = 'Hello';
-  /// final list4 = ConvertObject.toList<int>(object4); // throws ParsingException
+  /// final object4 = {'a': [1, 2], 'b': [3, 4]};
+  /// final list4 = ConvertObject.toList<int>(object4, mapKey: 'a'); // [1, 2]
+  ///
+  /// final object5 = [[1, 2], [3, 4]];
+  /// final list5 = ConvertObject.toList<int>(object5, listIndex: 0); // [1, 3]
+  ///
+  /// final object6 = 'Hello';
+  /// final list6 = ConvertObject.toList<int>(object6); // throws ParsingException
   /// ```
   static List<T> toList<T>(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object == null) {
@@ -1018,12 +1170,20 @@ abstract class ConvertObject {
     }
   }
 
-  /// Convert an object to a [List] of type `T`, or return `null` if the object is `null`.
+  /// Attempts to convert an object to a [List] of type `T`, or returns `null` if conversion is not possible.
   ///
-  /// If the object is already a [List] of type `T`, it will be returned.
-  /// If the object is of type `T`, a [List] containing the object as a single element will be returned.
-  /// If the object is a [Map] with values of type `T`, a [List] containing the values of the [Map] will be returned.
-  /// If the object cannot be converted to a [List] of type `T`, it will log an error and return `null`.
+  /// - If the object is already a [List] of type `T`, it is returned as-is.
+  /// - If the object is a single instance of type `T`, it returns a [List] containing that object.
+  /// - If the object is a [Map], and `mapKey` is provided, it returns a [List] of the values for that key across all map entries.
+  /// - If the object is a [Map] with values of type `T` and no `mapKey` is provided, it returns a [List] of all the map's values.
+  /// - If the object is a [List], and `listIndex` is provided, it attempts to return a [List] containing the element at that index from each list in the original list.
+  /// - If the object cannot be converted to a [List] of type `T`, an error is logged, and `null` is returned.
+  ///
+  /// [object] The object to be converted to a [List] of type `T`.
+  /// [mapKey] (Optional) Specifies the key to extract values from a [Map] object.
+  /// [listIndex] (Optional) Specifies the index to extract elements from a [List] object.
+  ///
+  /// Returns a [List] of type `T` if conversion is successful, otherwise `null`.
   ///
   /// Example usage:
   /// ```dart
@@ -1036,20 +1196,21 @@ abstract class ConvertObject {
   /// final object3 = {'a': 1, 'b': 2};
   /// final list3 = ConvertObject.tryToList<int>(object3); // [1, 2]
   ///
-  /// final object4 = 'Hello';
-  /// final list4 = ConvertObject.tryToList<int>(object4); // null (logs an error)
+  /// final object4 = {'a': [1, 2], 'b': [3, 4]};
+  /// final list4 = ConvertObject.tryToList<int>(object4, mapKey: 'a'); // [1, 2]
   ///
-  /// final object5 = null;
-  /// final list5 = ConvertObject.tryToList<int>(object5); // null
+  /// final object5 = [[1, 2], [3, 4]];
+  /// final list5 = ConvertObject.tryToList<int>(object5, listIndex: 0); // [1, 3]
+  ///
+  /// final object6 = 'Hello';
+  /// final list6 = ConvertObject.tryToList<int>(object6); // null (logs an error)
+  ///
+  /// final object7 = null;
+  /// final list7 = ConvertObject.tryToList<int>(object7); // null
   /// ```
   static List<T>? tryToList<T>(
     dynamic object, {
-    /// The map key used for converting objects within a map.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     Object? mapKey,
-
-    /// The index used for converting objects within a list.
-    /// for more info -> https://pub.dev/packages/flutter_helper_utils#converting-values-within-a-maplist-using-mapkey-or-listindex
     int? listIndex,
   }) {
     if (object is Iterable && object.isEmpty) return <T>[];

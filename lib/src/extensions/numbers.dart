@@ -39,8 +39,10 @@ import 'package:flutter_helper_utils/src/src.dart';
 extension HttpEx on num? {
   bool get isSuccessHttpResCode => this == 200 || this == 201;
 
+  bool get isValidPhoneNumber => toString().isValidPhoneNumber;
+
   HttpResStatus? get toHttpResStatus =>
-      HttpResStatus.values.firstOrNullWhere((s) => this == s.code);
+      HttpResStatus.values.firstWhereOrNull((s) => this == s.code);
 }
 
 extension NullSafeNumExtensions on num? {
@@ -79,6 +81,8 @@ extension NumExtensions on num {
 
   /// Returns if the number is zer0
   bool get isZero => this == 0;
+
+  bool get isValidPhoneNumber => toString().isValidPhoneNumber;
 
   /// Returns number of digits in this number
   int get numberOfDigits => toString().length;
@@ -122,15 +126,20 @@ extension NumExtensions on num {
   String get asGreeks {
     const greekSymbols = <String>['K', 'M', 'B', 'T', 'Q', 'P', 'E', 'Z', 'Y'];
     if (this < 1000) return toString();
-    final magnitude = (toString().length - 1) ~/ 3;
-    final scaledNumber = this / pow(1000, magnitude);
-    final symbol = greekSymbols[magnitude - 1];
-    return scaledNumber.toStringAsFixed(1) + symbol;
+
+    var magnitude = 0;
+    var reducedNum = this;
+    while (reducedNum >= 1000 && magnitude < greekSymbols.length) {
+      reducedNum /= 1000;
+      magnitude++;
+    }
+
+    final symbol = magnitude > 0 ? greekSymbols[magnitude - 1] : '';
+    return '${reducedNum.toStringAsFixed(1)}$symbol';
   }
 
   /// Utility to delay some callback (or code execution).
-  // TODO(Omar): Add a separated implementation of delay() with the ability
-  /// to stop it.
+  // TODO(Omar): Add a separated implementation of delay() with the ability to stop it.
   ///
   /// Sample:
   /// ```
@@ -201,10 +210,6 @@ extension NumExtensions on num {
       }
     }
   }
-
-  NumWatcher get watch {
-    return NumWatcher(this);
-  }
 }
 
 extension IntExtensions on int {
@@ -234,10 +239,6 @@ extension IntExtensions on int {
 
   /// Return squared number
   int get squared => this * this;
-
-  IntWatcher get watch {
-    return IntWatcher(this);
-  }
 }
 
 extension DoubleExtensions on double {
@@ -267,8 +268,4 @@ extension DoubleExtensions on double {
 
   /// Return squared number
   double get squared => this * this;
-
-  DoubleWatcher get watch {
-    return DoubleWatcher(this);
-  }
 }

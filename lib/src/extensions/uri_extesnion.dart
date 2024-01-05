@@ -11,11 +11,23 @@ extension NullSafeURIExtensions on String? {
 extension URIExtensions on String {
   Uri get toUri => Uri.parse(clean);
 
-  Uri get toPhoneUri => Uri.parse(startsWith('tel://') ? this : 'tel://$clean');
+  Uri get toPhoneUri =>
+      Uri.parse(startsWith('tel://') ? clean : 'tel://$clean');
 }
 
 extension UriEx on Uri {
-  UriWatcher get watch {
-    return UriWatcher(this);
+  /// Extracts the domain name from a URL.
+  /// Supports URLs with or without 'www' and different TLDs.
+  String get domainName {
+    // Split the URL by '.'
+    var parts = host.split('.');
+
+    // Remove 'www' if it exists
+    if (parts.isNotEmpty && parts[0] == 'www') {
+      parts = parts.sublist(1);
+    }
+
+    // Return the first part as the domain name, or an empty string if not found
+    return parts.isNotEmpty ? parts[0] : host;
   }
 }

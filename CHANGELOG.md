@@ -1,3 +1,21 @@
+### 3.0.2
+
+- **UPDATE**: Update docs for README, all ConvertObject's static methods, and add docs to all global functions.
+
+### 3.0.0
+
+- **BREAKING CHANGE**:
+    - The [`Watcher`](https://pub.dev/packages/flutter_watcher) state management functionality has been moved into a
+      separate [package](https://pub.dev/packages/flutter_watcher).
+      This change aligns with our goal of maintaining the simplicity and original intent of this package.
+      Please update your imports and dependencies accordingly if you rely
+      on [`Watcher`](https://pub.dev/packages/flutter_watcher) for state management.
+
+- **NEW FEATURE**:
+    - Added new `toUri` and `tryToUri` in both the `ConvertObject` class and the global functions.
+    - Introducing a new getter `domainName` in the `Uri` extension.
+- **ENHANCEMENTS**: The `indexOfOrNull` method under Iterable Extensions now supports taking null values.
+
 ### 2.0.1
 
 - **NEW**: Introducing Watcher state management, It's designed to be efficient, lightweight, and leverages native

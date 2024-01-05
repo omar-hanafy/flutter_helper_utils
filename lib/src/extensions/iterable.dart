@@ -3,7 +3,6 @@ import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:flutter_helper_utils/src/extensions/extensions.dart';
-import 'package:flutter_helper_utils/src/helper_methods/value_watcher_helper.dart';
 
 /* SUGGESTIONS:
 When designing utility extensions for a language like Dart, which is used extensively in Flutter development, it’s crucial to consider both the common use cases and the pain points that developers might encounter. Here are some suggestions to consider adding to your `ListExtensions` class, which might provide additional value to users of your `flutter_helper_utils` package:
@@ -49,12 +48,6 @@ Would you like any specific implementation details or examples for any of these 
 typedef IndexedPredicate<T> = bool Function(int index, T);
 typedef Predicate<T> = bool Function(T);
 
-extension NotifierListExtensions<T> on List<T> {
-  ListWatcher<T> get watch {
-    return ListWatcher<T>(this);
-  }
-}
-
 extension ListExtensionsNS<T> on List<T>? {
   /// similar to list[index] but it is null safe.
   T? of(int index) {
@@ -72,8 +65,8 @@ extension ListExtensionsNS<T> on List<T>? {
 
   /// same behavior as [indexOf] but it is null safe which means
   /// it do nothing when [List] return [isEmptyOrNull] to true.
-  int? indexOfOrNull(T element) =>
-      isEmptyOrNull ? null : this!.indexOf(element);
+  int? indexOfOrNull(T? element) =>
+      isEmptyOrNull || element == null ? null : this!.indexOf(element);
 
   /// same behavior as [indexWhere] but it is null safe which means
   /// it do nothing when [List] return [isEmptyOrNull] to true.
@@ -123,7 +116,7 @@ extension CollectionsExtensionsNS<T> on Iterable<T>? {
   /// get the last element if the list is not empty or return null
   T? get lastOrNull => isNotEmptyOrNull ? this!.last : null;
 
-  T? firstOrNullWhere(Predicate<T> predicate) {
+  T? firstWhereOrNull(Predicate<T> predicate) {
     if (isEmptyOrNull) return null;
     for (final element in this!) {
       if (predicate(element)) return element;
@@ -403,10 +396,6 @@ extension CollectionsExtensions<T> on Iterable<T> {
     }
 
     return null;
-  }
-
-  IterableWatcher<T> get watch {
-    return IterableWatcher<T>(this);
   }
 }
 

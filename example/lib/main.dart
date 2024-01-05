@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
   static final GlobalKey<TooltipState> tooltipKey = GlobalKey<TooltipState>();
   static final GlobalKey<TooltipState> tooltipKey2 = GlobalKey<TooltipState>();
 
@@ -81,13 +81,31 @@ class MyHomePage extends StatelessWidget {
       'google.com/[]()[]()'.isValidUrl ? 'Url Is Valid' : 'Url Is not Valid',
     );
 
+    const color = Colors.red;
+    final hexColor = color.toHex();
+
+    print(color.toHex());
+
+    print('2'.isValidPhoneNumber);
+    print(01111.isValidPhoneNumber);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Utils Samples'),
+        title: const Text(
+          'Utils Samples',
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            color: color,
+            height: 20,
+          ),
+          Container(
+            color: hexColor.toColor,
+            height: 20,
+          ),
           Text(
             'Hex Code to Flutter Color:',
             style: txtTheme.headlineSmall,
@@ -132,7 +150,7 @@ class MyHomePage extends StatelessWidget {
 }
 
 class ColorConverter extends StatefulWidget {
-  const ColorConverter({Key? key}) : super(key: key);
+  const ColorConverter({super.key});
 
   @override
   State<ColorConverter> createState() => _ColorConverterState();
@@ -194,7 +212,7 @@ class _ColorConverterState extends State<ColorConverter> {
 }
 
 class ToGreekNumbers extends StatefulWidget {
-  const ToGreekNumbers({Key? key}) : super(key: key);
+  const ToGreekNumbers({super.key});
 
   @override
   State<ToGreekNumbers> createState() => _ToGreekNumbersState();
@@ -235,74 +253,5 @@ class _ToGreekNumbersState extends State<ToGreekNumbers> {
         ],
       ),
     );
-  }
-}
-
-extension DateTimeExt on DateTime {
-  String get dateChat {
-    if (isToday) return 'Today';
-    if (isYesterday) return 'Yesterday';
-    if (isInPastWeek) return format('EEEE');
-    if (isInThisYear) return format('E, MMM d');
-    return format('E, MMM d, yyyy');
-  }
-
-  String get oldDateFormat => switch (remainingDays) {
-        -1 => 'Yesterday',
-        0 => 'Today',
-        1 => 'Tomorrow',
-        _ => format('MMM dd, ' 'yyyy'),
-      };
-
-  String get postTime2 {
-    final pd = passedDuration;
-    final hours = pd.inHours;
-    if (hours < 1) {
-      final minutes = pd.inMinutes;
-      if (minutes < 1) {
-        final seconds = pd.inSeconds;
-        if (seconds < 5) return 'Now';
-        return '${seconds}s';
-      }
-      return '${minutes}m';
-    }
-    if (hours < 24) return '${hours}h';
-    final days = pd.inDays;
-    return days < 7 ? '${days}d' : '${days ~/ 7}w';
-  }
-
-  String get postTime {
-    final pd = passedDuration;
-    final hours = pd.inHours;
-    final minutes = pd.inMinutes;
-    final seconds = pd.inSeconds;
-    return hours < 1
-        ? minutes < 1
-            ? seconds < 5
-                ? 'Now'
-                : '${seconds}s'
-            : '${minutes}m'
-        : hours < 24
-            ? '${hours}h'
-            : '${pd.inDays < 7 ? pd.inDays : pd.inDays ~/ 7}${pd.inDays < 7 ? 'd' : 'w'}';
-  }
-
-  String get time => format('hh:mm aa');
-
-  String get getEventDate => switch (remainingDays) {
-        -1 => 'Yesterday',
-        0 => 'Today',
-        1 => 'Tomorrow ${format('EEEE dd/MM')}',
-        _ => format('EEEE dd/MM'),
-      };
-
-  String get getEventDateTime {
-    final time = format('hh:mm a');
-    return switch (remainingDays) {
-      -1 => 'Yesterday - $time',
-      0 => 'Today - $time',
-      1 => 'Tomorrow - $time',
-      _ => '${format('EEEE dd, MMM yyyy')} - $time',
-    };
   }
 }

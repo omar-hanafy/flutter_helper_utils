@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter_helper_utils/src/extensions/extensions.dart';
 import 'package:intl/intl.dart';
 
+// TODO(OMAR): Add the the new updated [Intl] package methods and parsers.
 extension DateString on String? {
   /// Parse string to [DateTime] using null Safety
   DateTime? get tryToDateTime {

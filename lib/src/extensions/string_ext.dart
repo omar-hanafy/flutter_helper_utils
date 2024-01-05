@@ -68,10 +68,6 @@ extension StringExtensions on String {
   String get removeWhiteSpaces => replaceAll(' ', '');
 
   String get clean => removeWhiteSpaces.toOneLine;
-
-  StringWatcher get watch {
-    return StringWatcher(this);
-  }
 }
 
 extension NullSafeStringExtensions on String? {
@@ -121,7 +117,8 @@ extension NullSafeStringExtensions on String? {
   /// Checks if string is phone number.
   bool get isValidPhoneNumber {
     if (isEmptyOrNull || this!.length > 16 || this!.length < 9) return false;
-    return hasMatch(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$');
+    return hasMatch(
+        r'(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?');
   }
 
   /// Checks if string is email.

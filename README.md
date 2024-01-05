@@ -2,7 +2,7 @@
   <tr style="border:none;">
     <td style="vertical-align:top; border:none;">
       <h1 style="border:none;" "min-width:400px;">Flutter Helper Utils</h1>
-      <p style="min-width:400px;">Make Flutter development easier with Flutter Helper Utils! This toolkit is packed with state management, helper methods and extensions that boost your productivity and help you write less code and build apps faster.</p>
+      <p style="min-width:400px;">Make Flutter development easier with Flutter Helper Utils! This toolkit is packed with helper methods and extensions that boost your productivity and help you write less code and build apps faster.</p>
     </td>
     <td style="vertical-align:top; border:none;">
       <a href="https://flutter-helper-utils.web.app/" target="blank">
@@ -17,49 +17,6 @@
 - [Getting Started](https://flutter-helper-utils.web.app/documentation/getting-started.html)
 - [Helper Methods](#helper-methods)
 - [Extensions](#extensions)
-
-# Watcher (State Management):
-
-Watcher is a simple state management that utilizes Flutter's native `ValueListenableBuilder` and `ValueNotifier`,
-providing a lightweight, efficient, and straightforward way to manage state
-changes.
-[Detailed Documentation here](https://flutter-helper-utils.web.app/documentation/watcher-state-management.html).
-
-here's a quick example to showcase its simplicity:
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_helper_utils/flutter_helper_utils.dart';
-
-main() => runApp(MyCounter());
-
-class MyCounter extends StatelessWidget {
-
-  final IntWatcher counter = 0.watch;
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Watch Counter',
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Watch Counter')),
-        body: Center(
-          child: ValueWatcher(
-            watcher: counter,
-            builder: (context, value) {
-              return Text('Counter: $value');
-            },
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => counter.increment(1),
-          child: const Icon(Icons.add),
-        ),
-      ),
-    );
-  }
-}
-```
 
 # Helper Methods
 
@@ -146,10 +103,8 @@ extensions, sorted by their functionalities:
 
 ### [Boolean Extensions](https://flutter-helper-utils.web.app/documentation/bool-extension.html)
 
-* [`isTrue`](https://flutter-helper-utils.web.app/documentation/bool-extension.html#istrue) - Checks if the Boolean
-  value is true, considering null safety.
-* [`isFalse`](https://flutter-helper-utils.web.app/documentation/bool-extension.html#isfalse) - Checks if the Boolean
-  value is false or null.
+* [`isTrue` & `isFalse`](https://flutter-helper-utils.web.app/documentation/bool-extension.html#istrue-isfalse-null-safety) -
+  Checks if the Boolean values considering null safety.
 * [`val`](https://flutter-helper-utils.web.app/documentation/bool-extension.html#val) - Returns the Boolean value or
   false if it is null.
 * [`binary`](https://flutter-helper-utils.web.app/documentation/bool-extension.html#binary) - Returns 1 if the Boolean
@@ -278,7 +233,7 @@ provides information about the type of the object and the method used for conver
 ## Contributions
 
 Contributions to this package are welcome. If you have any suggestions, issues, or feature requests, please create a
-pull request on the [repository](https://github.com/omar-hanafy/flutter_helper_utils).
+pull request in the [repository](https://github.com/omar-hanafy/flutter_helper_utils).
 
 ## License
 

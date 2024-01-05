@@ -20,8 +20,4 @@ extension DurationExt on Duration {
 
   /// Subtracts the Duration from the current DateTime and returns a DateTime in the past
   DateTime get ago => DateTime.now() - this;
-
-  DurationWatcher get watch {
-    return DurationWatcher(this);
-  }
 }

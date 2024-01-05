@@ -1,9 +1,9 @@
 class ParsingException implements Exception {
-  const ParsingException({
+  ParsingException({
     required this.error,
     required this.parsingInfo,
-    this.stackTrace,
-  });
+    StackTrace? stackTrace,
+  }) : stackTrace = stackTrace ?? StackTrace.current;
 
   factory ParsingException.nullObject({
     required StackTrace stackTrace,
@@ -18,7 +18,7 @@ class ParsingException implements Exception {
 
   final String parsingInfo;
   final Object? error;
-  final StackTrace? stackTrace;
+  final StackTrace stackTrace;
 
   @override
   String toString() {
@@ -26,7 +26,7 @@ class ParsingException implements Exception {
 ParsingException {
   parsingInfo: $parsingInfo,
   error: $error,
-  ${stackTrace != null ? ', stackTrace: $stackTrace' : ''}
+  stackTrace: $stackTrace',
 }
 ''';
   }
