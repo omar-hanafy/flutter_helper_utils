@@ -667,6 +667,7 @@ abstract class ConvertObject {
     Object? mapKey,
     int? listIndex,
     String? format,
+    String? local,
   }) {
     if (object == null) {
       throw ParsingException.nullObject(
@@ -683,7 +684,9 @@ abstract class ConvertObject {
     }
     try {
       if (format.isEmptyOrNull) return DateTime.parse('$object');
-      return '$object'.toDateWithFormat(format!);
+      return '$object'.toDateWithFormat(
+        format!,
+      );
     } catch (e, s) {
       throw ParsingException(
         error: e,
@@ -725,6 +728,7 @@ abstract class ConvertObject {
     Object? mapKey,
     int? listIndex,
     String? format,
+    String? locale,
   }) {
     if (object is DateTime?) return object;
     if (mapKey != null && object is Map<dynamic, dynamic>) {
@@ -735,7 +739,7 @@ abstract class ConvertObject {
     }
     try {
       if (format.isEmptyOrNull) return DateTime.tryParse('$object');
-      return '$object'.tryToDateWithFormat(format!);
+      return '$object'.toDateWithFormat(format!, locale);
     } catch (e, s) {
       log(
         'tryToDateTime() Unsupported object type: exception message -> $e',
@@ -1024,7 +1028,9 @@ abstract class ConvertObject {
     if (object is T) return <T>{object};
     if (object is Map<dynamic, T>) return object.values.toSet();
     try {
-      return (object as Iterable).map((tmp) => toType<T>(tmp)).toSet();
+      return (object as Iterable)
+          .map((tmp) => tmp is T ? tmp : toType<T>(tmp))
+          .toSet();
     } catch (e, s) {
       log(
         'toSet() Unsupported object type ($T): exception message -> $e',
@@ -1086,7 +1092,9 @@ abstract class ConvertObject {
         return tryToSet(object[mapKey]);
       }
       if (object == null) return null;
-      return (object as Iterable).map((tmp) => toType<T>(tmp)).toSet();
+      return (object as Iterable)
+          .map((tmp) => tmp is T ? tmp : toType<T>(tmp))
+          .toSet();
     } catch (e, s) {
       log(
         'toSet() Unsupported object type ($T): exception message -> $e',
@@ -1155,7 +1163,9 @@ abstract class ConvertObject {
     if (object is T) return <T>[object];
     if (object is Map<dynamic, T>) return object.values.toList();
     try {
-      return (object as Iterable).map((tmp) => toType<T>(tmp)).toList();
+      return (object as Iterable)
+          .map((tmp) => tmp is T ? tmp : toType<T>(tmp))
+          .toList();
     } catch (e, s) {
       log(
         'toList() Unsupported object type ($T): exception message -> $e',
@@ -1223,9 +1233,12 @@ abstract class ConvertObject {
     if (object is List<T>?) return object;
     if (object is T) return <T>[object];
     if (object is Map<dynamic, T>) return object.values.toList();
+    try {} catch (_) {}
     try {
       if (object == null) return null;
-      return (object as Iterable).map((tmp) => toType<T>(tmp)).toList();
+      return (object as Iterable)
+          .map((tmp) => tmp is T ? tmp : toType<T>(tmp))
+          .toList();
     } catch (e, s) {
       log(
         'tryToList() Unsupported object type ($T): exception message -> $e',

@@ -26,7 +26,7 @@ Convert objects to various types, such as `int`, `double`, `bool`, `String`, `Li
 when working with data from APIs, where you often encounter dynamic types. They offer simple and flexible methods to
 perform accurate type conversions. Here is a sample:
 
-### Before:
+### **Before**:
 
 Map = {score: "12.4"};
 
@@ -37,7 +37,7 @@ int score = double.parse(map['key']).toInt();
 
 Notice that we need to parse to double first then to int.
 
-### With Package:
+### **With Package**:
 
 ```dart
 
@@ -240,3 +240,4 @@ pull request in the [repository](https://github.com/omar-hanafy/flutter_helper_u
 `flutter_helper_utils` is available under the [BSD 3-Clause License.](https://opensource.org/license/bsd-3-clause/)
 
 <a href="https://www.buymeacoffee.com/omar.hanafy" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+

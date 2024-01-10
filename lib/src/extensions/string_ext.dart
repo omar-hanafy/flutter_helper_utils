@@ -97,6 +97,7 @@ extension NullSafeStringExtensions on String? {
   }
 
   bool get isAlphanumeric => hasMatch(r'^[a-zA-Z0-9 ]+$');
+  bool get hasSpecialChars => hasMatch(r'^[a-zA-Z0-9 ]+$');
 
   bool get startsWithNumber => hasMatch(r'^\d');
 
@@ -337,7 +338,7 @@ extension NullSafeStringExtensions on String? {
   double get toDouble => double.parse(this!);
 
   /// Parses the string as an int or returns `null` if it is not a number.
-  int get toInt => int.parse(this!);
+  int get toInt => ConvertObject.toInt(this);
 
   /// Returns true if s is neither null, empty nor is solely made of whitespace characters.
   bool get isNotBlank => this != null && this!.trim().isNotEmpty;

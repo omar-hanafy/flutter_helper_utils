@@ -1,3 +1,12 @@
+### 3.0.3
+
+**NEW**:
+
+- Introduced `formattedJsonString` global function for converting maps to a formatted/indented JSON strings,
+  ensuring compatibility with complex types and ready to be used in logs output files.
+
+- Added new `local` optional argument to the `toDateTime` and `tryToDateTime` in both the static and global functions.
+
 ### 3.0.2
 
 - **UPDATE**: Update docs for README, all ConvertObject's static methods, and add docs to all global functions.

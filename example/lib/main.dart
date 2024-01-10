@@ -63,6 +63,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
+
   static final GlobalKey<TooltipState> tooltipKey = GlobalKey<TooltipState>();
   static final GlobalKey<TooltipState> tooltipKey2 = GlobalKey<TooltipState>();
 

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
@@ -956,6 +957,46 @@ Map<String, dynamic> makeMapEncodable(Map<dynamic, dynamic> inputMap) {
   });
   return result;
 }
+
+/// Converts a map with potentially complex data types to a formatted JSON string.
+///
+/// This function utilizes `makeMapEncodable` to prepare the map for JSON encoding,
+/// ensuring compatibility with JSON standards, especially for non-primitive types like enums
+/// or DateTime. It then uses `JsonEncoder.withIndent` to convert the map to a
+/// human-readable JSON string with proper indentation.
+///
+/// Example:
+/// ```dart
+/// Map<dynamic, dynamic> yourMap = {
+///   'id': 1,
+///   'name': 'Flutter Helper',
+///   'isActive': true,
+///   'registeredDate': DateTime(2024, 01, 06),
+///   'category': Category.mobile // Assuming Category is an enum.
+/// };
+///
+/// String jsonOutput = formattedJsonString(yourMap);
+/// print(jsonOutput);
+/// ```
+///
+/// Sample Output:
+/// ```json
+/// {
+///   "id": 1,
+///   "name": "Flutter Helper",
+///   "isActive": true,
+///   "registeredDate": "2024-01-06T00:00:00",
+///   "category": "mobile"
+/// }
+/// ```
+///
+/// Parameters:
+///   [map] - A Map with dynamic keys and values, potentially containing complex data types.
+///
+/// Returns:
+///   A string representing the formatted JSON.
+String formattedJsonString(Map<dynamic, dynamic> map) =>
+    const JsonEncoder.withIndent('  ').convert(makeMapEncodable(map));
 
 /// Determines whether a given value is of a primitive type for JSON serialization.
 ///

@@ -4,7 +4,13 @@ import 'package:flutter_helper_utils/src/extensions/extensions.dart';
 import 'package:intl/intl.dart';
 
 // TODO(OMAR): Add the the new updated [Intl] package methods and parsers.
-extension DateString on String? {
+extension DateString on String {
+  /// Parse string to [DateTime] but with a specific format, e.g, 'd-M-y'.
+  DateTime toDateWithFormat(String format, [String? locale]) =>
+      DateFormat(format, locale).parse(this);
+}
+
+extension DateNullString on String? {
   /// Parse string to [DateTime] using null Safety
   DateTime? get tryToDateTime {
     try {
@@ -23,12 +29,9 @@ extension DateString on String? {
 
   DateFormat get dateFormat => DateFormat(this);
 
-  /// Parse string to [DateTime] but with a specific format, e.g, 'd-M-y'.
-  DateTime toDateWithFormat(String format) => format.dateFormat.parse(this!);
-
   /// Parse string to nullable [DateTime] but with a specific format, e.g, 'd-M-y'.
-  DateTime? tryToDateWithFormat(String format) =>
-      isEmptyOrNull ? null : format.dateFormat.parse(this!);
+  DateTime? toDateWithFormat(String format, [String? locale]) =>
+      isEmptyOrNull ? null : DateFormat(format, locale).parse(this!);
 
   DateTime get timestampToDate => DateTime.fromMillisecondsSinceEpoch(toInt);
 }
