@@ -882,7 +882,8 @@ T toType<T>(dynamic object) {
   }
   throw ParsingException(
     parsingInfo: 'toType',
-    error: 'Unsupported type: $T',
+    error:
+        'Unsupported type detected. Please ensure that the type you are attempting to convert to is either a primitive type or a valid data type: $T.',
   );
 }
 

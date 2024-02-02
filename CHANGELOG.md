@@ -1,3 +1,8 @@
+### 3.0.4
+
+- The `asGreeks` is no longer a getter, it's a function now that takes optional `fractionDigits` which lets you specify
+  number of digits after the decimal point in the generated greek number. (`asGreeks` used to Convert a number to a format that includes Greek symbols for thousands, millions, and beyond. e.g. '1000' asGreek is '1k')
+
 ### 3.0.3
 
 **NEW**:

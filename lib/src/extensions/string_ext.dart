@@ -97,6 +97,7 @@ extension NullSafeStringExtensions on String? {
   }
 
   bool get isAlphanumeric => hasMatch(r'^[a-zA-Z0-9 ]+$');
+
   bool get hasSpecialChars => hasMatch(r'^[a-zA-Z0-9 ]+$');
 
   bool get startsWithNumber => hasMatch(r'^\d');
@@ -323,19 +324,19 @@ extension NullSafeStringExtensions on String? {
   }
 
   /// Parses the string as an num or returns `null` if it is not a number.
-  num? get tryToNum => this == null ? null : double.tryParse(this!);
+  num? get tryToNum => ConvertObject.tryToNum(this);
 
   /// Parses the string as an double or returns `null` if it is not a number.
-  double? get tryToDouble => this == null ? null : double.tryParse(this!);
+  double? get tryToDouble => ConvertObject.tryToDouble(this);
 
   /// Parses the string as an int or returns `null` if it is not a number.
-  int? get tryToInt => this == null ? null : int.tryParse(this!);
+  int? get tryToInt => ConvertObject.tryToInt(this);
 
   /// Parses the string as an num or returns `null` if it is not a number.
-  num get toNum => num.parse(this!);
+  num get toNum => ConvertObject.toNum(this);
 
   /// Parses the string as an double or returns `null` if it is not a number.
-  double get toDouble => double.parse(this!);
+  double get toDouble => ConvertObject.toDouble(this);
 
   /// Parses the string as an int or returns `null` if it is not a number.
   int get toInt => ConvertObject.toInt(this);

@@ -24,7 +24,7 @@ Future<void> main() async {
 
 // NUMBERS:
   const int number = 1000;
-  String greeks = number.asGreeks; // 1k
+  String greeks = number.asGreeks(0); // 1k
   Duration seconds = number.asSeconds; //  Duration(seconds: 1000)
   int numberOfDigits = number.numberOfDigits; // 4
   int doubled = number.doubled; // 2000
@@ -89,6 +89,9 @@ class MyHomePage extends StatelessWidget {
 
     print('2'.isValidPhoneNumber);
     print(01111.isValidPhoneNumber);
+    final ValueNotifier<int?> nullableCounter = ValueNotifier(null);
+    nullableCounter.value = 2;
+    print(nullableCounter.value);
 
     return Scaffold(
       appBar: AppBar(
@@ -238,7 +241,7 @@ class _ToGreekNumbersState extends State<ToGreekNumbers> {
                   hintText: 'Enter any number to convert it'),
               onChanged: (value) {
                 setState(() {
-                  greekNumber = value.tryToInt?.asGreeks;
+                  greekNumber = value.tryToInt?.asGreeks(0);
                 });
               },
             ),

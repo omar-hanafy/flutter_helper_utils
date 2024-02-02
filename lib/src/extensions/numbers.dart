@@ -123,9 +123,9 @@ extension NumExtensions on num {
   /// E: Exa, 10^18
   /// Z: Zetta, 10^21
   /// Y: Yotta, 10^24
-  String get asGreeks {
+  String asGreeks([int zerosFractionDigits = 0, int fractionDigits = 1]) {
     const greekSymbols = <String>['K', 'M', 'B', 'T', 'Q', 'P', 'E', 'Z', 'Y'];
-    if (this < 1000) return toString();
+    if (this < 1000) return toStringAsFixed(zerosFractionDigits);
 
     var magnitude = 0;
     var reducedNum = this;
@@ -135,7 +135,7 @@ extension NumExtensions on num {
     }
 
     final symbol = magnitude > 0 ? greekSymbols[magnitude - 1] : '';
-    return '${reducedNum.toStringAsFixed(1)}$symbol';
+    return '${reducedNum.toStringAsFixed(fractionDigits)}$symbol';
   }
 
   /// Utility to delay some callback (or code execution).
