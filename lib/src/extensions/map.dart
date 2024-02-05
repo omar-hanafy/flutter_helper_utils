@@ -1,7 +1,11 @@
-extension GeneralNullableMap<K, V> on Map<K, V>? {
+import 'package:flutter/foundation.dart';
+
+extension FHUNullableExtension<K, V> on Map<K, V>? {
   bool get isEmptyOrNull => this == null || this!.isEmpty;
 
   bool get isNotEmptyOrNull => !isEmptyOrNull;
+
+  bool isEqual(Map<K, V>? other) => mapEquals(this, other);
 }
 
 extension MapExt on Map<String, dynamic> {

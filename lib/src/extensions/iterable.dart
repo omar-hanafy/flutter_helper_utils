@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:developer' as dev;
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_helper_utils/src/extensions/extensions.dart';
 
 /* SUGGESTIONS:
@@ -48,9 +49,11 @@ Would you like any specific implementation details or examples for any of these 
 typedef IndexedPredicate<T> = bool Function(int index, T);
 typedef Predicate<T> = bool Function(T);
 
-extension ListExtensionsNS<T> on List<T>? {
+extension FHUNullableListExtensions<E> on List<E>? {
+  bool isEqual(List<E>? other) => listEquals(this, other);
+
   /// similar to list[index] but it is null safe.
-  T? of(int index) {
+  E? of(int index) {
     if (isNotEmptyOrNull && index >= 0 && this!.length > index) {
       return this![index];
     }
@@ -65,12 +68,12 @@ extension ListExtensionsNS<T> on List<T>? {
 
   /// same behavior as [indexOf] but it is null safe which means
   /// it do nothing when [List] return [isEmptyOrNull] to true.
-  int? indexOfOrNull(T? element) =>
+  int? indexOfOrNull(E? element) =>
       isEmptyOrNull || element == null ? null : this!.indexOf(element);
 
   /// same behavior as [indexWhere] but it is null safe which means
   /// it do nothing when [List] return [isEmptyOrNull] to true.
-  int? indexWhereOrNull(Predicate<T> test, [int start = 0]) {
+  int? indexWhereOrNull(Predicate<E> test, [int start = 0]) {
     if (isEmptyOrNull) return null;
     try {
       return this!.indexWhere(test, start);

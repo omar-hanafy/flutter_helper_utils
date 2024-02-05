@@ -324,22 +324,23 @@ extension NullSafeStringExtensions on String? {
   }
 
   /// Parses the string as an num or returns `null` if it is not a number.
-  num? get tryToNum => ConvertObject.tryToNum(this);
+  num? get tryToNum => this == null ? null : num.tryParse(this!);
 
   /// Parses the string as an double or returns `null` if it is not a number.
-  double? get tryToDouble => ConvertObject.tryToDouble(this);
+  double? get tryToDouble =>
+      this == null ? null : num.tryParse(this!).tryToDouble;
 
   /// Parses the string as an int or returns `null` if it is not a number.
-  int? get tryToInt => ConvertObject.tryToInt(this);
+  int? get tryToInt => this == null ? null : num.tryParse(this!).tryToInt;
 
   /// Parses the string as an num or returns `null` if it is not a number.
-  num get toNum => ConvertObject.toNum(this);
+  num get toNum => num.parse(this!);
 
   /// Parses the string as an double or returns `null` if it is not a number.
-  double get toDouble => ConvertObject.toDouble(this);
+  double get toDouble => num.parse(this!).toDouble();
 
   /// Parses the string as an int or returns `null` if it is not a number.
-  int get toInt => ConvertObject.toInt(this);
+  int get toInt => num.parse(this!).toInt();
 
   /// Returns true if s is neither null, empty nor is solely made of whitespace characters.
   bool get isNotBlank => this != null && this!.trim().isNotEmpty;

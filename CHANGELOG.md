@@ -1,3 +1,11 @@
+### 3.0.6
+
+- IMPORTANT fix to for the convert objects helper and static methods which makes the app freeze, if you are at '3.0.4' or '3.0.5', I encourage you to upgrade.
+
+### 3.0.5
+
+- Added isEqual to the `Set`, `List`, `Map`, and as global method. 
+
 ### 3.0.4
 
 - The `asGreeks` is no longer a getter, it's a function now that takes optional `fractionDigits` which lets you specify
