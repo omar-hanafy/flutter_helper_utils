@@ -1,15 +1,71 @@
+### 4.0.0
+
+#### New Features
+
+- **JSON Encoding and Decoding Enhancements:**
+  - Introduced a new `encode` function for any object, enabling JSON encoding with a simple method call: `encodedData = myObject.encode()`.
+  - Added a new `decode` function for strings to simplify JSON decoding: `decodedObject = 'string response'.decode()`.
+
+#### Enhancements
+
+- **Map Extension Improvements:**
+
+  - **BREAKING CHANGE:** Removed global functions `formattedJsonString` and `makeMapEncodable`. Introduced more intuitively named methods within a Map extension: `makeEncodable`, `safelyEncodedJson`, and `encodedJson` for `Map<K, V>` types.
+
+    **Migration Guide:**
+
+    ```dart
+    final myMap = { ... };
+    // BEFORE:
+    makeMapEncodable(myMap);
+    formattedJsonString(myMap);
+    
+    // NOW:
+    myMap.makeEncodable;
+    myMap.safelyEncodedJson;
+    ```
+
+- **MIME Type Checks on String:**
+
+  - **BREAKING CHANGE:** Replaced `isValidVideo`, `isValidHTML`, `isValidAudio`, `isValidImage`, and `isValidSVG` with more streamlined methods: `isVideo`, `isHTML`, `isAudio`, `isImage`, and `isSVG`.
+  - Added a new `mimeType()` function that returns the MIME type for any given file path or URL, e.g., `'path.mp4'.mimeType()` returns `'video/mp4'`.
+  - Introduced new getters for various file types, enhancing the way file types are detected based on file paths or URLs.
+    - These include checks for:
+      - **Videos:** `isVideo`, `isMP4`, `isMOV`, etc.
+      - **Images:** `isImage`, `isPNG`, `isJPEG`, etc.
+      - **Documents:** `isPDF`, `isDOCX`, `isTXT`, etc.
+      - **Audio:** `isAudio`, `isMP3`, `isWAV`, etc.
+      - **Archives:** `isArchive`, `isZIP`, `isRAR`, etc.
+      - And more, allowing for straightforward usage like `'file.mp4'.isMP4` returning `true`.
+
+#### Breaking Changes Summary
+
+- Removed `formattedJsonString` and `makeMapEncodable` in favor of new methods within the Map extension.
+- Replaced various `isValid` MIME type checks with simpler and more intuitive `is` methods, e.g. `isValidVideo -> isVideo`
+
+### 3.1.0
+
+- **UPDATE**: Updated `asBool` in the objects.
+
+### 3.0.7
+
+- **NEW**: Added `getRandom` that can be used with any number to get random number from
+  it. `final random = 1000.getRandom;`
+
 ### 3.0.6
 
-- IMPORTANT fix to for the convert objects helper and static methods which makes the app freeze, if you are at '3.0.4' or '3.0.5', I encourage you to upgrade.
+- IMPORTANT fix to for the convert objects helper and static methods which makes the app freeze, if you are at '3.0.4'
+  or '3.0.5', I encourage you to upgrade.
 
 ### 3.0.5
 
-- Added isEqual to the `Set`, `List`, `Map`, and as global method. 
+- Added isEqual to the `Set`, `List`, `Map`, and as global method.
 
 ### 3.0.4
 
 - The `asGreeks` is no longer a getter, it's a function now that takes optional `fractionDigits` which lets you specify
-  number of digits after the decimal point in the generated greek number. (`asGreeks` used to Convert a number to a format that includes Greek symbols for thousands, millions, and beyond. e.g. '1000' asGreek is '1k')
+  number of digits after the decimal point in the generated greek number. (`asGreeks` used to Convert a number to a
+  format that includes Greek symbols for thousands, millions, and beyond. e.g. '1000' asGreek is '1k')
 
 ### 3.0.3
 

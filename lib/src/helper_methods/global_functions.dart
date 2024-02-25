@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
@@ -935,70 +934,6 @@ T? tryToType<T>(dynamic object) {
   );
 }
 
-/// Converts a map with dynamic keys and values to a map with string keys and JSON-encodable values.
-///
-/// This function is useful for serializing maps to a format compatible with JSON serialization.
-/// It ensures that all keys are strings and that all values are in a form that can be
-/// encoded into JSON. Complex objects and types are processed recursively to make them encodable.
-///
-/// [inputMap] is the map with dynamic keys and values that needs to be converted.
-///
-/// Returns a new map where all keys are strings and all values are JSON-encodable.
-///
-/// Example:
-/// ```dart
-/// var originalMap = {123: 'value', 'key': {'innerKey': DateTime.now()}};
-/// var encodableMap = makeMapEncodable(originalMap);
-/// // encodableMap is now {'123': 'value', 'key': {'innerKey': '2021-08-01T12:00:00'}}
-/// ```
-Map<String, dynamic> makeMapEncodable(Map<dynamic, dynamic> inputMap) {
-  final result = <String, dynamic>{};
-  inputMap.forEach((key, value) {
-    result[key.toString()] = _makeValueEncodable(value);
-  });
-  return result;
-}
-
-/// Converts a map with potentially complex data types to a formatted JSON string.
-///
-/// This function utilizes `makeMapEncodable` to prepare the map for JSON encoding,
-/// ensuring compatibility with JSON standards, especially for non-primitive types like enums
-/// or DateTime. It then uses `JsonEncoder.withIndent` to convert the map to a
-/// human-readable JSON string with proper indentation.
-///
-/// Example:
-/// ```dart
-/// Map<dynamic, dynamic> yourMap = {
-///   'id': 1,
-///   'name': 'Flutter Helper',
-///   'isActive': true,
-///   'registeredDate': DateTime(2024, 01, 06),
-///   'category': Category.mobile // Assuming Category is an enum.
-/// };
-///
-/// String jsonOutput = formattedJsonString(yourMap);
-/// print(jsonOutput);
-/// ```
-///
-/// Sample Output:
-/// ```json
-/// {
-///   "id": 1,
-///   "name": "Flutter Helper",
-///   "isActive": true,
-///   "registeredDate": "2024-01-06T00:00:00",
-///   "category": "mobile"
-/// }
-/// ```
-///
-/// Parameters:
-///   [map] - A Map with dynamic keys and values, potentially containing complex data types.
-///
-/// Returns:
-///   A string representing the formatted JSON.
-String formattedJsonString(Map<dynamic, dynamic> map) =>
-    const JsonEncoder.withIndent('  ').convert(makeMapEncodable(map));
-
 /// Determines whether a given value is of a primitive type for JSON serialization.
 ///
 /// This function checks if the provided [value] is a type that can be directly
@@ -1024,26 +959,6 @@ bool isPrimitiveType(dynamic value) {
       value is DateTime ||
       value is Uint8List ||
       _isCollectionOfPrimitives(value);
-}
-
-dynamic _makeValueEncodable(dynamic value) {
-  if (value is String ||
-      value is int ||
-      value is double ||
-      value is bool ||
-      value == null) {
-    return value;
-  } else if (value is Enum) {
-    return value.name;
-  } else if (value is List) {
-    return value.map(_makeValueEncodable).toList();
-  } else if (value is Set) {
-    return value.map(_makeValueEncodable).toSet();
-  } else if (value is Map) {
-    return makeMapEncodable(value);
-  } else {
-    return value.toString();
-  }
 }
 
 bool _isCollectionOfPrimitives(dynamic value) {

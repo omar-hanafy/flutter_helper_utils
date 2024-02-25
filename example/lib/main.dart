@@ -31,8 +31,10 @@ Future<void> main() async {
 
 // TEXT:
   const text = 'hello there!';
-  // wrap string at the specified index
-  String wrappedString = text.wrapString(2);
+
+  // wrap string at the specified word
+  String wrappedString = text.wrapString(wordCount: 2);
+
   String capitalized = text.capitalizeFirstLetter; // 'Hello there!'
   String pascalCase = text.toPascalCase; // 'HelloThere!'.
   String camelCase = text.toCamelCase; // 'helloThere!'.

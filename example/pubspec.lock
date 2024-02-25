@@ -76,7 +76,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.0.5"
+    version: "3.1.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -130,6 +130,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
+  mime:
+    dependency: transitive
+    description:
+      name: mime
+      sha256: "2e123074287cc9fd6c09de8336dae606d1ddb88d9ac47358826db698c176a1f2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
   path:
     dependency: transitive
     description:
@@ -208,5 +216,5 @@ packages:
     source: hosted
     version: "0.3.0"
 sdks:
-  dart: ">=3.2.0-194.0.dev <4.0.0"
+  dart: ">=3.2.0 <4.0.0"
   flutter: ">=1.17.0"

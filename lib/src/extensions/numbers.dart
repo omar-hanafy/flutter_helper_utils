@@ -107,6 +107,8 @@ extension NumExtensions on num {
   /// Returns half of the number
   double get half => this / 2;
 
+  int get getRandom => Random().nextInt(this.toInt());
+
   /// Converts a number to a format that includes Greek symbols for thousands, millions, and beyond.
   ///
   /// Example usage:

@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:developer' as dev;
 import 'dart:math';
 
@@ -400,6 +401,8 @@ extension CollectionsExtensions<T> on Iterable<T> {
 
     return null;
   }
+
+  String get encodedJson => json.encode(this);
 }
 
 // A lazy [Iterable] skip elements do **NOT** match the predicate [_f].

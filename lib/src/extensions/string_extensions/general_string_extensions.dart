@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
@@ -43,8 +44,8 @@ extension StringExtensions on String {
 
   /// similar to [toTitleCase] but [toTitle] ignores the `-` and `_`.
   /// e.g. flutter-and-dart Flutter-And-Dart.
-  /// Useful in some cases when naming events,
-  /// products etc and want these characters to be shown.
+  /// Useful in some cases when naming events, products etc
+  /// and want these characters to be shown.
   String get toTitle {
     if (isEmpty) return '';
     return splitMapJoin(
@@ -57,16 +58,27 @@ extension StringExtensions on String {
     );
   }
 
+  /// Determines if capitalization should be ignored for this string.
+  ///
+  /// Returns true in the following cases:
+  ///   * The string starts with a number.
+  ///   * The string (converted to lowercase) is a common word
+  ///     typically found in lowercase within titles (e.g., "a", "the", "and").
   bool get shouldIgnoreCapitalization =>
       startsWithNumber || _titleCaseExceptions.contains(toLowerCase());
 
+  /// Removes consecutive empty lines, replacing them with single newlines.
   String get removeEmptyLines =>
       replaceAll(RegExp(r'(?:[\t ]*(?:\r?\n|\r))+'), '\n');
 
+  /// Converts the string into a single line by replacing all newline characters with spaces.
   String get toOneLine => replaceAll('\n', ' ');
 
+  /// Removes all whitespace characters (spaces) from the string.
   String get removeWhiteSpaces => replaceAll(' ', '');
 
+  /// Removes all whitespace characters and collapses the string into a single line.
+  /// This is a combination of 'removeWhiteSpaces' and 'toOneLine'.
   String get clean => removeWhiteSpaces.toOneLine;
 }
 
@@ -78,28 +90,31 @@ extension NullSafeStringExtensions on String? {
 
   bool get isNotEmptyOrNull => !isEmptyOrNull;
 
-  /// Checks if string is Palindrom.
-  bool get isPalindrom {
-    if (isEmptyOrNull) {
-      return false;
-    } else {
-      final cleanString = this!
-          .toLowerCase()
-          .replaceAll(RegExp(r'\s+'), '')
-          .replaceAll(RegExp('[^0-9a-zA-Z]+'), '');
-      for (var i = 0; i < cleanString.length; i++) {
-        if (cleanString[i] != cleanString[cleanString.length - i - 1]) {
-          return false;
-        }
+  /// Checks if the string is a palindrome.
+  bool get isPalindrome {
+    if (isEmptyOrNull) return false;
+
+    final cleanString = this!
+        .toLowerCase()
+        .replaceAll(RegExp(r'\s+'), '')
+        .replaceAll(RegExp('[^0-9a-zA-Z]+'), '');
+
+    // Iterate only up to half the length of the string
+    for (var i = 0; i < cleanString.length ~/ 2; i++) {
+      if (cleanString[i] != cleanString[cleanString.length - i - 1]) {
+        return false;
       }
-      return true;
     }
+    return true;
   }
 
-  bool get isAlphanumeric => hasMatch(r'^[a-zA-Z0-9 ]+$');
+  /// Checks if the string contains only letters, numbers.
+  bool get isAlphanumeric => hasMatch(r'^[a-zA-Z0-9]+$');
 
-  bool get hasSpecialChars => hasMatch(r'^[a-zA-Z0-9 ]+$');
+  /// Checks if the string contains any characters that are not letters, numbers, or spaces (i.e., special characters).
+  bool get hasSpecialChars => hasMatch('[^a-zA-Z0-9 ]');
 
+  /// Checks if the string starts with a number (digit).
   bool get startsWithNumber => hasMatch(r'^\d');
 
   /// check if String contains any digits.
@@ -128,7 +143,7 @@ extension NullSafeStringExtensions on String? {
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
       );
 
-  /// Checks if string is an html file.
+  /// Checks if string is an html file/url.
   bool get isValidHTML => (this ?? ' ').toLowerCase().endsWith('.html');
 
   /// check if the string is an IP Version 4
@@ -165,6 +180,7 @@ extension NullSafeStringExtensions on String? {
         r'/(?<protocol>(?:http|ftp|irc)s?:\/\/)?(?:(?<user>[^:\n\r]+):(?<pass>[^@\n\r]+)@)?(?<host>(?:www\.)?(?:[^:\/\n\r]+)(?::(?<port>\d+))?)\/?(?<request>[^?#\n\r]+)?\??(?<query>[^#\n\r]*)?\#?(?<anchor>[^\n\r]*)?/',
       );
 
+  /// checks if the string is valid URL or not.
   bool get isValidUrl => isEmptyOrNull
       ? isNotEmptyOrNull
       : this!.toLowerCase().removeEmptyLines.removeWhiteSpaces.hasMatch(
@@ -172,47 +188,11 @@ extension NullSafeStringExtensions on String? {
           caseSensitive: false,
         );
 
-  /// Checks if string is an video file.
-  bool get isValidVideo {
-    final ext = (this ?? ' ').toLowerCase();
-    return ext.endsWith('.mp4') ||
-        ext.endsWith('.avi') ||
-        ext.endsWith('.wmv') ||
-        ext.endsWith('.rmvb') ||
-        ext.endsWith('.mpg') ||
-        ext.endsWith('.mpeg') ||
-        ext.endsWith('.3gp');
-  }
-
-  /// Checks if string is an audio file.
-  bool get isValidAudio {
-    final ext = (this ?? ' ').toLowerCase();
-    return ext.endsWith('.mp3') ||
-        ext.endsWith('.wav') ||
-        ext.endsWith('.wma') ||
-        ext.endsWith('.amr') ||
-        ext.endsWith('.ogg');
-  }
-
-  /// Checks if string is an image file.
-  bool get isValidImage {
-    final ext = (this ?? ' ').toLowerCase();
-    return ext.endsWith('.jpg') ||
-        ext.endsWith('.jpeg') ||
-        ext.endsWith('.png') ||
-        ext.endsWith('.gif') ||
-        ext.endsWith('.bmp');
-  }
-
-  /// Checks if string is an svg file.
-  bool get isValidSVG => (this ?? ' ').split('.').last.toLowerCase() == 'svg';
-
   bool hasMatch(String pattern, {bool caseSensitive = true}) => (this != null)
       ? RegExp(pattern, caseSensitive: caseSensitive).hasMatch(this!)
       : this != null;
 
-  // Check if the string has any number in it, not accepting double, so don't
-  // use "."
+  /// Checks if string consist only Numbers. (No Whitespace)
   bool get isNumeric => hasMatch(r'^\d+$');
 
   /// Checks if string consist only Alphabet. (No Whitespace)
@@ -235,25 +215,97 @@ extension NullSafeStringExtensions on String? {
     return textPainter.size;
   }
 
-  // Will add new line if the sentence is bigger the 2 words.
-  /// [afterWords] will add new line after the selected word
-  /// Example
-  /// 'Hi, my name is'.wrapString(2)
+  /// This method allows for dynamic text formatting, useful in scenarios where text needs to be displayed
+  /// in a constrained space or in a specific visual structure.
+  /// Extends the `String` class to include a `wrapString` method, allowing customized wrapping of text.
   ///
-  /// will print:
-  /// Hi, my
-  /// name is
-  String wrapString(int afterWords) {
-    final wordsArr = this?.split(' ') ?? [];
-    if (wordsArr.length > 2) {
-      final middle = (this?.indexOf(wordsArr[afterWords]) ?? 0) - 1;
-      final prefix = this?.substring(0, middle);
-      final postfix = this?.substring(middle + 1);
-      return '$prefix\n$postfix';
+  /// This method provides flexible text wrapping based on the specified word count, wrapping behavior,
+  /// and custom delimiter for wrapping. It handles strings with leading, trailing, or multiple consecutive spaces gracefully.
+  ///
+  /// Parameters:
+  /// - `wrapCount`: An integer specifying after how many words the text should be wrapped.
+  ///   If less than or equal to 0, it defaults to 1. This parameter determines the granularity of wrapping.
+  /// - `wrapEach`: A boolean that controls the wrapping behavior. If true, the method wraps the text after every
+  ///   `wrapCount` words throughout the entire string. If false, the text is wrapped just once after the first
+  ///   `wrapCount` words, and the rest of the text remains unwrapped.
+  /// - `delimiter`: A string that specifies what character(s) to use for wrapping. Defaults to '\n'.
+  ///
+  /// Usage:
+  /// - To wrap each word individually, set `wrapEach` to true with `wrapCount` as 1.
+  ///   Example: `"This is a test".wrapString(wrapCount: 1, wrapEach: true)` results in:
+  ///   ```
+  ///   This
+  ///   is
+  ///   a
+  ///   test
+  ///   ```
+  ///
+  /// - To wrap the text once after a specific number of words, set `wrapEach` to false.
+  ///   Example: `"This is a test".wrapString(wrapCount: 2, wrapEach: false)` results in:
+  ///   ```
+  ///   This is
+  ///   a test
+  ///   ```
+  String wrapString({
+    int wordCount = 1,
+    bool wrapEach = false,
+    String delimiter = '\n',
+  }) {
+    if (isEmptyOrNull) return '';
+    final wrapCount = wordCount <= 0 ? 1 : wordCount;
+    // Handling strings with multiple consecutive spaces by reducing them to single spaces.
+    final words = this!.trim().replaceAll(RegExp(' +'), ' ').split(' ');
+    if (words.isEmpty) return '';
+    final buffer = StringBuffer();
+
+    if (wrapEach) {
+      for (var i = 0; i < words.length; i++) {
+        buffer.write(words[i]);
+        if ((i + 1) % wrapCount == 0 && i != words.length - 1) {
+          buffer.write(delimiter);
+        } else if (i != words.length - 1) {
+          buffer.write(' ');
+        }
+      }
+    } else {
+      for (var i = 0; i < words.length; i++) {
+        buffer.write(words[i]);
+        if (i == wrapCount - 1 && words.length > wrapCount) {
+          buffer.write(delimiter);
+        } else if (i != words.length - 1) {
+          buffer.write(' ');
+        }
+      }
     }
-    return this ?? '';
+
+    return buffer.toString();
   }
 
+  /// Compares the current string with another string for equality, ignoring case differences.
+  ///
+  /// This method performs a case-insensitive comparison between the current string instance and another string.
+  /// It returns `true` if the strings are considered equal when case differences are disregarded. This method is null-safe,
+  /// meaning it also considers two null values as equal, and a null value is not equal to a non-null value.
+  ///
+  /// Parameters:
+  /// - `other`: The string to compare with the current string. It can be null.
+  ///
+  /// Returns:
+  /// - `true` if the current string and the `other` string are both null, or if they are equal ignoring case differences.
+  /// - `false` otherwise, including when one string is null and the other is not.
+  ///
+  /// Example Usage:
+  /// ```dart
+  /// var str1 = 'Hello';
+  /// var str2 = 'hello';
+  /// var str3 = 'world';
+  /// var result1 = str1.equalsIgnoreCase(str2); // true
+  /// var result2 = str1.equalsIgnoreCase(str3); // false
+  /// var result3 = str1.equalsIgnoreCase(null); // false
+  /// var result4 = (null as String?).equalsIgnoreCase(null); // true
+  /// ```
+  ///
+  /// This method is useful for comparing strings in a way that is insensitive to whether letters are uppercase or lowercase.
   bool equalsIgnoreCase(String? other) =>
       (this == null && other == null) ||
       (this != null &&
@@ -314,7 +366,7 @@ extension NullSafeStringExtensions on String? {
   /// Returns the string if it is not `null`, or the empty string otherwise
   String get orEmpty => this ?? '';
 
-// if the string is empty perform an action
+  /// if the string is empty perform an action
   Future<T>? ifEmpty<T>(Future<T> Function() action) =>
       isEmptyOrNull ? action() : null;
 
@@ -385,75 +437,105 @@ extension NullSafeStringExtensions on String? {
       return false;
     }
   }
+
+  /// Decodes the JSON string into a dynamic data structure.
+  ///
+  /// This getter attempts to decode the current string as JSON. It's designed to be safe against
+  /// null or empty strings, returning null in such cases to avoid exceptions. For non-empty, valid
+  /// JSON strings, it returns the decode dynamic data structure, which could be a list, map, or any
+  /// other type that is a valid JSON structure.
+  ///
+  /// Returns:
+  /// - A dynamic data structure representing the decode JSON if the string is non-empty and valid.
+  /// - `null` if the string is null or empty, or if the string is not a valid JSON format.
+  ///
+  /// Example Usage:
+  /// ```dart
+  /// var jsonString = '{"name": "John", "age": 30}';
+  /// var decoded = jsonString.decode();
+  /// print(decoded); // Output: {name: John, age: 30}
+  ///
+  /// var emptyString = '';
+  /// var nullString = null;
+  /// print(emptyString.decode()); // Output: null
+  /// print(nullString.decode()); // Output: null
+  /// ```
+  ///
+  /// Note:
+  /// - This method does not handle parsing errors for invalid JSON formats. It's recommended to ensure
+  ///   that the string is a valid JSON before calling this getter or handle the potential `FormatException`
+  ///   that could be thrown by `json.decode` when dealing with unknown JSON strings.
+  dynamic decode({Object? Function(Object? key, Object? value)? reviver}) =>
+      isEmptyOrNull ? null : json.decode(this!, reviver: reviver);
 }
 
-const _titleCaseExceptions = <String>[
-  'a',
-  'abaft',
-  'about',
-  'above',
-  'afore',
-  'after',
-  'along',
-  'amid',
-  'among',
-  'an',
-  'apud',
-  'as',
-  'aside',
-  'at',
-  'atop',
-  'below',
-  'but',
-  'by',
-  'circa',
-  'down',
-  'for',
-  'from',
-  'given',
-  'in',
-  'into',
-  'lest',
-  'like',
-  'mid',
-  'midst',
-  'minus',
-  'near',
-  'next',
-  'of',
-  'off',
-  'on',
-  'onto',
-  'out',
-  'over',
-  'pace',
-  'past',
-  'per',
-  'plus',
-  'pro',
-  'qua',
-  'round',
-  'sans',
-  'save',
-  'since',
-  'than',
-  'thru',
-  'till',
-  'times',
-  'to',
-  'under',
-  'until',
-  'unto',
-  'up',
-  'upon',
-  'via',
-  'vice',
-  'with',
-  'worth',
-  'the',
-  'and',
-  'nor',
-  'or',
-  'yet',
-  'so',
-];
+List<String> get _titleCaseExceptions => const <String>[
+      'a',
+      'abaft',
+      'about',
+      'above',
+      'afore',
+      'after',
+      'along',
+      'amid',
+      'among',
+      'an',
+      'apud',
+      'as',
+      'aside',
+      'at',
+      'atop',
+      'below',
+      'but',
+      'by',
+      'circa',
+      'down',
+      'for',
+      'from',
+      'given',
+      'in',
+      'into',
+      'lest',
+      'like',
+      'mid',
+      'midst',
+      'minus',
+      'near',
+      'next',
+      'of',
+      'off',
+      'on',
+      'onto',
+      'out',
+      'over',
+      'pace',
+      'past',
+      'per',
+      'plus',
+      'pro',
+      'qua',
+      'round',
+      'sans',
+      'save',
+      'since',
+      'than',
+      'thru',
+      'till',
+      'times',
+      'to',
+      'under',
+      'until',
+      'unto',
+      'up',
+      'upon',
+      'via',
+      'vice',
+      'with',
+      'worth',
+      'the',
+      'and',
+      'nor',
+      'or',
+      'yet',
+      'so',
+    ];
