@@ -1,6 +1,6 @@
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
-extension NullSafeURIExtensions on String? {
+extension FHUNullSafeURIExtensions on String? {
   Uri? get toUri => this == null ? null : Uri.tryParse(this!.clean);
 
   Uri? get toPhoneUri => this == null
@@ -8,14 +8,14 @@ extension NullSafeURIExtensions on String? {
       : Uri.parse(this!.startsWith('tel://') ? this! : 'tel://${this!.clean}');
 }
 
-extension URIExtensions on String {
+extension FHUURIExtensions on String {
   Uri get toUri => Uri.parse(clean);
 
   Uri get toPhoneUri =>
       Uri.parse(startsWith('tel://') ? clean : 'tel://$clean');
 }
 
-extension UriEx on Uri {
+extension FHUUriEx on Uri {
   /// Extracts the domain name from a URL.
   /// Supports URLs with or without 'www' and different TLDs.
   String get domainName {

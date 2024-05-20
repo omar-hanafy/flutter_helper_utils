@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
-extension DurationExt on Duration {
+extension FHUDurationExt on Duration {
   /// Utility to delay some callback (or code execution).
   ///
   /// Sample:

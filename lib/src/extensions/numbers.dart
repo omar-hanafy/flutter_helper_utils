@@ -36,7 +36,7 @@ import 'package:flutter_helper_utils/src/src.dart';
     - If the number represents a `Retry-After` status, you could include a method to parse this and provide a `Duration` object, suggesting after how much time one should retry the request.
 */
 // TODO(ANY): add more http helpers from response code.
-extension HttpEx on num? {
+extension FHUHttpEx on num? {
   bool get isSuccessHttpResCode => this == 200 || this == 201;
 
   bool get isValidPhoneNumber => toString().isValidPhoneNumber;
@@ -45,7 +45,7 @@ extension HttpEx on num? {
       HttpResStatus.values.firstWhereOrNull((s) => this == s.code);
 }
 
-extension NullSafeNumExtensions on num? {
+extension FHUNullSafeNumExtensions on num? {
   int? get tryToInt => this?.toInt();
 
   double? get tryToDouble => this?.toDouble();
@@ -72,7 +72,7 @@ extension NullSafeNumExtensions on num? {
   bool get asBool => (this ?? 0) > 0;
 }
 
-extension NumExtensions on num {
+extension FHUNumExtensions on num {
   /// Returns if the number is positive
   bool get isPositive => this > 0;
 
@@ -221,7 +221,7 @@ extension NumExtensions on num {
   }
 }
 
-extension IntExtensions on int {
+extension FHUIntExtensions on int {
   /// Return the min if this number is smaller then minimum
   /// Return the max if this number is bigger the the maximum
   /// Return this number if it's between the range
@@ -250,7 +250,7 @@ extension IntExtensions on int {
   int get squared => this * this;
 }
 
-extension DoubleExtensions on double {
+extension FHUDoubleExtensions on double {
   /// Return the min if this number is smaller then minimum
   /// Return the max if this number is bigger the the maximum
   /// Return this number if it's between the range

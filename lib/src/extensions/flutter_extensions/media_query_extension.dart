@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-extension MediaQueryExtension on BuildContext {
+extension FHUMediaQueryExtension on BuildContext {
   /// The data from the closest instance of this class that encloses the given
   /// context.
   MediaQueryData get mq => MediaQuery.of(this);
@@ -206,7 +206,7 @@ extension MediaQueryExtension on BuildContext {
       MediaQuery.maybeDisplayFeaturesOf(this);
 }
 
-extension OrientationEx on Orientation {
+extension FHUOrientationEx on Orientation {
   /// check if device is on landscape mode
   bool get isLandscape => this == Orientation.landscape;
 

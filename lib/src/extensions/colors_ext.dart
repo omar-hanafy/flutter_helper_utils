@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-extension HexColor on Color {
+extension FHUHexColor on Color {
   /// converts current color to hex in string format.
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
   String toHex({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
@@ -10,7 +10,7 @@ extension HexColor on Color {
       '${blue.toRadixString(16).padLeft(2, '0')}';
 }
 
-extension ColorExt on String {
+extension FHUColorExt on String {
   /// checks if current string is in hex format or not.
   bool get isHexColor =>
       RegExp(r'^#?(?:[0-9a-fA-F]{3,4}){1,2}$').hasMatch(this);

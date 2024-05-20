@@ -96,7 +96,7 @@ extension FHUMapNullableExtension<K, V> on Map<K, V>? {
   bool isEqual(Map<K, V>? other) => mapEquals(this, other);
 }
 
-extension MapExt<K extends String, V> on Map<K, V> {
+extension FHUMapExt<K extends String, V> on Map<K, V> {
   /// Flatten a nested Map into a single level map
   ///
   /// If you don't want to flatten arrays (with 0, 1,... indexes),

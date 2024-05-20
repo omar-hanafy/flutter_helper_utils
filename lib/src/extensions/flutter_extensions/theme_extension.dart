@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_helper_utils/src/extensions/flutter_extensions/flutter_extensions.dart';
 
-extension ThemeExtension on BuildContext {
+extension FHUThemeExtension on BuildContext {
   ThemeData get themeData => Theme.of(this);
   TextTheme get txtTheme => themeData.textTheme;
 
@@ -15,7 +14,7 @@ extension ThemeExtension on BuildContext {
   bool get isLight => brightness == Brightness.light;
 }
 
-extension ThemeModeEx on ThemeMode? {
+extension FHUThemeModeEx on ThemeMode? {
   Brightness getBrightness(BuildContext context) {
     switch (this) {
       case ThemeMode.light:
@@ -36,7 +35,7 @@ extension ThemeModeEx on ThemeMode? {
   bool get isSystem => this == ThemeMode.system;
 }
 
-extension BrightnessExtension on Brightness? {
+extension FHUBrightnessExtension on Brightness? {
   bool get isDark => this == Brightness.dark;
 
   bool get isLight => this == Brightness.light;

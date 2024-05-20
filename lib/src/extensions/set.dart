@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-extension NullableSetExt<E> on Set<E>? {
+extension FHUNullableSetExt<E> on Set<E>? {
   bool get isEmptyOrNull => this == null || this!.isEmpty;
 
   bool get isNotEmptyOrNull => !isEmptyOrNull;

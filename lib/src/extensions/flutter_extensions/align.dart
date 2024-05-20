@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-extension AlignExtensions on Widget {
+extension FHUAlignExtensions on Widget {
   Align alignAtBottomCenter({
     Key? key,
     double? heightFactor,

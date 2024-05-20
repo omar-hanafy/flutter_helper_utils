@@ -1,10 +1,10 @@
-extension BoolEx on bool {
+extension FHUBoolEx on bool {
   /// returns a new bool which is toggled from the current one.
   /// itn does NOT change the current bool.
   bool get toggled => !this;
 }
 
-extension BoolNullablelEx on bool? {
+extension FHUBoolNullablelEx on bool? {
   /// Gets a boolean value indicating whether the nullable boolean is true.
   ///
   /// Returns `true` if the value is non-null and true, otherwise returns `false`.

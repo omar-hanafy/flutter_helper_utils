@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
-extension StringExtensions on String {
+extension FHUStringExtensions on String {
   /// flutter and dart => Flutter and dart
   String get capitalizeFirstLetter =>
       '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
@@ -82,7 +82,7 @@ extension StringExtensions on String {
   String get clean => removeWhiteSpaces.toOneLine;
 }
 
-extension NullSafeStringExtensions on String? {
+extension FHUNullSafeStringExtensions on String? {
   bool get isEmptyOrNull =>
       this == null ||
       this!.isEmpty ||

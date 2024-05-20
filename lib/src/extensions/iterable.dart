@@ -90,7 +90,7 @@ extension FHUNullableListExtensions<E> on List<E>? {
       isEmptyOrNull ? null : this!.removeWhere((element) => false);
 }
 
-extension CollectionsExtensionsNS<T> on Iterable<T>? {
+extension FHUCollectionsExtensionsNS<T> on Iterable<T>? {
   ///Returns [true] if this nullable iterable is either null or empty.
   bool get isEmptyOrNull => isNull || this!.isEmpty;
 
@@ -141,7 +141,7 @@ extension CollectionsExtensionsNS<T> on Iterable<T>? {
   T firstOrDefault(T defaultValue) => firstOrNull ?? defaultValue;
 }
 
-extension CollectionsExtensions<T> on Iterable<T> {
+extension FHUCollectionsExtensions<T> on Iterable<T> {
   /// Returns this Iterable if it's not `null` and the empty list otherwise.
   Iterable<T> orEmpty() => this;
 

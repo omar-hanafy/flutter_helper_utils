@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-extension ListExtensions<E> on List<Widget> {
+extension FHUListExtensions<E> on List<Widget> {
   Widget toRowWidget({
     Key? key,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,

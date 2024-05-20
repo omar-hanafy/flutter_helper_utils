@@ -1,47 +1,59 @@
 ### 4.0.0
 
 #### New Features
-
-- **JSON Encoding and Decoding Enhancements:**
-  - Introduced a new `encode` function for any object, enabling JSON encoding with a simple method call: `encodedData = myObject.encode()`.
-  - Added a new `decode` function for strings to simplify JSON decoding: `decodedObject = 'string response'.decode()`.
+- **JSON Handling**
+    - **Encoding:** Easily encode any object to JSON using the new `.encode()`  method on any object.
+    - **Decoding:** Decode JSON effortlessly with the `.decode()` method on String, e.g. `"[1,3,4]".decode();`.
+- **ValueNotifier Helpers**
+    - A comprehensive suite of tools for working with `ValueNotifier`
+      - **Specialized Notifiers:** Type-safe notifiers like `BoolNotifier`, `IntNotifier`, and more.
+      - **`.notifier` Extension:** Quickly create notifiers from various types.
+      - **Enhanced Functionality:** Added extension methods like `toggle`, `round`, and `increment` to `ValueNotifier` subclasses.
+      - **Reactive Integration:** Easily convert `ValueNotifier` into a `Stream` with the `stream` extension.
+      - **Concise UI Building:** The `.listenableBuilder` extension offers a **shorter and more readable syntax** compared to the traditional `ValueListenableBuilder`.
 
 #### Enhancements
 
 - **Map Extension Improvements:**
 
-  - **BREAKING CHANGE:** Removed global functions `formattedJsonString` and `makeMapEncodable`. Introduced more intuitively named methods within a Map extension: `makeEncodable`, `safelyEncodedJson`, and `encodedJson` for `Map<K, V>` types.
+    - **BREAKING CHANGE:** Removed global functions `formattedJsonString` and `makeMapEncodable`. Introduced more
+      intuitively named methods within a Map extension: `makeEncodable`, `safelyEncodedJson`, and `encodedJson`
+      for `Map<K, V>` types.
 
-    **Migration Guide:**
+      **Migration Guide:**
 
-    ```dart
-    final myMap = { ... };
-    // BEFORE:
-    makeMapEncodable(myMap);
-    formattedJsonString(myMap);
-    
-    // NOW:
-    myMap.makeEncodable;
-    myMap.safelyEncodedJson;
-    ```
+      ```dart
+      final myMap = { ... };
+      // BEFORE:
+      makeMapEncodable(myMap);
+      formattedJsonString(myMap);
+      
+      // NOW:
+      myMap.makeEncodable;
+      myMap.safelyEncodedJson;
+      ```
 
 - **MIME Type Checks on String:**
 
-  - **BREAKING CHANGE:** Replaced `isValidVideo`, `isValidHTML`, `isValidAudio`, `isValidImage`, and `isValidSVG` with more streamlined methods: `isVideo`, `isHTML`, `isAudio`, `isImage`, and `isSVG`.
-  - Added a new `mimeType()` function that returns the MIME type for any given file path or URL, e.g., `'path.mp4'.mimeType()` returns `'video/mp4'`.
-  - Introduced new getters for various file types, enhancing the way file types are detected based on file paths or URLs.
-    - These include checks for:
-      - **Videos:** `isVideo`, `isMP4`, `isMOV`, etc.
-      - **Images:** `isImage`, `isPNG`, `isJPEG`, etc.
-      - **Documents:** `isPDF`, `isDOCX`, `isTXT`, etc.
-      - **Audio:** `isAudio`, `isMP3`, `isWAV`, etc.
-      - **Archives:** `isArchive`, `isZIP`, `isRAR`, etc.
-      - And more, allowing for straightforward usage like `'file.mp4'.isMP4` returning `true`.
+    - **BREAKING CHANGE:** Replaced `isValidVideo`, `isValidHTML`, `isValidAudio`, `isValidImage`, and `isValidSVG` with
+      more streamlined methods: `isVideo`, `isHTML`, `isAudio`, `isImage`, and `isSVG`.
+    - Added a new `mimeType()` function that returns the MIME type for any given file path or URL,
+      e.g., `'path.mp4'.mimeType()` returns `'video/mp4'`.
+    - Introduced new getters for various file types, enhancing the way file types are detected based on file paths or
+      URLs.
+        - These include checks for:
+            - **Videos:** `isVideo`, `isMP4`, `isMOV`, etc.
+            - **Images:** `isImage`, `isPNG`, `isJPEG`, etc.
+            - **Documents:** `isPDF`, `isDOCX`, `isTXT`, etc.
+            - **Audio:** `isAudio`, `isMP3`, `isWAV`, etc.
+            - **Archives:** `isArchive`, `isZIP`, `isRAR`, etc.
+            - And more, allowing for straightforward usage like `'file.mp4'.isMP4` returning `true`.
 
 #### Breaking Changes Summary
 
 - Removed `formattedJsonString` and `makeMapEncodable` in favor of new methods within the Map extension.
-- Replaced various `isValid` MIME type checks with simpler and more intuitive `is` methods, e.g. `isValidVideo -> isVideo`
+- Replaced various `isValid` MIME type checks with simpler and more intuitive `is` methods,
+  e.g. `isValidVideo -> isVideo`
 
 ### 3.1.0
 

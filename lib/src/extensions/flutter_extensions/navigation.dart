@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-extension NavigationStateExtensions on State {
+extension FHUNavigationStateExtensions on State {
   /// Navigate to another widget
   Future<T?> navigateTo<T>({required Route<T> route}) =>
       Navigator.push(context, route);
@@ -15,7 +15,7 @@ extension NavigationStateExtensions on State {
       Navigator.pushNamed(context, routeName, arguments: args);
 }
 
-extension NavigationStatelessExtensions on StatelessWidget {
+extension FHUNavigationStatelessExtensions on StatelessWidget {
   /// Navigate to another widget
   Future<T?> navigateTo<T>({
     required BuildContext context,
@@ -39,7 +39,7 @@ extension NavigationStatelessExtensions on StatelessWidget {
       Navigator.pushNamed(context, routeName, arguments: args);
 }
 
-extension NavigatorExtension on BuildContext {
+extension FHUNavigatorExtension on BuildContext {
   void popPage<T extends Object?>([T? result]) =>
       Navigator.pop<T>(this, result);
 

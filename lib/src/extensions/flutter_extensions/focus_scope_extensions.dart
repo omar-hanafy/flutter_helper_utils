@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-extension FocusScopeExtension on BuildContext {
+extension FHUFocusScopeExtension on BuildContext {
   /// Returns the [FocusNode.nearestScope] of the [Focus] or [FocusScope] that
   /// most tightly encloses the given [context].
   ///

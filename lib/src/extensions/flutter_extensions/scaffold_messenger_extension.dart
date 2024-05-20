@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-extension ScaffoldMessengerExtension on BuildContext {
+extension FHUScaffoldMessengerExtension on BuildContext {
   /// The state from the closest instance of this class that encloses the given
   /// context.
   ScaffoldMessengerState get scaffoldMessenger => ScaffoldMessenger.of(this);

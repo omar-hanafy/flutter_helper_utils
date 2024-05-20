@@ -4,13 +4,13 @@ import 'package:flutter_helper_utils/src/extensions/extensions.dart';
 import 'package:intl/intl.dart';
 
 // TODO(OMAR): Add the the new updated [Intl] package methods and parsers.
-extension DateString on String {
+extension FHUDateString on String {
   /// Parse string to [DateTime] but with a specific format, e.g, 'd-M-y'.
   DateTime toDateWithFormat(String format, [String? locale]) =>
       DateFormat(format, locale).parse(this);
 }
 
-extension DateNullString on String? {
+extension FHUDateNullString on String? {
   /// Parse string to [DateTime] using null Safety
   DateTime? get tryToDateTime {
     try {
@@ -36,7 +36,7 @@ extension DateNullString on String? {
   DateTime get timestampToDate => DateTime.fromMillisecondsSinceEpoch(toInt);
 }
 
-extension ToDate on num {
+extension FHUToDate on num {
   String get toSmallMonthName => DateTime(0, toInt()).format('MMM');
 
   String get toFullMonthName => DateTime(0, toInt()).format('MMMM');
@@ -48,7 +48,7 @@ extension ToDate on num {
   DateTime get timestampToDate => DateTime.fromMillisecondsSinceEpoch(toInt());
 }
 
-extension NullableDateExtensions on DateTime? {
+extension FHUNullableDateExtensions on DateTime? {
   DateTime? get local => this?.toLocal();
 
   String? get toUtcIso => this?.toUtc().toIso8601String();
@@ -99,7 +99,7 @@ extension NullableDateExtensions on DateTime? {
       isNull ? null : DatesHelper.diffInDays(to: DateTime.now(), from: this);
 }
 
-extension DateExtensions on DateTime {
+extension FHUDateExtensions on DateTime {
   DateTime get local => toLocal();
 
   String format(String format) => format.dateFormat.format(this);

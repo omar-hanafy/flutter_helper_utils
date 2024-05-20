@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-extension PaddingExtensions on Widget {
+extension FHUPaddingExtensions on Widget {
   Padding paddingAll(double value, {Key? key}) {
     return Padding(
       key: key,

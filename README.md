@@ -15,10 +15,10 @@
 ## Table of Contents
 
 - [Getting Started](https://flutter-helper-utils.web.app/documentation/getting-started.html)
-- [Helper Methods](#helper-methods)
+- [Featured](#featured)
 - [Extensions](#extensions)
 
-# Helper Methods
+# Featured
 
 ## [Converting Objects](https://flutter-helper-utils.web.app/documentation/convert-object.html):
 
@@ -45,6 +45,29 @@ int score = toInt(map['key']);
 ```
 
 [More Details here](https://flutter-helper-utils.web.app/documentation/convert-object.html)
+
+## ValueNotifier Supercharged
+
+**ValueNotifier** is a simple class in **Flutter** that allows you to store a value and notify any listeners when the value changes.
+
+in this package, I've made this feature event better!
+
+Starting from version 4.0.0, you can use a new set of extensions, helper methods, and specialized notifiers for better data handling:
+
+- Instantly create notifiers from any value with the intuitive `.notifier` extension (e.g.,`10.notifier`)
+- Specific data types using our type-safe notifiers like `ListNotifer`,  `BoolNotifier`, `IntNotifier`, etc.
+- use the `.listenableBuilder`extension on `ValueNotifier` instance which creates a `ValueListenableBuilder` under the hood with shorter/simpler syntax.
+
+**Example:**
+
+```dart
+final counter = 0.notifier;
+counter.listenableBuilder((count) => Text('$count'));
+
+counter.increment(); // Increment the counter easily
+```
+
+For more info about ValueNotifier check the [official flutter documentation](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html)
 
 # Extensions
 
