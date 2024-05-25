@@ -114,6 +114,9 @@ extension FHUNullSafeStringExtensions on String? {
   /// Checks if the string contains any characters that are not letters, numbers, or spaces (i.e., special characters).
   bool get hasSpecialChars => hasMatch('[^a-zA-Z0-9 ]');
 
+  /// Checks if the string does NOT contains any characters that are not letters, numbers, or spaces (i.e., special characters).
+  bool get hasNoSpecialChars => !hasSpecialChars;
+
   /// Checks if the string starts with a number (digit).
   bool get startsWithNumber => hasMatch(r'^\d');
 

@@ -39,7 +39,6 @@ Future<void> main() async {
   String pascalCase = text.toPascalCase; // 'HelloThere!'.
   String camelCase = text.toCamelCase; // 'helloThere!'.
   String titleCase = text.toTitleCase; // 'Hello There!'.
-  bool isAlphanumeric = text.isAlphanumeric; // false
   // tryToInt, tryToDateTime are also available
   double? tryToDouble = text.tryToDouble;
   // limit the string from the start. limitFromEnd also available
@@ -94,6 +93,9 @@ class MyHomePage extends StatelessWidget {
     final ValueNotifier<int?> nullableCounter = ValueNotifier(null);
     nullableCounter.value = 2;
     print(nullableCounter.value);
+    print("check for alpha numeric");
+    print("OmarKhaled".hasSpecialChars);
+    print("Omar Khaled".hasSpecialChars);
 
     return Scaffold(
       appBar: AppBar(

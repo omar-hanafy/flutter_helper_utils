@@ -1,3 +1,7 @@
+### 4.0.1
+
+- Fixed mime checks not exported.
+
 ### 4.0.0
 
 #### New Features
