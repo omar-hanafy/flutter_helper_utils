@@ -9,6 +9,7 @@
     </td>
   </tr>
 </table>
+
 **Important Notes for Version 4.1.0:** We've refactored the Dart-specific utilities into a new package, [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils), to allow Dart projects to use these utilities without depending on Flutter.
 
 - Future updates for Dart-specific utilities will be available in the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) changelog.
