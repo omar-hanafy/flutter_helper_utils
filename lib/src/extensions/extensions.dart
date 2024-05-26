@@ -1,12 +1,4 @@
-export 'bool.dart';
-export 'colors_ext.dart';
-export 'date.dart';
-export 'duration.dart';
+export 'collections_extensions.dart';
+export 'flutter_extensions/colors_extension.dart';
 export 'flutter_extensions/flutter_extensions.dart';
-export 'iterable.dart';
-export 'map.dart';
-export 'numbers.dart';
-export 'objects.dart';
-export 'set.dart';
 export 'string_extensions/string_extensions.dart';
-export 'uri_extension.dart';

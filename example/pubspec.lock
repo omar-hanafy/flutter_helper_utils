@@ -49,6 +49,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
+  dart_helper_utils:
+    dependency: transitive
+    description:
+      name: dart_helper_utils
+      sha256: bb3ed1b7372f29f65fae3db3f53f2c55eb712767bd970865b08670b3b889cd8e
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   enefty_icons:
     dependency: "direct main"
     description:
@@ -76,7 +84,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "4.0.0"
+    version: "4.1.0"
   flutter_lints:
     dependency: "direct dev"
     description:

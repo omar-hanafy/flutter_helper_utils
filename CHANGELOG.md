@@ -1,3 +1,19 @@
+### 4.1.0
+
+#### Introducing [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils)
+
+We've refactored the Dart-specific utilities into a new package, [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils), to allow Dart projects to use these utilities without depending on Flutter.
+- No changes are needed from your side as `flutter_helper_utils` now exports [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) internally.
+
+#### New Features:
+- **BrightnessNotifier** and **ThemeModeNotifier** for easy creation of `ValueNotifier` instances.
+- New extensions on `ThemeData` for quick access to common text styles (`theme.bodySmall`) and brightness checks (`isDark`, `isLight`).
+
+**NOTES:**
+- All the Dart-specific utilities documentations moved to the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) readme.
+- Future updates for Dart-specific utilities will be available in the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) changelog.
+- Do NOT use the older versions (under 4.1.0) of this package with [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) as it may conflict with it. 
+
 ### 4.0.1
 
 - Fixed mime checks not exported.
@@ -5,16 +21,19 @@
 ### 4.0.0
 
 #### New Features
+
 - **JSON Handling**
     - **Encoding:** Easily encode any object to JSON using the new `.encode()`  method on any object.
     - **Decoding:** Decode JSON effortlessly with the `.decode()` method on String, e.g. `"[1,3,4]".decode();`.
 - **ValueNotifier Helpers**
     - A comprehensive suite of tools for working with `ValueNotifier`
-      - **Specialized Notifiers:** Type-safe notifiers like `BoolNotifier`, `IntNotifier`, and more.
-      - **`.notifier` Extension:** Quickly create notifiers from various types.
-      - **Enhanced Functionality:** Added extension methods like `toggle`, `round`, and `increment` to `ValueNotifier` subclasses.
-      - **Reactive Integration:** Easily convert `ValueNotifier` into a `Stream` with the `stream` extension.
-      - **Concise UI Building:** The `.listenableBuilder` extension offers a **shorter and more readable syntax** compared to the traditional `ValueListenableBuilder`.
+        - **Specialized Notifiers:** Type-safe notifiers like `BoolNotifier`, `IntNotifier`, and more.
+        - **`.notifier` Extension:** Quickly create notifiers from various types.
+        - **Enhanced Functionality:** Added extension methods like `toggle`, `round`, and `increment` to `ValueNotifier`
+          subclasses.
+        - **Reactive Integration:** Easily convert `ValueNotifier` into a `Stream` with the `stream` extension.
+        - **Concise UI Building:** The `.listenableBuilder` extension offers a **shorter and more readable syntax**
+          compared to the traditional `ValueListenableBuilder`.
 
 #### Enhancements
 

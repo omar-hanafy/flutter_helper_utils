@@ -9,4 +9,5 @@ export 'map_notifier.dart';
 export 'num_notifier.dart';
 export 'set_notifier.dart';
 export 'string_notifier.dart';
+export 'theme_mode_notifier.dart';
 export 'uri_notifier.dart';

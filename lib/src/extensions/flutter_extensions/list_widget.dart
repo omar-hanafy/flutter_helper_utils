@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 extension FHUListExtensions<E> on List<Widget> {
-  Widget toRowWidget({
+  Widget toRow({
     Key? key,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     MainAxisSize mainAxisSize = MainAxisSize.max,
@@ -22,7 +22,7 @@ extension FHUListExtensions<E> on List<Widget> {
         children: this,
       );
 
-  Widget toStackWidget({
+  Widget toStack({
     Key? key,
     AlignmentGeometry alignment = AlignmentDirectional.topStart,
     TextDirection? textDirection,
@@ -38,7 +38,7 @@ extension FHUListExtensions<E> on List<Widget> {
         children: this,
       );
 
-  Widget toColumnWidget({
+  Widget toColumn({
     Key? key,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     MainAxisSize mainAxisSize = MainAxisSize.max,
@@ -58,7 +58,7 @@ extension FHUListExtensions<E> on List<Widget> {
         children: this,
       );
 
-  Widget toListView({
+  Widget toList({
     Key? key,
     Axis scrollDirection = Axis.vertical,
     bool reverse = false,
@@ -103,7 +103,7 @@ extension FHUListExtensions<E> on List<Widget> {
         children: this,
       );
 
-  Widget toListViewBuilder({
+  Widget toListView({
     required NullableIndexedWidgetBuilder itemBuilder,
     Key? key,
     Axis scrollDirection = Axis.vertical,
