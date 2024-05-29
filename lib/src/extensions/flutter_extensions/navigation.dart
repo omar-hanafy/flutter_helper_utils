@@ -162,15 +162,16 @@ extension FHUNavigatorExtension on BuildContext {
     try {
       // Get the current route
       final currentRoute = ModalRoute.of(this);
+      final navigator = this.navigator(rootNavigator: true);
       // Check if the current route is a dialog, modal, etc...
       if ((currentRoute is PopupRoute ||
               currentRoute is DialogRoute ||
               currentRoute is RawDialogRoute ||
               currentRoute is ModalBottomSheetRoute ||
               currentRoute is CupertinoModalPopupRoute) &&
-          Navigator.of(this).canPop()) {
+          navigator.canPop()) {
         // Pop the current dialog, modal, etc...
-        Navigator.pop(this);
+        navigator.pop();
         // Recursively call this function to pop any other dialogs or modal sheets
         dismissActivePopup();
       }

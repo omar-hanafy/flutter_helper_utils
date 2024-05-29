@@ -1,3 +1,7 @@
+### 4.2.0
+
+- Enhancement to the `context.dismissActivePopup()`.
+
 ### 4.1.1
 
 - Updated the README
