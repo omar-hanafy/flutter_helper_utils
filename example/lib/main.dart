@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 final themeModeNotifier = ThemeMode.light.notifier;
 
@@ -41,10 +39,9 @@ class MyHomePage extends StatelessWidget {
         actions: [
           Switch(
             value: theme.isDark,
-            onChanged: (value) {
-              themeModeNotifier.value =
-                  value ? ThemeMode.dark : ThemeMode.light;
-            },
+            onChanged: (value) => value
+                ? themeModeNotifier.setDart()
+                : themeModeNotifier.setLight(),
           ),
         ],
       ),

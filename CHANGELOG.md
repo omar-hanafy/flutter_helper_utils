@@ -1,3 +1,14 @@
+### 4.3.0
+
+- Added `setDart`, `setLight`, and `setSystem` to `BrightnessNotifier`, and `ThemeModeNotifier`.
+- Added `modalRoute()` to the context extension for convenient access to the current ModalRoute.
+- Added the `usePopUntil` parameter to the `context.dismissActivePopup` (default: `true`):
+    - If `true`, uses `popUntil` for efficient dismissal of multiple pop-ups.
+    - If `false`, uses `recursion` (might be needed for compatibility reasons).
+    - This provides flexibility for different navigation scenarios and compatibility needs.
+
+- Updated `dart_helper_util` to [1.1.0](https://pub.dev/packages/dart_helper_utils/changelog#110).
+
 ### 4.2.0
 
 - Enhancement to the `context.dismissActivePopup()`.
@@ -10,17 +21,27 @@
 
 #### Introducing [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils)
 
-We've refactored the Dart-specific utilities into a new package, [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils), to allow Dart projects to use these utilities without depending on Flutter.
-- No changes are needed from your side as `flutter_helper_utils` now exports [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) internally.
+We've refactored the Dart-specific utilities into a new
+package, [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils), to allow Dart projects to use these
+utilities without depending on Flutter.
+
+- No changes are needed from your side as `flutter_helper_utils` now
+  exports [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) internally.
 
 #### New Features:
+
 - **BrightnessNotifier** and **ThemeModeNotifier** for easy creation of `ValueNotifier` instances.
-- New extensions on `ThemeData` for quick access to common text styles (`theme.bodySmall`) and brightness checks (`isDark`, `isLight`).
+- New extensions on `ThemeData` for quick access to common text styles (`theme.bodySmall`) and brightness
+  checks (`isDark`, `isLight`).
 
 **NOTES:**
-- All the Dart-specific utilities documentations moved to the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) readme.
-- Future updates for Dart-specific utilities will be available in the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) changelog.
-- Do NOT use the older versions (under 4.1.0) of this package with [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) as it may conflict with it. 
+
+- All the Dart-specific utilities documentations moved to
+  the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) readme.
+- Future updates for Dart-specific utilities will be available in
+  the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) changelog.
+- Do NOT use the older versions (under 4.1.0) of this package
+  with [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) as it may conflict with it.
 
 ### 4.0.1
 
@@ -92,8 +113,7 @@ We've refactored the Dart-specific utilities into a new package, [`dart_helper_u
 
 ### 3.0.7
 
-- **NEW**: Added `getRandom` that can be used with any number to get random number from
-  it. `final random = 1000.getRandom;`
+- **NEW**: Added `getRandom` that can be used with any number to get random number from it. `final random = 1000.getRandom;`
 
 ### 3.0.6
 
