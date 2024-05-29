@@ -125,7 +125,7 @@ theme properties. It’s recommended to use `final theme = context.themeData` at
 - `popUntil`: Pop pages until a condition is met.
 - `dismissActivePopup`: Dismiss the active popup.
 
-# Widgets
+## Widgets
 ### Align
 - `alignAtBottomCenter`, `alignAtTopLeft`, `alignAtBottomLeft`, etc.: Align a widget within its parent using various alignment options.
 - `alignXY`: Align a widget using explicit x and y coordinates.

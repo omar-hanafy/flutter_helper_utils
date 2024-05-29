@@ -53,10 +53,10 @@ packages:
     dependency: transitive
     description:
       name: dart_helper_utils
-      sha256: bb3ed1b7372f29f65fae3db3f53f2c55eb712767bd970865b08670b3b889cd8e
+      sha256: "9c26362089119593a38551f2d040e06e46386d1db6d41c14c3d9bd795075c0f2"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   enefty_icons:
     dependency: "direct main"
     description:

@@ -1,3 +1,7 @@
+### 4.1.1
+
+- Updated the README
+
 ### 4.1.0
 
 #### Introducing [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils)
