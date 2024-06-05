@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 /// allows to quickly create a ValueNotifier of type num.
 class NumNotifier extends ValueNotifier<num> {
   NumNotifier(super.initial);
+
+  void refresh() => notifyListeners();
 }
 
 /// NumericValueNotifierExtension

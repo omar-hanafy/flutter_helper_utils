@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 /// allows to quickly create a ValueNotifier of type Color.
 class ColorNotifier extends ValueNotifier<Color> {
   ColorNotifier(super.initial);
+
+  void refresh() => notifyListeners();
 }
 
 /// Extension: ColorValueNotifierExtension
@@ -15,7 +18,7 @@ class ColorNotifier extends ValueNotifier<Color> {
 /// final colorValueNotifier = Colors.blue.notifier;
 /// colorValueNotifier.withOpacity(0.5);
 /// ```
-extension FHUColorValueNotifierExtension on ValueNotifier<Color> {
+extension FHUColorValueNotifierExtension on ValueListenable<Color> {
   /// The alpha channel of this color in an 8 bit value.
   ///
   /// A value of 0 means this color is fully transparent. A value of 255 means

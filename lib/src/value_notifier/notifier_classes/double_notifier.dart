@@ -1,11 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 /// allows to quickly create a ValueNotifier of type double.
 class DoubleNotifier extends ValueNotifier<double> {
   DoubleNotifier(super.initial);
 
+  void refresh() => notifyListeners();
+
   @override
-  String toString() => value.toStringAsFixed(2);
+  String toString() => value.toString();
 }
 
 /// DoubleValueNotifierExtension
@@ -26,7 +28,7 @@ class DoubleNotifier extends ValueNotifier<double> {
 /// doubleValueNotifier.round(); // Directly rounds the value (now 13.0)
 /// // These operations modify the double value within the ValueNotifier without accessing `.value`
 /// ```
-extension FHUDoubleValueNotifierExtension on ValueNotifier<double> {
+extension FHUDoubleValueNotifierExtension on ValueListenable<double> {
   /// The remainder of the truncating division of `this` by [other].
   double remainder(num other) => value.remainder(other);
 

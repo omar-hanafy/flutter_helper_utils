@@ -4,6 +4,8 @@ import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 /// allows to quickly create a ValueNotifier of type bool.
 class BoolNotifier extends ValueNotifier<bool> {
   BoolNotifier(super.initial);
+
+  void refresh() => notifyListeners();
 }
 
 /// BoolValueNotifierExtension

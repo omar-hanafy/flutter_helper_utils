@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 class DateTimeNotifier extends ValueNotifier<DateTime> implements DateTime {
   DateTimeNotifier(super.initial);
 
+  void refresh() => notifyListeners();
+
   /// Returns true if [other] is a [DateTime] at the same moment and in the
   /// same time zone (UTC or local).
   ///

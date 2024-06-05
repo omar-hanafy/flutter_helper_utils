@@ -1,3 +1,11 @@
+### 4.4.0
+
+- Added `copy` methods to all TextStyle properties in ThemeData (e.g., `displayLargeCopy`, `headlineMediumCopy`, etc.). This allows to quickly use copyWith on text style with minimal code for example:
+Use  `theme.displayLargeCopy(color: Colors.red)` instead of `theme.displayLarge?.copyWith(color: Colors.red)`
+- Added `refresh` method to all specialized notifiers to allow force `notifyListeners` without changing value of `ValueNotifier`.
+
+- Updated `dart_helper_util` to [v1.2.0](https://pub.dev/packages/dart_helper_utils/changelog#120).
+
 ### 4.3.0
 
 - Added `setDart`, `setLight`, and `setSystem` to `BrightnessNotifier`, and `ThemeModeNotifier`.
@@ -7,7 +15,7 @@
     - If `false`, uses `recursion` (might be needed for compatibility reasons).
     - This provides flexibility for different navigation scenarios and compatibility needs.
 
-- Updated `dart_helper_util` to [1.1.0](https://pub.dev/packages/dart_helper_utils/changelog#110).
+- Updated `dart_helper_util` to [v1.1.0](https://pub.dev/packages/dart_helper_utils/changelog#110).
 
 ### 4.2.0
 

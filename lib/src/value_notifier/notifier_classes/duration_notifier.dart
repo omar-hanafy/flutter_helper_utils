@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 class DurationNotifier extends ValueNotifier<Duration> implements Duration {
   DurationNotifier(super.initial);
 
+  void refresh() => notifyListeners();
+
   /// documentation available in the original overridden method.
   @override
   Duration operator *(num factor) => value * factor;

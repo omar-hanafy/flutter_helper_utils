@@ -3,6 +3,8 @@ import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
 class ThemeModeNotifier extends ValueNotifier<ThemeMode> {
   ThemeModeNotifier(super.value);
+
+  void refresh() => notifyListeners();
 }
 
 extension ThemeModeNotifierEx on ValueNotifier<ThemeMode> {
@@ -21,6 +23,8 @@ extension ThemeModeNotifierEx on ValueNotifier<ThemeMode> {
 
 class BrightnessNotifier extends ValueNotifier<Brightness> {
   BrightnessNotifier(super.value);
+
+  void refresh() => notifyListeners();
 }
 
 extension BrightnessNotifierEx on ValueNotifier<Brightness> {

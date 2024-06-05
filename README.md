@@ -10,12 +10,11 @@
   </tr>
 </table>
 
-**Important Notes for Version 4.1.0:** We've refactored the Dart-specific utilities into a new package, [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils), to allow Dart projects to use these utilities without depending on Flutter.
+**Important Notes for Version 4.1.0+:** We've refactored the Dart-specific utilities into a new package, [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils), to allow Dart projects to use these utilities without depending on Flutter.
 
 - Future updates for Dart-specific utilities will be available in the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) changelog.
-
 - All the Dart-specific utilities documentations moved to the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) readme.
-
+- This package already exporting [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils), so there is no breaking changes on this version.
 
 
 ## Table of Contents
@@ -80,6 +79,7 @@ All the extensions included in the [`dart_helper_utils`](https://pub.dev/package
 ### ThemeData
 - `isDark`, `isLight`: Check if the theme is dark or light.
 - `displayLarge`, `displayMedium`, `displaySmall`, etc.: Access various text styles defined in the theme.
+- `displayLargeCopy`, `displayMediumCopy`, `displaySmallCopy`, etc.: Access various text styles with copyWith defined in the theme.
 
 ## BuildContext
 **Important Note:** Avoid frequent use of context on actions that might call `of(context)` like theme. The widget

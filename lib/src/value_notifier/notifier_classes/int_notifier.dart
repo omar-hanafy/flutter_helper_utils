@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 /// allows to quickly create a ValueNotifier of type int.
 class IntNotifier extends ValueNotifier<int> {
   IntNotifier(super.initial);
+
+  void refresh() => notifyListeners();
 }
 
 /// IntValueNotifierExtension
@@ -23,7 +25,7 @@ class IntNotifier extends ValueNotifier<int> {
 /// intValueNotifier.toggleBetween(11, 5); // Toggles the value to 5 as current is 11
 /// // These operations directly modify the int value within the ValueNotifier without accessing `.value`
 /// ```
-extension FHUIntValueNotifierExtension on ValueNotifier<int> {
+extension FHUIntValueNotifierExtension on ValueListenable<int> {
   /// Bit-wise and operator.
   ///
   /// Treating both `this` and [other] as sufficiently large two's component
