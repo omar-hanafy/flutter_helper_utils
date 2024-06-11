@@ -5,7 +5,9 @@
       <p style="min-width:400px;">Make Flutter development easier with Flutter Helper Utils! This toolkit is packed with helper methods and extensions that boost your productivity and help you write less code and build apps faster.</p>
     </td>
     <td style="vertical-align:top; border:none;">
-        <img src="https://raw.githubusercontent.com/omar-hanafy/flutter_helper_utils/main/dash-tools.png" alt="Flutter Helper Utils Logo" style="max-width:400;"/>
+      <a href="https://pub.dev/packages/flutter_helper_utils" target="_blank">
+        <img src="https://raw.githubusercontent.com/omar-hanafy/flutter_helper_utils/main/dash-tools.png" alt="Flutter Helper Utils Logo" style="max-width:400px;"/>
+      </a>
     </td>
   </tr>
 </table>

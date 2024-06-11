@@ -41,22 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.0"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      sha256: d57953e10f9f8327ce64a508a355f0b1ec902193f66288e8cb5070e7c47eeb2d
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.6"
   dart_helper_utils:
     dependency: transitive
     description:
       name: dart_helper_utils
-      sha256: bb68a7e89ef0c84e5dff9391e260d41902d4589aeea7381a268639ba2788dbdf
+      sha256: "34b48899f8d0f19f620c7ab7069e60a46fb21506f39c9d85cbdd536f5dc7318b"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0-beta.2"
+    version: "2.0.0-beta.6"
   enefty_icons:
     dependency: "direct main"
     description:
@@ -85,14 +77,6 @@ packages:
       relative: true
     source: path
     version: "4.4.0"
-  flutter_lints:
-    dependency: "direct dev"
-    description:
-      name: flutter_lints
-      sha256: e2a421b7e59244faef694ba7b30562e489c2b489866e505074eb005cd7060db7
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -130,14 +114,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
-  lints:
-    dependency: transitive
-    description:
-      name: lints
-      sha256: cbf8d4b858bb0134ef3ef87841abdf8d63bfc255c266b7bf6b39daa1085c4290
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
   matcher:
     dependency: transitive
     description:
