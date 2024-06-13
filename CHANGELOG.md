@@ -4,8 +4,7 @@
 
 - Upgraded `dart_helper_utils` to [v2.0.0](https://pub.dev/packages/dart_helper_utils/changelog#200), **introducing
   breaking changes**.
-- Enhanced and moved all `isEqual` methods (Map, Set, List, global)
-  to [`dart_helper_utils`]([https://pub.dev/packages/dart_helper_utils](https://pub.dev/packages/dart_helper_utils)).
+- Enhanced and moved all `isEqual` methods (Map, Set, List, global) to [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils).
 
 ### BREAKING CHANGES
 
