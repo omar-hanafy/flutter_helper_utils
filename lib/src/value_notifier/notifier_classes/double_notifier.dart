@@ -4,10 +4,21 @@ import 'package:flutter/foundation.dart';
 class DoubleNotifier extends ValueNotifier<double> {
   DoubleNotifier(super.initial);
 
+  @override
+  void notifyListeners() {
+    try {
+      super.notifyListeners();
+    } catch (_) {}
+  }
+
   void refresh() => notifyListeners();
 
-  @override
-  String toString() => value.toString();
+  /// similar to value setter but this one force trigger the notifyListeners()
+  /// event if newValue == value.
+  void update(double newValue) {
+    value = newValue;
+    refresh();
+  }
 }
 
 /// DoubleValueNotifierExtension

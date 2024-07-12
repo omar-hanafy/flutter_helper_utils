@@ -1,0 +1,842 @@
+diff --git a/analysis_options.yaml b/analysis_options.yaml
+index 4b219c4..d458ad1 100644
+--- a/analysis_options.yaml
++++ b/analysis_options.yaml
+@@ -1,4 +1,4 @@
+-include: package:very_good_analysis/analysis_options.5.0.0.yaml
++include: package:very_good_analysis/analysis_options.6.0.0.yaml
+ linter:
+   rules:
+     public_member_api_docs: false
+diff --git a/example/lib/main.dart b/example/lib/main.dart
+index 6bb19ab..a69f5cb 100644
+--- a/example/lib/main.dart
++++ b/example/lib/main.dart
+@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
+ 
+   @override
+   Widget build(BuildContext context) {
+-    return themeModeNotifier.listenableBuilder(
++    return themeModeNotifier.builder(
+       (themeMode) {
+         return MaterialApp(
+           title: 'Flutter Demo',
+diff --git a/lib/src/value_notifier/extensions/listenable_extensions.dart b/lib/src/value_notifier/extensions/listenable_extensions.dart
+index ddd475d..3ed720d 100644
+--- a/lib/src/value_notifier/extensions/listenable_extensions.dart
++++ b/lib/src/value_notifier/extensions/listenable_extensions.dart
+@@ -1,5 +1,64 @@
+ import 'package:flutter/foundation.dart';
+ import 'package:flutter/material.dart';
++import 'package:flutter_helper_utils/flutter_helper_utils.dart';
++// import 'package:flutter_helper_utils/flutter_helper_utils.dart';
++
++/// Extension on [Listenable] to integrate with the [Watch] widget.
++///
++/// Provides a convenient method to create a [Watch] widget that listens to the [Listenable].
++/// This extension simplifies reacting to changes in the [Listenable] within the UI.
++extension WatcherListenableExtension on Listenable {
++  /// [watch]
++  /// This method simplifies the creation of [Watch]
++  ///
++  /// Example:
++  /// ```dart
++  /// final myWatcher = 0.watcher;
++  /// controller.watch(
++  ///   (context) => Text('Value is ${myWatcher.value}'),
++  /// );
++  /// // The Text widget will update whenever [myWatcher] changes.
++  /// ```
++  Widget builder(Widget Function(BuildContext context) builder) {
++    return ListenableBuilder(
++      listenable: this,
++      builder: (context, child) => builder(context),
++    );
++  }
++}
++
++/// Extension on a list of [Listenable] objects to integrate with the [WatchAll] widget.
++///
++/// Facilitates the creation of a [WatchAll] widget that listens to multiple [Listenable] instances.
++/// Ideal for scenarios where UI needs to respond to changes in multiple listenable sources.
++extension WatcherListenablesExtension on List<Listenable?> {
++  /// [watchAll]
++  /// This method simplifies the creation of [WatchAll]
++  ///
++  /// Example:
++  /// ```dart
++  /// final textController = TextEditingController();
++  /// final scrollController = ScrollController();
++  /// final myWatcher = 0.watcher;
++  /// final myListeners = <Listenable>[textController, scrollController, myWatcher];
++  /// myListeners.watchAll(
++  ///   (context) => Text('Value is $value'),
++  /// );
++  /// // The Text widget will update whenever any of myListeners changes.
++  /// ```
++  Widget builder(
++    Widget Function(BuildContext context) builder, {
++    bool Function()? buildWhen,
++    Duration? threshold,
++  }) {
++    return ListenablesBuilder(
++      listenables: this,
++      buildWhen: buildWhen,
++      threshold: threshold,
++      builder: builder,
++    );
++  }
++}
+ 
+ /// Extension on [ValueListenable] to seamlessly create a [ValueListenableBuilder] widget.
+ ///
+@@ -8,7 +67,7 @@ import 'package:flutter/material.dart';
+ extension FHUValueListenableExtension<T> on ValueListenable<T> {
+   /// [listenableBuilder]
+   /// This method simplifies the creation of [ValueListenableBuilder]
+-  Widget listenableBuilder(
++  Widget builder(
+     Widget Function(T v) builder, {
+     Key? key,
+   }) {
+diff --git a/lib/src/value_notifier/notifier_classes/bool_notifier.dart b/lib/src/value_notifier/notifier_classes/bool_notifier.dart
+index 2a4255d..623b064 100644
+--- a/lib/src/value_notifier/notifier_classes/bool_notifier.dart
++++ b/lib/src/value_notifier/notifier_classes/bool_notifier.dart
+@@ -5,21 +5,21 @@ import 'package:flutter_helper_utils/flutter_helper_utils.dart';
+ class BoolNotifier extends ValueNotifier<bool> {
+   BoolNotifier(super.initial);
+ 
++  @override
++  void notifyListeners() {
++    try {
++      super.notifyListeners();
++    } catch (_) {}
++  }
++
+   void refresh() => notifyListeners();
+-}
+ 
+-/// BoolValueNotifierExtension
+-///
+-/// Extension on `ValueNotifier<bool>` providing additional boolean-specific functionalities.
+-/// This extension simplifies toggling and other boolean operations directly on
+-/// the [ValueNotifier] without the need to perform actions in the value itself.
+-///
+-/// Example:
+-/// ```dart
+-/// final boolValueNotifier = true.notifier;
+-/// boolValueNotifier.toggle(); // Toggles the boolean value.
+-/// ```
+-extension FHUBoolValueNotifierExtension on ValueNotifier<bool> {
++  @override
++  set value(bool newValue) {
++    value = newValue;
++    refresh();
++  }
++
+   /// toggle the value of the [ValueNotifier]
+   void toggle() => value = !value;
+ 
+diff --git a/lib/src/value_notifier/notifier_classes/color_notifier.dart b/lib/src/value_notifier/notifier_classes/color_notifier.dart
+index bd3bf9a..8e0e948 100644
+--- a/lib/src/value_notifier/notifier_classes/color_notifier.dart
++++ b/lib/src/value_notifier/notifier_classes/color_notifier.dart
+@@ -1,24 +1,24 @@
+ import 'package:flutter/cupertino.dart';
+-import 'package:flutter/foundation.dart';
+ 
+ /// allows to quickly create a ValueNotifier of type Color.
+ class ColorNotifier extends ValueNotifier<Color> {
+   ColorNotifier(super.initial);
+ 
++  @override
++  void notifyListeners() {
++    try {
++      super.notifyListeners();
++    } catch (_) {}
++  }
++
+   void refresh() => notifyListeners();
+-}
+ 
+-/// Extension: ColorValueNotifierExtension
+-///
+-/// Description:
+-/// Adds convenience methods to `ValueNotifier<Color>` for managing color state changes
+-///
+-/// Example:
+-/// ```dart
+-/// final colorValueNotifier = Colors.blue.notifier;
+-/// colorValueNotifier.withOpacity(0.5);
+-/// ```
+-extension FHUColorValueNotifierExtension on ValueListenable<Color> {
++  @override
++  set value(Color newValue) {
++    value = newValue;
++    refresh();
++  }
++
+   /// The alpha channel of this color in an 8 bit value.
+   ///
+   /// A value of 0 means this color is fully transparent. A value of 255 means
+diff --git a/lib/src/value_notifier/notifier_classes/date_notifier.dart b/lib/src/value_notifier/notifier_classes/date_notifier.dart
+index 2ea9f71..fc76f2c 100644
+--- a/lib/src/value_notifier/notifier_classes/date_notifier.dart
++++ b/lib/src/value_notifier/notifier_classes/date_notifier.dart
+@@ -5,8 +5,21 @@ import 'package:flutter/material.dart';
+ class DateTimeNotifier extends ValueNotifier<DateTime> implements DateTime {
+   DateTimeNotifier(super.initial);
+ 
++  @override
++  void notifyListeners() {
++    try {
++      super.notifyListeners();
++    } catch (_) {}
++  }
++
+   void refresh() => notifyListeners();
+ 
++  @override
++  set value(DateTime newValue) {
++    value = newValue;
++    refresh();
++  }
++
+   /// Returns true if [other] is a [DateTime] at the same moment and in the
+   /// same time zone (UTC or local).
+   ///
+diff --git a/lib/src/value_notifier/notifier_classes/double_notifier.dart b/lib/src/value_notifier/notifier_classes/double_notifier.dart
+index 6f28378..d491619 100644
+--- a/lib/src/value_notifier/notifier_classes/double_notifier.dart
++++ b/lib/src/value_notifier/notifier_classes/double_notifier.dart
+@@ -4,31 +4,24 @@ import 'package:flutter/foundation.dart';
+ class DoubleNotifier extends ValueNotifier<double> {
+   DoubleNotifier(super.initial);
+ 
++  @override
++  void notifyListeners() {
++    try {
++      super.notifyListeners();
++    } catch (_) {}
++  }
++
+   void refresh() => notifyListeners();
+ 
++  @override
++  set value(double newValue) {
++    value = newValue;
++    refresh();
++  }
++
+   @override
+   String toString() => value.toString();
+-}
+ 
+-/// DoubleValueNotifierExtension
+-///
+-/// Extension on `ValueNotifier<double>` to enable direct manipulation of double values.
+-/// This extension provides convenient methods for handling double precision floating-point
+-/// numbers within a ValueNotifier. It simplifies arithmetic and other operations on double
+-/// values, such as rounding, scaling, or clamping, without the need to explicitly access the
+-/// `.value` property.
+-///
+-/// Ideal for scenarios where reactive double values need to be manipulated frequently and
+-/// with precision, this extension ensures more readable and concise code.
+-///
+-/// Example:
+-/// ```dart
+-/// final doubleValueNotifier = 10.5.notifier;
+-/// doubleValueNotifier.increment(2.5); // Directly adds 2.5 to the value (now 13.0)
+-/// doubleValueNotifier.round(); // Directly rounds the value (now 13.0)
+-/// // These operations modify the double value within the ValueNotifier without accessing `.value`
+-/// ```
+-extension FHUDoubleValueNotifierExtension on ValueListenable<double> {
+   /// The remainder of the truncating division of `this` by [other].
+   double remainder(num other) => value.remainder(other);
+ 
+diff --git a/lib/src/value_notifier/notifier_classes/duration_notifier.dart b/lib/src/value_notifier/notifier_classes/duration_notifier.dart
+index dfc6712..5af26a2 100644
+--- a/lib/src/value_notifier/notifier_classes/duration_notifier.dart
++++ b/lib/src/value_notifier/notifier_classes/duration_notifier.dart
+@@ -5,8 +5,21 @@ import 'package:flutter/material.dart';
+ class DurationNotifier extends ValueNotifier<Duration> implements Duration {
+   DurationNotifier(super.initial);
+ 
++  @override
++  void notifyListeners() {
++    try {
++      super.notifyListeners();
++    } catch (_) {}
++  }
++
+   void refresh() => notifyListeners();
+ 
++  @override
++  set value(Duration newValue) {
++    value = newValue;
++    refresh();
++  }
++
+   /// documentation available in the original overridden method.
+   @override
+   Duration operator *(num factor) => value * factor;
+diff --git a/lib/src/value_notifier/notifier_classes/int_notifier.dart b/lib/src/value_notifier/notifier_classes/int_notifier.dart
+index edfd75d..5b6132d 100644
+--- a/lib/src/value_notifier/notifier_classes/int_notifier.dart
++++ b/lib/src/value_notifier/notifier_classes/int_notifier.dart
+@@ -4,28 +4,21 @@ import 'package:flutter/foundation.dart';
+ class IntNotifier extends ValueNotifier<int> {
+   IntNotifier(super.initial);
+ 
++  @override
++  void notifyListeners() {
++    try {
++      super.notifyListeners();
++    } catch (_) {}
++  }
++
+   void refresh() => notifyListeners();
+-}
+ 
+-/// IntValueNotifierExtension
+-///
+-/// Extension on `ValueNotifier<int>` for direct manipulation of integer values.
+-/// This extension augments the ValueNotifier with methods tailored for integer operations.
+-/// It allows for straightforward arithmetic operations and transformations on the int value,
+-/// such as incrementing, decrementing, or toggling between values, without explicitly
+-/// accessing the `.value` property.
+-///
+-/// This extension is particularly useful in reactive programming contexts where integer
+-/// values are frequently modified and need to be handled in a clean, concise manner.
+-///
+-/// Example:
+-/// ```dart
+-/// final intValueNotifier = 10.notifier;
+-/// intValueNotifier.increment(); // Directly increments the value (now 11)
+-/// intValueNotifier.toggleBetween(11, 5); // Toggles the value to 5 as current is 11
+-/// // These operations directly modify the int value within the ValueNotifier without accessing `.value`
+-/// ```
+-extension FHUIntValueNotifierExtension on ValueListenable<int> {
++  @override
++  set value(int newValue) {
++    value = newValue;
++    refresh();
++  }
++
+   /// Bit-wise and operator.
+   ///
+   /// Treating both `this` and [other] as sufficiently large two's component
+diff --git a/lib/src/value_notifier/notifier_classes/list_notifier.dart b/lib/src/value_notifier/notifier_classes/list_notifier.dart
+index abe17f1..2ddf531 100644
+--- a/lib/src/value_notifier/notifier_classes/list_notifier.dart
++++ b/lib/src/value_notifier/notifier_classes/list_notifier.dart
+@@ -15,8 +15,21 @@ class ListNotifier<E> extends ValueNotifier<List<E>> implements List<E> {
+           {bool growable = true}) =>
+       ListNotifier(List.generate(length, generator, growable: growable));
+ 
++  @override
++  void notifyListeners() {
++    try {
++      super.notifyListeners();
++    } catch (_) {}
++  }
++
+   void refresh() => notifyListeners();
+ 
++  @override
++  set value(List<E> newValue) {
++    value = newValue;
++    refresh();
++  }
++
+   /// Will notifyListeners after a specific [action] has been made,
+   /// and optionally return a result [R] of certain type.
+   R _updateOnAction<R>(R Function() action) {
+@@ -716,7 +729,7 @@ class ListNotifier<E> extends ValueNotifier<List<E>> implements List<E> {
+   /// For example, [elementAt] may call `toElement` only once.
+   ///
+   /// Equivalent to:
+-  /// ```
++  /// ```dart
+   /// Iterable<T> map<T>(T toElement(E e)) sync* {
+   ///   for (var value in this) {
+   ///     yield toElement(value);
+@@ -793,7 +806,7 @@ class ListNotifier<E> extends ValueNotifier<List<E>> implements List<E> {
+   /// ```
+   ///
+   /// Equivalent to:
+-  /// ```
++  /// ```dart
+   /// Iterable<T> expand<T>(Iterable<T> toElements(E e)) sync* {
+   ///   for (var value in this) {
+   ///     yield* toElements(value);
+@@ -856,7 +869,7 @@ class ListNotifier<E> extends ValueNotifier<List<E>> implements List<E> {
+   /// Otherwise this method starts with the first element from the iterator,
+   /// and then combines it with the remaining elements in iteration order,
+   /// as if by:
+-  /// ```
++  /// ```dart
+   /// E value = iterable.first;
+   /// iterable.skip(1).forEach((element) {
+   ///   value = combine(value, element);
+@@ -880,7 +893,7 @@ class ListNotifier<E> extends ValueNotifier<List<E>> implements List<E> {
+   /// Uses [initialValue] as the initial value,
+   /// then iterates through the elements and updates the value with
+   /// each element using the [combine] function, as if by:
+-  /// ```
++  /// ```dart
+   /// var value = initialValue;
+   /// for (E element in this) {
+   ///   value = combine(value, element);
+diff --git a/lib/src/value_notifier/notifier_classes/map_notifier.dart b/lib/src/value_notifier/notifier_classes/map_notifier.dart
+index eb036e8..a856bc4 100644
+--- a/lib/src/value_notifier/notifier_classes/map_notifier.dart
++++ b/lib/src/value_notifier/notifier_classes/map_notifier.dart
+@@ -6,8 +6,21 @@ import 'package:flutter_helper_utils/flutter_helper_utils.dart';
+ class MapNotifier<K, V> extends ValueNotifier<Map<K, V>> implements Map<K, V> {
+   MapNotifier(super.initial);
+ 
++  @override
++  void notifyListeners() {
++    try {
++      super.notifyListeners();
++    } catch (_) {}
++  }
++
+   void refresh() => notifyListeners();
+ 
++  @override
++  set value(Map<K, V> newValue) {
++    value = newValue;
++    refresh();
++  }
++
+   /// Will notifyListeners after a specific [action] has been made,
+   /// and optionally return a result [R] of certain type.
+   R _updateOnAction<R>(R Function() action) {
+diff --git a/lib/src/value_notifier/notifier_classes/num_notifier.dart b/lib/src/value_notifier/notifier_classes/num_notifier.dart
+index f2cad2a..873f0c2 100644
+--- a/lib/src/value_notifier/notifier_classes/num_notifier.dart
++++ b/lib/src/value_notifier/notifier_classes/num_notifier.dart
+@@ -4,28 +4,21 @@ import 'package:flutter/foundation.dart';
+ class NumNotifier extends ValueNotifier<num> {
+   NumNotifier(super.initial);
+ 
++  @override
++  void notifyListeners() {
++    try {
++      super.notifyListeners();
++    } catch (_) {}
++  }
++
+   void refresh() => notifyListeners();
+-}
+ 
+-/// NumericValueNotifierExtension
+-///
+-/// Extension on `ValueNotifier<num>` to enable direct numerical manipulations.
+-/// This extension enriches the ValueNotifier with methods specifically tailored for
+-/// handling numerical data. It allows for direct mathematical operations on the numeric
+-/// value contained within the ValueNotifier, without the need to explicitly access the `.value` property.
+-///
+-/// This simplifies arithmetic operations such as addition, subtraction, multiplication,
+-/// and division, directly on the ValueNotifier's numeric value, making the code more readable
+-/// and concise, especially in a reactive programming context.
+-///
+-/// Example:
+-/// ```dart
+-/// final numberValueNotifier = 10.notifier;
+-/// numberValueNotifier.increment(5); // Directly adds 5 to the value (now 15)
+-/// numberValueNotifier.multiply(2);  // Directly multiplies the value by 2 (now 30)
+-/// // These operations modify the numeric value within the ValueNotifier without accessing `.value`
+-/// ```
+-extension FHUNumericValueNotifierExtension on ValueNotifier<num> {
++  @override
++  set value(num newValue) {
++    value = newValue;
++    refresh();
++  }
++
+   /// Compares this to `other`.
+   ///
+   /// Returns a negative number if `this` is less than `other`, zero if they are
+diff --git a/lib/src/value_notifier/notifier_classes/set_notifier.dart b/lib/src/value_notifier/notifier_classes/set_notifier.dart
+index 290fc05..54f9d9a 100644
+--- a/lib/src/value_notifier/notifier_classes/set_notifier.dart
++++ b/lib/src/value_notifier/notifier_classes/set_notifier.dart
+@@ -6,8 +6,21 @@ import 'package:flutter_helper_utils/flutter_helper_utils.dart';
+ class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
+   SetNotifier(super.initial);
+ 
++  @override
++  void notifyListeners() {
++    try {
++      super.notifyListeners();
++    } catch (_) {}
++  }
++
+   void refresh() => notifyListeners();
+ 
++  @override
++  set value(Set<E> newValue) {
++    value = newValue;
++    refresh();
++  }
++
+   /// Will notifyListeners after a specific [action] has been made,
+   /// and optionally return a result [R] of certain type.
+   R _updateOnAction<R>(R Function() action) {
+@@ -285,7 +298,7 @@ class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
+   /// For example, [elementAt] may call `toElement` only once.
+   ///
+   /// Equivalent to:
+-  /// ```
++  /// ```dart
+   /// Iterable<T> map<T>(T toElement(E e)) sync* {
+   ///   for (var value in this) {
+   ///     yield toElement(value);
+@@ -364,7 +377,7 @@ class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
+   /// ```
+   ///
+   /// Equivalent to:
+-  /// ```
++  /// ```dart
+   /// Iterable<T> expand<T>(Iterable<T> toElements(E e)) sync* {
+   ///   for (var value in this) {
+   ///     yield* toElements(value);
+@@ -418,7 +431,7 @@ class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
+   /// Otherwise this method starts with the first element from the iterator,
+   /// and then combines it with the remaining elements in iteration order,
+   /// as if by:
+-  /// ```
++  /// ```dart
+   /// E value = iterable.first;
+   /// iterable.skip(1).forEach((element) {
+   ///   value = combine(value, element);
+@@ -444,7 +457,7 @@ class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
+   /// Uses [initialValue] as the initial value,
+   /// then iterates through the elements and updates the value with
+   /// each element using the [combine] function, as if by:
+-  /// ```
++  /// ```dart
+   /// var value = initialValue;
+   /// for (E element in this) {
+   ///   value = combine(value, element);
+@@ -534,7 +547,7 @@ class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
+   /// Otherwise this method starts with the first element from the iterator,
+   /// and then combines it with the remaining elements in iteration order,
+   /// as if by:
+-  /// ```
++  /// ```dart
+   /// E value = iterable.first;
+   /// iterable.skip(1).forEach((element) {
+   ///   value = combine(value, element);
+@@ -557,7 +570,7 @@ class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
+   /// Uses [initialValue] as the initial value,
+   /// then iterates through the elements and updates the value with
+   /// each element using the [combine] function, as if by:
+-  /// ```
++  /// ```dart
+   /// var value = initialValue;
+   /// for (E element in this) {
+   ///   value = combine(value, element);
+diff --git a/lib/src/value_notifier/notifier_classes/string_notifier.dart b/lib/src/value_notifier/notifier_classes/string_notifier.dart
+index e26f6b9..0f18113 100644
+--- a/lib/src/value_notifier/notifier_classes/string_notifier.dart
++++ b/lib/src/value_notifier/notifier_classes/string_notifier.dart
+@@ -7,8 +7,21 @@ class StringNotifier extends ValueNotifier<String> {
+   @override
+   String toString() => value;
+ 
++  @override
++  void notifyListeners() {
++    try {
++      super.notifyListeners();
++    } catch (_) {}
++  }
++
+   void refresh() => notifyListeners();
+ 
++  @override
++  set value(String newValue) {
++    value = newValue;
++    refresh();
++  }
++
+   /// Will notifyListeners after a specific [action] has been made,
+   /// and optionally return a result [R] of certain type.
+   R _updateOnAction<R>(R Function() action) {
+diff --git a/lib/src/value_notifier/notifier_classes/theme_mode_notifier.dart b/lib/src/value_notifier/notifier_classes/theme_mode_notifier.dart
+index c300373..1723ac3 100644
+--- a/lib/src/value_notifier/notifier_classes/theme_mode_notifier.dart
++++ b/lib/src/value_notifier/notifier_classes/theme_mode_notifier.dart
+@@ -4,10 +4,21 @@ import 'package:flutter_helper_utils/flutter_helper_utils.dart';
+ class ThemeModeNotifier extends ValueNotifier<ThemeMode> {
+   ThemeModeNotifier(super.value);
+ 
++  @override
++  void notifyListeners() {
++    try {
++      super.notifyListeners();
++    } catch (_) {}
++  }
++
+   void refresh() => notifyListeners();
+-}
+ 
+-extension ThemeModeNotifierEx on ValueNotifier<ThemeMode> {
++  @override
++  set value(ThemeMode newValue) {
++    value = newValue;
++    refresh();
++  }
++
+   bool get isDark => value.isDark;
+ 
+   bool get isLight => value.isLight;
+@@ -24,10 +35,21 @@ extension ThemeModeNotifierEx on ValueNotifier<ThemeMode> {
+ class BrightnessNotifier extends ValueNotifier<Brightness> {
+   BrightnessNotifier(super.value);
+ 
++  @override
++  void notifyListeners() {
++    try {
++      super.notifyListeners();
++    } catch (_) {}
++  }
++
+   void refresh() => notifyListeners();
+-}
+ 
+-extension BrightnessNotifierEx on ValueNotifier<Brightness> {
++  @override
++  set value(Brightness newValue) {
++    value = newValue;
++    refresh();
++  }
++
+   bool get isDark => value.isDark;
+ 
+   bool get isLight => value.isLight;
+diff --git a/lib/src/value_notifier/notifier_classes/uri_notifier.dart b/lib/src/value_notifier/notifier_classes/uri_notifier.dart
+index f8a545b..222c3c5 100644
+--- a/lib/src/value_notifier/notifier_classes/uri_notifier.dart
++++ b/lib/src/value_notifier/notifier_classes/uri_notifier.dart
+@@ -5,8 +5,21 @@ import 'package:flutter/material.dart';
+ class UriNotifier extends ValueNotifier<Uri> implements Uri {
+   UriNotifier(super.initial);
+ 
++  @override
++  void notifyListeners() {
++    try {
++      super.notifyListeners();
++    } catch (_) {}
++  }
++
+   void refresh() => notifyListeners();
+ 
++  @override
++  set value(Uri newValue) {
++    value = newValue;
++    refresh();
++  }
++
+   /// Will notifyListeners after a specific [action] has been made,
+   /// and optionally return a result [R] of certain type.
+   R _updateOnAction<R>(R Function() action) {
+diff --git a/lib/src/value_notifier/value_notifier.dart b/lib/src/value_notifier/value_notifier.dart
+index a5e4b10..2b01e42 100644
+--- a/lib/src/value_notifier/value_notifier.dart
++++ b/lib/src/value_notifier/value_notifier.dart
+@@ -1,2 +1,3 @@
+ export 'extensions/extensions.dart';
+ export 'notifier_classes/notifier_classes.dart';
++export 'widgets/widgets.dart';
+diff --git a/lib/src/value_notifier/widgets/listenables_builder.dart b/lib/src/value_notifier/widgets/listenables_builder.dart
+index 4f44c3d..6c65bd2 100644
+--- a/lib/src/value_notifier/widgets/listenables_builder.dart
++++ b/lib/src/value_notifier/widgets/listenables_builder.dart
+@@ -2,96 +2,110 @@ import 'package:flutter/material.dart';
+ 
+ /// [ListenablesBuilder]
+ ///
+-/// A dynamic widget designed to rebuild itself in response to changes in multiple [Listenable] objects.
+-/// It listens to a collection of `watchers`, each being a [Listenable] object. This includes custom [Watcher]
+-/// instances as well as other [Listenable] types available in Flutter.
++/// A widget that rebuilds itself when any of the provided [Listenable] objects notify their listeners.
++/// This allows for responsive and dynamic UI updates based on changes in multiple [Listenable] sources.
+ ///
+-/// `WatchAll` offers a practical approach for reactive UI updates. It triggers a rebuild whenever any
+-/// of the specified watchers notify their listeners of changes, ensuring an up-to-date UI.
++/// The `ListenablesBuilder` widget is designed to listen to a collection of [Listenable] objects,
++/// such as [ValueNotifier], [ChangeNotifier], or custom [Listenable] instances. When any of the
++/// specified `listenables` notify their listeners of changes, the widget will trigger a rebuild,
++/// ensuring that the UI reflects the latest state.
++///
++/// This widget offers flexibility in its configuration:
++/// - You can provide a list of [Listenable] objects to listen to.
++/// - You can define a custom `builder` function to specify the UI.
++/// - You can optionally provide a `buildWhen` callback to control when the widget should rebuild,
++///   optimizing performance by preventing unnecessary rebuilds.
++/// - You can also specify a `threshold` duration to limit the frequency of rebuilds during rapid
++///   state changes, helping to avoid performance issues and UI flickering.
++/// **Example:**
++/// ```dart
++/// ListenablesBuilder(
++///   listenables: [myValueNotifier1, myChangeNotifier],
++///   builder: (context) => Text('Value 1: ${myValueNotifier1.value}, Value 2: ${myChangeNotifier.someProperty}'),
++/// );
++/// ```
+ class ListenablesBuilder extends StatefulWidget {
+   const ListenablesBuilder({
+-    required this.watchers,
++    required this.listenables,
+     required this.builder,
+-    this.watchWhen,
++    this.buildWhen,
+     this.threshold,
+     super.key,
+   });
+ 
+-  /// A list of [Listenable] objects that this widget is listening to.
+-  /// The widget will be rebuilt when any of the `watchers` notify their listeners. This list
+-  /// can include any mix of [Watcher] instances or other [Listenable] types, making it
+-  /// flexible for different use cases.
+-  final List<Listenable?> watchers;
++  /// A list of [Listenable] objects that this widget listens to.
++  /// The widget will rebuild when any of the `listenables` notify their listeners.
++  final List<Listenable?> listenables;
+ 
+-  /// A function that defines the widget to be built based on the current context.
+-  /// This function is called whenever the widget needs to rebuild, providing the flexibility
+-  /// to design responsive and dynamic UI components that react to state changes.
++  /// A function that returns the widget to be built.
++  /// This function is called whenever the widget needs to rebuild.
+   final Widget Function(BuildContext context) builder;
+ 
+-  /// An optional callback that determines whether the widget should rebuild when
+-  /// any of the `watchers` notify their listeners. It can be used to optimize performance by
+-  /// preventing unnecessary rebuilds. If it returns `true`, the [builder] function is called
+-  /// to rebuild the widget. If `false`, the widget is not rebuilt. If left `null`, the widget
+-  /// rebuilds on every notification from the `watchers`.
+-  final bool Function()? watchWhen;
++  /// An optional function that determines whether the widget should rebuild
++  /// when any of the `listenables` notify their listeners.
++  /// If it returns `true`, the [builder] function is called to rebuild the widget.
++  /// If `false`, the widget is not rebuilt. If null, the widget rebuilds on every notification.
++  final bool Function()? buildWhen;
+ 
+-  /// An optional [Duration] that sets a time limit for how frequently the widget can
+-  /// rebuild in response to `watchers` notifications. If set, the widget will only consider
+-  /// rebuilding after this duration has elapsed since the last rebuild, providing a way to limit
+-  /// the frequency of rebuilds during rapid state changes. This feature is particularly useful
+-  /// for optimizing performance and avoiding flickering in the UI.
++  /// An optional [Duration] that sets a minimum interval between rebuilds
++  /// to limit the frequency of rebuilds during rapid state changes.
+   final Duration? threshold;
+ 
+-  void _addListeners(VoidCallback listener) {
+-    for (final watcher in watchers) {
+-      if (watcher != null) watcher.addListener(listener);
+-    }
+-  }
+-
+-  void _removeListeners(VoidCallback listener) {
+-    for (final watcher in watchers) {
+-      if (watcher != null) watcher.removeListener(listener);
+-    }
+-  }
+-
+   @override
+   State<ListenablesBuilder> createState() => _ListenablesBuilderState();
+ }
+ 
+ class _ListenablesBuilderState extends State<ListenablesBuilder> {
+   DateTime? _lastBuildTime;
++  final Set<Listenable> _activeListenables = {}; // Track active listeners
+ 
+   @override
+   void initState() {
+     super.initState();
+-    widget._addListeners(_listener);
++    _addListeners();
+   }
+ 
+-  void _listener() {
+-    if ((widget.watchWhen?.call() ?? true) && _shouldRebuild()) {
+-      setState(() {
+-        _lastBuildTime = DateTime.now();
+-      });
++  void _addListeners() {
++    for (final listenable in widget.listenables) {
++      if (listenable != null && !_activeListenables.contains(listenable)) {
++        listenable.addListener(_listener);
++        _activeListenables.add(listenable);
++      }
++    }
++  }
++
++  void _removeListeners() {
++    for (final listenable in _activeListenables) {
++      listenable.removeListener(_listener);
+     }
++    _activeListenables.clear();
+   }
+ 
+-  bool _shouldRebuild() {
+-    if (widget.threshold == null || _lastBuildTime == null) return true;
+-    return DateTime.now().difference(_lastBuildTime!) > widget.threshold!;
++  void _listener() {
++    if (widget.buildWhen?.call() ?? true) {
++      final now = DateTime.now();
++      if (widget.threshold == null ||
++          _lastBuildTime == null ||
++          now.difference(_lastBuildTime!) > widget.threshold!) {
++        setState(() {
++          _lastBuildTime = now;
++        });
++      }
++    }
+   }
+ 
+   @override
+   void didUpdateWidget(ListenablesBuilder oldWidget) {
+     super.didUpdateWidget(oldWidget);
+-    if (oldWidget.watchers != widget.watchers) {
+-      oldWidget._removeListeners(_listener);
+-      widget._addListeners(_listener);
++    if (oldWidget.listenables != widget.listenables) {
++      _removeListeners();
++      _addListeners();
+     }
+   }
+ 
+   @override
+   void dispose() {
+-    widget._removeListeners(_listener);
++    _removeListeners();
+     super.dispose();
+   }
+ 
+diff --git a/lib/src/value_notifier/widgets/widgets.dart b/lib/src/value_notifier/widgets/widgets.dart
+index 0a32cd2..acb108d 100644
+--- a/lib/src/value_notifier/widgets/widgets.dart
++++ b/lib/src/value_notifier/widgets/widgets.dart
+@@ -1,3 +1 @@
+-export 'watch.dart';
+-export 'watch_all.dart';
+-export 'watch_value.dart';
++export 'listenables_builder.dart';
+diff --git a/pubspec.yaml b/pubspec.yaml
+index bd2f694..60cff7f 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -15,6 +15,6 @@ dependencies:
+ dev_dependencies:
+   flutter_test:
+     sdk: flutter
+-  very_good_analysis: ^5.1.0
++  very_good_analysis: ^6.0.0
+ 
+ flutter:

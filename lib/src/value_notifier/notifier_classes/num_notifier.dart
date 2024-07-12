@@ -1,10 +1,25 @@
 import 'package:flutter/foundation.dart';
 
 /// allows to quickly create a ValueNotifier of type num.
+/// allows to quickly create a ValueNotifier of type num.
 class NumNotifier extends ValueNotifier<num> {
   NumNotifier(super.initial);
 
+  @override
+  void notifyListeners() {
+    try {
+      super.notifyListeners();
+    } catch (_) {}
+  }
+
   void refresh() => notifyListeners();
+
+  /// similar to value setter but this one force trigger the notifyListeners()
+  /// event if newValue == value.
+  void update(num newValue) {
+    value = newValue;
+    refresh();
+  }
 }
 
 /// NumericValueNotifierExtension

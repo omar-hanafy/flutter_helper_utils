@@ -5,7 +5,21 @@ import 'package:flutter/material.dart';
 class UriNotifier extends ValueNotifier<Uri> implements Uri {
   UriNotifier(super.initial);
 
+  @override
+  void notifyListeners() {
+    try {
+      super.notifyListeners();
+    } catch (_) {}
+  }
+
   void refresh() => notifyListeners();
+
+  /// similar to value setter but this one force trigger the notifyListeners()
+  /// event if newValue == value.
+  void update(Uri newValue) {
+    value = newValue;
+    refresh();
+  }
 
   /// Will notifyListeners after a specific [action] has been made,
   /// and optionally return a result [R] of certain type.

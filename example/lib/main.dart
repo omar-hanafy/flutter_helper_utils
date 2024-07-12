@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return themeModeNotifier.listenableBuilder(
+    return themeModeNotifier.builder(
       (themeMode) {
         return MaterialApp(
           title: 'Flutter Demo',

@@ -5,7 +5,21 @@ import 'package:flutter/material.dart';
 class DurationNotifier extends ValueNotifier<Duration> implements Duration {
   DurationNotifier(super.initial);
 
+  @override
+  void notifyListeners() {
+    try {
+      super.notifyListeners();
+    } catch (_) {}
+  }
+
   void refresh() => notifyListeners();
+
+  /// similar to value setter but this one force trigger the notifyListeners()
+  /// event if newValue == value.
+  void update(Duration newValue) {
+    value = newValue;
+    refresh();
+  }
 
   /// documentation available in the original overridden method.
   @override

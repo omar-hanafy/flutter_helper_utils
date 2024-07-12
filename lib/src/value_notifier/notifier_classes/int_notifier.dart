@@ -4,7 +4,21 @@ import 'package:flutter/foundation.dart';
 class IntNotifier extends ValueNotifier<int> {
   IntNotifier(super.initial);
 
+  @override
+  void notifyListeners() {
+    try {
+      super.notifyListeners();
+    } catch (_) {}
+  }
+
   void refresh() => notifyListeners();
+
+  /// similar to value setter but this one force trigger the notifyListeners()
+  /// event if newValue == value.
+  void update(int newValue) {
+    value = newValue;
+    refresh();
+  }
 }
 
 /// IntValueNotifierExtension

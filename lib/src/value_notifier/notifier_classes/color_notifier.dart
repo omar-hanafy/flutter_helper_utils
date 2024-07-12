@@ -5,7 +5,21 @@ import 'package:flutter/foundation.dart';
 class ColorNotifier extends ValueNotifier<Color> {
   ColorNotifier(super.initial);
 
+  @override
+  void notifyListeners() {
+    try {
+      super.notifyListeners();
+    } catch (_) {}
+  }
+
   void refresh() => notifyListeners();
+
+  /// similar to value setter but this one force trigger the notifyListeners()
+  /// event if newValue == value.
+  void update(Color newValue) {
+    value = newValue;
+    refresh();
+  }
 }
 
 /// Extension: ColorValueNotifierExtension

@@ -5,7 +5,21 @@ import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 class BoolNotifier extends ValueNotifier<bool> {
   BoolNotifier(super.initial);
 
+  @override
+  void notifyListeners() {
+    try {
+      super.notifyListeners();
+    } catch (_) {}
+  }
+
   void refresh() => notifyListeners();
+
+  /// similar to value setter but this one force trigger the notifyListeners()
+  /// event if newValue == value.
+  void update(bool newValue) {
+    value = newValue;
+    refresh();
+  }
 }
 
 /// BoolValueNotifierExtension

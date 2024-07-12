@@ -24,6 +24,7 @@
 - [Featured](#featured)
   - [ValueNotifier Supercharged](#valuenotifier-supercharged)
 - [Extensions](#extensions)
+  - [Listenable & ValueNotifier](#listenable--valuenotifier)
   - [UI & Design](#ui--design)
     - [Colors](#colors)
     - [ThemeData](#themedata)
@@ -43,18 +44,19 @@
 **ValueNotifier** is a simple class in **Flutter** that allows you to store a value and notify any listeners when the
 value changes.
 
-in this package, I've made this feature event better!
+This package enhances `ValueNotifier` with additional functionalities:
 
 Starting from version 4.0.0, you can use a new set of extensions, helper methods, and specialized notifiers for better
 data handling:
 
 - Instantly create notifiers from any value with the intuitive `.notifier` extension (e.g.,`10.notifier`)
 - Specific data types using our type-safe notifiers like `ListNotifer`,  `BoolNotifier`, `IntNotifier`, etc.
-- use the `.listenableBuilder`extension on `ValueNotifier` instance which creates a `ValueListenableBuilder` under the
-  hood with shorter/simpler syntax.
+- Use the `.builder` extension on any `ValueListenable`, `Listenable`, or `List<Listenable>` instance to create a
+  `ValueListenableBuilder`, `ListenableBuilder`, or `ListenablesBuilder` respectively under the hood with a shorter and simpler
+  syntax.
 - complex data handling with collections. For example `ListNotifier`, which acts like normal list and `ValueNotifier` at the
-  same time, which means you can use it in for loops, in `ValueListenableBuilder` widget, and get notified automatically
-  when inner data changed. Same goes for all notifier classes!
+  same time, which means you can use it in `for` loops, in `ValueListenableBuilder` widget, and get notified automatically
+  when inner data changed (Same goes for all notifier classes!).
 
 **Example:**
 
@@ -70,24 +72,44 @@ For more info about ValueNotifier check the [official flutter documentation](htt
 # Extensions
 All the extensions included in the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils#extensions) package Plus:
 
-## UI & Design
+## Listenable & ValueNotifier
+### on ValueListenable 
+- `builder`: Simplifies the creation of a `ValueListenableBuilder` widget that reacts to changes in a single `ValueListenable`.
+  - ```dart
+    final intNotifer = 0.notifer;
+    scrollController.builder((value) => /* widget reacts to intNotifer changes */ );
+    ```
+### on Listenable
+- `.builder`: Simplifies the creation of a `ListenableBuilder` widget that reacts to changes in any `Listenable`.
+  - ```dart
+    final scrollController = ScrollController();
+    scrollController.builder((context) => /* widget reacts to scrollController changes */ );
+    ```
+### on List<Listenable>
+- `.builder`:  Creates a `ListenablesBuilder` widget to efficiently manage and respond to changes in multiple `Listenable` objects simultaneously, including `ValueNotifier`, `ChangeNotifier`, and others. Customize rebuild behavior using the optional `buildWhen` and `threshold` parameters.
+  - ```dart
+    final myListeners = <Listenable>[textController, scrollController, anyNotifier];
+    myListeners.builder((context) => /* widget reacts to myListeners changes */ );
+    ```
+### ValueNotifier Creation
+- `.notifier`:  Converts a value of any type into the corresponding `ValueNotifier` type/subtype, enabling easy integration into reactive UI components.
+  - e.g. `final intNotifer = 1.notifier` creates an IntNotifier aka ValueNotifier<int>.
 
+### UI & Design
 ### Colors
 
-- `toHex`: Converts a `Color` object to its hex string representation.
-- `toColor`: Converts a hex color string to a `Color` object.
-- `isHexColor`: Validates a string as a hexadecimal color.
+- `toHex`: Transforms a `Color` object into its corresponding hexadecimal string representation.
+- `toColor`: Creates a `Color` object from a valid hexadecimal color string.
+- `isHexColor`: Determines if a given string is a valid hexadecimal color representation.
 
 ### ThemeData
-- `isDark`, `isLight`: Check if the theme is dark or light.
-- `displayLarge`, `displayMedium`, `displaySmall`, etc.: Access various text styles defined in the theme.
-- `displayLargeCopy`, `displayMediumCopy`, `displaySmallCopy`, etc.: Access various text styles with copyWith defined in the theme.
+- `isDark`, `isLight`: Checks whether the current theme is in dark or light mode.
+- `textTheme`: Provides direct access to the `TextTheme` of the current theme.
+- `displayLarge`, `displayMedium`, `displaySmall`, etc.: Retrieve specific text styles from the theme, optimized for different display sizes.
+- `displayLargeCopy`, `displayMediumCopy`, `displaySmallCopy`, etc.: Retrieve copies of the specific text styles from the theme, allowing modifications without affecting the original theme.
 
 ## BuildContext
-**Important Note:** Avoid frequent use of context on actions that might call `of(context)` like theme. The widget
-registers itself as a dependency on the theme, meaning that if the theme changes (e.g., when switching between
-light/dark mode), all widgets using `Theme.of(context)` aka `context.themeData` will rebuild, even if they don’t directly depend on the changed
-theme properties. It’s recommended to use `final theme = context.themeData` at the top of the widget tree only once.
+**Important Note:** Avoid frequent use of context on actions that might call `of(context)` like theme. The widget registers itself as a dependency on the theme, meaning that if the theme changes (e.g., when switching between light/dark mode), all widgets using `Theme.of(context)` aka `context.themeData` will rebuild, even if they don’t directly depend on the changed theme properties. It’s recommended to use `final theme = context.themeData` at the top of the widget tree only once.
 
 ### For Themes
 - `themeData`: Get the current `ThemeData`.
@@ -142,6 +164,7 @@ theme properties. It’s recommended to use `final theme = context.themeData` at
 **More widget extensions to be added soon.**
 
 ## List/Iterable Extensions
+
 - `toRow`: Convert a list of widgets into a `Row`.
 - `toColumn`: Convert a list of widgets into a `Column`.
 - `toStack`: Convert a list of widgets into a `Stack`.

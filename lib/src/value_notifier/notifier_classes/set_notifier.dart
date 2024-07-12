@@ -6,7 +6,21 @@ import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
   SetNotifier(super.initial);
 
+  @override
+  void notifyListeners() {
+    try {
+      super.notifyListeners();
+    } catch (_) {}
+  }
+
   void refresh() => notifyListeners();
+
+  /// similar to value setter but this one force trigger the notifyListeners()
+  /// event if newValue == value.
+  void update(Set<E> newValue) {
+    value = newValue;
+    refresh();
+  }
 
   /// Will notifyListeners after a specific [action] has been made,
   /// and optionally return a result [R] of certain type.
@@ -285,7 +299,7 @@ class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
   /// For example, [elementAt] may call `toElement` only once.
   ///
   /// Equivalent to:
-  /// ```
+  /// ```dart
   /// Iterable<T> map<T>(T toElement(E e)) sync* {
   ///   for (var value in this) {
   ///     yield toElement(value);
@@ -364,7 +378,7 @@ class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
   /// ```
   ///
   /// Equivalent to:
-  /// ```
+  /// ```dart
   /// Iterable<T> expand<T>(Iterable<T> toElements(E e)) sync* {
   ///   for (var value in this) {
   ///     yield* toElements(value);
@@ -418,7 +432,7 @@ class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
   /// Otherwise this method starts with the first element from the iterator,
   /// and then combines it with the remaining elements in iteration order,
   /// as if by:
-  /// ```
+  /// ```dart
   /// E value = iterable.first;
   /// iterable.skip(1).forEach((element) {
   ///   value = combine(value, element);
@@ -444,7 +458,7 @@ class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
   /// Uses [initialValue] as the initial value,
   /// then iterates through the elements and updates the value with
   /// each element using the [combine] function, as if by:
-  /// ```
+  /// ```dart
   /// var value = initialValue;
   /// for (E element in this) {
   ///   value = combine(value, element);
@@ -534,7 +548,7 @@ class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
   /// Otherwise this method starts with the first element from the iterator,
   /// and then combines it with the remaining elements in iteration order,
   /// as if by:
-  /// ```
+  /// ```dart
   /// E value = iterable.first;
   /// iterable.skip(1).forEach((element) {
   ///   value = combine(value, element);
@@ -557,7 +571,7 @@ class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
   /// Uses [initialValue] as the initial value,
   /// then iterates through the elements and updates the value with
   /// each element using the [combine] function, as if by:
-  /// ```
+  /// ```dart
   /// var value = initialValue;
   /// for (E element in this) {
   ///   value = combine(value, element);

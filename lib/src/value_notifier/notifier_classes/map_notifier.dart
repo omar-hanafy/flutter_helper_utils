@@ -6,6 +6,13 @@ import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 class MapNotifier<K, V> extends ValueNotifier<Map<K, V>> implements Map<K, V> {
   MapNotifier(super.initial);
 
+  @override
+  void notifyListeners() {
+    try {
+      super.notifyListeners();
+    } catch (_) {}
+  }
+
   void refresh() => notifyListeners();
 
   /// Will notifyListeners after a specific [action] has been made,
