@@ -1,12 +1,8 @@
+## 6.0.3
+
+- Updated some documentations.
+
 ## 6.0.2
-
-- **Important**: Fixed custom notifier classes sometimes produce Stackoverflow bug when notify listeners.
-
-## 6.0.1
-**Reverted Notifier Class Refactoring**: The methods previously moved into the notifier classes (v6.0.0) have been returned to their original locations as extensions on `ValueNotifier<T>`. This change addresses potential compatibility issues.
-- No need to do the migration guide number 2 addressed in v6.0.0 after upgrading to this version.
-
-## 6.0.0
 ### Breaking Changes
 - **Renamed Method:** The `listenableBuilder` method has been renamed to `builder` in the `extension on ValueListenable`.
 - **Refactored Notifier Classes**: Methods previously available as extensions on ValueNotifier<T> have been moved directly into the corresponding notifier classes (e.g., toggle for BoolNotifier, increment for IntNotifier).
@@ -15,44 +11,29 @@
 - Introduced `ListenablesBuilder`: A widget for building UI in response to changes in multiple listenable objects (`List<Listenable>`). it also has  `buildWhen` and `threshold` properties for more granular control over rebuild behavior.
 - **Listenable Extensions:** Added `builder` methods to easily create `ListenableBuilder` (for single listeners) and `ListenablesBuilder`(for multiple listeners) widgets.
 
+### Fixes & Enhancements
 - Updated `dart_helper_util` to [v2.1.0](https://pub.dev/packages/dart_helper_utils/changelog#120).
+- Fixed custom notifier classes sometimes produce Stackoverflow bug when notify listeners.
 
 ### Migration Guide
 1. **Updating ValueNotifier Extensions**:
-   - Replace all instances of `listenableBuilder` with the new `builder` method to ensure compatibility.
-       - **Before**:
-         ```dart
-         final myNotifier = ValueNotifier<int>(0);
-         myNotifier.listenableBuilder(
-           (value) => Text('Value is $value'),
-         );
-         ```
-       - **After**:
-         ```dart
-         final myNotifier = ValueNotifier<int>(0);
-         myNotifier.builder(
-           (value) => Text('Value is $value'),
-         );
-         ```
-2. **Updating Notifier Class Methods:**
-    - **If you were using `ValueNotifier<T>` directly:** You need to switch to the specific notifier class and create instances accordingly.
-        - **Before:**
+    - Replace all instances of `listenableBuilder` with the new `builder` method to ensure compatibility.
+        - **Before**:
           ```dart
-          final intNotifier = ValueNotifier<int>(0);
-          intNotifier.increment(); // won't work anymore
+          final myNotifier = ValueNotifier<int>(0);
+          myNotifier.listenableBuilder(
+            (value) => Text('Value is $value'),
+          );
           ```
-        - **After:**
+        - **After**:
           ```dart
-          final intNotifier = IntNotifier(0);
-          intNotifier.increment();
-          ```
-    - **If you were using the `.notifier` extension:** No changes are needed as this extension already creates the appropriate notifier class instance. 
-      ```dart
-      final intNotifier = 0.notifier; // Already creates IntNotifier
-      ```
+          final myNotifier = ValueNotifier<int>(0);
+          myNotifier.builder(
+            (value) => Text('Value is $value'),
+          );
+          ``` 
 
 ## 5.0.0
-
 ### Changed
 
 - Upgraded `dart_helper_utils` to [v2.0.0](https://pub.dev/packages/dart_helper_utils/changelog#200), **introducing
