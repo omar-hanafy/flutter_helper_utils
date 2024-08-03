@@ -23,11 +23,13 @@
 
 - [Featured](#featured)
   - [ValueNotifier Supercharged](#valuenotifier-supercharged)
+  - [PlatformEnv](#platformenv-class)
 - [Extensions](#extensions)
   - [Listenable & ValueNotifier](#listenable--valuenotifier)
   - [UI & Design](#ui--design)
     - [Colors](#colors)
     - [ThemeData](#themedata)
+  - [TargetPlatform](#targetplatform)
   - [BuildContext](#buildcontext)
     - [For Themes](#for-themes)
     - [For MediaQuery](#for-mediaquery)
@@ -69,6 +71,20 @@ counter.increment(); // Increment the counter easily
 
 For more info about ValueNotifier check the [official flutter documentation](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html)
 
+## PlatformEnv class
+A replacement for `dart:io` `Platform` class.
+Key Enhancements over the original `Platform`:
+- Eliminates errors caused by using dart:io functionality in web browsers.
+- Maintains a familiar API similar to the dart:io Platform class, making migration and usage effortless.
+- Handles system-specific properties like the number of processors, path separator, and local hostname, with sensible defaults on web platforms.
+  **Example Usage:**
+```dart
+print('TargetPlatform: ${PlatformEnv.targetPlatform}');
+print('is Web:' ${PlatformEnv.isWeb})
+print('Is macOS: ${PlatformEnv.isMacOS}');
+// and all other Platform getters are supported.
+```
+
 # Extensions
 All the extensions included in the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils#extensions) package Plus:
 
@@ -97,16 +113,43 @@ All the extensions included in the [`dart_helper_utils`](https://pub.dev/package
 
 ### UI & Design
 ### Colors
-
 - `toHex`: Transforms a `Color` object into its corresponding hexadecimal string representation.
-- `toColor`: Creates a `Color` object from a valid hexadecimal color string.
-- `isHexColor`: Determines if a given string is a valid hexadecimal color representation.
+- `darken`, `lighten`: Adjust color lightness.
+- `shade`, `tint`: Create variations by mixing with black/white.
+- `contrast`: Calculate contrast ratios between colors.
+- `complementary`: Find the opposite color on the color wheel.
+- `blend`: Mix colors together.
+- `grayscale`, `invert`: Convert to grayscale or invert colors. 
+- `toColor`: Creates a `Color` object from a valid hexadecimal color string `"#FFFFFF".toColor`.
+- `isHexColor`: Determines if a given string is a valid hexadecimal color representation `"#FFFFFF".isHexColor`.
 
 ### ThemeData
 - `isDark`, `isLight`: Checks whether the current theme is in dark or light mode.
 - `textTheme`: Provides direct access to the `TextTheme` of the current theme.
 - `displayLarge`, `displayMedium`, `displaySmall`, etc.: Retrieve specific text styles from the theme, optimized for different display sizes.
 - `displayLargeCopy`, `displayMediumCopy`, `displaySmallCopy`, etc.: Retrieve copies of the specific text styles from the theme, allowing modifications without affecting the original theme.
+
+## TargetPlatform
+All the above getters are available under both `BuildContext` instances and `TargetPlatform` instances.
+**Native Only Platforms**
+- `isMobile`: true if running on a mobile device (iOS or Android) natively.
+- `isIOS`: true if running on iOS natively.
+- `isAndroid`: true if running on Android natively.
+- `isDesktop`: true if running on a desktop OS (Linux, macOS, Windows) natively.
+- `isMacOS`: true if running on macOS natively.
+- `isWindows`: true if running on Windows natively.
+- `isLinux`: true if running on Linux natively.
+- `isApple`: true if running on an any Apple platform (macOS or iOS) natively.
+
+**Web Platforms**
+- `isMobileWeb`: true if running on a mobile browser (iOS or Android).
+- `isIOSWeb`: true if running on iOS in a web browser.
+- `isAndroidWeb`: true if running on Android in a web browser.
+- `isDesktopWeb`: true if running on a desktop browser (Linux, macOS, Windows).
+- `isMacOsWeb`: true if running on macOS in a web browser.
+- `isWindowsWeb`: true if running on Windows in a web browser.
+- `isLinuxWeb`: true if running on Linux in a web browser.
+- `isAppleWeb`: true if running on an Apple platform (macOS or iOS) in a web
 
 ## BuildContext
 **Important Note:** Avoid frequent use of context on actions that might call `of(context)` like theme. The widget registers itself as a dependency on the theme, meaning that if the theme changes (e.g., when switching between light/dark mode), all widgets using `Theme.of(context)` aka `context.themeData` will rebuild, even if they don’t directly depend on the changed theme properties. It’s recommended to use `final theme = context.themeData` at the top of the widget tree only once.
@@ -117,6 +160,8 @@ All the extensions included in the [`dart_helper_utils`](https://pub.dev/package
 - `brightness`: Determine the theme's brightness.
 - `sysBrightness`: Determine the system's brightness.
 - `isDark`, `isLight`: Check if the theme is dark or light.
+- `targetPlatform`: Get the current `TargetPlatform`, all the getters mentioned in [TargetPlatform](#targetplatform) are also available here.
+- `withoutEffects()`: method to remove visual feedback effects (splash, highlight, hover, etc.) from a theme with customizations.
 
 ### For MediaQuery
 - `mq`: Access `MediaQueryData`.
@@ -181,4 +226,3 @@ pull request in the [repository](https://github.com/omar-hanafy/flutter_helper_u
 `flutter_helper_utils` is available under the [BSD 3-Clause License.](https://opensource.org/license/bsd-3-clause/)
 
 <a href="https://www.buymeacoffee.com/omar.hanafy" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
-

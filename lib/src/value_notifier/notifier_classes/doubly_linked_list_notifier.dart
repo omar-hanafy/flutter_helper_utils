@@ -1,40 +1,23 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
-/// create a [ValueNotifier] of type List<T>, which reacts just like normal [List],
-/// but with notifier capabilities.
-class ListNotifier<E> extends ValueNotifier<List<E>> implements List<E> {
-  ListNotifier(super.initial);
+class DoublyLinkedListNotifier<E> extends ValueNotifier<DoublyLinkedList<E>>
+    implements DoublyLinkedList<E> {
+  DoublyLinkedListNotifier(super.value);
 
-  /// Generates a ValueNotifierList with values.
-  factory ListNotifier.generate(int length, E Function(int index) generator,
-          {bool growable = true}) =>
-      ListNotifier(List.generate(length, generator, growable: growable));
+  factory DoublyLinkedListNotifier.from(Iterable<E> elements) =>
+      DoublyLinkedListNotifier(DoublyLinkedList(elements));
 
-  factory ListNotifier.filled(int length, E fill, {bool growable = false}) {
-    return ListNotifier(List.filled(length, fill, growable: growable));
-  }
+  factory DoublyLinkedListNotifier.filled(int length, E fill) =>
+      DoublyLinkedListNotifier(DoublyLinkedList.filled(length, fill));
 
-  factory ListNotifier.empty({bool growable = false}) {
-    return ListNotifier(List.empty(growable: growable));
-  }
-
-  /// Creates a list containing all [elements].
-  factory ListNotifier.from(Iterable<E> elements, {bool growable = true}) {
-    return ListNotifier(List.from(elements, growable: growable));
-  }
-
-  /// Creates a list from [elements].
-  factory ListNotifier.of(Iterable<E> elements, {bool growable = true}) {
-    return ListNotifier(List.of(elements, growable: growable));
-  }
-
-  /// Creates an unmodifiable list containing all [elements].
-  factory ListNotifier.unmodifiable(Iterable<E> elements) {
-    return ListNotifier(List.unmodifiable(elements));
-  }
+  factory DoublyLinkedListNotifier.generate(
+    int length,
+    E Function(int index) generator,
+  ) =>
+      DoublyLinkedListNotifier(DoublyLinkedList.generate(length, generator));
 
   @override
   void notifyListeners() {
@@ -46,16 +29,16 @@ class ListNotifier<E> extends ValueNotifier<List<E>> implements List<E> {
   /// similar to value setter but this one force trigger the notifyListeners()
   /// event if newValue == value.
   // TODO(any): rename this to replace in the upcoming breaking changes update.
-  void update(List<E> newValue) {
+  void update(DoublyLinkedListNotifier<E> newValue) {
     final list = value;
-    value = [...newValue];
+    value = newValue;
     // force notify if the value setter did not trigger.
     if (list == newValue) notifyListeners();
   }
 
   void refresh() {
     final list = value;
-    final newList = [...list];
+    final newList = DoublyLinkedListNotifier.from(list);
     value = newList;
     // force notify if the value setter did not trigger.
     if (list == newList) notifyListeners();
@@ -285,7 +268,8 @@ class ListNotifier<E> extends ValueNotifier<List<E>> implements List<E> {
   /// final index = notes.indexOf('fa'); // -1
   /// ```
   @override
-  int indexOf(E element, [int start = 0]) => value.indexOf(element, start);
+  int indexOf(Object? element, [int start = 0]) =>
+      value.indexOf(element as E, start);
 
   /// The first index in the list that satisfies the provided [test].
   ///
@@ -355,7 +339,8 @@ class ListNotifier<E> extends ValueNotifier<List<E>> implements List<E> {
   /// final index = notes.lastIndexOf('fa'); // -1
   /// ```
   @override
-  int lastIndexOf(E element, [int? start]) => value.lastIndexOf(element, start);
+  int lastIndexOf(Object? element, [int? start]) =>
+      value.lastIndexOf(element as E, start);
 
   /// Removes all objects from this list; the length of the list becomes zero.
   ///
@@ -519,7 +504,7 @@ class ListNotifier<E> extends ValueNotifier<List<E>> implements List<E> {
   /// Some list types may choose to return a list of the same type as themselves
   /// (see [Uint8List.+]);
   @override
-  ListNotifier<E> operator +(List<E> other) {
+  DoublyLinkedListNotifier<E> operator +(List<E> other) {
     _updateOnAction(() => addAll(other));
     return this;
   }
@@ -546,7 +531,7 @@ class ListNotifier<E> extends ValueNotifier<List<E>> implements List<E> {
   /// 0 ≤ `start` ≤ `end` ≤ [length].
   /// If `end` is equal to `start`, then the returned list is empty.
   @override
-  ListNotifier<E> sublist(int start, [int? end]) {
+  DoublyLinkedListNotifier<E> sublist(int start, [int? end]) {
     _updateOnAction(() => value.sublist(start, end));
     return this;
   }
@@ -1257,7 +1242,7 @@ class ListNotifier<E> extends ValueNotifier<List<E>> implements List<E> {
   ///     planets.values.toList(growable: false); // [Mercury, Venus, Mars]
   /// ```
   @override
-  ListNotifier<E> toList({bool growable = true}) {
+  DoublyLinkedListNotifier<E> toList({bool growable = true}) {
     value.toList(growable: growable);
     return this;
   }
@@ -1273,4 +1258,166 @@ class ListNotifier<E> extends ValueNotifier<List<E>> implements List<E> {
   /// element unless their equality operators ([Object.==]) do so. For checking
   /// deep equality, consider using the [DeepCollectionEquality] class.
   bool isEqual(List<E> other) => value.isEqual(other);
+
+  /// first node in this list.
+  @override
+  Node<E>? head;
+
+  /// last node in this list.
+  @override
+  Node<E>? tail;
+
+  /// Operator to get a node by its index.
+  ///
+  /// ```dart
+  /// final list = [1, 2, 3].doublyLinkedListNotifier
+  /// final node = list ^ 1;
+  /// print(node?.data); // Output: 2
+  /// ```
+  @override
+  Node<E> operator ^(int index) => value ^ index;
+
+  /// Appends a new node with the given data to the end of the list.
+  ///
+  /// ```dart
+  /// final list = <int>[].doublyLinkedListNotifier;
+  /// list.append(1);
+  /// list.append(2);
+  /// print(list); // Output: [1, 2]
+  /// ```
+  @override
+  void append(E data) => _updateOnAction(() => v.append(data));
+
+  /// Finds a node by its index.
+  ///
+  /// ```dart
+  /// final list = [1, 2, 3].doublyLinkedListNotifier
+  /// final node = list.findNode(1);
+  /// print(node?.data); // Output: 2
+  /// ```
+  @override
+  Node<E> findNode(int index) => value.findNode(index);
+
+  /// Finds the first node with the given data.
+  ///
+  /// ```dart
+  /// final list = [1, 2, 3].doublyLinkedListNotifier
+  /// final node = list.findNodeByElement(2);
+  /// print(node?.data); // Output: 2
+  /// ```
+  @override
+  Node<E>? findNodeByElement(E data) => value.findNodeByElement(data);
+
+  /// Inserts a new node after the specified node.
+  ///
+  /// ```dart
+  /// final list = <int>[1, 3].doublyLinkedListNotifier;
+  /// final node = list.findNodeByElement(1);
+  /// list.insertAfter(node!, 2);
+  /// print(list); // Output: [1, 2, 3]
+  /// ```
+  @override
+  void insertAfter(Node<E> node, E data) =>
+      _updateOnAction(() => v.insertAfter(node, data));
+
+  @override
+  void insertBefore(Node<E> node, E data) =>
+      _updateOnAction(() => v.insertBefore(node, data));
+
+  /// Inserts a new node before the specified node.
+  ///
+  /// ```dart
+  /// final list = <int>[2, 3].doublyLinkedListNotifier;
+  /// final node = list.findNodeByElement(2);
+  /// list.insertBefore(node!, 1);
+  /// print(list); // Output: [1, 2, 3]
+  /// ```
+  @override
+  Iterable<Node<E>> get nodes => v.nodes;
+
+  /// Prepends a new node with the given data to the start of the list.
+  ///
+  /// ```dart
+  /// final list = <int>[].doublyLinkedListNotifier;
+  /// list.prepend(2);
+  /// list.prepend(1);
+  /// print(list); // Output: [1, 2]
+  /// ```
+  @override
+  void prepend(E data) => _updateOnAction(() => v.prepend(data));
+
+  /// Removes the first node with the given value.
+  ///
+  /// ```dart
+  /// final list = [1, 2, 3].doublyLinkedListNotifier
+  /// list.removeByValue(2);
+  /// print(list); // Output: [1, 3]
+  /// ```
+  @override
+  bool removeByValue(E value) => _updateOnAction(() => v.removeByValue(value));
+
+  /// Removes the specified node from the list.
+  ///
+  /// ```dart
+  /// final list = [1, 2, 3].doublyLinkedListNotifier
+  /// final node = list.findNodeByElement(2);
+  /// list.removeNode(node!);
+  /// print(list); // Output: [1, 3]
+  /// ```
+  @override
+  bool removeNode(Node<E> node) => _updateOnAction(() => v.removeNode(node));
+
+  /// Finds a node by its index and returns null with RangeError.
+  @override
+  Node<E>? tryFindNode(int index) => v.tryFindNode(index);
+
+  /// Returns the first node that satisfies the given test.
+  @override
+  Node<E> firstNodeWhere(bool Function(Node<E> p1) test) =>
+      v.firstNodeWhere(test);
+
+  /// Returns the first node that satisfies the given test, or null if none found.
+  @override
+  Node<E>? firstNodeWhereOrNull(bool Function(Node<E> p1) test) =>
+      v.firstNodeWhereOrNull(test);
+
+  /// Returns the last node that satisfies the given test.
+  @override
+  Node<E> lastNodeWhere(bool Function(Node<E> p1) test) =>
+      v.lastNodeWhere(test);
+
+  /// Returns the last node that satisfies the given test, or null if none found.
+  @override
+  Node<E>? lastNodeWhereOrNull(bool Function(Node<E> p1) test) =>
+      v.lastNodeWhereOrNull(test);
+
+  /// Removes all nodes whose data satisfies the test function.
+  @override
+  void removeNodesWhere(bool Function(E p1) test) =>
+      _updateOnAction(() => v.removeNodesWhere(test));
+
+  /// Replaces the data of the specified node with newData.
+  @override
+  void replaceNode(Node<E> node, E newData) => _updateOnAction(
+        () => v.replaceNode(node, newData),
+      );
+
+  /// Reverses the order of the nodes in the list.
+  @override
+  void reverse() => _updateOnAction(v.reverse);
+
+  /// Returns a single node that satisfies the given test.
+  @override
+  Node<E> singleNodeWhere(bool Function(Node<E> p1) test) =>
+      v.singleNodeWhere(test);
+
+  /// same as [singleNodeWhere] but returns null when not found.
+  @override
+  E? singleNodeWhereOrNull(bool Function(E p1) test) =>
+      v.singleNodeWhereOrNull(test);
+
+  /// Swaps the positions of two nodes in the list.
+  @override
+  void swapNodes(Node<E> node1, Node<E> node2) =>
+      _updateOnAction(() => v.swapNodes(node1, node2));
 }

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  print(PlatformEnv.isMacOS);
+  runApp(const MyApp());
+}
 
 final themeModeNotifier = ThemeMode.light.notifier;
 
 class MyApp extends StatelessWidget {
-  // Create a ValueNotifier for the theme mode.
-
   const MyApp({super.key});
 
   @override
@@ -45,10 +46,13 @@ class MyHomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Text(
-          "Theme Mode is: ${theme.brightness.name}",
-          style: theme.displayMedium,
+      body: Padding(
+        padding: 8.paddingAll,
+        child: Center(
+          child: Text(
+            "Theme Mode is: ${theme.brightness.name}",
+            style: theme.displayMedium,
+          ),
         ),
       ),
     );

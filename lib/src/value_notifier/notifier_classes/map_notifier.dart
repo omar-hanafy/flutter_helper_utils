@@ -13,7 +13,22 @@ class MapNotifier<K, V> extends ValueNotifier<Map<K, V>> implements Map<K, V> {
     } catch (_) {}
   }
 
-  void refresh() => notifyListeners();
+  /// similar to value setter but this one force trigger the notifyListeners()
+  /// event if newValue == value.
+  void replace(Map<K, V> newValue) {
+    final list = value;
+    value = newValue;
+    // force notify if the value setter did not trigger.
+    if (list == newValue) notifyListeners();
+  }
+
+  void refresh() {
+    final map = value;
+    final newMap = {...map};
+    value = newMap;
+    // force notify if the value setter did not trigger.
+    if (map == newMap) notifyListeners();
+  }
 
   /// Will notifyListeners after a specific [action] has been made,
   /// and optionally return a result [R] of certain type.

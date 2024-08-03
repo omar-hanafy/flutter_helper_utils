@@ -12,7 +12,13 @@ class UriNotifier extends ValueNotifier<Uri> implements Uri {
     } catch (_) {}
   }
 
-  void refresh() => notifyListeners();
+  void refresh() {
+    final uri = value;
+    final newUri = uri.replace();
+    value = newUri;
+    // force notify if the value setter did not trigger.
+    if (uri == newUri) notifyListeners();
+  }
 
   /// similar to value setter but this one force trigger the notifyListeners()
   /// event if newValue == value.

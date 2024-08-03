@@ -1,5 +1,27 @@
-## 6.0.3
+## 6.1.0
+- Introduced `isFuchsia` and `isFuchsiaWeb` properties to `BuildContext` and `TargetPlatform` extensions, simplifying detection of the Fuchsia operating system in both native and web environments.
+- Added `DoublyLinkedListNotifier` which creates `ValueNotifier<DoublyLinkedList>` (leveraging the `DoublyLinkedList` from [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils/changelog#2) package as of [v2.2.1+](https://pub.dev/packages/dart_helper_utils/changelog#221))
+- Easily create custom `ValueNotifier` (e.g. `ListNotifier`) from any `Iterable<E>` using the `listNotifier`, `setNotifier`, and `doublyLinkedListNotifier` constructors.
+- `Box` Widget: Introduced the `Box` widget for creating square `SizedBox` elements with a single `dimension` parameter, reducing boilerplate.
+- `EdgeInsets` Conversion: convert numbers to `EdgeInsets` using the new extension, e.g., `Padding(padding: 8.paddingAll)`.
+- `themeData.withoutEffects()`: method to customize which visual feedback effects (splash, highlight, hover, etc.) to remove from a theme.
+- `ThemeWithoutEffects` Widget: Wrap widgets with this widget to selectively disable visual effects for specific parts of your app.
 
+- **PlatformEnv:**
+    - Introduced the `PlatformEnv` class to replace direct usage of `dart:io`'s `Platform` for improved web compatibility and error prevention.
+    - The `PlatformEnv` class is a critical update for web compatibility. Consider updating your code to use `PlatformEnv` instead of `Platform` for a smoother transition to web support.
+
+- **Enhanced Color Extension:**
+    - **Expanded `toHex`:**  The `toHex` method now accepts an optional `includeAlpha` parameter to control whether the alpha channel is included in the hexadecimal representation.
+    - Introduced new methods:
+        - `darken`, `lighten`: Adjust color lightness.
+        - `shade`, `tint`: Create variations by mixing with black/white.
+        - `contrast`: Calculate contrast ratios between colors.
+        - `complementary`: Find the opposite color on the color wheel.
+        - `blend`: Mix colors together.
+        - `grayscale`, `invert`: Convert to grayscale or invert colors.
+
+## 6.0.3
 - Updated some documentations.
 
 ## 6.0.2

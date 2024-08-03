@@ -2,6 +2,7 @@ export 'bool_notifier.dart';
 export 'color_notifier.dart';
 export 'date_notifier.dart';
 export 'double_notifier.dart';
+export 'doubly_linked_list_notifier.dart';
 export 'duration_notifier.dart';
 export 'int_notifier.dart';
 export 'list_notifier.dart';

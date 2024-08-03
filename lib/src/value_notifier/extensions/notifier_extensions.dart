@@ -1,3 +1,4 @@
+import 'package:dart_helper_utils/dart_helper_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/src/value_notifier/notifier_classes/notifier_classes.dart';
 
@@ -93,17 +94,34 @@ extension FHUBrightnessNotifierEx on Brightness {
   BrightnessNotifier get notifier => BrightnessNotifier(this);
 }
 
-/// ListNotifierEx<T>
+/// ListNotifierEx<E>
 ///
-/// Extension on List<T> to provide easy access to creating a [ValueNotifier] for lists of any (primitive types)[https://dart.dev/language/built-in-types].
+/// Extension on List<E> to provide easy access to creating a [ValueNotifier] for lists of any (primitive types)[https://dart.dev/language/built-in-types].
+extension FHUIterableNotifierEx<E> on Iterable<E> {
+  ListNotifier<E> get listNotifier => ListNotifier.from(this);
+
+  SetNotifier<E> get setNotifier => SetNotifier.from(this);
+
+  DoublyLinkedListNotifier<E> get doublyLinkedListNotifier =>
+      DoublyLinkedListNotifier.from(this);
+}
+
 extension FHUListNotifierEx<E> on List<E> {
   /// directly make [ValueNotifier] instance from [List].
   ListNotifier<E> get notifier => ListNotifier(this);
 }
 
-/// SetNotifierEx<T>
+/// DoublyLinkedListNotifierEx<E>
 ///
-/// Extension on List<T> to provide easy access to creating a [ValueNotifier] for lists of any (primitive types)[https://dart.dev/language/built-in-types].
+/// Extension on DoublyLinkedList<E> to provide easy access to creating a [ValueNotifier] for [DoublyLinkedList] of any (primitive types)[https://dart.dev/language/built-in-types].
+extension FHUDoublyLinkedListNotifierEx<E> on DoublyLinkedList<E> {
+  /// directly make [ValueNotifier] instance from [List].
+  DoublyLinkedListNotifier<E> get notifier => DoublyLinkedListNotifier(this);
+}
+
+/// SetNotifierEx<E>
+///
+/// Extension on List<E> to provide easy access to creating a [ValueNotifier] for lists of any (primitive types)[https://dart.dev/language/built-in-types].
 extension FHUSetNotifierEx<E> on Set<E> {
   /// directly make [ValueNotifier] instance from [List].
   SetNotifier<E> get notifier => SetNotifier(this);

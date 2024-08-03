@@ -6,6 +6,21 @@ import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
   SetNotifier(super.initial);
 
+  /// Creates a list containing all [elements].
+  factory SetNotifier.from(Iterable<E> elements) =>
+      SetNotifier(Set.from(elements));
+
+  factory SetNotifier.of(Iterable<E> elements) => SetNotifier(Set.of(elements));
+
+  factory SetNotifier.unmodifiable(Iterable<E> elements) =>
+      SetNotifier(Set.unmodifiable(elements));
+
+  static SetNotifier<T> castFrom<S, T>(
+    Set<S> source, {
+    Set<R> Function<R>()? newSet,
+  }) =>
+      SetNotifier(Set.castFrom(source, newSet: newSet));
+
   @override
   void notifyListeners() {
     try {
@@ -13,13 +28,22 @@ class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
     } catch (_) {}
   }
 
-  void refresh() => notifyListeners();
-
   /// similar to value setter but this one force trigger the notifyListeners()
   /// event if newValue == value.
+  // TODO(any): rename this to replace in the upcoming breaking changes update.
   void update(Set<E> newValue) {
+    final list = value;
     value = newValue;
-    refresh();
+    // force notify if the value setter did not trigger.
+    if (list == newValue) notifyListeners();
+  }
+
+  void refresh() {
+    final set = value;
+    final newSet = {...set};
+    value = newSet;
+    // force notify if the value setter did not trigger.
+    if (set == newSet) notifyListeners();
   }
 
   /// Will notifyListeners after a specific [action] has been made,
