@@ -1,7 +1,24 @@
+## v6.2.0-dev.1
+
+### Introducing Adaptive UI:
+
+This release introduces a simple suite of tools
+to create adaptive user interfaces without relying on any third party libraries.
+It only uses Flutter native code, its efficient as it updates widgets without unnecessary rebuilds
+(updates triggered only when the platform type changes).
+
+**Key Highlights:**
+- **`PlatformTypeProvider` Widget**: Detect platform type (mobile, tablet, desktop, etc.) and manage breakpoint changes efficiently.
+- **Context Extensions**: Use `context.breakpoint` and `context.platformSizeInfo` for convenient access to platform and orientation information.
+- **Responsive Layout Builders**:
+    - `BreakpointLayoutBuilder`: Build responsive layouts based on the current breakpoint (e.g., mobile, tablet).
+    - `PlatformInfoLayoutBuilder`: Build responsive layouts based on both platform type and screen orientation.
+- **Detailed Documentation**: Added [detailed documentation](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/documentations/adaptive_ui_with_platform_type_detection.md) for adaptive UI usage.
+
 ## 6.1.0
 - Introduced `isFuchsia` and `isFuchsiaWeb` properties to `BuildContext` and `TargetPlatform` extensions, simplifying detection of the Fuchsia operating system in both native and web environments.
 - Added `DoublyLinkedListNotifier` which creates `ValueNotifier<DoublyLinkedList>` (leveraging the `DoublyLinkedList` from [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils/changelog#2) package as of [v2.2.1+](https://pub.dev/packages/dart_helper_utils/changelog#221))
-- Easily create custom `ValueNotifier` (e.g. `ListNotifier`) from any `Iterable<E>` using the `listNotifier`, `setNotifier`, and `doublyLinkedListNotifier` constructors.
+- Create custom `ValueNotifier` (e.g. `ListNotifier`) from any `Iterable<E>` using the `listNotifier`, `setNotifier`, and `doublyLinkedListNotifier` constructors.
 - `Box` Widget: Introduced the `Box` widget for creating square `SizedBox` elements with a single `dimension` parameter, reducing boilerplate.
 - `EdgeInsets` Conversion: convert numbers to `EdgeInsets` using the new extension, e.g., `Padding(padding: 8.paddingAll)`.
 - `themeData.withoutEffects()`: method to customize which visual feedback effects (splash, highlight, hover, etc.) to remove from a theme.
@@ -18,11 +35,11 @@
         - `shade`, `tint`: Create variations by mixing with black/white.
         - `contrast`: Calculate contrast ratios between colors.
         - `complementary`: Find the opposite color on the color wheel.
-        - `blend`: Mix colors together.
+        - `blend`: Mix colors.
         - `grayscale`, `invert`: Convert to grayscale or invert colors.
 
 ## 6.0.3
-- Updated some documentations.
+- Updated some documentation.
 
 ## 6.0.2
 ### Breaking Changes
@@ -71,7 +88,7 @@
 ## 4.4.0
 
 - Added `copy` methods to all TextStyle properties in ThemeData (e.g., `displayLargeCopy`, `headlineMediumCopy`, etc.).
-  This allows to quickly use copyWith on text style with minimal code for example:
+  This allows quickly using copyWith on text style with minimal code, for example,
   Use  `theme.displayLargeCopy(color: Colors.red)` instead of `theme.displayLarge?.copyWith(color: Colors.red)`
 - Added `refresh` method to all specialized notifiers to allow force `notifyListeners` without changing value
   of `ValueNotifier`.
@@ -84,7 +101,7 @@
 - Added `modalRoute()` to the context extension for convenient access to the current ModalRoute.
 - Added the `usePopUntil` parameter to the `context.dismissActivePopup` (default: `true`):
     - If `true`, uses `popUntil` for efficient dismissal of multiple pop-ups.
-    - If `false`, uses `recursion` (might be needed for compatibility reasons).
+    - If `false`, uses `recursion` (might be necessary for compatibility reasons).
     - This provides flexibility for different navigation scenarios and compatibility needs.
 
 - Updated `dart_helper_util` to [v1.1.0](https://pub.dev/packages/dart_helper_utils/changelog#110).
@@ -105,7 +122,7 @@ We've refactored the Dart-specific utilities into a new
 package, [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils), to allow Dart projects to use these
 utilities without depending on Flutter.
 
-- No changes are needed from your side as `flutter_helper_utils` now
+- No changes are necessary from your side as `flutter_helper_utils` now
   exports [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) internally.
 
 ### New Features:
@@ -125,7 +142,7 @@ utilities without depending on Flutter.
 
 ## 4.0.1
 
-- Fixed mime checks not exported.
+- Fixed mime checks aren't exported.
 
 ## 4.0.0
 
@@ -199,7 +216,7 @@ utilities without depending on Flutter.
 ## 3.0.6
 
 - IMPORTANT fix to for the convert objects helper and static methods which makes the app freeze, if you are at '3.0.4'
-  or '3.0.5', I encourage you to upgrade.
+  or '3.0.5,' I encourage you to upgrade.
 
 ## 3.0.5
 
@@ -268,7 +285,7 @@ utilities without depending on Flutter.
 
 ## 1.5.6
 
-- Added New Uri extension to help convert string (supports nullable strings) link to uri, `toUri` and `toPhoneUri`.
+- Added a New Uri extension to help convert string (supports nullable strings) link to uri, `toUri` and `toPhoneUri`.
 
 ## 1.5.4
 
@@ -342,7 +359,7 @@ final remainingDuration = date.remainingDuration(DateTime.now());
 
 - **UPDATE**: Enhanced the `asGreeks` getter to include all available Greek symbols for converting large numbers.
   Now, the symbols used are `['K', 'M', 'B', 'T', 'Q', 'P', 'E', 'Z', 'Y']`.
-  This allows for more accurate representation of large numbers, such as converting 1000000000 to 1.0B.
+  This allows for more accurate representation of large numbers, such as converting 1,000,000,000 to 1.0B.
 
 ## 1.4.4
 
@@ -440,7 +457,7 @@ final myInt = toType<int>(data); // tryToType behaves similarly but is null-safe
 - **NEW**: Added `BigInt` and `tryBigInt` in the ConvertObject class. `BigInt` represents arbitrarily large
   integers. It is used when you need to perform operations on integers that exceed the maximum value that can be
   represented by the int type. It's IMPORTANT to note that BigInt operations can be computationally expensive,
-  especially for very large integers. Therefore, use BigInt only when necessary, and be mindful of performance
+  especially for huge integers. Therefore, use BigInt only when necessary, and be mindful of performance
   implications.
 
 &nbsp;
@@ -482,13 +499,13 @@ final BigInt myBigInt = toType<BigInt>(largeNum);
   print(res.statusCode.toHttpResStatus); // will print "Insufficient Storage"
   ```
 
-- **UPDATE**: Used MediaQuery as InheritedModel to improve performance, see
+- **UPDATE**: Use MediaQuery as InheritedModel to improve performance, see
   this [pull](https://github.com/flutter/flutter/pull/114459) in flutter for more info.
 
 ## 1.3.4
 
 - **NEW**: Added `isValidHttpCode` in `num?` extension that returns true if the http response code is 200 or 201.
-- **NEW**: Added `toDateWithFormat` in String extension that converts string to `DateTime` with specific format
+- **NEW**: Added `toDateWithFormat` in a String extension that converts string to `DateTime` with specific format
   e.g., `d-M-y`.
 
 &nbsp;
@@ -506,7 +523,7 @@ final dateTime = '14-12-2030'.toDateWithFormat('d-M-y');
 ## 1.3.2
 
 - **FIX**: Fixed a bug when detecting `isIOSWeb` and `isAndroidWeb` using `TargetPlatform`.
-- **NEW**: Added `isApple` that detects if the running device is made by apple e.g. MacOS, iPadOS, or iOS.
+- **NEW**: Added `isApple` that detects if the running device is made by apple e.g. macOS, iPadOS, or iOS.
 
 &nbsp;
 *Usage*:
@@ -532,7 +549,7 @@ defaultTargetPlatform.isApple // import 'package:flutter/foundation.dart';
 
 ## 1.3.0
 
-- **HOT FIX**: Fixed bool extension is not exported.
+- **HOT FIX**: A fixed bool extension is not exported.
 
 ## 1.2.9
 
@@ -595,7 +612,7 @@ defaultTargetPlatform.isApple // import 'package:flutter/foundation.dart';
 ## 1.1.8
 
 - **NEW**: Added `isPositiveOrNull`, `isZeroOrNull`, and `isNegativeOrNull` to all numbers extensions.
-- **UPDATE**: on String extension, `isEmptyOrNull` now returns true if string has only empty lines.
+- **UPDATE**: on a String extension, `isEmptyOrNull` now returns true if string has only empty lines.
 
 ## 1.1.7
 
@@ -603,7 +620,7 @@ defaultTargetPlatform.isApple // import 'package:flutter/foundation.dart';
 
 ## 1.1.6
 
-- **NEW**:  Added `toMap` and `tryToMap` in `ConvertObject` class, and add `isValidSVG` in String extension.
+- **NEW**:  Added `toMap` and `tryToMap` in `ConvertObject` class, and add `isValidSVG` in a String extension.
 
 ## 1.1.5
 
@@ -612,7 +629,7 @@ defaultTargetPlatform.isApple // import 'package:flutter/foundation.dart';
 
 ## 1.1.4
 
-- **NEW**:  Supported converting timestamp milliseconds to `DateTime` and added `tryToString` in `ConvertObject` class.
+- **NEW**: Supported converting timestamp milliseconds to `DateTime` and added `tryToString` in `ConvertObject` class.
 
 ## 1.1.3
 
@@ -636,7 +653,7 @@ defaultTargetPlatform.isApple // import 'package:flutter/foundation.dart';
 
 ## 1.0.8
 
-- **FIX**: Fixed bug with `isHexColor` in color extension.
+- **FIX**: Fixed bug with `isHexColor` in a color extension.
 
 ## 1.0.7
 

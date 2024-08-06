@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
+extension CustomBreakpoint on Breakpoint {
+  bool get isWatch => match('watch');
+}
+
 void main() {
-  print(PlatformEnv.isMacOS);
-  runApp(const MyApp());
+  runApp(
+    PlatformTypeProvider(
+      breakpoints: [
+        Breakpoint(size: Size(200, 200), name: 'Watch'),
+        ...Breakpoint.defaults,
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 final themeModeNotifier = ThemeMode.light.notifier;
@@ -46,14 +57,20 @@ class MyHomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: 8.paddingAll,
-        child: Center(
-          child: Text(
-            "Theme Mode is: ${theme.brightness.name}",
-            style: theme.displayMedium,
-          ),
-        ),
+      body: PlatformInfoLayoutBuilder(
+        builder: (context, platformInfo) {
+          return Padding(
+            padding: 8.paddingAll,
+            child: Center(
+              child: Text(
+                "Theme Mode is: ${theme.brightness.name}",
+                style: platformInfo.breakpoint.isDesktop
+                    ? theme.displayLarge
+                    : theme.displayMedium,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
