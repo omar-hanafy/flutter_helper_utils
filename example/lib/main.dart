@@ -7,9 +7,9 @@ extension CustomBreakpoint on Breakpoint {
 
 void main() {
   runApp(
-    PlatformTypeProvider(
+    const PlatformTypeProvider(
       breakpoints: [
-        Breakpoint(size: Size(200, 200), name: 'Watch'),
+        Breakpoint(width: 200, name: 'Watch'),
         ...Breakpoint.defaults,
       ],
       child: MyApp(),
@@ -17,7 +17,7 @@ void main() {
   );
 }
 
-final themeModeNotifier = ThemeMode.light.notifier;
+final themeModeNotifier = ThemeMode.system.notifier;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -27,11 +27,24 @@ class MyApp extends StatelessWidget {
     return themeModeNotifier.builder(
       (themeMode) {
         return MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData.light(),
-          darkTheme: ThemeData.dark(),
+          title: 'Flutter Helper Utils Enhanced Demo',
+          theme: ThemeData(
+            brightness: Brightness.light,
+            primarySwatch: Colors.blue,
+            textTheme: const TextTheme(
+              headlineMedium: TextStyle(color: Colors.blue),
+              bodyMedium: TextStyle(color: Colors.black87),
+            ),
+          ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            primarySwatch: Colors.deepPurple,
+            textTheme: const TextTheme(
+              headlineMedium: TextStyle(color: Colors.deepPurpleAccent),
+              bodyMedium: TextStyle(color: Colors.white70),
+            ),
+          ),
           themeMode: themeMode,
-          // Use the value from the ValueNotifier
           home: const MyHomePage(),
         );
       },
@@ -45,33 +58,203 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.themeData;
+    final platformInfo = context.platformSizeInfo;
+    final screenSize = context.sizePx;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Theme Mode Switcher"),
+        title: Text('Platform: ${platformInfo.platform.name}'),
         actions: [
-          Switch(
-            value: theme.isDark,
-            onChanged: (value) => value
-                ? themeModeNotifier.setDart()
-                : themeModeNotifier.setLight(),
+          IconButton(
+            icon: Icon(theme.isDark ? Icons.nightlight_round : Icons.wb_sunny),
+            onPressed: () {
+              theme.isDark
+                  ? themeModeNotifier.setLight()
+                  : themeModeNotifier.setDark();
+            },
           ),
         ],
       ),
-      body: PlatformInfoLayoutBuilder(
-        builder: (context, platformInfo) {
-          return Padding(
-            padding: 8.paddingAll,
-            child: Center(
-              child: Text(
-                "Theme Mode is: ${theme.brightness.name}",
-                style: platformInfo.breakpoint.isDesktop
-                    ? theme.displayLarge
-                    : theme.displayMedium,
-              ),
+      body: SingleChildScrollView(
+        padding: 16.edgeInsetsAll, // Using EdgeInsets utility
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Current Theme Mode: ${theme.brightness.name}',
+              style: platformInfo.breakpoint.isDesktop
+                  ? theme.headlineMedium
+                  : theme.headlineSmall,
+              textAlign: TextAlign.center,
             ),
-          );
-        },
+            const SizedBox(height: 20),
+            Text(
+              'Platform: ${platformInfo.platform.name}',
+              style: platformInfo.breakpoint.isDesktop
+                  ? theme.headlineMedium
+                  : theme.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Screen Size: ${screenSize.width.toInt()} x ${screenSize.height.toInt()}',
+              style: platformInfo.breakpoint.isDesktop
+                  ? theme.headlineMedium
+                  : theme.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            _buildResponsiveButtons(context, platformInfo, screenSize),
+            const SizedBox(height: 40),
+            Text(
+              'Try switching the theme mode or resizing the window to see changes!',
+              style: theme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            if (platformInfo.breakpoint.isDesktop)
+              Text(
+                'Additional Desktop Information: Multi-window support enabled.',
+                style: theme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Using focus utility
+                context
+                  ..unFocus
+                  ..showSnackBar(
+                    const SnackBar(
+                      content: Text('Focus removed and button clicked!'),
+                    ),
+                  );
+              },
+              child: const Text('Unfocus & Click'),
+            ),
+            const SizedBox(height: 20),
+            _buildAdditionalUtilities(context),
+          ],
+        ),
       ),
+      drawer: platformInfo.breakpoint.isMobile
+          ? Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  const DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                    ),
+                    child: Text(
+                      'Menu',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text('Item 1'),
+                    onTap: () {
+                      context.showSnackBar(
+                        const SnackBar(
+                          content: Text('Item 1 selected'),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Item 2'),
+                    onTap: () {
+                      context.showSnackBar(
+                        const SnackBar(
+                          content: Text('Item 2 selected'),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            )
+          : null,
+    );
+  }
+
+  Widget _buildResponsiveButtons(
+      BuildContext context, PlatformSizeInfo platformInfo, Size screenSize) {
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      alignment: WrapAlignment.center,
+      children: [
+        if (platformInfo.breakpoint.isMobile)
+          ElevatedButton.icon(
+            onPressed: () {
+              context.showSnackBar(
+                const SnackBar(
+                  content: Text('Action triggered on Mobile!'),
+                ),
+              ); // Using context.showSnackBar utility
+            },
+            icon: const Icon(Icons.phone_android),
+            label: const Text('Mobile Action'),
+          ),
+        if (platformInfo.breakpoint.isTablet)
+          ElevatedButton.icon(
+            onPressed: () {
+              context.showSnackBar(
+                const SnackBar(
+                  content: Text('Action triggered on Tablet!'),
+                ),
+              );
+            },
+            icon: const Icon(Icons.tablet),
+            label: const Text('Tablet Action'),
+          ),
+        if (platformInfo.breakpoint.isDesktop)
+          ElevatedButton.icon(
+            onPressed: () {
+              context.showSnackBar(
+                const SnackBar(
+                  content: Text('Action triggered on Desktop!'),
+                ),
+              );
+            },
+            icon: const Icon(Icons.desktop_windows),
+            label: const Text('Desktop Action'),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildAdditionalUtilities(BuildContext context) {
+    return Column(
+      children: [
+        // Demonstrating DateTime utilities
+        Text(
+          'Formatted Date: ${DateTime.now().format('yyyy/MM/dd')}',
+          style: context.themeData.bodyMedium,
+        ),
+        const SizedBox(height: 20),
+        // Demonstrating String utilities
+        Text(
+          'Is the string "Helper" blank? ${"Helper".isBlank}',
+          style: context.themeData.bodyMedium,
+        ),
+        const SizedBox(height: 20),
+        // Demonstrating Focus utility
+        ElevatedButton(
+          onPressed: () {
+            context
+              ..unFocus
+              ..showSnackBar(
+                const SnackBar(
+                  content: Text('Focus removed and action triggered!'),
+                ),
+              );
+          },
+          child: const Text('Unfocus & Show SnackBar'),
+        ),
+      ],
     );
   }
 }

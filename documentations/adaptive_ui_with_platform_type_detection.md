@@ -1,6 +1,13 @@
 # Adaptive UI with Platform Type Detection
 
-This documentation is part of the [flutter_helper_utils](https://pub.dev/packages/flutter_helper_utils) package
+This documentation is part of the [flutter_helper_utils](https://pub.dev/packages/flutter_helper_utils) package.
+
+## Table of Contents
+
+- [Features](#features)
+- [Usage](#usage)
+- [Customizing Breakpoints](#customizing-breakpoints)
+- [Complete Example](#complete-example-with-customizations) 
 
 ## Features
 
@@ -18,7 +25,10 @@ Wrap the root of your application with `PlatformTypeProvider` to make platform a
 ```dart
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
-runApp(PlatformTypeProvider(child: MyApp()));
+runApp(PlatformTypeProvider(
+  breakpoints: Breakpoint.defaults,  // Use default breakpoints or provide your own
+  child: MyApp()
+));
 ```
 
 ### 2. Build UI Using Context Extensions
@@ -28,7 +38,7 @@ Leverage context extensions for a streamlined approach to building adaptive UIs:
 ```dart
 @override
 Widget build(BuildContext context) {
-  final breakpoint = context.breakpoint; // Automatically rebuilds when the breakpoint changes
+  final breakpoint = context.watchBreakpoint; // Automatically rebuilds when the breakpoint changes
   return breakpoint.isMobile ? const MobileLayout() : const TabletLayout();
 }
 ```
@@ -79,16 +89,16 @@ The `PlatformTypeProvider` widget lets you build responsive layouts by defining 
 
 ### Default Breakpoints
 
-The package provides default breakpoints to get you started:
+The package provides convenient constructors for default breakpoints:
 
-- `mobileBreakPoint`:  `Size(600, 800)`
-- `tabletBreakPoint`: `Size(1200, 1600)`
-- `desktopBreakPoint`: `Size(1800, 2400)`
+- `Breakpoint.mobile()`: Creates a mobile breakpoint with a default width of 600.
+- `Breakpoint.tablet()`: Creates a tablet breakpoint with a default width of 1200.
+- `Breakpoint.desktop()`: Creates a desktop breakpoint with a default width of 1800.
 
 You can use these directly or as a basis for customization:
 
 ```dart
-const smallerMobileBreakpoint = mobileBreakPoint.copyWith(
+const smallerMobileBreakpoint = Breakpoint.mobile(
    name: 'mobileSmall', 
    width: 360
 );
@@ -114,12 +124,12 @@ PlatformTypeProvider(
 ),
 ```
 
-Now, within your `BreakpointLayoutBuilder`, you can easily check for your custom breakpoint:
+Now, within your `BreakpointLayoutBuilder`, you can easily check for your custom breakpoint using the `match` method:
 
 ```dart
 BreakpointLayoutBuilder(
   builder: (context, breakpoint) {
-    if (breakpoint.isWatch) { 
+    if (breakpoint.match('watch')) { 
       // Render a watch-specific UI
     } else if (breakpoint.isMobile) {
       // Render a mobile UI
@@ -144,7 +154,7 @@ if (breakpoint.isWatch) {
 }
 ```
 
-**Complete Example with customizations** 
+### Complete Example with customizations
 
 ```dart
 import 'package:flutter/material.dart';
@@ -154,6 +164,8 @@ const watchBreakPoint = Breakpoint(size: Size(250, 250), name: 'watch');
 
 extension CustomBreakpointEx on Breakpoint {
   bool get isWatch => match('watch');
+  // if you prefer to match with size not name you can use:
+  // bool get isWatch => this == watchBreakPoint;
 }
 
 void main() {
@@ -182,9 +194,12 @@ class MyApp extends StatelessWidget {
           } else if (breakpoint.isMobile) {
             // Render a mobile UI
           } // ... and so on
+          // the breakpoint understands operators like >, <=, ==, etc
+          // e.g. breakpoint > watchBreakPoint
         },
       ),
     );
   }
 }
 ```
+

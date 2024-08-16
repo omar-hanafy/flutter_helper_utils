@@ -1420,4 +1420,9 @@ class DoublyLinkedListNotifier<E> extends ValueNotifier<DoublyLinkedList<E>>
   @override
   void swapNodes(Node<E> node1, Node<E> node2) =>
       _updateOnAction(() => v.swapNodes(node1, node2));
+
+  /// Returns all nodes that satisfy the given test.
+  @override
+  Iterable<Node<E>> nodesWhere(bool Function(Node<E> p1) test) =>
+      v.nodesWhere(test);
 }

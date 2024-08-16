@@ -4,11 +4,11 @@ import 'package:flutter_helper_utils/src/extensions/flutter_extensions/flutter_e
 extension FHUThemeExtension on BuildContext {
   ThemeData get themeData => Theme.of(this);
 
+  Brightness get sysBrightness => mq.platformBrightness;
+
   TextTheme get txtTheme => themeData.textTheme;
 
   Brightness get brightness => themeData.brightness;
-
-  Brightness get sysBrightness => mq.platformBrightness;
 
   bool get isDark => brightness == Brightness.dark;
 

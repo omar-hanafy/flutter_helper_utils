@@ -28,7 +28,7 @@ extension ThemeModeNotifierEx on ValueNotifier<ThemeMode> {
 
   bool get isSystem => value.isSystem;
 
-  void setDart() => value = ThemeMode.dark;
+  void setDark() => value = ThemeMode.dark;
 
   void setLight() => value = ThemeMode.light;
 

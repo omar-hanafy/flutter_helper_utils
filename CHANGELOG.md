@@ -1,25 +1,54 @@
-## v6.2.0-dev.1
+## v6.2.0
 
 ### Introducing Adaptive UI:
 
-This release introduces a simple suite of tools
-to create adaptive user interfaces without relying on any third party libraries.
-It only uses Flutter native code, its efficient as it updates widgets without unnecessary rebuilds
-(updates triggered only when the platform type changes).
+This update introduces a set of tools for creating adaptive user interfaces using only native Flutter code. Widgets update efficiently, triggered only by platform type changes not on every pixel change like other APIs.
 
 **Key Highlights:**
-- **`PlatformTypeProvider` Widget**: Detect platform type (mobile, tablet, desktop, etc.) and manage breakpoint changes efficiently.
-- **Context Extensions**: Use `context.breakpoint` and `context.platformSizeInfo` for convenient access to platform and orientation information.
-- **Responsive Layout Builders**:
-    - `BreakpointLayoutBuilder`: Build responsive layouts based on the current breakpoint (e.g., mobile, tablet).
-    - `PlatformInfoLayoutBuilder`: Build responsive layouts based on both platform type and screen orientation.
-- **Detailed Documentation**: Added [detailed documentation](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/documentations/adaptive_ui_with_platform_type_detection.md) for adaptive UI usage.
+
+* **`PlatformTypeProvider` Widget:** Detect platform type (mobile, tablet, desktop, etc.) and manage breakpoint changes efficiently.
+* **Context Extensions:** 
+    * Use `context.breakpoint` and `context.platformSizeInfo` for convenient access to platform and orientation information.
+    * You can now access the platform helper directly from the theme, e.g., `theme.isMobile`. 
+* **Responsive Layout Builders**:
+    * `BreakpointLayoutBuilder`: Build responsive layouts based on the current breakpoint (e.g., mobile, tablet).
+    * `PlatformInfoLayoutBuilder`: Build responsive layouts based on both platform type and screen orientation.
+* **Detailed Documentation**: Added [detailed documentation](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/documentations/adaptive_ui_with_platform_type_detection.md) for adaptive UI usage.
+
+### New Features:
+
+* **Extension Methods for `num`**: 
+    * `paddingAll`, `paddingHorizontal`, `paddingTop`, etc.: Create `Padding` widgets directly from numeric values, e.g., `12.paddingAll()`.
+    * `edgeInsetsAll`, `edgeInsetsHorizontal`, `edgeInsetsTop`, etc.: Generate `EdgeInsets` objects from numeric values for padding control, e.g., `padding: 12.edgeInsetsAll`.
+    * `widthBox`, `heightBox`, `squareBox`: Easily create `SizedBox` widgets with specified dimensions.
+    * `size`: Converts a numeric value into a `Size` object. 
+* **Extension Methods for `Size`**:
+    * `toSizedBox`: Transforms a `Size` object into a `SizedBox`.
+    * `scaled`: Scales a `Size` by a given factor. 
+    * `aspectRatio`: Calculates the aspect ratio of a `Size`. 
+    * `withWidth`, `withHeight`: Creates a new `Size` with a modified width or height.
+    * `transpose`: Swaps the width and height of a `Size`. 
+    * `toPadding`: Converts a `Size` into a `Padding` widget.
+    * `toAspectRatio`: Creates an `AspectRatio` widget from a `Size`'s aspect ratio.
+    * `isEmpty`: Checks if a `Size` has zero width and height. 
+    * `isLargerThan`, `isSmallerThan`: Compares the area of two `Size` objects.
+    * `scaleIndependently`: Scales the width and height of a `Size` independently.
+    * `clamp`: Restricts a `Size` within specified minimum and maximum dimensions.
+    * `expand`, `reduce`: Increases or decreases the dimensions of a `Size`.
+    * `maxDimension`, `minDimension`: Retrieves the largest or smallest dimension of a `Size`.
+    * `isEqualTo`: Compares two `Size` objects for equality.
+    * `increaseBy`, `decreaseBy`: Creates a new `Size` with increased or decreased dimensions.
+    * `fitWithin`: Scales a `Size` to fit within specified constraints while maintaining its aspect ratio. 
+
+### Fixes
+
+* Fixed a typo in the `setDark` method; it was previously misspelled as `setDart`. 
+* Removed the custom `Box` widget as `SizedBox.square` provides similar functionality.
 
 ## 6.1.0
 - Introduced `isFuchsia` and `isFuchsiaWeb` properties to `BuildContext` and `TargetPlatform` extensions, simplifying detection of the Fuchsia operating system in both native and web environments.
 - Added `DoublyLinkedListNotifier` which creates `ValueNotifier<DoublyLinkedList>` (leveraging the `DoublyLinkedList` from [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils/changelog#2) package as of [v2.2.1+](https://pub.dev/packages/dart_helper_utils/changelog#221))
 - Create custom `ValueNotifier` (e.g. `ListNotifier`) from any `Iterable<E>` using the `listNotifier`, `setNotifier`, and `doublyLinkedListNotifier` constructors.
-- `Box` Widget: Introduced the `Box` widget for creating square `SizedBox` elements with a single `dimension` parameter, reducing boilerplate.
 - `EdgeInsets` Conversion: convert numbers to `EdgeInsets` using the new extension, e.g., `Padding(padding: 8.paddingAll)`.
 - `themeData.withoutEffects()`: method to customize which visual feedback effects (splash, highlight, hover, etc.) to remove from a theme.
 - `ThemeWithoutEffects` Widget: Wrap widgets with this widget to selectively disable visual effects for specific parts of your app.
@@ -70,7 +99,7 @@ It only uses Flutter native code, its efficient as it updates widgets without un
           myNotifier.builder(
             (value) => Text('Value is $value'),
           );
-          ``` 
+          ```
 
 ## 5.0.0
 ### Changed
