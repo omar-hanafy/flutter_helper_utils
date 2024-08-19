@@ -1,3 +1,7 @@
+## v6.2.1
+
+- Updated `dart_helper_util` to [v2.5.0](https://pub.dev/packages/dart_helper_utils/changelog#250).
+
 ## v6.2.0
 
 ### Introducing Adaptive UI:
@@ -80,7 +84,7 @@ This update introduces a set of tools for creating adaptive user interfaces usin
 - **Listenable Extensions:** Added `builder` methods to easily create `ListenableBuilder` (for single listeners) and `ListenablesBuilder`(for multiple listeners) widgets.
 
 ### Fixes & Enhancements
-- Updated `dart_helper_util` to [v2.1.0](https://pub.dev/packages/dart_helper_utils/changelog#120).
+- Updated `dart_helper_util` to [v2.1.0](https://pub.dev/packages/dart_helper_utils/changelog#210).
 - Fixed custom notifier classes sometimes produce Stackoverflow bug when notify listeners.
 
 ### Migration Guide

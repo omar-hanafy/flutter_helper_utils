@@ -95,12 +95,12 @@ extension FHUNumericValueNotifierExtension on ValueNotifier<num> {
   /// otherwise the result is a [double].
   num operator +(num other) => value + other;
 
-  /// Subtracts [other] from this number.
-  ///
-  /// The result is an [int], as described by [int.-],
-  /// if both this number and [other] is an integer,
-  /// otherwise the result is a [double].
-  num operator -(num other) => value - other;
+  // /// Subtracts [other] from this number.
+  // ///
+  // /// The result is an [int], as described by [int.-],
+  // /// if both this number and [other] is an integer,
+  // /// otherwise the result is a [double].
+  // num operator -(num other) => value - other;
 
   /// Multiplies this number by [other].
   ///
@@ -156,24 +156,6 @@ extension FHUNumericValueNotifierExtension on ValueNotifier<num> {
   /// This means that the intermediate result of the double division
   /// must be a finite integer (not an infinity or [double.nan]).
   int operator ~/(num other) => value ~/ other;
-
-  /// The negation of this value.
-  ///
-  /// The negation of a number is a number of the same kind
-  /// (`int` or `double`) representing the negation of the
-  /// numbers numerical value (the result of subtracting the
-  /// number from zero), if that value *exists*.
-  ///
-  /// Negating a double gives a number with the same magnitude
-  /// as the original value (`number.abs() == (-number).abs()`),
-  /// and the opposite sign (`-(number.sign) == (-number).sign`).
-  ///
-  /// Negating an integer, `-number`, is equivalent to subtracting
-  /// it from zero, `0 - number`.
-  ///
-  /// (Both properties generally also hold for the other type,
-  /// but with a few edge case exceptions).
-  num operator -() => -value;
 
   /// The remainder of the truncating division of `this` by [other].
   ///
