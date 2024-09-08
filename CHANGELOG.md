@@ -1,3 +1,41 @@
+# CHANGELOG
+
+## v6.5.0
+
+* **Added** `GradientWidget` which applies a gradient effect to its child widget.
+- Updated `dart_helper_util` to [v2.5.3](https://pub.dev/packages/dart_helper_utils/changelog#253).
+
+## v6.4.0
+* **Added** more methods on numbers for creating `Border`, `Matrix4`, and `BoxConstraints`.
+* **Added** `MultiTapDetector` widget for detecting multi-tap gestures on `child` with `tapCount` and `onTap` callback.
+
+- Updated `dart_helper_util` to [v2.5.2](https://pub.dev/packages/dart_helper_utils/changelog#252).
+
+## v6.3.0
+* **Added** new methods on numbers for creating `BorderRadius` and `Radius` with specific corner combinations:
+    * `onlyTopRounded`
+    * `onlyBottomRounded`
+    * `diagonalBLTR`
+    * `diagonalTLBR`
+    * `onlyLeftRounded`
+    * `onlyRightRounded`
+
+```dart
+Container(
+   decoration: BoxDecoration(
+     color: Colors.blue,
+     borderRadius: 10.allCircular, // All corners rounded with radius 10
+   ),
+  ...
+),
+```
+
+This changelog focuses on the most impactful changes, making it easy for users to quickly understand the updates to the extension.
+
+## v6.2.2
+
+- Updated `dart_helper_util` to [v2.5.1](https://pub.dev/packages/dart_helper_utils/changelog#251).
+
 ## v6.2.1
 
 - Updated `dart_helper_util` to [v2.5.0](https://pub.dev/packages/dart_helper_utils/changelog#250).
