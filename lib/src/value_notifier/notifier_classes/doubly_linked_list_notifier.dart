@@ -1306,7 +1306,11 @@ class DoublyLinkedListNotifier<E> extends ValueNotifier<DoublyLinkedList<E>>
   /// print(node?.data); // Output: 2
   /// ```
   @override
-  Node<E>? findNodeByElement(E data) => value.findNodeByElement(data);
+  Node<E>? findNodeByElement(
+    E data, {
+    Node<E> Function()? orElse,
+  }) =>
+      value.findNodeByElement(data, orElse: orElse);
 
   /// Inserts a new node after the specified node.
   ///
@@ -1373,23 +1377,35 @@ class DoublyLinkedListNotifier<E> extends ValueNotifier<DoublyLinkedList<E>>
 
   /// Returns the first node that satisfies the given test.
   @override
-  Node<E> firstNodeWhere(bool Function(Node<E> p1) test) =>
-      v.firstNodeWhere(test);
+  Node<E> firstNodeWhere(
+    bool Function(Node<E> p1) test, {
+    Node<E> Function()? orElse,
+  }) =>
+      v.firstNodeWhere(test, orElse: orElse);
 
   /// Returns the first node that satisfies the given test, or null if none found.
   @override
-  Node<E>? firstNodeWhereOrNull(bool Function(Node<E> p1) test) =>
-      v.firstNodeWhereOrNull(test);
+  Node<E>? firstNodeWhereOrNull(
+    bool Function(Node<E> p1) test, {
+    Node<E> Function()? orElse,
+  }) =>
+      v.firstNodeWhereOrNull(test, orElse: orElse);
 
   /// Returns the last node that satisfies the given test.
   @override
-  Node<E> lastNodeWhere(bool Function(Node<E> p1) test) =>
-      v.lastNodeWhere(test);
+  Node<E> lastNodeWhere(
+    bool Function(Node<E> p1) test, {
+    Node<E> Function()? orElse,
+  }) =>
+      v.lastNodeWhere(test, orElse: orElse);
 
   /// Returns the last node that satisfies the given test, or null if none found.
   @override
-  Node<E>? lastNodeWhereOrNull(bool Function(Node<E> p1) test) =>
-      v.lastNodeWhereOrNull(test);
+  Node<E>? lastNodeWhereOrNull(
+    bool Function(Node<E> p1) test, {
+    Node<E> Function()? orElse,
+  }) =>
+      v.lastNodeWhereOrNull(test, orElse: orElse);
 
   /// Removes all nodes whose data satisfies the test function.
   @override
@@ -1408,13 +1424,19 @@ class DoublyLinkedListNotifier<E> extends ValueNotifier<DoublyLinkedList<E>>
 
   /// Returns a single node that satisfies the given test.
   @override
-  Node<E> singleNodeWhere(bool Function(Node<E> p1) test) =>
-      v.singleNodeWhere(test);
+  Node<E> singleNodeWhere(
+    bool Function(Node<E> p1) test, {
+    Node<E> Function()? orElse,
+  }) =>
+      v.singleNodeWhere(test, orElse: orElse);
 
   /// same as [singleNodeWhere] but returns null when not found.
   @override
-  E? singleNodeWhereOrNull(bool Function(E p1) test) =>
-      v.singleNodeWhereOrNull(test);
+  Node<E>? singleNodeWhereOrNull(
+    bool Function(Node<E> p1) test, {
+    Node<E> Function()? orElse,
+  }) =>
+      v.singleNodeWhereOrNull(test, orElse: orElse);
 
   /// Swaps the positions of two nodes in the list.
   @override

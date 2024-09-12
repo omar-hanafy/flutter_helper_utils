@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 /// The [onTap] callback is triggered when the specified number of taps ([tapCount])
 /// occurs within the given [duration].
 ///
+/// This widget can detect gestures where the user taps multiple times on the child
+/// widget within a configurable time interval. It handles both rapid tapping
+/// and accidental taps where the user pauses or performs other gestures.
+///
 /// ## Properties:
 ///
 /// * **child:** The widget to which the multi-tap detection will be applied.
@@ -55,8 +59,8 @@ class MultiTapDetector extends StatefulWidget {
 }
 
 class _MultiTapDetectorState extends State<MultiTapDetector> {
-  int _currentTapCount = 0;
-  DateTime? _lastTapTime;
+  int _currentTapCount = 0; // Tracks how many taps have been made
+  DateTime? _firstTapTime; // Tracks when the first tap was made
 
   @override
   Widget build(BuildContext context) {
@@ -69,18 +73,21 @@ class _MultiTapDetectorState extends State<MultiTapDetector> {
             instance.onSerialTapDown = (SerialTapDownDetails details) {
               final now = DateTime.now();
 
-              // Reset if time between taps is too long
-              if (_lastTapTime == null ||
-                  now.difference(_lastTapTime!) > widget.duration) {
+              // Reset if this is the first tap in the sequence or if too much time passed between taps
+              if (_firstTapTime == null ||
+                  now.difference(_firstTapTime!) > widget.duration) {
                 _currentTapCount = 0;
+                _firstTapTime =
+                    now; // Start tracking the sequence from the first tap
               }
 
+              // Increment the tap count
               _currentTapCount++;
-              _lastTapTime = now;
 
+              // Check if the number of taps matches the desired count
               if (_currentTapCount == widget.tapCount) {
                 widget.onTap();
-                _currentTapCount = 0; // Reset after successful tap sequence
+                _resetTapSequence(); // Reset after successful tap sequence
               }
             };
           },
@@ -88,5 +95,11 @@ class _MultiTapDetectorState extends State<MultiTapDetector> {
       },
       child: widget.child,
     );
+  }
+
+  /// Resets the tap count and the timing variables after a successful tap sequence or timeout.
+  void _resetTapSequence() {
+    _currentTapCount = 0;
+    _firstTapTime = null;
   }
 }

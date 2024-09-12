@@ -1,17 +1,57 @@
 # CHANGELOG
 
+## v6.6.0
+
+- `dart_helper_util` upgraded to [v2.6.0](https://pub.dev/packages/dart_helper_utils/changelog#260).
+  This includes updates to `DoublyLinkedList` methods, which are now re-implemented in the `DoublyLinkedListNotifier`.
+- **Added the following to the BuildContext extension for MediaQuery:**
+  - `nullableDeviceOrientation`
+  - `nullablePixelRatio`
+  - `nullableTextScaler`
+  - `platformBrightness`
+  - `nullableSystemGestureInsets`
+  - `nullableViewPadding`
+  - `alwaysUse24HourFormat`
+  - `accessibleNavigation`
+  - `invertColors`
+  - `highContrast`
+  - `onOffSwitchLabels`
+  - `disableAnimations`
+  - `boldText`
+  - `gestureSettings`
+  - `displayFeatures`
+  - `supportsShowingSystemContextMenu`
+  - `nullableSupportsShowingSystemContextMenu`
+      - Usage example:
+        ```dart
+          @override
+          Widget build(BuildContext context) {
+          // DO
+          final displayFeatures = context.displayFeatures;
+          // INSTEAD OF
+          final displayFeatures = MediaQuery.displayFeaturesOf(context);
+          }
+        ```
+
+## v6.5.1
+
+The `MultiTapDetector` widget has been enhanced to handle rapid tapping scenarios and prevent accidental triggers.
+
 ## v6.5.0
 
 * **Added** `GradientWidget` which applies a gradient effect to its child widget.
+
 - Updated `dart_helper_util` to [v2.5.3](https://pub.dev/packages/dart_helper_utils/changelog#253).
 
 ## v6.4.0
+
 * **Added** more methods on numbers for creating `Border`, `Matrix4`, and `BoxConstraints`.
 * **Added** `MultiTapDetector` widget for detecting multi-tap gestures on `child` with `tapCount` and `onTap` callback.
 
 - Updated `dart_helper_util` to [v2.5.2](https://pub.dev/packages/dart_helper_utils/changelog#252).
 
 ## v6.3.0
+
 * **Added** new methods on numbers for creating `BorderRadius` and `Radius` with specific corner combinations:
     * `onlyTopRounded`
     * `onlyBottomRounded`
@@ -21,16 +61,18 @@
     * `onlyRightRounded`
 
 ```dart
-Container(
-   decoration: BoxDecoration(
-     color: Colors.blue,
-     borderRadius: 10.allCircular, // All corners rounded with radius 10
-   ),
-  ...
+Container
+(
+decoration: BoxDecoration(
+color: Colors.blue,
+borderRadius: 10.allCircular, // All corners rounded with radius 10
+),
+...
 ),
 ```
 
-This changelog focuses on the most impactful changes, making it easy for users to quickly understand the updates to the extension.
+This changelog focuses on the most impactful changes, making it easy for users to quickly understand the updates to the
+extension.
 
 ## v6.2.2
 
@@ -44,35 +86,42 @@ This changelog focuses on the most impactful changes, making it easy for users t
 
 ### Introducing Adaptive UI:
 
-This update introduces a set of tools for creating adaptive user interfaces using only native Flutter code. Widgets update efficiently, triggered only by platform type changes not on every pixel change like other APIs.
+This update introduces a set of tools for creating adaptive user interfaces using only native Flutter code. Widgets
+update efficiently, triggered only by platform type changes not on every pixel change like other APIs.
 
 **Key Highlights:**
 
-* **`PlatformTypeProvider` Widget:** Detect platform type (mobile, tablet, desktop, etc.) and manage breakpoint changes efficiently.
-* **Context Extensions:** 
-    * Use `context.breakpoint` and `context.platformSizeInfo` for convenient access to platform and orientation information.
-    * You can now access the platform helper directly from the theme, e.g., `theme.isMobile`. 
+* **`PlatformTypeProvider` Widget:** Detect platform type (mobile, tablet, desktop, etc.) and manage breakpoint changes
+  efficiently.
+* **Context Extensions:**
+    * Use `context.breakpoint` and `context.platformSizeInfo` for convenient access to platform and orientation
+      information.
+    * You can now access the platform helper directly from the theme, e.g., `theme.isMobile`.
 * **Responsive Layout Builders**:
     * `BreakpointLayoutBuilder`: Build responsive layouts based on the current breakpoint (e.g., mobile, tablet).
     * `PlatformInfoLayoutBuilder`: Build responsive layouts based on both platform type and screen orientation.
-* **Detailed Documentation**: Added [detailed documentation](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/documentations/adaptive_ui_with_platform_type_detection.md) for adaptive UI usage.
+* **Detailed Documentation**:
+  Added [detailed documentation](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/documentations/adaptive_ui_with_platform_type_detection.md)
+  for adaptive UI usage.
 
 ### New Features:
 
-* **Extension Methods for `num`**: 
-    * `paddingAll`, `paddingHorizontal`, `paddingTop`, etc.: Create `Padding` widgets directly from numeric values, e.g., `12.paddingAll()`.
-    * `edgeInsetsAll`, `edgeInsetsHorizontal`, `edgeInsetsTop`, etc.: Generate `EdgeInsets` objects from numeric values for padding control, e.g., `padding: 12.edgeInsetsAll`.
+* **Extension Methods for `num`**:
+    * `paddingAll`, `paddingHorizontal`, `paddingTop`, etc.: Create `Padding` widgets directly from numeric values,
+      e.g., `12.paddingAll()`.
+    * `edgeInsetsAll`, `edgeInsetsHorizontal`, `edgeInsetsTop`, etc.: Generate `EdgeInsets` objects from numeric values
+      for padding control, e.g., `padding: 12.edgeInsetsAll`.
     * `widthBox`, `heightBox`, `squareBox`: Easily create `SizedBox` widgets with specified dimensions.
-    * `size`: Converts a numeric value into a `Size` object. 
+    * `size`: Converts a numeric value into a `Size` object.
 * **Extension Methods for `Size`**:
     * `toSizedBox`: Transforms a `Size` object into a `SizedBox`.
-    * `scaled`: Scales a `Size` by a given factor. 
-    * `aspectRatio`: Calculates the aspect ratio of a `Size`. 
+    * `scaled`: Scales a `Size` by a given factor.
+    * `aspectRatio`: Calculates the aspect ratio of a `Size`.
     * `withWidth`, `withHeight`: Creates a new `Size` with a modified width or height.
-    * `transpose`: Swaps the width and height of a `Size`. 
+    * `transpose`: Swaps the width and height of a `Size`.
     * `toPadding`: Converts a `Size` into a `Padding` widget.
     * `toAspectRatio`: Creates an `AspectRatio` widget from a `Size`'s aspect ratio.
-    * `isEmpty`: Checks if a `Size` has zero width and height. 
+    * `isEmpty`: Checks if a `Size` has zero width and height.
     * `isLargerThan`, `isSmallerThan`: Compares the area of two `Size` objects.
     * `scaleIndependently`: Scales the width and height of a `Size` independently.
     * `clamp`: Restricts a `Size` within specified minimum and maximum dimensions.
@@ -80,27 +129,38 @@ This update introduces a set of tools for creating adaptive user interfaces usin
     * `maxDimension`, `minDimension`: Retrieves the largest or smallest dimension of a `Size`.
     * `isEqualTo`: Compares two `Size` objects for equality.
     * `increaseBy`, `decreaseBy`: Creates a new `Size` with increased or decreased dimensions.
-    * `fitWithin`: Scales a `Size` to fit within specified constraints while maintaining its aspect ratio. 
+    * `fitWithin`: Scales a `Size` to fit within specified constraints while maintaining its aspect ratio.
 
 ### Fixes
 
-* Fixed a typo in the `setDark` method; it was previously misspelled as `setDart`. 
+* Fixed a typo in the `setDark` method; it was previously misspelled as `setDart`.
 * Removed the custom `Box` widget as `SizedBox.square` provides similar functionality.
 
 ## 6.1.0
-- Introduced `isFuchsia` and `isFuchsiaWeb` properties to `BuildContext` and `TargetPlatform` extensions, simplifying detection of the Fuchsia operating system in both native and web environments.
-- Added `DoublyLinkedListNotifier` which creates `ValueNotifier<DoublyLinkedList>` (leveraging the `DoublyLinkedList` from [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils/changelog#2) package as of [v2.2.1+](https://pub.dev/packages/dart_helper_utils/changelog#221))
-- Create custom `ValueNotifier` (e.g. `ListNotifier`) from any `Iterable<E>` using the `listNotifier`, `setNotifier`, and `doublyLinkedListNotifier` constructors.
-- `EdgeInsets` Conversion: convert numbers to `EdgeInsets` using the new extension, e.g., `Padding(padding: 8.paddingAll)`.
-- `themeData.withoutEffects()`: method to customize which visual feedback effects (splash, highlight, hover, etc.) to remove from a theme.
-- `ThemeWithoutEffects` Widget: Wrap widgets with this widget to selectively disable visual effects for specific parts of your app.
+
+- Introduced `isFuchsia` and `isFuchsiaWeb` properties to `BuildContext` and `TargetPlatform` extensions, simplifying
+  detection of the Fuchsia operating system in both native and web environments.
+- Added `DoublyLinkedListNotifier` which creates `ValueNotifier<DoublyLinkedList>` (leveraging the `DoublyLinkedList`
+  from [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils/changelog#2) package as
+  of [v2.2.1+](https://pub.dev/packages/dart_helper_utils/changelog#221))
+- Create custom `ValueNotifier` (e.g. `ListNotifier`) from any `Iterable<E>` using the `listNotifier`, `setNotifier`,
+  and `doublyLinkedListNotifier` constructors.
+- `EdgeInsets` Conversion: convert numbers to `EdgeInsets` using the new extension, e.g.,
+  `Padding(padding: 8.paddingAll)`.
+- `themeData.withoutEffects()`: method to customize which visual feedback effects (splash, highlight, hover, etc.) to
+  remove from a theme.
+- `ThemeWithoutEffects` Widget: Wrap widgets with this widget to selectively disable visual effects for specific parts
+  of your app.
 
 - **PlatformEnv:**
-    - Introduced the `PlatformEnv` class to replace direct usage of `dart:io`'s `Platform` for improved web compatibility and error prevention.
-    - The `PlatformEnv` class is a critical update for web compatibility. Consider updating your code to use `PlatformEnv` instead of `Platform` for a smoother transition to web support.
+    - Introduced the `PlatformEnv` class to replace direct usage of `dart:io`'s `Platform` for improved web
+      compatibility and error prevention.
+    - The `PlatformEnv` class is a critical update for web compatibility. Consider updating your code to use
+      `PlatformEnv` instead of `Platform` for a smoother transition to web support.
 
 - **Enhanced Color Extension:**
-    - **Expanded `toHex`:**  The `toHex` method now accepts an optional `includeAlpha` parameter to control whether the alpha channel is included in the hexadecimal representation.
+    - **Expanded `toHex`:**  The `toHex` method now accepts an optional `includeAlpha` parameter to control whether the
+      alpha channel is included in the hexadecimal representation.
     - Introduced new methods:
         - `darken`, `lighten`: Adjust color lightness.
         - `shade`, `tint`: Create variations by mixing with black/white.
@@ -110,22 +170,33 @@ This update introduces a set of tools for creating adaptive user interfaces usin
         - `grayscale`, `invert`: Convert to grayscale or invert colors.
 
 ## 6.0.3
+
 - Updated some documentation.
 
 ## 6.0.2
+
 ### Breaking Changes
-- **Renamed Method:** The `listenableBuilder` method has been renamed to `builder` in the `extension on ValueListenable`.
-- **Refactored Notifier Classes**: Methods previously available as extensions on ValueNotifier<T> have been moved directly into the corresponding notifier classes (e.g., toggle for BoolNotifier, increment for IntNotifier).
+
+- **Renamed Method:** The `listenableBuilder` method has been renamed to `builder` in the
+  `extension on ValueListenable`.
+- **Refactored Notifier Classes**: Methods previously available as extensions on ValueNotifier<T> have been moved
+  directly into the corresponding notifier classes (e.g., toggle for BoolNotifier, increment for IntNotifier).
 
 ### New Features
-- Introduced `ListenablesBuilder`: A widget for building UI in response to changes in multiple listenable objects (`List<Listenable>`). it also has  `buildWhen` and `threshold` properties for more granular control over rebuild behavior.
-- **Listenable Extensions:** Added `builder` methods to easily create `ListenableBuilder` (for single listeners) and `ListenablesBuilder`(for multiple listeners) widgets.
+
+- Introduced `ListenablesBuilder`: A widget for building UI in response to changes in multiple listenable objects (
+  `List<Listenable>`). it also has  `buildWhen` and `threshold` properties for more granular control over rebuild
+  behavior.
+- **Listenable Extensions:** Added `builder` methods to easily create `ListenableBuilder` (for single listeners) and
+  `ListenablesBuilder`(for multiple listeners) widgets.
 
 ### Fixes & Enhancements
+
 - Updated `dart_helper_util` to [v2.1.0](https://pub.dev/packages/dart_helper_utils/changelog#210).
 - Fixed custom notifier classes sometimes produce Stackoverflow bug when notify listeners.
 
 ### Migration Guide
+
 1. **Updating ValueNotifier Extensions**:
     - Replace all instances of `listenableBuilder` with the new `builder` method to ensure compatibility.
         - **Before**:
@@ -144,11 +215,13 @@ This update introduces a set of tools for creating adaptive user interfaces usin
           ```
 
 ## 5.0.0
+
 ### Changed
 
 - Upgraded `dart_helper_utils` to [v2.0.0](https://pub.dev/packages/dart_helper_utils/changelog#200), **introducing
   breaking changes**.
-- Enhanced and moved all `isEqual` methods (Map, Set, List, global) to [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils).
+- Enhanced and moved all `isEqual` methods (Map, Set, List, global) to [
+  `dart_helper_utils`](https://pub.dev/packages/dart_helper_utils).
 
 ### BREAKING CHANGES
 
@@ -553,7 +626,8 @@ final BigInt myBigInt = toType<BigInt>(largeNum);
 ## 1.3.5
 
 - **NEW**:
-  Added `showMaterialBanner`, `showSnackBar`, `hideCurrentMaterialBanner`, `hideCurrentSnackBar`, `removeCurrentMaterialBanner`, `removeCurrentSnackBar`, `clearMaterialBanners`, `clearSnackBars`
+  Added `showMaterialBanner`, `showSnackBar`, `hideCurrentMaterialBanner`, `hideCurrentSnackBar`,
+  `removeCurrentMaterialBanner`, `removeCurrentSnackBar`, `clearMaterialBanners`, `clearSnackBars`
   on `BuildContext`. Usage example could be as easy as `context.removeCurrentSnackBar`.
 
 - **NEW**: Added `focusScope`, `hasFocus`, `unFocus`, and `requestFocus` call back on BuildContext. `requestFocus` is
