@@ -1,37 +1,92 @@
 # CHANGELOG
 
+## v6.7.1
+
+- **Enhancement**: `TypedListView`'s internal logic for rendering items and separators has been optimized.
+- **Chore**: `dart_helper_util` upgraded to [v3.1.1](https://pub.dev/packages/dart_helper_utils/changelog#311).
+
+## v6.7.0
+
+### New: `TypedListView` Widget
+
+- A type-safe list view for building highly customizable list.
+- Supports optional headers, footers, separators, and pagination.
+- Optimized for performance with efficient item building logic.
+- ```dart
+  TypedListView(
+    items: products,
+  	itemBuilder: (index, product) => ProductCard(product: item)
+  	paginationWidget: const CircularProgressIndicator(), 
+    padding: 8.edgeInsetsAll,
+  ),
+  ```
+
+### `Future<T>` Extensions
+
+- **`builder`**: Simplifies creating `FutureBuilder` widgets with less boilerplate.
+    - Handles `Future` states (loading, data, error) and supports `initialData` for pre-load UI.
+
+- **`map`**: Transforms `Future` results with a specified function.
+    - Returns a new `Future` with the transformed result, enabling easier async chaining.
+
+- **`buildWidget`**: Simplifies building widgets based on `Future` states.
+    - Accepts `onSuccess`, `onError`, and optional `onLoading` callbacks for rendering different states.
+
+### `AsyncSnapshot<T>` Extensions
+
+- **Connection State Getters**:
+    - `isNone`, `isWaiting`, `isActive`, `isDone`, `isSuccess`, `hasErrorAndDone`, `isWaitingOrActive`.
+
+- **Data Utility Methods**:
+    - `dataOr`: Provides safe access to data with a default fallback.
+    - `dataWhen`: Pattern-matching utility for handling different snapshot states.
+    - `buildWidget`: Simplifies widget building with `onSuccess`, `onError`, and `onLoading` callbacks.
+    - `mapData`: Transforms data if available, returning `null` otherwise.
+  ```dart
+    // Using the `buildWidget` extension on Future to build UI for different states
+    fetchData().buildWidget(
+      onSuccess: (context, data) => ContentWidget(data),
+      onError: (context, error) => ErrorWidget(error),
+      onLoading: (context) => LoadingWidget(),
+    );
+    ```
+
+- Added Countries search example which uses the lightweight countries and timezone data from the `dart_helper_util`
+  package [v3.0.0+](https://pub.dev/packages/dart_helper_utils/changelog).
+- `dart_helper_util` upgraded to [v3.0.0](https://pub.dev/packages/dart_helper_utils/versions/3.0.0/changelog#300).
+
 ## v6.6.0
 
 - `dart_helper_util` upgraded to [v2.6.0](https://pub.dev/packages/dart_helper_utils/changelog#260).
   This includes updates to `DoublyLinkedList` methods, which are now re-implemented in the `DoublyLinkedListNotifier`.
 - **Added the following to the BuildContext extension for MediaQuery:**
-  - `nullableDeviceOrientation`
-  - `nullablePixelRatio`
-  - `nullableTextScaler`
-  - `platformBrightness`
-  - `nullableSystemGestureInsets`
-  - `nullableViewPadding`
-  - `alwaysUse24HourFormat`
-  - `accessibleNavigation`
-  - `invertColors`
-  - `highContrast`
-  - `onOffSwitchLabels`
-  - `disableAnimations`
-  - `boldText`
-  - `gestureSettings`
-  - `displayFeatures`
-  - `supportsShowingSystemContextMenu`
-  - `nullableSupportsShowingSystemContextMenu`
-      - Usage example:
-        ```dart
-          @override
-          Widget build(BuildContext context) {
-          // DO
-          final displayFeatures = context.displayFeatures;
-          // INSTEAD OF
-          final displayFeatures = MediaQuery.displayFeaturesOf(context);
-          }
-        ```
+    - `nullableDeviceOrientation`
+    - `nullablePixelRatio`
+    - `nullableTextScaler`
+    - `platformBrightness`
+    - `nullableSystemGestureInsets`
+    - `nullableViewPadding`
+    - `alwaysUse24HourFormat`
+    - `accessibleNavigation`
+    - `invertColors`
+    - `highContrast`
+    - `onOffSwitchLabels`
+    - `disableAnimations`
+    - `boldText`
+    - `gestureSettings`
+    - `displayFeatures`
+    - `supportsShowingSystemContextMenu`
+    - `nullableSupportsShowingSystemContextMenu`
+        - Usage example:
+          ```dart
+            @override
+            Widget build(BuildContext context) {
+            // DO
+            final displayFeatures = context.displayFeatures;
+            // INSTEAD OF
+            final displayFeatures = MediaQuery.displayFeaturesOf(context);
+            }
+          ```
 
 ## v6.5.1
 

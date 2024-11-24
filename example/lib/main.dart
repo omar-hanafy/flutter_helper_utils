@@ -1,3 +1,4 @@
+import 'package:example/countries.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
@@ -131,10 +132,11 @@ class MyHomePage extends StatelessWidget {
                     ),
                   );
               },
-              child: const Text('Unfocus & Click'),
+              child: const Text('Unfocused & Click'),
             ),
             const SizedBox(height: 20),
             _buildAdditionalUtilities(context),
+            const Countries(),
           ],
         ),
       ),
@@ -241,6 +243,7 @@ class MyHomePage extends StatelessWidget {
           style: context.themeData.bodyMedium,
         ),
         const SizedBox(height: 20),
+
         // Demonstrating Focus utility
         ElevatedButton(
           onPressed: () {

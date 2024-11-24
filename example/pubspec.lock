@@ -42,13 +42,13 @@ packages:
     source: hosted
     version: "1.18.0"
   dart_helper_utils:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: dart_helper_utils
-      sha256: df0fa6d588d3e0b026daf4b47acbd68be7e69db666bf913e47d895bac24b6ea9
+      sha256: "5d11ed4b8c31feec9570caabd7a5d7444caaee19006f3c969638a5d8470ab152"
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.0"
+    version: "3.0.0"
   enefty_icons:
     dependency: "direct main"
     description:
@@ -76,7 +76,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "6.5.0"
+    version: "6.7.0-dev.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -142,10 +142,10 @@ packages:
     dependency: transitive
     description:
       name: mime
-      sha256: "801fd0b26f14a4a58ccb09d5892c3fbdeff209594300a542492cf13fba9d247a"
+      sha256: "41a20518f0cb1256669420fdba0cd90d21561e560ac240f26ef8322e45bb7ed6"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.6"
+    version: "2.0.0"
   path:
     dependency: transitive
     description:

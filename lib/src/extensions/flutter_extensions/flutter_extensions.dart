@@ -1,6 +1,7 @@
 export 'align.dart';
 export 'colors_extension.dart';
 export 'focus_scope_extensions.dart';
+export 'future.dart';
 export 'list_widget.dart';
 export 'media_query_extension.dart';
 export 'navigation.dart';
