@@ -942,6 +942,148 @@ extension FHUThemeDataExtension on ThemeData {
       );
 }
 
+extension FHUThemeDataColorSchemeEx on ThemeData {
+  /// gets the primary from the ColorScheme of this ThemeData
+  /// calling `themeData.primary` is
+  /// same as calling `themeData.colorScheme.primary`
+  Color get primary => colorScheme.primary;
+
+  /// gets the onPrimary from the ColorScheme of this ThemeData
+  /// calling `themeData.onPrimary` is
+  /// same as calling `themeData.colorScheme.onPrimary`
+  Color get onPrimary => colorScheme.onPrimary;
+
+  /// gets the primaryContainer from the ColorScheme of this ThemeData
+  /// calling `themeData.primaryContainer` is
+  /// same as calling `themeData.colorScheme.primaryContainer`
+  Color get primaryContainer => colorScheme.primaryContainer;
+
+  /// gets the onPrimaryContainer from the ColorScheme of this ThemeData
+  /// calling `themeData.onPrimaryContainer` is
+  /// same as calling `themeData.colorScheme.onPrimaryContainer`
+  Color get onPrimaryContainer => colorScheme.onPrimaryContainer;
+
+  /// gets the secondary from the ColorScheme of this ThemeData
+  /// calling `themeData.secondary` is
+  /// same as calling `themeData.colorScheme.secondary`
+  Color get secondary => colorScheme.secondary;
+
+  /// gets the onSecondary from the ColorScheme of this ThemeData
+  /// calling `themeData.onSecondary` is
+  /// same as calling `themeData.colorScheme.onSecondary`
+  Color get onSecondary => colorScheme.onSecondary;
+
+  /// gets the secondaryContainer from the ColorScheme of this ThemeData
+  /// calling `themeData.secondaryContainer` is
+  /// same as calling `themeData.colorScheme.secondaryContainer`
+  Color get secondaryContainer => colorScheme.secondaryContainer;
+
+  /// gets the onSecondaryContainer from the ColorScheme of this ThemeData
+  /// calling `themeData.onSecondaryContainer` is
+  /// same as calling `themeData.colorScheme.onSecondaryContainer`
+  Color get onSecondaryContainer => colorScheme.onSecondaryContainer;
+
+  /// gets the tertiary from the ColorScheme of this ThemeData
+  /// calling `themeData.tertiary` is
+  /// same as calling `themeData.colorScheme.tertiary`
+  Color get tertiary => colorScheme.tertiary;
+
+  /// gets the onTertiary from the ColorScheme of this ThemeData
+  /// calling `themeData.onTertiary` is
+  /// same as calling `themeData.colorScheme.onTertiary`
+  Color get onTertiary => colorScheme.onTertiary;
+
+  /// gets the tertiaryContainer from the ColorScheme of this ThemeData
+  /// calling `themeData.tertiaryContainer` is
+  /// same as calling `themeData.colorScheme.tertiaryContainer`
+  Color get tertiaryContainer => colorScheme.tertiaryContainer;
+
+  /// gets the onTertiaryContainer from the ColorScheme of this ThemeData
+  /// calling `themeData.onTertiaryContainer` is
+  /// same as calling `themeData.colorScheme.onTertiaryContainer`
+  Color get onTertiaryContainer => colorScheme.onTertiaryContainer;
+
+  /// gets the error from the ColorScheme of this ThemeData
+  /// calling `themeData.error` is
+  /// same as calling `themeData.colorScheme.error`
+  Color get error => colorScheme.error;
+
+  /// gets the onError from the ColorScheme of this ThemeData
+  /// calling `themeData.onError` is
+  /// same as calling `themeData.colorScheme.onError`
+  Color get onError => colorScheme.onError;
+
+  /// gets the errorContainer from the ColorScheme of this ThemeData
+  /// calling `themeData.errorContainer` is
+  /// same as calling `themeData.colorScheme.errorContainer`
+  Color get errorContainer => colorScheme.errorContainer;
+
+  /// gets the onErrorContainer from the ColorScheme of this ThemeData
+  /// calling `themeData.onErrorContainer` is
+  /// same as calling `themeData.colorScheme.onErrorContainer`
+  Color get onErrorContainer => colorScheme.onErrorContainer;
+
+  /// gets the surface from the ColorScheme of this ThemeData
+  /// calling `themeData.surface` is
+  /// same as calling `themeData.colorScheme.surface`
+  Color get surface => colorScheme.surface;
+
+  /// gets the onSurface from the ColorScheme of this ThemeData
+  /// calling `themeData.onSurface` is
+  /// same as calling `themeData.colorScheme.onSurface`
+  Color get onSurface => colorScheme.onSurface;
+
+  /// gets the surfaceContainerHighest from the ColorScheme of this ThemeData
+  /// calling `themeData.surfaceContainerHighest` is
+  /// same as calling `themeData.colorScheme.surfaceContainerHighest`
+  Color get surfaceContainerHighest => colorScheme.surfaceContainerHighest;
+
+  /// gets the onSurfaceVariant from the ColorScheme of this ThemeData
+  /// calling `themeData.onSurfaceVariant` is
+  /// same as calling `themeData.colorScheme.onSurfaceVariant`
+  Color get onSurfaceVariant => colorScheme.onSurfaceVariant;
+
+  /// gets the outline from the ColorScheme of this ThemeData
+  /// calling `themeData.outline` is
+  /// same as calling `themeData.colorScheme.outline`
+  Color get outline => colorScheme.outline;
+
+  /// gets the outlineVariant from the ColorScheme of this ThemeData
+  /// calling `themeData.outlineVariant` is
+  /// same as calling `themeData.colorScheme.outlineVariant`
+  Color get outlineVariant => colorScheme.outlineVariant;
+
+  /// gets the shadow from the ColorScheme of this ThemeData
+  /// calling `themeData.shadow` is
+  /// same as calling `themeData.colorScheme.shadow`
+  Color get shadow => colorScheme.shadow;
+
+  /// gets the scrim from the ColorScheme of this ThemeData
+  /// calling `themeData.scrim` is
+  /// same as calling `themeData.colorScheme.scrim`
+  Color get scrim => colorScheme.scrim;
+
+  /// gets the inverseSurface from the ColorScheme of this ThemeData
+  /// calling `themeData.inverseSurface` is
+  /// same as calling `themeData.colorScheme.inverseSurface`
+  Color get inverseSurface => colorScheme.inverseSurface;
+
+  /// gets the onInverseSurface from the ColorScheme of this ThemeData
+  /// calling `themeData.onInverseSurface` is
+  /// same as calling `themeData.colorScheme.onInverseSurface`
+  Color get onInverseSurface => colorScheme.onInverseSurface;
+
+  /// gets the inversePrimary from the ColorScheme of this ThemeData
+  /// calling `themeData.inversePrimary` is
+  /// same as calling `themeData.colorScheme.inversePrimary`
+  Color get inversePrimary => colorScheme.inversePrimary;
+
+  /// gets the surfaceTint from the ColorScheme of this ThemeData
+  /// calling `themeData.surfaceTint` is
+  /// same as calling `themeData.colorScheme.surfaceTint`
+  Color get surfaceTint => colorScheme.surfaceTint;
+}
+
 extension FHUThemeModeEx on ThemeMode? {
   Brightness getBrightness(BuildContext context) {
     switch (this) {
@@ -967,6 +1109,42 @@ extension FHUBrightnessExtension on Brightness? {
   bool get isDark => this == Brightness.dark;
 
   bool get isLight => this == Brightness.light;
+}
+
+extension FHUColorSchemeEx on ColorScheme {
+  /// Converts ThemeColors to ThemeData based on brightness.
+  ThemeData toThemeData({
+    ToggleButtonsThemeData? toggleButtonsTheme,
+    SwitchThemeData? switchTheme,
+    AppBarTheme? appBarTheme,
+    TextTheme? textTheme,
+    ElevatedButtonThemeData? elevatedButtonTheme,
+    TextButtonThemeData? textButtonTheme,
+    FloatingActionButtonThemeData? floatingActionButtonTheme,
+    InputDecorationTheme? inputDecorationTheme,
+    IconThemeData? iconTheme,
+    SnackBarThemeData? snackBarTheme,
+    DividerThemeData? dividerTheme,
+    NavigationBarThemeData? navigationBarTheme,
+    SegmentedButtonThemeData? segmentedButtonTheme,
+  }) {
+    return ThemeData(
+      colorScheme: this,
+      toggleButtonsTheme: toggleButtonsTheme,
+      switchTheme: switchTheme,
+      appBarTheme: appBarTheme,
+      textTheme: textTheme,
+      elevatedButtonTheme: elevatedButtonTheme,
+      textButtonTheme: textButtonTheme,
+      floatingActionButtonTheme: floatingActionButtonTheme,
+      inputDecorationTheme: inputDecorationTheme,
+      iconTheme: iconTheme,
+      snackBarTheme: snackBarTheme,
+      dividerTheme: dividerTheme,
+      navigationBarTheme: navigationBarTheme,
+      segmentedButtonTheme: segmentedButtonTheme,
+    );
+  }
 }
 
 /// A widget that optionally removes various visual feedback effects from its child subtree.

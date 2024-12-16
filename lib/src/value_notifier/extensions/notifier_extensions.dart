@@ -2,135 +2,121 @@ import 'package:dart_helper_utils/dart_helper_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/src/value_notifier/notifier_classes/notifier_classes.dart';
 
-/// extension on [T] where [T] is any non-nullable [Object],
-/// Its used to directly make [ValueNotifier] instance from that [T].
+/// Extension on any non-nullable [Object].
+///
+/// Allows you to directly create a [ValueNotifier] instance from the object.
+///
+/// Example:
+/// ```dart
+/// // Creates ValueNotifier<User>(User()) where User is your custom type/class.
+/// final userNotifier = User().notifier;
+/// ```
 extension FHUValueNotifierExtension<T extends Object> on T {
-  /// using .notifier on any [Objects] allows you to create an instance of [ValueNotifier] that holds a value of type [T]
-  /// for example:
-  /// ```dart
-  /// // creates ValueNotifier<User>(User()) where user is your custom type/class.
-  /// final userNotifier = User().notifier;
-  /// ```
+  /// Creates a [ValueNotifier] for the current instance.
   ValueNotifier<T> get notifier => ValueNotifier<T>(this);
 }
 
-/// BoolNotifierEx
-///
-/// Extension on boolean values to provide easy access to creating a [ValueNotifier] for booleans.
+/// Extension on `bool` to provide easy access to creating a [ValueNotifier] for boolean values.
 extension FHUBoolNotifierEx on bool {
-  /// directly make [ValueNotifier] instance from [bool].
+  /// Creates a [BoolNotifier] instance from the current `bool` value.
   BoolNotifier get notifier => BoolNotifier(this);
 }
 
-/// NumNotifierEx
-///
-/// Extension on numeric values to provide easy access to creating a [ValueNotifier] for numeric types.
+/// Extension on `num` to provide easy access to creating a [ValueNotifier] for numeric types.
 extension FHUNumNotifierEx on num {
-  /// directly make [ValueNotifier] instance from [num].
+  /// Creates a [NumNotifier] instance from the current `num` value.
   NumNotifier get notifier => NumNotifier(this);
 }
 
-/// DoubleNotifierEx
-///
-/// Extension on double values to provide easy access to creating a [ValueNotifier] for double types.
+/// Extension on `double` to provide easy access to creating a [ValueNotifier] for double values.
 extension FHUDoubleNotifierEx on double {
-  /// directly make [ValueNotifier] instance from [double].
+  /// Creates a [DoubleNotifier] instance from the current `double` value.
   DoubleNotifier get notifier => DoubleNotifier(this);
 }
 
-/// IntNotifierEx
-///
-/// Extension on integer values to provide easy access to creating a [ValueNotifier] for integers.
+/// Extension on `int` to provide easy access to creating a [ValueNotifier] for integer values.
 extension FHUIntNotifierEx on int {
-  /// directly make [ValueNotifier] instance from [int].
+  /// Creates an [IntNotifier] instance from the current `int` value.
   IntNotifier get notifier => IntNotifier(this);
 }
 
-/// DateTimeNotifierEx
-///
-/// Extension on DateTime to provide easy access to creating a [ValueNotifier] for DateTime objects.
+/// Extension on `DateTime` to provide easy access to creating a [ValueNotifier] for `DateTime` objects.
 extension FHUDateTimeNotifierEx on DateTime {
-  /// directly make [ValueNotifier] instance from [DateTime].
+  /// Creates a [DateTimeNotifier] instance from the current `DateTime` value.
   DateTimeNotifier get notifier => DateTimeNotifier(this);
 }
 
-/// StringNotifierEx
-///
-/// Extension on String to provide easy access to creating a [ValueNotifier] for String values.
+/// Extension on `String` to provide easy access to creating a [ValueNotifier] for `String` values.
 extension FHUStringNotifierEx on String {
-  /// directly make [ValueNotifier] instance from [String].
+  /// Creates a [StringNotifier] instance from the current `String` value.
   StringNotifier get notifier => StringNotifier(this);
 }
 
-/// ColorNotifierEx
-///
-/// Extension on Color to provide easy access to creating a [ValueNotifier] for Color objects.
+/// Extension on `Color` to provide easy access to creating a [ValueNotifier] for `Color` objects.
 extension FHUColorNotifierEx on Color {
-  /// directly make [ValueNotifier] instance from [Color].
+  /// Creates a [ColorNotifier] instance from the current `Color` value.
   ColorNotifier get notifier => ColorNotifier(this);
 }
 
-/// UriNotifierEx
-///
-/// Extension on Uri to provide easy access to creating a [ValueNotifier] for Uri objects.
+/// Extension on `Uri` to provide easy access to creating a [ValueNotifier] for `Uri` objects.
 extension FHUUriNotifierEx on Uri {
-  /// directly make [ValueNotifier] instance from [Uri].
+  /// Creates a [UriNotifier] instance from the current `Uri` value.
   UriNotifier get notifier => UriNotifier(this);
 }
 
-/// ThemeModeNotifierEx
-///
-/// Extension on ThemeMode to provide easy access to creating a [ValueNotifier]
+/// Extension on `ThemeMode` to provide easy access to creating a [ValueNotifier] for `ThemeMode`.
 extension FHUThemeModeNotifierEx on ThemeMode {
-  /// directly make [ValueNotifier] instance from [ThemeMode].
+  /// Creates a [ThemeModeNotifier] instance from the current `ThemeMode` value.
   ThemeModeNotifier get notifier => ThemeModeNotifier(this);
 }
 
-/// BrightnessNotifierEx
-///
-/// Extension on Brightness to provide easy access to creating a [ValueNotifier]
+/// Extension on `Brightness` to provide easy access to creating a [ValueNotifier] for `Brightness`.
 extension FHUBrightnessNotifierEx on Brightness {
-  /// directly make [ValueNotifier] instance from [ThemeMode].
+  /// Creates a [BrightnessNotifier] instance from the current `Brightness` value.
   BrightnessNotifier get notifier => BrightnessNotifier(this);
 }
 
-/// ListNotifierEx<E>
+/// Extension on `Iterable<E>` to provide easy access to creating various [ValueNotifier] instances.
 ///
-/// Extension on List<E> to provide easy access to creating a [ValueNotifier] for lists of any (primitive types)[https://dart.dev/language/built-in-types].
+/// - [ListNotifier] for lists.
+/// - [SetNotifier] for sets.
+/// - [DoublyLinkedListNotifier] for doubly linked lists.
 extension FHUIterableNotifierEx<E> on Iterable<E> {
+  /// Creates a [ListNotifier] instance from the current `Iterable<E>`.
   ListNotifier<E> get listNotifier => ListNotifier.from(this);
 
+  /// Creates a [SetNotifier] instance from the current `Iterable<E>`.
   SetNotifier<E> get setNotifier => SetNotifier.from(this);
 
+  /// Creates a [DoublyLinkedListNotifier] instance from the current `Iterable<E>`.
   DoublyLinkedListNotifier<E> get doublyLinkedListNotifier =>
       DoublyLinkedListNotifier.from(this);
 }
 
+/// Extension on `List<E>` to provide easy access to creating a [ValueNotifier] for lists.
 extension FHUListNotifierEx<E> on List<E> {
-  /// directly make [ValueNotifier] instance from [List].
+  /// Creates a [ListNotifier] instance from the current `List<E>`.
   ListNotifier<E> get notifier => ListNotifier(this);
 }
 
-/// DoublyLinkedListNotifierEx<E>
+/// Extension on `DoublyLinkedList<E>` to provide easy access to creating a [ValueNotifier] for doubly linked lists.
 ///
-/// Extension on DoublyLinkedList<E> to provide easy access to creating a [ValueNotifier] for [DoublyLinkedList] of any (primitive types)[https://dart.dev/language/built-in-types].
+/// [DoublyLinkedList] is a part of the `dart:collection` library.
 extension FHUDoublyLinkedListNotifierEx<E> on DoublyLinkedList<E> {
-  /// directly make [ValueNotifier] instance from [List].
+  /// Creates a [DoublyLinkedListNotifier] instance from the current `DoublyLinkedList<E>`.
   DoublyLinkedListNotifier<E> get notifier => DoublyLinkedListNotifier(this);
 }
 
-/// SetNotifierEx<E>
-///
-/// Extension on List<E> to provide easy access to creating a [ValueNotifier] for lists of any (primitive types)[https://dart.dev/language/built-in-types].
+/// Extension on `Set<E>` to provide easy access to creating a [ValueNotifier] for sets.
 extension FHUSetNotifierEx<E> on Set<E> {
-  /// directly make [ValueNotifier] instance from [List].
+  /// Creates a [SetNotifier] instance from the current `Set<E>`.
   SetNotifier<E> get notifier => SetNotifier(this);
 }
 
-/// MapNotifierEx<K, V>
+/// Extension on `Map<K, V>` to provide easy access to creating a [ValueNotifier] for maps.
 ///
-/// Extension on Map<K, V> to provide easy access to creating a [ValueNotifier] for maps of any key-value (primitive types)[https://dart.dev/language/built-in-types].
+/// Allows creating a [MapNotifier] instance from a `Map<K, V>`.
 extension FHUMapNotifierEx<K, V> on Map<K, V> {
-  /// directly make [ValueNotifier] instance from [Map].
+  /// Creates a [MapNotifier] instance from the current `Map<K, V>`.
   MapNotifier<K, V> get notifier => MapNotifier(this);
 }

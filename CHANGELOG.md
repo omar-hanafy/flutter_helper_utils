@@ -1,5 +1,41 @@
 # CHANGELOG
 
+## v6.9.0
+
+### **Colors Enhancements:**
+
+- **Wide Gamut Support:** Updated all color operations to be compatible with Flutter's new wide gamut color support.
+  This includes using the `Color.withValues` constructor and ensuring sRGB alignment for consistent results.
+- **Migration Helpers:** Added methods to assist with migrating from the old `Color` API to the new one:
+    - `addOpacity(double opacity)`: Replaces `withOpacity`.
+    - `addAlpha(int alpha)`: Replaces `withAlpha`.
+    - `addRed(int red)`: Replaces `withRed`, and similar for `addGreen`/`addBlue`.
+    - `toARGBInt()`: Converts to the old 32-bit integer format.
+    - `lerpColor(Color? a, Color? b, double t)`:  sRGB-aware version of `Color.lerp`.
+- **Additional Functionality:**
+    - `scaleOpacity(double scale)`:  Scales the alpha channel.
+    - `convertToColorSpace(ColorSpace targetSpace)`: Converts to a specific color space.
+    - `isInColorSpace(ColorSpace targetSpace)`: Checks the color's color space.
+
+### **Internal Improvements:**
+
+- **sRGB Alignment:** Improved handling of color spaces, ensuring that operations like HSL transformations and luminance
+  calculations are performed in the sRGB color space for consistency.
+- **Code Clarity:** Refactored some methods for better readability and maintainability.
+
+### **Chore**:
+- **Flutter SDK:** Enforced minimum version to `>=3.27.0`.
+- **dart_helper_utils:** Upgraded to [v3.3.0](https://pub.dev/packages/dart_helper_utils/changelog#330).
+
+## v6.8.0
+
+- **Easier theme color access:** Access ColorScheme properties directly from the theme data object.
+  For example, use `theme.onSurface` instead of `theme.colorScheme.onSurface`.
+
+## v6.7.2
+
+- **Chore**: `dart_helper_util` upgraded to [v3.2.0](https://pub.dev/packages/dart_helper_utils/changelog#320).
+
 ## v6.7.1
 
 - **Enhancement**: `TypedListView`'s internal logic for rendering items and separators has been optimized.

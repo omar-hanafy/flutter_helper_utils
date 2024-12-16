@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
 /// allows to quickly create a ValueNotifier of type Color.
 class ColorNotifier extends ValueNotifier<Color> {
@@ -37,22 +38,25 @@ extension FHUColorValueNotifierExtension on ValueListenable<Color> {
   ///
   /// A value of 0 means this color is fully transparent. A value of 255 means
   /// this color is fully opaque.
-  int get alpha => value.alpha;
+  double get alpha => value.a;
 
+  /// **Deprecated:** Use [alpha] instead.
+  ///
   /// The alpha channel of this color as a double.
   ///
   /// A value of 0.0 means this color is fully transparent. A value of 1.0 means
   /// this color is fully opaque.
-  double get opacity => value.opacity;
+  @Deprecated('Use alpha instead. This will be removed in future versions.')
+  double get opacity => value.a;
 
   /// The red channel of this color in an 8 bit value.
-  int get red => value.red;
+  double get red => value.r;
 
   /// The green channel of this color in an 8 bit value.
-  int get green => value.green;
+  double get green => value.g;
 
   /// The blue channel of this color in an 8 bit value.
-  int get blue => value.blue;
+  double get blue => value.b;
 
   /// Returns a new color that matches this color with the alpha channel
   /// replaced with `a` (which ranges from 0 to 255).
@@ -64,7 +68,7 @@ extension FHUColorValueNotifierExtension on ValueListenable<Color> {
   /// replaced with the given `opacity` (which ranges from 0.0 to 1.0).
   ///
   /// Out of range values will have unexpected effects.
-  Color withOpacity(double opacity) => value.withOpacity(opacity);
+  Color withOpacity(double opacity) => value.addOpacity(opacity);
 
   /// Returns a new color that matches this color with the red channel replaced
   /// with `r` (which ranges from 0 to 255).
