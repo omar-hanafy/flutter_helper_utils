@@ -9,4 +9,5 @@ export 'on_numbers.dart';
 export 'padding.dart';
 export 'platform_extension.dart';
 export 'scaffold_messenger_extension.dart';
+export 'scroll_extensions.dart';
 export 'theme_extension.dart';

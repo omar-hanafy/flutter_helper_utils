@@ -1,5 +1,30 @@
 # CHANGELOG
 
+## v6.10.0
+
+### New Scroll Extensions:
+
+- **Extended ScrollController Functionality:**
+    - **Basic Scroll Animations:**
+        - `animateToPosition`: Animate to a specific offset with customizable duration and curve
+        - `animateToBottom`/`animateToTop`: Quick navigation to extremes
+        - `smoothScrollTo`: Smooth scroll with boundary clamping
+    - **Advanced Controls:**
+        - `pageScroll`: Paginated scrolling with a customizable viewport fraction
+        - `scrollToPercentage`: Scroll to specific percentage of content
+    - **Position Checking:**
+        - `isAtEdge`, `isAtBottom`: Edge detection
+        - `scrollProgress`: Current scroll position as percentage
+        - `isNearTop`/`isNearBottom`: Proximity detection with a threshold
+- **Nullable ScrollController Extensions:**
+    - `isInTop`: Check if scrolled to top
+    - `canScroll`: Verify if scrolling is possible
+    - `didScrollToTop`: Animate to top and return success status
+    - **Direction Checking:**
+        - `isScrollReverse`/`isScrollForward`/`isScrollIdle`: Direction state checks
+- **ScrollDirection Extensions:**
+    - Simple direction state checks: `isIdle`, `isForward`, `isReverse`
+
 ## v6.9.0
 
 ### **Colors Enhancements:**
@@ -24,6 +49,7 @@
 - **Code Clarity:** Refactored some methods for better readability and maintainability.
 
 ### **Chore**:
+
 - **Flutter SDK:** Enforced minimum version to `>=3.27.0`.
 - **dart_helper_utils:** Upgraded to [v3.3.0](https://pub.dev/packages/dart_helper_utils/changelog#330).
 
@@ -677,47 +703,7 @@ please don't hesitate to reach out.
 
 ## 1.3.7
 
-- **NEW**: Introducing `toType` and `tryToType` global functions. They allow converting a dynamic object to a specific
-  type `T` and automatically detect the type, invoking the appropriate function from the `ConvertObject` class.
-
-&nbsp;
-*Sample*:
-
-  ```dart
-
-dynamic data = 12.4;
-final myInt = toType<int>(data); // tryToType behaves similarly but is null-safe
-  ```
-
-- **NEW**: Added `BigInt` and `tryBigInt` in the ConvertObject class. `BigInt` represents arbitrarily large
-  integers. It is used when you need to perform operations on integers that exceed the maximum value that can be
-  represented by the int type. It's IMPORTANT to note that BigInt operations can be computationally expensive,
-  especially for huge integers. Therefore, use BigInt only when necessary, and be mindful of performance
-  implications.
-
-&nbsp;
-*Sample*:
-
-  ```dart
-
-String largeNum = '12434535367326235634';
-final BigInt myBigInt = ConvertObject.toBigInt(largeNum);
-// OR
-final BigInt myBigInt = toType<BigInt>(largeNum);
-  ```
-
-- **UPDATE**:  The `toList<T>`, `tryToList<T>`, `toSet<T>` and `tryToSet<T>` functions now support converting any type
-  of `Iterable`.
-
-## 1.3.6
-
-- **UPDATE**: The `toList<T>` and `tryToList<T>` functions now support converting map values to a list if the value's
-  type matches `T`. This enhancement adds more flexibility and convenience when working with collections.
-
-## 1.3.5
-
-- **NEW**:
-  Added `showMaterialBanner`, `showSnackBar`, `hideCurrentMaterialBanner`, `hideCurrentSnackBar`,
+- **NEW**: Added `showMaterialBanner`, `showSnackBar`, `hideCurrentMaterialBanner`, `hideCurrentSnackBar`,
   `removeCurrentMaterialBanner`, `removeCurrentSnackBar`, `clearMaterialBanners`, `clearSnackBars`
   on `BuildContext`. Usage example could be as easy as `context.removeCurrentSnackBar`.
 
@@ -738,7 +724,7 @@ final BigInt myBigInt = toType<BigInt>(largeNum);
 - **UPDATE**: Use MediaQuery as InheritedModel to improve performance, see
   this [pull](https://github.com/flutter/flutter/pull/114459) in flutter for more info.
 
-## 1.3.4
+## 1.3.6
 
 - **NEW**: Added `isValidHttpCode` in `num?` extension that returns true if the http response code is 200 or 201.
 - **NEW**: Added `toDateWithFormat` in a String extension that converts string to `DateTime` with specific format
@@ -752,23 +738,30 @@ final BigInt myBigInt = toType<BigInt>(largeNum);
 final dateTime = '14-12-2030'.toDateWithFormat('d-M-y');
   ```
 
-## 1.3.3
+## 1.3.5
 
 - **NEW**: Added `binary` in bool extension that returns `1` if true and `0` if false as `int`.
 
+## 1.3.4
+
+- **NEW**: Added `tryRemoveAt`, `indexOfOrNull`, `indexWhereOrNull`, and `tryRemoveWhere` on `List<T>?` extension.
+- **UPDATE**: Update the package
+  to [FlutterSDK 3.10](https://docs.flutter.dev/release/release-notes/release-notes-3.10.0).
+- **FIX**: Fixed a bug with `isNotNull` on `Object` extension.
+
+## 1.3.3
+
+- **NEW**: Added `DatesHelper` class that provide a set of static methods for DateTime such
+  as `isSameHour`, `diffInDays`, and `daysInRange`.
+- **NEW**: Added the getters `isPresent`, `isPast`, `passedDuration`, `remainingDays`, and more to the `DateTime`
+  extension.
+    - Now you can get formatted date using the format method directly in any date e.g `DateTime.now().format('EEE')`
+
 ## 1.3.2
 
-- **FIX**: Fixed a bug when detecting `isIOSWeb` and `isAndroidWeb` using `TargetPlatform`.
-- **NEW**: Added `isApple` that detects if the running device is made by apple e.g. macOS, iPadOS, or iOS.
-
-&nbsp;
-*Usage*:
-
-  ```dart
-context.isApple
-// OR without context
-defaultTargetPlatform.isApple // import 'package:flutter/foundation.dart';
-  ```
+- **NEW**: Added `scaffoldMessenger` getter in the `BuildContext` extension to easily
+  call `ScaffoldMessenger.of(context)`
+- **UPDATE**: Improved implementation of the `toList` and `tryToList` in the `ConvertObject` class.
 
 ## 1.3.1
 
@@ -789,13 +782,14 @@ defaultTargetPlatform.isApple // import 'package:flutter/foundation.dart';
 
 ## 1.2.9
 
-- **NEW**: Added `isTrue`, and `isFalse` on nullable boolean, now if bool? is null the check will always return false
-  instead of showing compile error.
+- **FIX**: Fixed a bug with `isZero` bool in numbers extensions.
+- **UPDATE**: `asBool` support null safety on numbers extensions.
+- **UPDATE**: Updated `ParsingException` implementation.
 
 ## 1.2.8
 
-- **UPDATE**: replace `isNegativeOrNull`, `isPositiveOrNull`, `isNotNegativeOrNull`, `isNotPositiveOrNull`,
-  and `isNotZeroOrNull` with just `isNegative`, `isPositive`, and `isZeroOrNull` in nullable numbers.
+- **NEW**: Added `isPositiveOrNull`, `isZeroOrNull`, and `isNegativeOrNull` to all numbers extensions.
+- **UPDATE**: on a String extension, `isEmptyOrNull` now returns true if string has only empty lines.
 
 ## 1.2.7
 
@@ -852,16 +846,16 @@ defaultTargetPlatform.isApple // import 'package:flutter/foundation.dart';
 
 ## 1.1.7
 
-- **NEW**:  Added `toDateTime` and `tryToDateTime` in `ConvertObject` class.
+- **NEW**: Added `toDateTime` and `tryToDateTime` in `ConvertObject` class.
 
 ## 1.1.6
 
-- **NEW**:  Added `toMap` and `tryToMap` in `ConvertObject` class, and add `isValidSVG` in a String extension.
+- **NEW**: Added `toMap` and `tryToMap` in `ConvertObject` class, and add `isValidSVG` in a String extension.
 
 ## 1.1.5
 
-- **NEW**:  Added `toBool` and `tryToBool` in `ConvertObject` class.
-- **UPDATE**:  Improved all implementations of static methods in `ConvertObject` class.
+- **NEW**: Added `toBool` and `tryToBool` in `ConvertObject` class.
+- **UPDATE**: Improved all implementations of static methods in `ConvertObject` class.
 
 ## 1.1.4
 
@@ -901,7 +895,7 @@ defaultTargetPlatform.isApple // import 'package:flutter/foundation.dart';
 
 ## 1.0.5
 
-- **UPDATE**: Changed `pop` to `popPage` to solve conflicts with `go_router` package extensions.
+- **UPDATE**: Changed `pop` to `popPage` to solve conflicts with the `get` package.
 
 ## 1.0.4
 
