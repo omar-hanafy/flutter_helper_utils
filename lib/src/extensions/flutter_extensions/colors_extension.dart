@@ -4,31 +4,111 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 extension ColorUtils on Color {
-  /// Ensures that the current color is converted to sRGB if it is not already.
-  /// Some color operations (HSL transformations, luminance, and so forth) are
-  /// defined in sRGB space.
+  /// Returns a contrasting color (e.g., for text or icons) based on whether
+  /// this color is relatively "dark" or "light" using a [threshold].
+  ///
+  /// - [light]: The color used against a dark background.
+  /// - [dark]: The color used against a light background.
+  /// - [threshold]: The WCAG luminance cutoff. Above this => "light" color; below => "dark."
+  ///   Defaults to 0.179.
+  ///
+  /// Example:
+  /// ```dart
+  /// final background = Color(0xFF000000); // Black
+  /// final textColor = background.contrastColor();
+  /// // textColor would be white because black is below the threshold.
+  /// ```
+  Color contrastColor({
+    Color light = Colors.white,
+    Color dark = Colors.black,
+    double threshold = 0.179,
+  }) {
+    return computeLuminance() > threshold ? dark : light;
+  }
+
+  /// Determines if this color is considered "dark" using a [threshold].
+  ///
+  /// If `relativeLuminance` is **less than or equal** to [threshold],
+  /// this color is treated as "dark."
+  bool isDark({double threshold = 0.179}) => computeLuminance() <= threshold;
+
+  /// Determines if this color is considered "light" using a [threshold].
+  ///
+  /// Inversely, returns `true` if `relativeLuminance` is
+  /// **greater than** [threshold].
+  bool isLight({double threshold = 0.179}) => !isDark(threshold: threshold);
+
+  /// Converts the current color to the sRGB color space if it isn't already.
+  /// Certain color operations (like luminance, HSL transformations, etc.)
+  /// must be done in sRGB space for consistency.
+  ///
+  /// Returns a [Color] in the [ColorSpace.sRGB].
+  ///
+  /// Example:
+  /// ```dart
+  /// final color = Colors.blue; // Some color in non-sRGB space
+  /// final alignedColor = color._toSRGB(); // Now guaranteed to be sRGB
+  /// ```
   Color _toSRGB() {
     return colorSpace == ColorSpace.sRGB
         ? this
         : withValues(colorSpace: ColorSpace.sRGB);
   }
 
-  /// Converts the color to a hex string in ARGB format, ensuring alignment with the sRGB color space.
+  /// Creates a hex string (RGB or ARGB) from this color in the sRGB color space.
   ///
-  /// - [leadingHashSign]: If true, prepends a '#' to the hex string.
-  String toHex({bool leadingHashSign = true}) {
-    // Align to sRGB first for predictable 0..255 channels.
+  /// - [leadingHashSign] prepends a `#` to the string if `true`.
+  /// - [includeAlpha] includes the alpha channel if `true` (ARGB). By default, only RGB is used.
+  /// - [omitAlphaIfFullOpacity] overrides [includeAlpha] if the alpha component is `1.0` (fully opaque).
+  ///   If `true`, we skip alpha entirely for fully opaque colors.
+  /// - [uppercase] returns uppercase hex digits if `true`.
+  ///
+  /// ### Examples
+  /// ```dart
+  /// final color = Colors.blue.withOpacity(0.6);
+  ///
+  /// // Hex string in ARGB format with # sign and uppercase
+  /// final hexWithAlpha = color.toHex(
+  ///   leadingHashSign: true,
+  ///   includeAlpha: true,
+  ///   uppercase: true,
+  /// );
+  ///
+  /// // Hex string in RGB format without # sign and ignoring alpha
+  /// final hexWithoutAlpha = color.toHex(
+  ///   leadingHashSign: false,
+  ///   includeAlpha: false,
+  /// );
+  /// ```
+  String toHex({
+    bool leadingHashSign = true,
+    bool includeAlpha = false,
+    bool omitAlphaIfFullOpacity = false,
+    bool uppercase = false,
+  }) {
+    // Align to sRGB first for predictable 0..255 component values.
     final aligned = _toSRGB();
 
-    // Construct the hex string from the 8-bit integer components.
+    // Convert a normalized color component (0..1) to a 2-digit hex value.
     String componentToHex(double c) {
-      return ((c * 255.0).round() & 0xff).toRadixString(16).padLeft(2, '0');
+      final intVal = (c * 255.0).round().clamp(0, 255);
+      return intVal.toRadixString(16).padLeft(2, '0');
     }
 
-    final hexString =
-        '${componentToHex(aligned.a)}${componentToHex(aligned.r)}${componentToHex(aligned.g)}${componentToHex(aligned.b)}';
+    final alphaIsFull = aligned.a == 1.0;
+    final shouldIncludeAlpha =
+        includeAlpha && !(omitAlphaIfFullOpacity && alphaIsFull);
 
-    return leadingHashSign ? '#$hexString' : hexString;
+    // Build hex segments
+    final alphaHex = shouldIncludeAlpha ? componentToHex(aligned.a) : '';
+    final rHex = componentToHex(aligned.r);
+    final gHex = componentToHex(aligned.g);
+    final bHex = componentToHex(aligned.b);
+
+    // Combine to form the final string
+    final rawHex = '$alphaHex$rHex$gHex$bHex';
+    final prefixedHex = leadingHashSign ? '#$rawHex' : rawHex;
+    return uppercase ? prefixedHex.toUpperCase() : prefixedHex;
   }
 
   /// Darkens the color by the given amount (0.0 to 1.0).

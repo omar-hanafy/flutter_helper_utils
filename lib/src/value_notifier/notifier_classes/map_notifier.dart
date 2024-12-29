@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
-/// create a [ValueNotifier] of type Map<K, V>, which reacts just like normal [Map],
+/// create a [ValueNotifier] of type Map, which reacts just like normal [Map],
 /// but with notifier capabilities.
 class MapNotifier<K, V> extends ValueNotifier<Map<K, V>> implements Map<K, V> {
   MapNotifier(super.initial);

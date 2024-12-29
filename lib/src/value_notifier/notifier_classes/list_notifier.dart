@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
-/// create a [ValueNotifier] of type List<T>, which reacts just like normal [List],
+/// create a [ValueNotifier] of type List, which reacts just like normal [List],
 /// but with notifier capabilities.
 class ListNotifier<E> extends ValueNotifier<List<E>> implements List<E> {
   ListNotifier(super.initial);

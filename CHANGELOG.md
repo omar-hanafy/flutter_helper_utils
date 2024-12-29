@@ -1,5 +1,27 @@
 # CHANGELOG
 
+## v7.0.0
+
+### New Color Extension APIs
+
+* **`contrastColor`**:  Generates a contrasting color (light or dark) based on relative luminance.
+* **`isDark` / `isLight`**: Determines if a color is "dark" or "light" based on WCAG-compliant luminance.
+  **`toHex` Enhancements:**
+* **`includeAlpha`**:  Includes the alpha channel in the hex string.
+    * **`omitAlphaIfFullOpacity`**: Excludes alpha for fully opaque colors.
+    * **`uppercase`**: Outputs the hex string in uppercase.
+
+### Scroll Extensions Changes
+
+**Breaking Changes:**
+
+* `isInTop` has been changed to `isAtTop` for consistency with other methods.
+* The extension does not work on nullable scroll controllers any more now requires null-aware access for all helper
+  getters (e.g. `controller?.isAtTop`).
+
+- Upgraded `dart_helper_utils` to [v4.0.0](https://pub.dev/packages/dart_helper_utils/changelog#400), **introducing
+  breaking changes**.
+
 ## v6.10.0
 
 ### New Scroll Extensions:
