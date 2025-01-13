@@ -87,4 +87,29 @@ abstract class PlatformEnv {
 
   /// Returns the system's default line terminator.
   static String get lineTerminator => Platform.isWindows ? '\r\n' : '\n';
+
+  static Map<String, String> report() => {
+        'targetPlatform': targetPlatform.name,
+        'isLinux': '$isLinux',
+        'isMacOS': '$isMacOS',
+        'isWindows': '$isWindows',
+        'isAndroid': '$isAndroid',
+        'isIOS': '$isIOS',
+        'isWeb': '$isWeb',
+        'isFuchsia': '$isFuchsia',
+        'operatingSystem': operatingSystem,
+        'operatingSystemVersion': operatingSystemVersion,
+        'numberOfProcessors': '$numberOfProcessors',
+        'pathSeparator': pathSeparator,
+        'localHostname': localHostname,
+        'version': version,
+        'localeName': localeName,
+        ...environment,
+        'executable': executable,
+        'resolvedExecutable': resolvedExecutable,
+        'script': '$script',
+        'executableArguments': '$executableArguments',
+        'packageConfig': '$packageConfig',
+        'lineTerminator': lineTerminator,
+      };
 }

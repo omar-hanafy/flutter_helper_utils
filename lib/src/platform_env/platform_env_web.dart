@@ -68,4 +68,22 @@ abstract class PlatformEnv {
 
   /// Returns `'\n'` as the system's default line terminator on web platforms.
   static String get lineTerminator => '\n';
+
+  static Map<String, String> report() => {
+        'targetPlatform': targetPlatform.name,
+        'operatingSystem': operatingSystem,
+        'operatingSystemVersion': operatingSystemVersion,
+        'numberOfProcessors': '$numberOfProcessors',
+        'pathSeparator': pathSeparator,
+        'localHostname': localHostname,
+        'version': version,
+        'localeName': localeName,
+        ...environment,
+        'executable': executable,
+        'resolvedExecutable': resolvedExecutable,
+        'script': '$script',
+        'executableArguments': '$executableArguments',
+        'packageConfig': '$packageConfig',
+        'lineTerminator': lineTerminator,
+      };
 }

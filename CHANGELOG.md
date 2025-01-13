@@ -2,6 +2,11 @@
 
 ## v7.0.0
 
+### PlatformEnv APIs
+
+* Added `report()` to `PlatformEnv` to get detailed report info about the current platform in `Map<String, String>`
+  format.
+
 ### New Color Extension APIs
 
 * **`contrastColor`**:  Generates a contrasting color (light or dark) based on relative luminance.

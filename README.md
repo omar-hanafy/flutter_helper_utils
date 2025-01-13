@@ -2,7 +2,7 @@
   <tr style="border:none;">
     <td style="vertical-align:top; border:none;">
       <h1 style="border:none; min-width:400px;">Flutter Helper Utils</h1>
-      <p style="min-width:400px;">Make Flutter development easier with Flutter Helper Utils! This toolkit is packed with helper methods and extensions that boost your productivity, helping you write less code and build apps faster.</p>
+      <p style="min-width:400px;">Flutter Helper Utils is a toolkit that streamlines common tasks in Flutter projects. It’s packed with useful extensions and helpers to handle everything from scrolling animations and platform detection to color manipulation and adaptive layout. Our goal is to reduce boilerplate, so you can focus on creating delightful apps without reinventing the wheel.</p>
     </td>
     <td style="vertical-align:top; border:none;">
       <a href="https://pub.dev/packages/flutter_helper_utils" target="_blank">
@@ -12,86 +12,108 @@
   </tr>
 </table>
 
-**Important Notes for Version 4.1.0+:** We've refactored the Dart-specific utilities into a new package, [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils), to allow Dart projects to use these utilities without depending on Flutter.
+> **Dart-only?** We’ve separated the purely Dart-related helpers into [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils). If you need those features in a non-Flutter environment (like a CLI app), feel free to use that package directly. Don’t worry—`flutter_helper_utils` exports it internally, so you can still access all of the Dart helpers without changing your existing imports.
 
-- Future updates for Dart-specific utilities will be available in the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) changelog.
-- All the Dart-specific utilities documentation has been moved to the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) readme.
-- This package already exports [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils), so there are no breaking changes in this version.
+## Getting Started
 
-## Table of Contents
+Add the dependency in your `pubspec.yaml`:
 
-- [Featured](#featured)
-  - [ValueNotifier Supercharged](#valuenotifier-supercharged)
-  - [PlatformEnv](#platformenv-class)
-  - [Adaptive UI](#adaptive-ui)
-- [Extensions](#extensions)
-  - [Listenable & ValueNotifier](#listenable--valuenotifier)
-  - [UI & Design](#ui--design)
-    - [Colors](#colors)
-    - [ThemeData](#themedata)
-  - [TargetPlatform](#targetplatform)
-  - [BuildContext](#buildcontext)
-    - [For Themes](#for-themes)
-    - [For MediaQuery](#for-mediaquery)
-    - [For FocusScope](#for-focusscope)
-    - [For Navigation](#for-navigation)
-  - [Widgets](#widgets)
-    - [Align](#align)
-    - [Padding](#padding)
-  - [List/Iterable Extensions](#listiterable-extensions)
-
-# Featured
-## ValueNotifier Supercharged
-
-**ValueNotifier** is a simple class in **Flutter** that allows you to store a value and notify any listeners when the value changes.
-
-This package enhances `ValueNotifier` with additional functionalities:
-
-Starting from version 4.0.0, you can use a new set of extensions,
-helper methods, and specialized notifiers for better data handling:
-
-- Instantly create notifiers from any value with the intuitive `.notifier` extension (e.g., `10.notifier`).
-- Specific data types using our type-safe notifiers like `ListNotifier`, `BoolNotifier`, `IntNotifier`, etc.
-- Use the `.builder` extension on any `ValueListenable`, `Listenable`, or `List<Listenable>` instance to create a `ValueListenableBuilder`, `ListenableBuilder`, or `ListenablesBuilder` respectively under the hood with a shorter and simpler syntax.
-- Complex data handling with collections. For example, `ListNotifier`, which acts like a normal list and `ValueNotifier` at the same time, allowing usage in `for` loops, in `ValueListenableBuilder` widgets, and automatic notifications when inner data changes (same goes for all notifier classes!).
-
-**Example:**
-
-```dart
-final counter = 0.notifier;
-counter.listenableBuilder((count) => Text('$count'));
-
-counter.increment(); // Increment the counter easily
+```yaml
+dependencies:
+  flutter_helper_utils: <latest_version>
 ```
 
-For more info about `ValueNotifier`,
-check the [official Flutter documentation](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html).
+Then import it into your Dart code:
 
-## PlatformEnv class
-A replacement for the `dart:io` `Platform` class.
-Key enhancements over the original `Platform`:
-- Eliminates errors caused by using dart:io functionality in web browsers.
-- Maintains a familiar API similar to the dart:io Platform class, making migration and usage effortless.
-- Handles system-specific properties like the number of processors, path separator, and local hostname, with sensible defaults on web platforms.
-
-**Example Usage:**
 ```dart
-print('TargetPlatform: ${PlatformEnv.targetPlatform}');
-print('Is Web: ${PlatformEnv.isWeb}');
-print('Is macOS: ${PlatformEnv.isMacOS}');
-// and all other Platform getters are supported.
+import 'package:flutter_helper_utils/flutter_helper_utils.dart';
+```
+
+You’ll also automatically get the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) exports, so everything’s in one place.
+
+# Highlights
+
+## PlatformEnv
+
+A modern Web-compatible replacement for `dart:io`'s `Platform` class that works seamlessly across all platforms, including web. The `PlatformEnv` class provides:
+
+```dart
+// Simple platform checks
+if (PlatformEnv.isIOS) {
+  // iOS-specific code
+}
+
+// Get detailed platform info
+final report = PlatformEnv.report();
+print('Operating System: ${report['operatingSystem']}');
+
+// Access system properties
+final processors = PlatformEnv.numberOfProcessors;
+final pathSeparator = PlatformEnv.pathSeparator;
+```
+
+## ValueNotifier Supercharged
+
+Enhanced ValueNotifier functionality with type-safe notifiers and convenient extensions:
+
+- Create notifiers instantly from any value
+- Type-safe specialized notifiers
+- Simplified builder syntax
+- Advanced collection handling
+
+```dart
+// Quick notifier creation
+final counter = 0.notifier;  // Creates IntNotifier
+final isLoading = false.notifier;  // Creates BoolNotifier
+final items = <String>[].notifier;  // Creates ListNotifier<String>
+
+// Easy builder syntax
+counter.builder((value) => Text('Count: $value'));
+
+// Type-safe operations
+counter.increment();  // Built-in methods for specific types
+isLoading.toggle();  // Toggles boolean value
+
+// Collection operations with automatic notifications
+items.add('New Item');  // Notifies listeners automatically
+```
+
+## TypedListView Widget
+
+A powerful, type-safe list view widget with built-in support for headers, footers, separators, and pagination:
+
+- Type safety for list items
+- Optional headers and footers
+- Custom separators
+- Built-in pagination support
+- Optimized performance
+
+```dart
+TypedListView<Product>(
+  items: products,
+  itemBuilder: (context, product) => ProductCard(product: product),
+  headerBuilder: (context) => CategoryHeader(),
+  footerBuilder: (context) => LoadMoreButton(),
+  separatorBuilder: (context) => Divider(),
+  paginationWidget: CircularProgressIndicator(),
+  padding: EdgeInsets.all(16),
+  onScrollEnd: () => loadMoreProducts(),
+);
 ```
 
 ## Adaptive UI
+
 Create responsive layouts for different screen sizes and platforms (mobile, tablet, desktop).
 
 ### Features
+
 - **Efficient:** Rebuilds only when the platform type changes.
 - **Easy-to-use context extensions:** Access platform/orientation information directly.
 - **Customizable:** Define your own breakpoints and helper extensions.
 - **Layout builders:** Convenient widgets for building adaptive UI.
 
 ### Basic Usage
+
 ```dart
 PlatformTypeProvider( // Wrap your app
   child: MyApp(),
@@ -103,146 +125,377 @@ Widget build(BuildContext context) {
   return breakpoint.isMobile ? const MobileLayout() : const TabletLayout();
 }
 ```
+
 See the [detailed documentation](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/documentations/adaptive_ui_with_platform_type_detection.md) for adaptive ui
 to explore more.
 
 # Extensions
-All the extensions included in the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils#extensions) package plus:
 
-## Listenable & ValueNotifier
-### on ValueListenable 
-- `builder`: Simplifies the creation of a `ValueListenableBuilder` widget that reacts to changes in a single `ValueListenable`.
-  - ```dart
-    final intNotifier = 0.notifier;
-    intNotifier.builder((value) => /* widget reacts to intNotifier changes */ );
-    ```
-### on Listenable
-- `.builder`: Simplifies the creation of a `ListenableBuilder` widget that reacts to changes in any `Listenable`.
-  - ```dart
-    final scrollController = ScrollController();
-    scrollController.builder((context) => /* widget reacts to scrollController changes */ );
-    ```
-### on List<Listenable>
-- `.builder`: Creates a `ListenablesBuilder` widget to efficiently manage and respond to changes in multiple `Listenable` objects simultaneously, including `ValueNotifier`, `ChangeNotifier`, and others. Customize rebuild behavior using the optional `buildWhen` and `threshold` parameters.
-  - ```dart
-    final myListeners = <Listenable>[textController, scrollController, anyNotifier];
-    myListeners.builder((context) => /* widget reacts to myListeners changes */ );
-    ```
-### ValueNotifier Creation
-- `.notifier`: Converts a value of any type into the corresponding `ValueNotifier` type/subtype, enabling easy integration into reactive UI components.
-  - e.g., `final intNotifier = 1.notifier` creates an `IntNotifier`, aka `ValueNotifier<int>`.
+## Theme Extensions
 
-### UI & Design
-### Colors
-- `toHex`: Transforms a `Color` object into its corresponding hexadecimal string representation.
-- `darken`, `lighten`: Adjust color lightness.
-- `shade`, `tint`: Create variations by mixing with black/white.
-- `contrast`: Calculate contrast ratios between colors.
-- `complementary`: Find the opposite color on the color wheel.
-- `blend`: Mix colors.
-- `grayscale`, `invert`: Convert to grayscale or invert colors. 
-- `toColor`: Creates a `Color` object from a valid hexadecimal color string `"#FFFFFF".toColor()`.
-- `isHexColor`: Determines if a given string is a valid hexadecimal color representation `"#FFFFFF".isHexColor()`.
+```dart
+// Get theme instance
+final theme = context.themeData;
 
-### ThemeData
-- `isDark`, `isLight`: Checks whether the current theme is in dark or light mode.
-- `textTheme`: Provides direct access to the `TextTheme` of the current theme.
-- `displayLarge`, `displayMedium`, `displaySmall`, etc.: Retrieve specific text styles from the theme, optimized for different display sizes.
-- `displayLargeCopy`, `displayMediumCopy`, `displaySmallCopy`, etc.: Retrieve copies of the specific text styles from the theme, allowing modifications without affecting the original theme.
+// Direct TextStyle access
+Text('Some Text', style: theme.bodyMedium)
+Text('Some Text', style: theme.titleLarge)
+Text('Some Text', style: theme.labelSmall)
 
-## TargetPlatform
-All the above getters are available under both `BuildContext` instances and `TargetPlatform` instances.
+// Copy TextStyles with modifications
+Text('Some Text', style: theme.labelSmallCopy(color: theme.primary))
 
-**Native Only Platforms**
-- `isMobile`: true if running on a mobile device (iOS or Android) natively.
-- `isIOS`: true if running on iOS natively.
-- `isAndroid`: true if running on Android natively.
-- `isDesktop`: true if running on a desktop OS (Linux, macOS, Windows) natively.
-- `isMacOS`: true if running on macOS natively.
-- `isWindows`: true if running on Windows natively.
-- `isLinux`: true if running on Linux natively.
-- `isApple`: true if running on any Apple platform (macOS or iOS) natively.
+// Direct ColorScheme access
+final primary = theme.primary;        // Instead of theme.colorScheme.primary
+final onSurface = theme.onSurface;    // Instead of theme.colorScheme.onSurface
+final isLight = theme.isLight;        // Check if light theme
+```
 
-**Web Platforms**
-- `isMobileWeb`: true if running on a mobile browser (iOS or Android).
-- `isIOSWeb`: true if running on iOS in a web browser.
-- `isAndroidWeb`: true if running on Android in a web browser.
-- `isDesktopWeb`: true if running on a desktop browser (Linux, macOS, Windows).
-- `isMacOSWeb`: true if running on macOS in a web browser.
-- `isWindowsWeb`: true if running on Windows in a web browser.
-- `isLinuxWeb`: true if running on Linux in a web browser.
-- `isAppleWeb`: true if running on an Apple platform (macOS or iOS) in a web browser.
+## Color Extensions
 
-## BuildContext
-**Important Note:** Avoid frequent use of context on actions that might call `of(context)`, like theme. The widget registers itself as a dependency on the theme, meaning that if the theme changes (e.g., when switching between light/dark mode), all widgets using `Theme.of(context)`, aka `context.themeData`, will rebuild, even if they don’t directly depend on the changed theme properties. It’s recommended to use `final theme = context.themeData` at the top of the widget tree only once.
+Comprehensive color manipulation with support for wide gamut colors and modern color operations:
 
-### For Themes
-- `themeData`: Get the current `ThemeData`.
-- `txtTheme`: Obtain the `TextTheme`.
-- `brightness`: Determine the theme's brightness.
-- `sysBrightness`: Determine the system's brightness.
-- `isDark`, `isLight`: Check if the theme is dark or light.
-- `targetPlatform`: Get the current `TargetPlatform`; all the getters mentioned in [TargetPlatform](#targetplatform) are also available here.
-- `withoutEffects()`: Remove visual feedback effects (splash, highlight, hover, etc.) from a theme with customizations.
+### New Color API
 
-### For MediaQuery
-- `mq`: Access `MediaQueryData`.
-- `nullableMQ`: Access `MediaQueryData` (nullable).
-- `deviceOrientation`: Get device orientation.
-- `navigationMode`: Get navigation mode.
-- `padding`, `viewInsets`: Get screen padding and insets.
-- `screenDimensions`: Get screen width and height.
-- `additionalFeatures`: Access additional features.
+```dart
+final color = Colors.blue;
 
-### For FocusScope
-- `focusScope`: Get the nearest `FocusScopeNode`.
-- `unFocus`: Remove focus.
-- `requestFocus`: Request focus.
-- `requestFocusCall`: Request focus (using `GestureTapCallback`).
-- `hasFocus`: Check if a node has focus.
-- `hasPrimaryFocus`: Check if a node has primary focus.
+// New color operations
+final contrast = color.contrastColor;  // Gets contrasting color
+final isDark = color.isDark;  // Checks if color is dark
+final hex = color.toHex(
+  includeAlpha: true,
+  omitAlphaIfFullOpacity: true,
+  uppercase: true
+);
 
-### For Navigation
-- `popPage`: Pop the current page.
-- `popRoot`: Pop to the root page.
-- `navigator`: Get the `NavigatorState`.
-- `canPop`: Check if you can pop the current page.
-- `pPage`: Push a new page.
-- `pReplacement`: Push and replace the current page.
-- `pAndRemoveUntil`: Push and remove pages until a condition is met.
-- `pNamedAndRemoveUntil`: Push a named route and remove pages until a condition is met.
-- `pNamed`: Push a named route.
-- `pReplacementNamed`: Push and replace the current page with a named route.
-- `popUntil`: Pop pages until a condition is met.
-- `dismissActivePopup`: Dismiss the active popup.
+// Color transformations
+final darker = color.darken(0.2);
+final lighter = color.lighten(0.3);
+final complementary = color.complementary;
+```
 
-## Widgets
-### Align
-- `alignAtBottomCenter`, `alignAtTopLeft`, `alignAtBottomLeft`, etc.: Align a widget within its parent using various alignment options.
-- `alignXY`: Align a widget using explicit x and y coordinates.
-- `alignAtLERP`: Align a widget using linear interpolation between two alignments.
+### Wide Gamut Support
 
-### Padding
-- `paddingAll`: Add padding on all sides of a widget.
-- `paddingLTRB`: Add padding with individual values for a left, top, right, and bottom.
-- `paddingSymmetric`: Add padding symmetrically for horizontal and vertical.
-- `paddingOnly`: Add padding to specific sides.
+```dart
+// Modern color handling
+final wideColor = color.convertToColorSpace(ColorSpace.srgb);
+final isInSpace = color.isInColorSpace(ColorSpace.displayP3);
 
-**More widget extensions to be added soon.**
+// Opacity operations
+final withOpacity = color.addOpacity(0.5); // replaces deprecated withOpacity form the FlutterSDK
+final scaled = color.scaleOpacity(0.8);
+```
 
-## List/Iterable Extensions
+## Scroll Extensions
 
-- `toRow`: Convert a list of widgets into a `Row`.
-- `toColumn`: Convert a list of widgets into a `Column`.
-- `toStack`: Convert a list of widgets into a `Stack`.
-- `toList`: Convert an `Iterable` to a `List`.
-- `toListView`: Convert an `Iterable` to a `ListView`.
+Rich set of scroll controller extensions for enhanced scrolling functionality:
+
+### Basic Animations
+
+```dart
+// Smooth scrolling animations
+controller.animateToPosition(500.0);
+controller.animateToBottom();
+controller.smoothScrollTo(250.0);
+
+// Percentage-based scrolling
+controller.scrollToPercentage(0.5);  // Scroll to 50%
+```
+
+### Position Detection
+
+```dart
+// Position checks
+if (controller.isAtTop) {
+  // At the top of the scroll view
+}
+
+if (controller.isNearBottom(threshold: 50)) {
+  // Near the bottom with custom threshold
+}
+
+// Get scroll progress
+final progress = controller.scrollProgress;  // 0.0 to 1.0
+```
+
+## Future & AsyncSnapshot Extensions
+
+Simplified Future handling and AsyncSnapshot state management:
+
+```dart
+// Future extensions
+myFuture.builder(
+  onLoading: () => LoadingSpinner(),
+  onSuccess: (data) => SuccessView(data),
+  onError: (error) => ErrorView(error),
+);
+
+// AsyncSnapshot extensions
+snapshot.dataWhen(
+  loading: () => LoadingSpinner(),
+  error: (error) => ErrorView(error),
+  success: (data) => SuccessView(data),
+);
+```
+
+## BuildContext Extensions
+
+```dart
+// Navigation
+context.pushPage(NewScreen());
+context.pReplacement(ReplacementScreen());
+context.popPage();
+context.dismissActivePopup();
+
+// Theme access
+final theme = context.themeData;
+final isDarkMode = context.isDark;
+final primaryColor = theme.primaryColor;
+
+// Media queries
+final width = context.screenWidth;
+final height = context.screenHeight;
+final padding = context.padding;
+final orientation = context.deviceOrientation;
+
+// Focus handling
+context.unFocus(); // Hide keyboard
+context.requestFocus; // Request focus
+
+// Scaffold interactions
+context.showSnackBar(SnackBar(content: Text('Hello!')));
+context.showMaterialBanner(MaterialBanner(...));
+```
+
+## Number Extensions
+
+Type-safe number extensions for common UI operations:
+
+### EdgeInsets & Padding
+
+```dart
+// Create EdgeInsets
+final padding = 16.edgeInsetsAll;
+final horizontal = 8.edgeInsetsHorizontal;
+
+// Create Padding widgets
+final paddedWidget = 16.paddingAll(child: MyWidget());
+```
+
+### BorderRadius & Border
+
+```dart
+// Border radius
+final radius = 8.allCircular;
+final topRadius = 12.onlyTopRounded;
+final diagonal = 10.diagonalBLTR;
+
+// Matrix transformations
+final matrix = 45.rotationZ;
+```
+
+### Box Constraints & Size
+
+```dart
+// Size creation
+final size = 100.size;
+final box = 50.squareBox;
+
+// Constraints
+final constraints = 200.boxConstraints;
+```
+
+# Widgets
+
+## TypedListView
+
+A type-safe, high-performance list view widget with built-in support for headers, footers, separators, and pagination:
+
+```dart
+// Basic usage
+TypedListView<Product>(
+  items: products,
+  itemBuilder: (context, product) => ProductCard(product),
+);
+
+// Advanced usage with all features
+TypedListView<Product>(
+  items: products,
+  itemBuilder: (context, product) => ProductCard(product),
+  headerBuilder: (context) => CategoryHeader(),
+  footerBuilder: (context) => LoadMoreButton(),
+  separatorBuilder: (context) => const Divider(),
+  paginationWidget: const CircularProgressIndicator(),
+  padding: 16.edgeInsetsAll,
+  onScrollEnd: () => loadMoreProducts(),
+);
+```
+
+## GradientWidget
+
+Apply gradient effects to any widget with ease:
+
+```dart
+GradientWidget(
+  gradient: const LinearGradient(
+    colors: [Colors.blue, Colors.purple],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  ),
+  child: const Text('Gradient Text'),
+);
+```
+
+## MultiTapDetector
+
+Detect and handle multi-tap gestures with configurable tap count:
+
+```dart
+MultiTapDetector(
+  tapCount: 2, // Double tap
+  onTap: () => print('Double tapped!'),
+  child: Container(
+    height: 100,
+    color: Colors.blue,
+    child: const Center(
+      child: Text('Double tap me!'),
+    ),
+  ),
+);
+```
+
+## ThemeWithoutEffects
+
+Selectively disable visual feedback effects (splash, highlight, hover) for specific parts of your app:
+
+```dart
+// Disable all effects
+ThemeWithoutEffects(
+  child: MyWidget(),
+);
+
+// Customize which effects to disable
+ThemeWithoutEffects.custom(
+  disableSplash: true,
+  disableHighlight: true,
+  disableHover: false,
+  child: MyWidget(),
+);
+```
+
+## PlatformTypeProvider
+
+Enable adaptive UI features and platform-specific behavior:
+
+```dart
+PlatformTypeProvider(
+  // Optional custom breakpoints
+  breakpoints: const PlatformBreakpoints(
+    mobileMax: 600,
+    tabletMax: 1000,
+  ),
+  child: MaterialApp(
+    home: Builder(
+      builder: (context) {
+        // Access platform info
+        final info = context.platformSizeInfo;
+        
+        // Build responsive layout
+        return info.when(
+          mobile: () => MobileLayout(),
+          tablet: () => TabletLayout(),
+          desktop: () => DesktopLayout(),
+        );
+      },
+    ),
+  ),
+);
+```
+
+## ListenablesBuilder
+
+Efficiently manage and respond to changes in multiple Listenable objects:
+
+```dart
+// Multiple controllers/notifiers
+final controllers = [
+  textController,
+  scrollController,
+  valueNotifier,
+];
+
+ListenablesBuilder(
+  listenables: controllers,
+  builder: (context) {
+    return Column(
+      children: [
+        Text(textController.text),
+        Text('Scroll offset: ${scrollController.offset}'),
+        Text('Value: ${valueNotifier.value}'),
+      ],
+    );
+  },
+  // Optional: Control when to rebuild
+  buildWhen: (previous, current) {
+    return previous != current; // default.
+  },
+  // Optional: Debounce rapid changes
+  threshold: const Duration(milliseconds: 100),
+);
+```
+
+# Utilities
+
+## File Handling
+
+Enhanced file handling with robust MIME type detection and processing:
+
+```dart
+// Check file types
+'image.png'.isImage;  // true
+'document.pdf'.isPDF;  // true
+'video.mp4'.isVideo;  // true
+
+// Get MIME type
+final mimeType = 'file.jpg'.mimeType();  // 'image/jpeg'
+```
+
+## Platform Detection
+
+Comprehensive platform detection across web and native platforms:
+
+```dart
+// Basic platform checks
+context.isMobile;      // true on iOS/Android
+context.isDesktop;     // true on Windows/macOS/Linux
+context.isWeb;         // true on web platforms
+
+// Specific platform + web checks
+context.isMobileWeb;   // true on mobile browsers
+context.isDesktopWeb;  // true on desktop browsers
+context.isIOSWeb;      // true on iOS Safari
+```
+
+## Theme Utilities
+
+Utilities for theme manipulation and management:
+
+```dart
+// Remove specific effects
+final cleanTheme = themeData.withoutEffects(
+  disableSplash: true,
+  disableHover: true,
+);
+
+// Access theme colors directly
+final surface = theme.surface;  // Instead of theme.colorScheme.surface
+final primary = theme.primary;  // Instead of theme.colorScheme.primary
+```
 
 ## Contributions
 
-Contributions to this package are welcome.
-If you have any suggestions, issues, or feature requests,
-please create a pull request in the [repository](https://github.com/omar-hanafy/flutter_helper_utils).
+Contributions to this package are welcome. If you have any suggestions, issues, or feature requests, please create a pull request in the [repository](https://github.com/omar-hanafy/flutter_helper_utils).
 
 ## License
 
