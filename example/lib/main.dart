@@ -125,7 +125,7 @@ class MyHomePage extends StatelessWidget {
               onPressed: () {
                 // Using focus utility
                 context
-                  ..unFocus
+                  ..unFocus()
                   ..showSnackBar(
                     const SnackBar(
                       content: Text('Focus removed and button clicked!'),
@@ -243,12 +243,11 @@ class MyHomePage extends StatelessWidget {
           style: context.themeData.bodyMedium,
         ),
         const SizedBox(height: 20),
-
         // Demonstrating Focus utility
         ElevatedButton(
           onPressed: () {
             context
-              ..unFocus
+              ..unFocus()
               ..showSnackBar(
                 const SnackBar(
                   content: Text('Focus removed and action triggered!'),

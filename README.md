@@ -501,4 +501,6 @@ Contributions to this package are welcome. If you have any suggestions, issues, 
 
 `flutter_helper_utils` is available under the [BSD 3-Clause License](https://opensource.org/license/bsd-3-clause/).
 
+If this package saves you time or helps you ship faster, consider buying me a coffee. It goes a long way in helping maintain and improve these tools.
+
 <a href="https://www.buymeacoffee.com/omar.hanafy" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>

@@ -45,10 +45,10 @@ packages:
     dependency: transitive
     description:
       name: dart_helper_utils
-      sha256: dfb205502fd5f2e18ef344a73a9aed266ca4e18c9f9d65f45735c760e104337d
+      sha256: "1a3bc343bce147ca8cc61b22e5cf14258a4eb78706dd67fd8f7678878c8f4b7d"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0-dev.1"
+    version: "4.0.0-dev.4"
   enefty_icons:
     dependency: "direct main"
     description:
@@ -76,7 +76,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "7.0.0"
+    version: "7.0.0-dev.4"
   flutter_test:
     dependency: "direct dev"
     description: flutter

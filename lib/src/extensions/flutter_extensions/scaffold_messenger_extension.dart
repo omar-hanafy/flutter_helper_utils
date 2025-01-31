@@ -25,20 +25,20 @@ extension FHUScaffoldMessengerExtension on BuildContext {
   /// Removes the current [MaterialBanner] by running its normal exit animation.
   ///
   /// The closed completer is called after the animation is complete.
-  void get hideCurrentMaterialBanner =>
+  void hideCurrentMaterialBanner() =>
       scaffoldMessenger.hideCurrentMaterialBanner();
 
   /// Removes the current [SnackBar] by running its normal exit animation.
   ///
   /// The closed completer is called after the animation is complete.
-  void get hideCurrentSnackBar => scaffoldMessenger.hideCurrentSnackBar();
+  void hideCurrentSnackBar() => scaffoldMessenger.hideCurrentSnackBar();
 
   /// Removes the current [MaterialBanner] (if any) immediately from registered
   /// [Scaffold]s.
   ///
   /// The removed material banner does not run its normal exit animation. If there are
   /// any queued material banners, they begin their entrance animation immediately.
-  void get removeCurrentMaterialBanner =>
+  void removeCurrentMaterialBanner() =>
       scaffoldMessenger.removeCurrentMaterialBanner();
 
   /// Removes the current [SnackBar] (if any) immediately from registered
@@ -46,13 +46,13 @@ extension FHUScaffoldMessengerExtension on BuildContext {
   ///
   /// The removed snack bar does not run its normal exit animation. If there are
   /// any queued snack bars, they begin their entrance animation immediately.
-  void get removeCurrentSnackBar => scaffoldMessenger.removeCurrentSnackBar();
+  void removeCurrentSnackBar() => scaffoldMessenger.removeCurrentSnackBar();
 
   /// Removes all the [MaterialBanner]s currently in queue by clearing the queue
   /// and running normal exit animation on the current [MaterialBanner].
-  void get clearMaterialBanners => scaffoldMessenger.clearMaterialBanners();
+  void clearMaterialBanners() => scaffoldMessenger.clearMaterialBanners();
 
   /// Removes all the snackBars currently in queue by clearing the queue
   /// and running normal exit animation on the current snackBar.
-  void get clearSnackBars => scaffoldMessenger.clearSnackBars();
+  void clearSnackBars() => scaffoldMessenger.clearSnackBars();
 }

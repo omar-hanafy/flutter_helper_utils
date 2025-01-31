@@ -17,11 +17,11 @@ extension FHUFocusScopeExtension on BuildContext {
   /// It is safe to call regardless of whether this node has ever requested
   /// focus or not. If this node doesn't have focus or primary focus, nothing
   /// happens.
-  void get unFocus => focusScope.unfocus();
+  void unFocus() => focusScope.unfocus();
 
   /// is commonly used to hide keyboard on onTap/onPress call. Usage could be
   /// `onTap: () => context.requestFocus` or `onTap: context.requestFocusCall`.
-  void get requestFocus => focusScope.requestFocus(FocusNode());
+  void requestFocus() => focusScope.requestFocus(FocusNode());
 
   GestureTapCallback get requestFocusCall =>
       () => focusScope.requestFocus(FocusNode());

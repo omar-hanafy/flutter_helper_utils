@@ -1,31 +1,65 @@
 # CHANGELOG
 
-## v7.0.0
+## Version 7.0.0
 
-### PlatformEnv APIs
+### New Features
 
-* Added `report()` to `PlatformEnv` to get detailed report info about the current platform in `Map<String, String>`
-  format.
+#### Platform Environment
 
-### New Color Extension APIs
+- Added `report()` method to `PlatformEnv`
+    - Returns: Detailed platform information in `Map<String, String>` format
 
-* **`contrastColor`**:  Generates a contrasting color (light or dark) based on relative luminance.
-* **`isDark` / `isLight`**: Determines if a color is "dark" or "light" based on WCAG-compliant luminance.
-  **`toHex` Enhancements:**
-* **`includeAlpha`**:  Includes the alpha channel in the hex string.
-    * **`omitAlphaIfFullOpacity`**: Excludes alpha for fully opaque colors.
-    * **`uppercase`**: Outputs the hex string in uppercase.
+#### Color Extension Enhancements
+- Added `contrastColor` for readable contrasting colors.
+- Added `isDark` and `isLight` for WCAG-based darkness/lightness checks. 
 
-### Scroll Extensions Changes
+- **`toHex`:** Improved with alpha channel control, uppercase option, and performance optimizations.
+- **Grayscale:** Enhanced for perceptual accuracy using linear luminance.
+- **Color Comparison:** Added `isApproximately` for approximate comparison with tolerance.
 
-**Breaking Changes:**
+#### New Scroll Extensions Helpers
 
-* `isInTop` has been changed to `isAtTop` for consistency with other methods.
-* The extension does not work on nullable scroll controllers any more now requires null-aware access for all helper
-  getters (e.g. `controller?.isAtTop`).
+- Added: `flingWithVelocity` - Performs velocity-based scroll animation
+- Added: `snapToClosest` - Snaps scroll position to the closest item based on a given item extent
+- Added: `scrollByPercentage` - Scrolls by relative percentage from current position
+- Added: `isItemVisible` - Checks if a specific item is visible in viewport
+- Added: `hasScrollMomentum` - Checks if scroll view is in ballistic scroll motion
+- Added: `debugPrintScrollInfo` - Prints detailed scroll state information for debugging
 
-- Upgraded `dart_helper_utils` to [v4.0.0](https://pub.dev/packages/dart_helper_utils/changelog#400), **introducing
-  breaking changes**.
+### Breaking Changes
+
+#### Focus Scope Extension Updates
+
+All getter methods have been converted to regular method calls for clarity and consistency:
+
+| Old (Getter)   | New (Method)     |
+|----------------|------------------|
+| `unFocus`      | `unFocus()`      |
+| `requestFocus` | `requestFocus()` |
+
+#### Scaffold Messenger Extension Updates
+
+All getter methods have been converted to regular method calls:
+
+| Old (Getter)                  | New (Method)                    |
+|-------------------------------|---------------------------------|
+| `hideCurrentMaterialBanner`   | `hideCurrentMaterialBanner()`   |
+| `hideCurrentSnackBar`         | `hideCurrentSnackBar()`         |
+| `removeCurrentMaterialBanner` | `removeCurrentMaterialBanner()` |
+| `removeCurrentSnackBar`       | `removeCurrentSnackBar()`       |
+| `clearMaterialBanners`        | `clearMaterialBanners()`        |
+| `clearSnackBars`              | `clearSnackBars()`              |
+
+#### Scroll Extensions Changes
+
+- Renamed: `isInTop` → `isAtTop` for better naming consistency
+- **Important**: The extension no longer supports nullable scroll controllers
+    - All helper getters now require null-aware access (e.g., `controller?.isAtTop`)
+
+### Dependencies
+
+- Updated to `dart_helper_utils` v4.0.0 (contains breaking changes)
+    - For details: [dart_helper_utils changelog](https://pub.dev/packages/dart_helper_utils/changelog#400)
 
 ## v6.10.0
 
