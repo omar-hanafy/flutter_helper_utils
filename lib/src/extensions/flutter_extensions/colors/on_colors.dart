@@ -1,7 +1,8 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+// ignore_for_file: avoid_private_typedef_functions
 import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:dart_helper_utils/dart_helper_utils.dart';
 import 'package:flutter/material.dart';
 
 /// An extension on [Color] that provides a variety of color-manipulation helpers.
@@ -272,68 +273,5 @@ extension FHUColorExt on Color {
         (c1.r - c2.r).abs() < epsilon &&
         (c1.g - c2.g).abs() < epsilon &&
         (c1.b - c2.b).abs() < epsilon;
-  }
-}
-
-/// An extension on [String] that provides utility methods
-/// for hex color parsing (including short-hex, #RGB or #RGBA, etc.)
-extension FHUStringToColorExtensions on String {
-  /// Checks if the string is a valid hex color code.
-  ///
-  /// Validates strings in the following formats:
-  /// - 3 digits: RGB (#RGB)
-  /// - 4 digits: RGBA (#RGBA)
-  /// - 6 digits: RRGGBB (#RRGGBB)
-  /// - 8 digits: RRGGBBAA (#RRGGBBAA)
-  ///
-  /// The '#' prefix is optional. Letters can be uppercase or lowercase.
-  ///
-  /// Examples:
-  /// - Valid: "#123", "abc", "#FF00FF", "80808080"
-  /// - Invalid: "12", "#12345", "xyz"
-  bool get isHexColor {
-    return RegExp(
-      regexValidHexColor,
-      caseSensitive: false,
-    ).hasMatch(this);
-  }
-
-  /// Attempts to convert this string to an sRGB [Color].
-  /// Returns `null` if parsing fails.
-  ///
-  /// Supports:
-  /// - #RGB or RGB
-  /// - #RGBA or RGBA
-  /// - #RRGGBB or RRGGBB
-  /// - #RRGGBBAA or RRGGBBAA
-  ///
-  /// Example usage:
-  /// ```dart
-  /// final color = "#349".toColor;       // => Color(0xFF334499)
-  /// final color2 = "FF334499".toColor;  // => Color(0xFF334499)
-  /// ```
-  Color? get toColor {
-    if (!isHexColor) return null;
-
-    // Remove '#'
-    var hex = replaceAll('#', '');
-
-    // If it's 3 or 4 chars, expand to 6 or 8 chars by duplicating each nibble
-    // e.g. "abc" => "aabbcc", "abcd" => "aabbccdd"
-    if (hex.length == 3 || hex.length == 4) {
-      hex = hex.split('').map((c) => c * 2).join();
-    }
-
-    // If it's now 6 chars, prepend "FF" for the alpha channel.
-    if (hex.length == 6) {
-      hex = 'FF$hex';
-    }
-
-    // Now it should be 8 chars (ARGB).
-    final value = int.tryParse(hex, radix: 16);
-    if (value == null) return null;
-
-    // Construct a color in the default sRGB space.
-    return Color(value);
   }
 }
