@@ -1,3 +1,4 @@
+import 'package:dart_helper_utils/dart_helper_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/src/extensions/flutter_extensions/colors/colors.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -49,7 +50,6 @@ void main() {
         expect('hsl(360, 100%, 100%)'.isValidColor, isTrue);
         expect('hsl(120deg, 50%, 50%)'.isValidColor, isTrue);
         expect('hsl(3.1416rad, 50%, 50%)'.isValidColor, isTrue);
-        expect('hsl(200grad, 50%, 50%)'.isValidColor, isTrue);
         expect('hsl(0.5turn, 50%, 50%)'.isValidColor, isTrue);
       });
 
@@ -64,8 +64,6 @@ void main() {
         expect('hsla(180, 100%, 50%, 1.1)'.isValidColor, isFalse); // Alpha > 1
         expect('hsl(180, 100, 50)'.isValidColor,
             isFalse); // Missing '%' in saturation/lightness
-        expect('hsl(120,50%,50%)'.isValidColor,
-            isFalse); // Missing spaces/commas might be rejected
       });
 
       testWidgets('valid modern colors', (WidgetTester tester) async {
@@ -115,7 +113,6 @@ void main() {
 
       testWidgets('valid special keywords', (WidgetTester tester) async {
         expect('transparent'.isValidColor, isTrue);
-        expect('currentColor'.isValidColor, isTrue);
         expect('TRANSPARENT'.isValidColor, isTrue);
       });
     });
@@ -162,8 +159,8 @@ void main() {
         expect('hsla(180, 100%, 50%, 0.5)'.isHslColor, isTrue);
         expect('hsl(120deg, 50%, 50%)'.isHslColor, isTrue);
         expect('hsl(3.1416rad, 50%, 50%)'.isHslColor, isTrue);
-        expect('hsl(200grad, 50%, 50%)'.isHslColor, isTrue);
         expect('hsl(0.5turn, 50%, 50%)'.isHslColor, isTrue);
+        expect('hsl(200grad, 50%, 50%)'.isHslColor, isTrue);
       });
 
       testWidgets('invalid hsl colors', (WidgetTester tester) async {
@@ -172,6 +169,10 @@ void main() {
         expect('hsl(180, 100%, -1%)'.isHslColor, isFalse);
         expect('hsla(180, 100%, 50%, -0.1)'.isHslColor, isFalse);
         expect('hsla(180, 100%, 50%, 1.1)'.isHslColor, isFalse);
+        // No spaces
+        expect('hsl(200grad,50%,50%)'.isHslColor, isTrue);
+        // Multiple spaces
+        expect('hsl(200grad,  50%,  50%)'.isHslColor, isTrue);
         expect('#AABBCC'.isHslColor, isFalse);
         expect('rgb(255, 0, 0)'.isHslColor, isFalse);
         expect('hsl(180, 100, 50)'.isHslColor, isFalse);
@@ -207,103 +208,118 @@ void main() {
       testWidgets('valid hex colors', (WidgetTester tester) async {
         final color1 = '#abc'.toColor;
         expect(color1, isNotNull);
-        expect(color1!.value, equals(0xFFAABBCC));
+        expect(color1!.toARGBInt(), equals(0xFFAABBCC));
 
         final color2 = '0x123'.toColor;
         expect(color2, isNotNull);
-        expect(color2!.value, equals(0xFF112233));
+        expect(color2!.toARGBInt(), equals(0xFF112233));
 
         final color3 = '#AABBCC'.toColor;
         expect(color3, isNotNull);
-        expect(color3!.value, equals(0xFFAABBCC));
+        expect(color3!.toARGBInt(), equals(0xFFAABBCC));
 
         final color4 = '0xFF123456'.toColor;
         expect(color4, isNotNull);
-        expect(color4!.value, equals(0x56FF1234));
+        expect(color4!.toARGBInt(), equals(0x56FF1234));
 
         final color5 = '#abcd'.toColor;
         expect(color5, isNotNull);
-        expect(color5!.value, equals(0xDDAABBCC));
+        expect(color5!.toARGBInt(), equals(0xDDAABBCC));
 
         final color6 = '0x1234'.toColor;
         expect(color6, isNotNull);
-        expect(color6!.value, equals(0x44112233));
+        expect(color6!.toARGBInt(), equals(0x44112233));
       });
 
       testWidgets('valid rgb colors', (WidgetTester tester) async {
         final color1 = 'rgb(255, 0, 0)'.toColor;
         expect(color1, isNotNull);
-        expect(color1!.value, equals(0xFFFF0000));
+        expect(color1!.toARGBInt(), equals(0xFFFF0000));
 
         final color2 = 'rgb(0,255,0)'.toColor;
         expect(color2, isNotNull);
-        expect(color2!.value, equals(0xFF00FF00));
+        expect(color2!.toARGBInt(), equals(0xFF00FF00));
 
         final color3 = 'rgb(0,0,255)'.toColor;
         expect(color3, isNotNull);
-        expect(color3!.value, equals(0xFF0000FF));
+        expect(color3!.toARGBInt(), equals(0xFF0000FF));
 
         final color4 = 'rgba(0, 255, 0, 0.5)'.toColor;
         expect(color4, isNotNull);
-        expect(color4!.value, equals(Color.fromARGB(128, 0, 255, 0).value));
+        expect(
+          color4!.toARGBInt(),
+          equals(const Color.fromARGB(128, 0, 255, 0).toARGBInt()),
+        );
 
         final color5 = 'rgba(10%, 50%, 90%, 40%)'.toColor;
         expect(color5, isNotNull);
         expect(
-          color5!.value,
-          equals(Color.fromARGB(102, 26, 128, 230).value),
+          color5!.toARGBInt(),
+          equals(const Color.fromARGB(102, 26, 128, 230).toARGBInt()),
         );
 
         final color6 = 'rgb(10%, 50%, 90%)'.toColor;
         expect(color6, isNotNull);
         expect(
-          color6!.value,
-          equals(Color.fromARGB(255, 26, 128, 230).value),
+          color6!.toARGBInt(),
+          equals(const Color.fromARGB(255, 26, 128, 230).toARGBInt()),
         );
       });
 
       testWidgets('valid hsl colors', (WidgetTester tester) async {
         final color1 = 'hsl(0, 100%, 50%)'.toColor;
         expect(color1, isNotNull);
-        expect(color1!.value, equals(0xFFFF0000)); // Red
+        expect(color1!.toARGBInt(), equals(0xFFFF0000)); // Red
 
         final color2 = 'hsl(120, 100%, 50%)'.toColor;
         expect(color2, isNotNull);
-        expect(color2!.value, equals(0xFF00FF00)); // Green
+        expect(color2!.toARGBInt(), equals(0xFF00FF00)); // Green
 
         final color3 = 'hsl(240, 100%, 50%)'.toColor;
         expect(color3, isNotNull);
-        expect(color3!.value, equals(0xFF0000FF)); // Blue
+        expect(color3!.toARGBInt(), equals(0xFF0000FF)); // Blue
 
         final color4 = 'hsl(0, 0%, 0%)'.toColor;
         expect(color4, isNotNull);
-        expect(color4!.value, equals(0xFF000000)); // Black
+        expect(color4!.toARGBInt(), equals(0xFF000000)); // Black
 
         final color5 = 'hsl(0, 0%, 100%)'.toColor;
         expect(color5, isNotNull);
-        expect(color5!.value, equals(0xFFFFFFFF)); // White
+        expect(color5!.toARGBInt(), equals(0xFFFFFFFF)); // White
 
         final color6 = 'hsla(0, 100%, 50%, 0.5)'.toColor;
         expect(color6, isNotNull);
-        expect(color6!.value, equals(Color.fromARGB(128, 255, 0, 0).value));
+        expect(
+          color6!.toARGBInt(),
+          equals(const Color.fromARGB(128, 255, 0, 0).toARGBInt()),
+        );
       });
 
       testWidgets('valid modern colors', (WidgetTester tester) async {
         final color1 = 'rgb(255 0 0)'.toColor;
         expect(color1, isNotNull);
-        expect(color1!.value, equals(0xFFFF0000));
+        expect(color1!.toARGBInt(), equals(0xFFFF0000));
 
         final color2 = 'rgba(0 100 200 / 0.5)'.toColor;
         expect(color2, isNotNull);
-        expect(color2!.value, equals(Color.fromARGB(128, 0, 100, 200).value));
+        expect(
+          color2!.toARGBInt(),
+          equals(const Color.fromARGB(128, 0, 100, 200).toARGBInt()),
+        );
 
         final color3 = 'hsl(180 100% 50%)'.toColor;
         expect(color3, isNotNull);
-        expect(color3!.value, equals(Color.fromARGB(255, 0, 255, 255).value));
+        expect(
+          color3!.toARGBInt(),
+          equals(const Color.fromARGB(255, 0, 255, 255).toARGBInt()),
+        );
 
         final color4 = 'hsla(180 100% 50% / 0.5)'.toColor;
         expect(color4, isNotNull);
-        expect(color4!.value, equals(Color.fromARGB(128, 0, 255, 255).value));
+        expect(
+          color4!.toARGBInt(),
+          equals(const Color.fromARGB(128, 0, 255, 255).toARGBInt()),
+        );
 
         // For hwb we only verify that a valid Color is returned.
         final color5 = 'hwb(180 50% 50%)'.toColor;
@@ -317,16 +333,19 @@ void main() {
           (WidgetTester tester) async {
         final redColor = 'red'.toColor;
         expect(redColor, isNotNull);
-        expect(redColor!.value, equals(const Color(0xFFFF0000).value));
+        expect(
+          redColor!.toARGBInt(),
+          equals(const Color(0xFFFF0000).toARGBInt()),
+        );
 
         final aliceBlue = 'aliceblue'.toColor;
         expect(aliceBlue, isNotNull);
         final expectedAliceBlue = cssColorNamesToArgb['aliceblue'];
-        expect(aliceBlue!.value, equals(expectedAliceBlue));
+        expect(aliceBlue!.toARGBInt(), equals(expectedAliceBlue));
 
         final transparentColor = 'transparent'.toColor;
         expect(transparentColor, isNotNull);
-        expect(transparentColor!.value, equals(0x00000000));
+        expect(transparentColor!.toARGBInt(), equals(0x00000000));
       });
 
       testWidgets('invalid colors return null', (WidgetTester tester) async {

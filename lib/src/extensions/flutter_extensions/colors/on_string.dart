@@ -4,75 +4,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-/// Global variables – update these if needed.
-const regexValidHexColor =
-    r'^(#|0x)?([0-9A-Fa-f]{3}|[0-9A-Fa-f]{4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$';
-
-const _intPattern = r'(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)';
-const _percentPattern = r'(?:100|[1-9]?\d)%';
-
-/// Updated regex for legacy rgb()/rgba() with capturing groups.
-/// (The number alternatives are now explicit so that only 0–255 (or a valid percent) is allowed.)
-const regexValidRgbColor = r'^rgba?\(\s*'
-    '($_intPattern|$_percentPattern)\\s*,\\s*'
-    '($_intPattern|$_percentPattern)\\s*,\\s*'
-    '($_intPattern|$_percentPattern)'
-    '(?:\\s*,\\s*((?:0?\\.\\d+)|(?:1)|(?:0)|$_percentPattern))?\\s*\\)\$';
-
-/// Updated regex for legacy hsl()/hsla() with capturing groups.
-/// The hue part now accepts a number that may have a unit (deg, rad, turn, grad).
-const regexValidHslColor = r'^hsla?\s*\(\s*'
-    r'((?:[0-9]+(?:\.[0-9]+)?)(?:deg|rad|turn|grad)?)\s*,\s*'
-    r'((?:100|[0-9]{1,2})%)\s*,\s*'
-    r'((?:100|[0-9]{1,2})%)'
-    r'(?:\s*,\s*'
-    r'((?:0?\.\d+|1|0))'
-    r')?\s*\)$';
-
-/// Updated modern color regex – now requires that no commas appear.
-const regexValidModernColorFunc =
-    r'^(?:(?:rgb|hsl|hwb|lab|lch)a?|color)\(\s*(?:(?!,).)+\)$';
-
-/// Expanded named colors map. (Note: if a keyword like "currentColor" is not desired, omit it.)
-const cssColorNamesToArgb = <String, int>{
-  'black': 0xFF000000,
-  'white': 0xFFFFFFFF,
-  'red': 0xFFFF0000,
-  'lime': 0xFF00FF00,
-  'green': 0xFF008000,
-  'blue': 0xFF0000FF,
-  'yellow': 0xFFFFFF00,
-  'cyan': 0xFF00FFFF,
-  'magenta': 0xFFFF00FF,
-  'silver': 0xFFC0C0C0,
-  'gray': 0xFF808080,
-  'maroon': 0xFF800000,
-  'olive': 0xFF808000,
-  'purple': 0xFF800080,
-  'teal': 0xFF008080,
-  'navy': 0xFF000080,
-  'orange': 0xFFFFA500,
-  'pink': 0xFFFFC0CB,
-  'brown': 0xFFA52A2A,
-  'violet': 0xFFEE82EE,
-  'gold': 0xFFFFD700,
-  'indigo': 0xFF4B0082,
-  'khaki': 0xFFF0E68C,
-  'coral': 0xFFFF7F50,
-  'aquamarine': 0xFF7FFFD4,
-  'turquoise': 0xFF40E0D0,
-  'lavender': 0xFFE6E6FA,
-  'tan': 0xFFD2B48C,
-  'salmon': 0xFFFA8072,
-  'plum': 0xFFDDA0DD,
-  'orchid': 0xFFDA70D6,
-  'chocolate': 0xFFD2691E,
-  'tomato': 0xFFFF6347,
-  'crimson': 0xFFDC143C,
-  'transparent': 0x00000000,
-  'aliceblue': 0xFFF0F8FF,
-  // (Additional named colors could be added here if desired.)
-};
+import '../../../../flutter_helper_utils.dart';
 
 typedef _ColorParser = Color? Function(List<String> values);
 
@@ -87,17 +19,16 @@ extension FHUStringToColorExtension on String {
   static final RegExp _modernColorRegex =
       RegExp(regexValidModernColorFunc, caseSensitive: false);
 
-  // For splitting modern color function values.
-  static final RegExp _splitRegExp = RegExp(r'[\s,/]');
-
   /// Whether the string represents a valid color.
-  bool get isValidColor => toColor != null;
+  bool get isValidColor => isHexColor || toColor != null;
 
-  bool get isHexColor => _hexColorRegex.hasMatch(trim());
+  /// Checks if the string is a valid hex color code.
+  /// using [regexValidHexColor] global regex pattern.
+  bool get isHexColor => _hexColorRegex.hasMatch(this);
 
-  bool get isRgbColor => _rgbColorRegex.hasMatch(trim());
+  bool get isRgbColor => _parseRgbColor(trim()) != null;
 
-  bool get isHslColor => _hslColorRegex.hasMatch(trim());
+  bool get isHslColor => _parseHslColor(trim()) != null;
 
   /// For modern syntax we additionally require that parsing returns a non-null Color.
   bool get isModernColor =>
@@ -107,15 +38,14 @@ extension FHUStringToColorExtension on String {
   Color? get toColor {
     final input = trim();
 
-    // Named color.
+    // Try named colors first.
     final namedColor = cssColorNamesToArgb[input.toLowerCase()];
     if (namedColor != null) return Color(namedColor);
 
-    if (isHexColor) return _parseHexColor(input);
-    if (isRgbColor) return _parseRgbColor(input);
-    if (isHslColor) return _parseHslColor(input);
-    if (isModernColor) return _parseModernColor(input);
-    return null;
+    return _parseHexColor(input) ??
+        _parseRgbColor(input) ??
+        _parseHslColor(input) ??
+        _parseModernColor(input);
   }
 
   // -------------------------
@@ -123,8 +53,10 @@ extension FHUStringToColorExtension on String {
   // -------------------------
 
   Color? _parseHexColor(String input) {
-    var hex =
-        input.trim().replaceFirst(RegExp('^(#|0x)', caseSensitive: false), '');
+    var hex = input.trim().replaceFirst(
+          RegExp('^(#|0x)', caseSensitive: false),
+          '',
+        );
     if (hex.length == 3) {
       hex = hex.split('').map((c) => c * 2).join();
       hex = 'FF$hex';
@@ -146,11 +78,17 @@ extension FHUStringToColorExtension on String {
     final match = _rgbColorRegex.firstMatch(input);
     if (match == null) return null;
 
-    // Ensure consistency: either all components are percentages or none are.
+    // Legacy rule: if input starts with "rgb(" (without "a"), a fourth value is invalid.
+    if (input.trim().toLowerCase().startsWith('rgb(') &&
+        match.group(4) != null) {
+      return null;
+    }
+
+    // Ensure either all three components are percentages or none are.
     bool isPercent(int groupIndex) =>
         match.group(groupIndex)!.trim().endsWith('%');
-    bool allPercent = isPercent(1) && isPercent(2) && isPercent(3);
-    bool nonePercent = !isPercent(1) && !isPercent(2) && !isPercent(3);
+    final allPercent = isPercent(1) && isPercent(2) && isPercent(3);
+    final nonePercent = !isPercent(1) && !isPercent(2) && !isPercent(3);
     if (!allPercent && !nonePercent) return null;
 
     final components = <int>[];
@@ -159,8 +97,9 @@ extension FHUStringToColorExtension on String {
       if (group.endsWith('%')) {
         final percentage =
             double.tryParse(group.substring(0, group.length - 1));
-        if (percentage == null || percentage < 0 || percentage > 100)
+        if (percentage == null || percentage < 0 || percentage > 100) {
           return null;
+        }
         components.add((percentage / 100 * 255).round());
       } else {
         final value = int.tryParse(group);
@@ -168,14 +107,15 @@ extension FHUStringToColorExtension on String {
         components.add(value);
       }
     }
-    int alpha = 255;
+    var alpha = 255;
     if (match.group(4) != null) {
       final alphaGroup = match.group(4)!;
-      if (alphaGroup.endsWith('%')) {
+      if (alphaGroup.trim().endsWith('%')) {
         final percentage =
             double.tryParse(alphaGroup.substring(0, alphaGroup.length - 1));
-        if (percentage == null || percentage < 0 || percentage > 100)
+        if (percentage == null || percentage < 0 || percentage > 100) {
           return null;
+        }
         alpha = (percentage / 100 * 255).round();
       } else {
         final d = double.tryParse(alphaGroup);
@@ -188,7 +128,17 @@ extension FHUStringToColorExtension on String {
 
   Color? _parseHslColor(String input) {
     final match = _hslColorRegex.firstMatch(input);
-    if (match == null) return null;
+    if (match == null) {
+      return null;
+    }
+
+    // Legacy rule: if input starts with "hsl(" (without "a"), reject if alpha is present
+    if (input.trim().toLowerCase().startsWith('hsl(') &&
+        match.group(4) != null) {
+      // Simplified check
+      return null;
+    }
+
     final lowerInput = input.toLowerCase();
     final isHsla = lowerInput.startsWith('hsla');
     final numGroups = isHsla ? 4 : 3;
@@ -211,9 +161,9 @@ extension FHUStringToColorExtension on String {
         final alpha = double.tryParse(group);
         if (alpha == null || alpha < 0 || alpha > 1) return null;
         components.add(alpha);
-      } else if (group.endsWith('%')) {
+      } else if (group.trim().endsWith('%')) {
         final percentage =
-            double.tryParse(group.substring(0, group.length - 1));
+            double.tryParse(group.substring(0, group.length - 1).trim());
         if (percentage == null || percentage < 0 || percentage > 100) {
           return null;
         }
@@ -232,6 +182,8 @@ extension FHUStringToColorExtension on String {
   Color? _parseModernColor(String input) {
     final values = _extractModernValues(input);
     if (values.isEmpty) return null;
+    // If there are 4 tokens but no slash in the original input, the syntax is invalid.
+    if (values.length == 4 && !input.contains('/')) return null;
     final functionName = input.substring(0, input.indexOf('(')).toLowerCase();
     final parser = _modernColorParsers[functionName];
     if (parser != null) {
@@ -245,16 +197,20 @@ extension FHUStringToColorExtension on String {
   }
 
   List<String> _extractModernValues(String input) {
-    final match = _modernColorRegex.firstMatch(input);
-    if (match == null) return const [];
     final start = input.indexOf('(') + 1;
     final end = input.lastIndexOf(')');
     if (start >= end) return const [];
-    return input
-        .substring(start, end)
-        .split(_splitRegExp)
-        .where((s) => s.isNotEmpty)
-        .toList();
+    final inner = input.substring(start, end).trim();
+    if (inner.contains('/')) {
+      final parts = inner.split('/');
+      if (parts.length != 2) return const [];
+      final mainParts = parts[0].trim().split(RegExp(r'\s+'));
+      final alphaParts = parts[1].trim().split(RegExp(r'\s+'));
+      if (mainParts.length != 3 || alphaParts.length != 1) return const [];
+      return [...mainParts, ...alphaParts];
+    } else {
+      return inner.split(RegExp(r'\s+')).where((s) => s.isNotEmpty).toList();
+    }
   }
 
   // -------------------------
@@ -262,13 +218,16 @@ extension FHUStringToColorExtension on String {
   // -------------------------
   static final Map<String, _ColorParser> _modernColorParsers = {
     'rgb': _parseRgbValues,
+    'rgba': _parseRgbValues, // Allow rgba syntax.
     'hsl': _parseHslValues,
+    'hsla': _parseHslValues, // Allow hsla syntax.
     'hwb': _parseHwbValues,
-    // Additional parsers can be added here.
+    // Additional parsers (e.g. for "lab", "lch", or "color") can be added here.
   };
 
   static Color? _parseRgbValues(List<String> values) {
-    if (values.length < 3 || values.length > 4) return null;
+    // Expect exactly 3 tokens if no alpha, or 4 if an alpha value is provided.
+    if (values.length != 3 && values.length != 4) return null;
     final r = _parseColorComponent(values[0]);
     final g = _parseColorComponent(values[1]);
     final b = _parseColorComponent(values[2]);
@@ -278,7 +237,7 @@ extension FHUStringToColorExtension on String {
   }
 
   static Color? _parseHslValues(List<String> values) {
-    if (values.length < 3 || values.length > 4) return null;
+    if (values.length != 3 && values.length != 4) return null;
     final h = _parseHueValue(values[0]);
     final s = _parsePercentage(values[1]);
     final l = _parsePercentage(values[2]);
@@ -288,7 +247,7 @@ extension FHUStringToColorExtension on String {
   }
 
   static Color? _parseHwbValues(List<String> values) {
-    if (values.length < 3 || values.length > 4) return null;
+    if (values.length != 3 && values.length != 4) return null;
     final h = _parseHueValue(values[0]);
     final w = _parsePercentage(values[1]);
     final b = _parsePercentage(values[2]);
@@ -322,10 +281,20 @@ extension FHUStringToColorExtension on String {
   }
 
   static double? _parseHueValue(String v) {
-    final value = v.trim().toLowerCase();
+    // Trim and remove any trailing commas and spaces
+    final value = v
+        .trim()
+        .toLowerCase()
+        .replaceAll(RegExp('$regexComponentSeparator\$'), '');
     try {
       double hue;
-      if (value.endsWith('deg')) {
+      if (value.endsWith('grad')) {
+        // Check 'grad' first!
+        final gradValue = double.parse(value.substring(0, value.length - 4));
+        // 400 gradians = 360 degrees
+        hue = (gradValue * 360 / 400) % 360;
+        if (hue < 0 || hue > 360) return null;
+      } else if (value.endsWith('deg')) {
         hue = double.parse(value.substring(0, value.length - 3));
         if (hue < 0 || hue > 360) return null;
       } else if (value.endsWith('rad')) {
@@ -335,15 +304,12 @@ extension FHUStringToColorExtension on String {
       } else if (value.endsWith('turn')) {
         hue = double.parse(value.substring(0, value.length - 4)) * 360;
         if (hue < 0 || hue > 360) return null;
-      } else if (value.endsWith('grad')) {
-        hue = double.parse(value.substring(0, value.length - 4)) * 0.9;
-        // Normalize grad values (e.g. 400grad → 360deg, 450grad → 45deg)
-        hue = hue % 360;
       } else {
         hue = double.tryParse(value) ?? 0;
         if (hue < 0 || hue > 360) return null;
       }
-      return hue / 360;
+      // Normalize hue so that 360° becomes 0°
+      return (hue / 360) % 1;
     } catch (_) {
       return null;
     }
@@ -393,13 +359,17 @@ extension FHUStringToColorExtension on String {
       black /= sum;
     }
     final pureColor = _hslToColor(h, 1, 0.5, 255);
-    final rPure = pureColor.red / 255;
-    final gPure = pureColor.green / 255;
-    final bPure = pureColor.blue / 255;
+    final rPure = pureColor.r / 255;
+    final gPure = pureColor.g / 255;
+    final bPure = pureColor.b / 255;
     final rFinal = ((1 - white - black) * rPure + white) * 255;
     final gFinal = ((1 - white - black) * gPure + white) * 255;
     final bFinal = ((1 - white - black) * bPure + white) * 255;
-    return Color.fromARGB(alpha, rFinal.round().clamp(0, 255),
-        gFinal.round().clamp(0, 255), bFinal.round().clamp(0, 255));
+    return Color.fromARGB(
+      alpha,
+      rFinal.round().clamp(0, 255),
+      gFinal.round().clamp(0, 255),
+      bFinal.round().clamp(0, 255),
+    );
   }
 }

@@ -44,10 +44,11 @@ packages:
   dart_helper_utils:
     dependency: transitive
     description:
-      path: "../../../dart_helper_utils"
-      relative: true
-    source: path
-    version: "4.0.0-dev.5"
+      name: dart_helper_utils
+      sha256: bafd90771f935595c57fc616e8b936c81b526a6d0b50465d17ba731b346826a9
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0-dev.7"
   enefty_icons:
     dependency: "direct main"
     description:

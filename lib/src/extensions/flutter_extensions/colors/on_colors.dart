@@ -103,15 +103,17 @@ extension FHUColorExt on Color {
     return leadingHashSign ? '#$rawHex' : rawHex;
   }
 
-  /// Converts this color (in sRGB) to a 32-bit ARGB integer.
-  /// Useful if you're migrating from older integer-based APIs.
+  /// Converts this color (assumed to be in sRGB) to a 32-bit ARGB integer.
+  /// This is useful if you're migrating from older APIs that expected an integer.
   int toARGBInt() {
     final srgb = _toSRGB();
-    return (srgb.a * 255).round().clamp(0, 255) << 24 |
-        (srgb.r * 255).round().clamp(0, 255) << 16 |
-        (srgb.g * 255).round().clamp(0, 255) << 8 |
-        (srgb.b * 255).round().clamp(0, 255);
+    return (_floatToInt8(srgb.a) << 24) |
+        (_floatToInt8(srgb.r) << 16) |
+        (_floatToInt8(srgb.g) << 8) |
+        _floatToInt8(srgb.b);
   }
+
+  int _floatToInt8(double component) => (component * 255).round().clamp(0, 255);
 
   // ------------------------------------------------------
   //        Brightness adjustments
