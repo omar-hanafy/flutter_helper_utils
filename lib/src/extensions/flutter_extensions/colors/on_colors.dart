@@ -11,6 +11,9 @@ import 'package:flutter/material.dart';
 /// consistent behavior (for example, when computing luminance or performing
 /// HSL transformations).
 extension FHUColorExt on Color {
+  WidgetStateProperty<Color> get toWidgetStateProperty =>
+      WidgetStateProperty.all(this);
+
   // ------------------------------------------------------
   //        Basic sRGB alignment
   // ------------------------------------------------------

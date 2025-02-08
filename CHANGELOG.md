@@ -2,20 +2,32 @@
 
 ## Version 7.0.0
 
-### New Features
+### Features & Enhances
 
-#### Platform Environment
+#### Colors
 
-- Added `report()` method to `PlatformEnv`
-    - Returns: Detailed platform information in `Map<String, String>` format
+- **Color Utilities**
+    - Added `contrastColor` for generating readable contrasting colors
+    - Added `isDark` and `isLight` for WCAG-based color analysis
+    - Enhanced grayscale conversion using linear luminance for better perceptual accuracy
+    - Added `isApproximately` for fuzzy color comparison with tolerance
 
-#### Color Extension Enhancements
-- Added `contrastColor` for readable contrasting colors.
-- Added `isDark` and `isLight` for WCAG-based darkness/lightness checks. 
+- **String to Color Parsing**
+  this version improves handling of hex colors, alpha channels, RGB percentages, and multiple angle units in HSL, using
+  robust methods for accuracy.
+    - Added support for modern color formats:
+        - RGB/RGBA: `rgb(255, 0, 0)`, `rgba(255, 0, 0, 0.5)`
+        - HSL/HSLA: `hsl(120, 100%, 50%)`, `hsla(120, 100%, 50%, 0.5)`
+        - HWB: `hwb(0 0% 0%)`, `hwb(0 0% 0% / 0.5)`
+        - Modern space-separated syntax
+        - CSS named colors
 
-- **`toHex`:** Improved with alpha channel control, uppercase option, and performance optimizations.
-- **Grayscale:** Enhanced for perceptual accuracy using linear luminance.
-- **Color Comparison:** Added `isApproximately` for approximate comparison with tolerance.
+    - Enhanced validation methods:
+        - `isValidColor`: Universal color format validation
+        - `isHexColor`: Improved hex color validation
+        - `isRgbColor`: RGB/RGBA syntax validation
+        - `isHslColor`: HSL/HSLA syntax validation
+        - `isModernColor`: Modern color function syntax validation
 
 #### New Scroll Extensions Helpers
 
@@ -26,11 +38,16 @@
 - Added: `hasScrollMomentum` - Checks if scroll view is in ballistic scroll motion
 - Added: `debugPrintScrollInfo` - Prints detailed scroll state information for debugging
 
-### Breaking Changes
+#### Platform Environment
+
+- Added `report()` method to `PlatformEnv`
+    - Returns: Detailed platform information in `Map<String, String>` format
+
+### Breaking Changes Guide
 
 #### Focus Scope Extension Updates
 
-All getter methods have been converted to regular method calls for clarity and consistency:
+All getter methods have been converted to regular method calls for clarity:
 
 | Old (Getter)   | New (Method)     |
 |----------------|------------------|

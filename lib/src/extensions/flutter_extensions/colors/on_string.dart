@@ -20,23 +20,27 @@ extension FHUStringToColorExtension on String {
       RegExp(regexValidModernColorFunc, caseSensitive: false);
 
   /// Whether the string represents a valid color.
-  bool get isValidColor => isHexColor || toColor != null;
+  bool get isValidColor => isNotEmptyOrNull && (isHexColor || toColor != null);
 
   /// Checks if the string is a valid hex color code.
-  /// using [regexValidHexColor] global regex pattern.
-  bool get isHexColor => _hexColorRegex.hasMatch(this);
+  bool get isHexColor => isNotEmptyOrNull && _hexColorRegex.hasMatch(trim());
 
-  bool get isRgbColor => _parseRgbColor(trim()) != null;
+  bool get isRgbColor => isNotEmptyOrNull && _parseRgbColor(trim()) != null;
 
-  bool get isHslColor => _parseHslColor(trim()) != null;
+  bool get isHslColor => isNotEmptyOrNull && _parseHslColor(trim()) != null;
 
   /// For modern syntax we additionally require that parsing returns a non-null Color.
-  bool get isModernColor =>
-      _modernColorRegex.hasMatch(trim()) && _parseModernColor(trim()) != null;
+  bool get isModernColor {
+    final input = trim();
+    return input.isNotEmpty &&
+        _modernColorRegex.hasMatch(input) &&
+        _parseModernColor(input) != null;
+  }
 
   /// Converts this string to a [Color] object.
   Color? get toColor {
     final input = trim();
+    if (input.isEmpty) return null;
 
     // Try named colors first.
     final namedColor = cssColorNamesToArgb[input.toLowerCase()];
@@ -57,30 +61,38 @@ extension FHUStringToColorExtension on String {
           RegExp('^(#|0x)', caseSensitive: false),
           '',
         );
+
+    // Normalize the hex string into ARGB format.
     if (hex.length == 3) {
+      // e.g. "abc" -> "aabbcc", then add full opacity.
       hex = hex.split('').map((c) => c * 2).join();
       hex = 'FF$hex';
     } else if (hex.length == 4) {
+      // e.g. "abcd" -> duplicate then swap (assuming rgba → argb).
       hex = hex.split('').map((c) => c * 2).join();
       hex = hex.substring(6, 8) + hex.substring(0, 6);
     } else if (hex.length == 6) {
+      // e.g. "aabbcc" → add full opacity.
       hex = 'FF$hex';
     } else if (hex.length == 8) {
+      // e.g. "aabbccdd" → swap to ARGB order.
       hex = hex.substring(6, 8) + hex.substring(0, 6);
     } else {
       return null;
     }
+
     final colorValue = int.tryParse(hex, radix: 16);
     return colorValue != null ? Color(colorValue) : null;
   }
 
   Color? _parseRgbColor(String input) {
-    final match = _rgbColorRegex.firstMatch(input);
+    final trimmed = input.trim();
+    final match = _rgbColorRegex.firstMatch(trimmed);
     if (match == null) return null;
 
+    final lowerInput = trimmed.toLowerCase();
     // Legacy rule: if input starts with "rgb(" (without "a"), a fourth value is invalid.
-    if (input.trim().toLowerCase().startsWith('rgb(') &&
-        match.group(4) != null) {
+    if (lowerInput.startsWith('rgb(') && match.group(4) != null) {
       return null;
     }
 
@@ -103,10 +115,13 @@ extension FHUStringToColorExtension on String {
         components.add((percentage / 100 * 255).round());
       } else {
         final value = int.tryParse(group);
-        if (value == null || value < 0 || value > 255) return null;
+        if (value == null || value < 0 || value > 255) {
+          return null;
+        }
         components.add(value);
       }
     }
+
     var alpha = 255;
     if (match.group(4) != null) {
       final alphaGroup = match.group(4)!;
@@ -127,26 +142,25 @@ extension FHUStringToColorExtension on String {
   }
 
   Color? _parseHslColor(String input) {
-    final match = _hslColorRegex.firstMatch(input);
-    if (match == null) {
-      return null;
-    }
+    final trimmed = input.trim();
+    final match = _hslColorRegex.firstMatch(trimmed);
+    if (match == null) return null;
 
-    // Legacy rule: if input starts with "hsl(" (without "a"), reject if alpha is present
-    if (input.trim().toLowerCase().startsWith('hsl(') &&
-        match.group(4) != null) {
-      // Simplified check
-      return null;
-    }
-
-    final lowerInput = input.toLowerCase();
+    final lowerInput = trimmed.toLowerCase();
+    // Legacy rule: if input starts with "hsl(" (without "a"), reject if an alpha is present.
     final isHsla = lowerInput.startsWith('hsla');
-    final numGroups = isHsla ? 4 : 3;
+    if (!isHsla && lowerInput.startsWith('hsl(') && match.group(4) != null) {
+      return null;
+    }
+
+    // Depending on whether alpha is present, expect 3 or 4 groups.
+    final numComponents = isHsla ? 4 : 3;
     final components = <double>[];
 
-    for (var i = 1; i <= numGroups; i++) {
+    for (var i = 1; i <= numComponents; i++) {
       final group = match.group(i);
       if (group == null) {
+        // For hsla, if alpha is missing, default to 1.
         if (isHsla && i == 4) {
           components.add(1);
           continue;
@@ -180,12 +194,15 @@ extension FHUStringToColorExtension on String {
   }
 
   Color? _parseModernColor(String input) {
-    final values = _extractModernValues(input);
+    final trimmed = input.trim();
+    final values = _extractModernValues(trimmed);
     if (values.isEmpty) return null;
+
     // If there are 4 tokens but no slash in the original input, the syntax is invalid.
-    if (values.length == 4 && !input.contains('/')) return null;
-    final functionName = input.substring(0, input.indexOf('(')).toLowerCase();
-    final parser = _modernColorParsers[functionName];
+    if (values.length == 4 && !trimmed.contains('/')) return null;
+
+    final funcName = trimmed.substring(0, trimmed.indexOf('(')).toLowerCase();
+    final parser = _modernColorParsers[funcName];
     if (parser != null) {
       try {
         return parser(values);
@@ -202,6 +219,7 @@ extension FHUStringToColorExtension on String {
     if (start >= end) return const [];
     final inner = input.substring(start, end).trim();
     if (inner.contains('/')) {
+      // Expecting exactly three main parts and one alpha part.
       final parts = inner.split('/');
       if (parts.length != 2) return const [];
       final mainParts = parts[0].trim().split(RegExp(r'\s+'));
@@ -226,7 +244,7 @@ extension FHUStringToColorExtension on String {
   };
 
   static Color? _parseRgbValues(List<String> values) {
-    // Expect exactly 3 tokens if no alpha, or 4 if an alpha value is provided.
+    // Expect exactly 3 tokens if no alpha, or 4 tokens if an alpha value is provided.
     if (values.length != 3 && values.length != 4) return null;
     final r = _parseColorComponent(values[0]);
     final g = _parseColorComponent(values[1]);
@@ -281,7 +299,7 @@ extension FHUStringToColorExtension on String {
   }
 
   static double? _parseHueValue(String v) {
-    // Trim and remove any trailing commas and spaces
+    // Normalize the input: remove extra spaces, commas, etc.
     final value = v
         .trim()
         .toLowerCase()
@@ -291,24 +309,20 @@ extension FHUStringToColorExtension on String {
       if (value.endsWith('grad')) {
         // Check 'grad' first!
         final gradValue = double.parse(value.substring(0, value.length - 4));
-        // 400 gradians = 360 degrees
+        // 400 gradians = 360 degrees.
         hue = (gradValue * 360 / 400) % 360;
-        if (hue < 0 || hue > 360) return null;
-      } else if (value.endsWith('deg')) {
-        hue = double.parse(value.substring(0, value.length - 3));
-        if (hue < 0 || hue > 360) return null;
       } else if (value.endsWith('rad')) {
         hue =
             double.parse(value.substring(0, value.length - 3)) * 180 / math.pi;
-        if (hue < 0 || hue > 360) return null;
+      } else if (value.endsWith('deg')) {
+        hue = double.parse(value.substring(0, value.length - 3));
       } else if (value.endsWith('turn')) {
         hue = double.parse(value.substring(0, value.length - 4)) * 360;
-        if (hue < 0 || hue > 360) return null;
       } else {
         hue = double.tryParse(value) ?? 0;
-        if (hue < 0 || hue > 360) return null;
       }
-      // Normalize hue so that 360° becomes 0°
+      if (hue < 0 || hue > 360) return null;
+      // Normalize so that 360° becomes 0°.
       return (hue / 360) % 1;
     } catch (_) {
       return null;
@@ -331,6 +345,9 @@ extension FHUStringToColorExtension on String {
       r = g = b = l;
     } else {
       double hue2rgb(double p, double q, double _t) {
+        // we do that to avoid "Invalid assignment to the parameter 't'." warning
+        // in dart its not recommended to modify the value of the method argument
+        // instead we can do this:
         var t = _t;
         if (t < 0) t += 1;
         if (t > 1) t -= 1;
@@ -347,7 +364,11 @@ extension FHUStringToColorExtension on String {
       b = hue2rgb(p, q, h - 1 / 3);
     }
     return Color.fromARGB(
-        alpha, (r * 255).round(), (g * 255).round(), (b * 255).round());
+      alpha,
+      (r * 255).round(),
+      (g * 255).round(),
+      (b * 255).round(),
+    );
   }
 
   static Color _hwbToColor(double h, double w, double b, int alpha) {
@@ -359,6 +380,8 @@ extension FHUStringToColorExtension on String {
       black /= sum;
     }
     final pureColor = _hslToColor(h, 1, 0.5, 255);
+    // using new getters for red, green, blue in Color object
+    // now they are .r, .g, .b, instead of .red, .green, .blue.
     final rPure = pureColor.r / 255;
     final gPure = pureColor.g / 255;
     final bPure = pureColor.b / 255;

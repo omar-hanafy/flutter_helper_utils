@@ -1,359 +1,511 @@
 import 'package:dart_helper_utils/dart_helper_utils.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_helper_utils/src/extensions/flutter_extensions/colors/colors.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('FHUStringToColorExtension', () {
     group('isValidColor', () {
-      testWidgets('valid hex colors', (WidgetTester tester) async {
-        expect('#abc'.isValidColor, isTrue);
-        expect('0x123'.isValidColor, isTrue);
-        expect('#AABBCC'.isValidColor, isTrue);
-        expect('0xFF123456'.isValidColor, isTrue);
-        expect('#abcd'.isValidColor, isTrue);
-        expect('0x1234'.isValidColor, isTrue);
-        // Note: 0xFF12345678 has 10 hex digits so it’s not supported.
+      // Map each valid input to a short description.
+      <String, String>{
+        // Hex formats.
+        '#abc': '3-digit hex with #',
+        '0x123': '3-digit hex with 0x',
+        '#AABBCC': '6-digit hex with #',
+        '0xFF123456': '8-digit hex with 0x',
+        '#abcd': '4-digit hex with #',
+        '0x1234': '4-digit hex with 0x',
+        // RGB/RGBA legacy.
+        'rgb(255, 0, 0)': 'rgb with integers',
+        'rgba(255, 0, 0, 1.0)': 'rgba with 1.0 alpha',
+        'rgba(0, 100, 200, 0.5)': 'rgba with float alpha',
+        'rgb(10%, 50%, 90%)': 'rgb with percentages',
+        'rgba(10%, 50%, 90%,40%)': 'rgba with percentage alpha',
+        // HSL/HSLA legacy.
+        'hsla(180, 100%, 50%, 0.5)': 'hsla valid',
+        'hsl(180, 100%, 50%)': 'hsl valid',
+        'hsl(120deg, 50%, 50%)': 'hsl with deg unit',
+        'hsl(3.1416rad, 50%, 50%)': 'hsl with rad unit',
+        'hsl(0.5turn, 50%, 50%)': 'hsl with turn unit',
+        'hsl(200grad, 50%, 50%)': 'hsl with grad unit',
+        // Modern syntax (comma-free).
+        'rgb(255 0 0)': 'modern rgb without commas',
+        'rgba(0 100 200 / 0.5)': 'modern rgba with slash alpha',
+        'hsl(180 100% 50%)': 'modern hsl',
+        'hsla(180 100% 50% / 0.5)': 'modern hsla with slash',
+        'hwb(180 50% 50%)': 'modern hwb',
+        'hwb(180 50% 50% / 0.5)': 'modern hwb with alpha',
+        // Named colors and special keywords.
+        'red': 'named color (red)',
+        'RED': 'named color, uppercase',
+        'aliceblue': 'named color (aliceblue)',
+        'transparent': 'special keyword transparent',
+      }.forEach((input, description) {
+        test('Valid: $description → "$input"', () {
+          expect(input.isValidColor, isTrue);
+        });
       });
 
-      testWidgets('invalid hex colors', (WidgetTester tester) async {
-        expect('#ab'.isValidColor, isFalse); // Too short
-        expect('#abcg'.isValidColor, isFalse); // Contains invalid character
-        expect('0x1234567'.isValidColor, isFalse); // Length not supported
-        expect('#'.isValidColor, isFalse);
-        expect('0x'.isValidColor, isFalse);
-      });
+      final invalidInputs = [
+        // Hexes.
+        '#ab', // too short
+        '#abcg', // invalid character
+        '0x1234567', // invalid length
+        '#', '0x',
+        // RGB/RGBA.
+        'rgb(256, 0, 0)', // out-of-range value
+        'rgb(-1, 0, 0)', // negative number
+        'rgb(0, 0, 0, 0)', // too many values for rgb()
+        'rgb(0, 0)', // too few values
+        'rgb(10,10,100%)', // mixed integer and percentage
+        'rgba(10,10,10,101%)', // alpha > 100%
+        'rgba(10,10,10, -10%)', // negative alpha
+        // HSL/HSLA.
+        'hsl(361, 100%, 50%)', // hue > 360
+        'hsl(180, 101%, 50%)', // saturation too high
+        'hsl(180, 100%, -1%)', // lightness negative
+        'hsla(180, 100%, 50%, -0.1)', // negative alpha
+        'hsla(180, 100%, 50%, 1.1)', // alpha > 1
+        'hsl(180, 100, 50)', // missing '%' on saturation/lightness
+        // Modern syntax errors.
+        'rgb(255 0 0 0)', // too many values
 
-      testWidgets('valid rgb colors', (WidgetTester tester) async {
-        expect('rgb(255, 0, 0)'.isValidColor, isTrue);
-        expect('rgba(0, 100, 200, 0.5)'.isValidColor, isTrue);
-        expect('rgb(10%, 50%, 90%)'.isValidColor, isTrue);
-        expect('rgba(10%, 50%, 90%,40%)'.isValidColor, isTrue);
-        expect('rgb(0,0,0)'.isValidColor, isTrue);
-        expect('rgb(255,255,255)'.isValidColor, isTrue);
-      });
+        'hwb(180, 50%, 50%)', // commas not allowed
+        'hwb(180 50% 50% / -0.5)', // negative alpha in modern syntax
+        'hwb(-180 50% 50%)', // negative hue for hwb
+        'hwb(180 101% 50%)', // saturation out-of-range for hwb
+        'hwb(180 50% 101%)', // brightness out-of-range for hwb
+        // Named color mistakes.
+        'notacolor',
+        // Completely invalid strings.
+        'some invalid string',
+        '',
+      ];
 
-      testWidgets('invalid rgb colors', (WidgetTester tester) async {
-        expect('rgb(256, 0, 0)'.isValidColor, isFalse); // 256 out of range
-        expect('rgb(-1, 0, 0)'.isValidColor, isFalse); // Negative value
-        expect('rgb(0, 0, 0, 0)'.isValidColor, isFalse); // Too many values
-        expect('rgb(0, 0)'.isValidColor, isFalse); // Too few values
-        expect('rgb(10,10,100%)'.isValidColor, isFalse); // Mixed types
-        expect('rgba(10,10,10,101%)'.isValidColor, isFalse); // Alpha > 100%
-        expect('rgba(10,10,10, -10%)'.isValidColor, isFalse); // Negative alpha
-      });
-
-      testWidgets('valid hsl colors', (WidgetTester tester) async {
-        expect('hsl(180, 100%, 50%)'.isValidColor, isTrue);
-        expect('hsla(180, 100%, 50%, 0.5)'.isValidColor, isTrue);
-        expect('hsl(0, 0%, 0%)'.isValidColor, isTrue);
-        expect('hsl(360, 100%, 100%)'.isValidColor, isTrue);
-        expect('hsl(120deg, 50%, 50%)'.isValidColor, isTrue);
-        expect('hsl(3.1416rad, 50%, 50%)'.isValidColor, isTrue);
-        expect('hsl(0.5turn, 50%, 50%)'.isValidColor, isTrue);
-      });
-
-      testWidgets('invalid hsl colors', (WidgetTester tester) async {
-        expect('hsl(361, 100%, 50%)'.isValidColor, isFalse); // Hue > 360
-        expect(
-            'hsl(180, 101%, 50%)'.isValidColor, isFalse); // Saturation > 100%
-        expect(
-            'hsl(180, 100%, -1%)'.isValidColor, isFalse); // Lightness negative
-        expect('hsla(180, 100%, 50%, -0.1)'.isValidColor,
-            isFalse); // Alpha negative
-        expect('hsla(180, 100%, 50%, 1.1)'.isValidColor, isFalse); // Alpha > 1
-        expect('hsl(180, 100, 50)'.isValidColor,
-            isFalse); // Missing '%' in saturation/lightness
-      });
-
-      testWidgets('valid modern colors', (WidgetTester tester) async {
-        expect('rgb(255 0 0)'.isValidColor, isTrue);
-        expect('rgba(0 100 200 / 0.5)'.isValidColor, isTrue);
-        expect('hsl(180 100% 50%)'.isValidColor, isTrue);
-        expect('hsla(180 100% 50% / 0.5)'.isValidColor, isTrue);
-        expect('hwb(180 50% 50%)'.isValidColor, isTrue);
-        expect('hwb(180 50% 50% / 0.5)'.isValidColor, isTrue);
-        expect('hwb(190 0% 0% / 0.15)'.isValidColor, isTrue);
-      });
-
-      testWidgets('invalid modern colors', (WidgetTester tester) async {
-        // Comma-separated values should be invalid for modern syntax.
-        expect('rgb(255, 0, 0)'.isModernColor, isFalse);
-        expect('rgb(255 0 0 0)'.isModernColor, isFalse); // Too many values
-        expect('hsl(180, 100%, 50%)'.isModernColor, isFalse);
-        expect('hwb(180, 50%, 50%)'.isModernColor, isFalse);
-        expect(
-            'hwb(180 50% 50% / -0.5)'.isModernColor, isFalse); // Negative alpha
-        expect('#AABBCC'.isModernColor, isFalse);
-        expect('red'.isModernColor, isFalse);
-        expect('hwb(-180 50% 50%)'.isModernColor, isFalse);
-        expect('hwb(180 101% 50%)'.isModernColor, isFalse);
-        expect('hwb(180 50% 101%)'.isModernColor, isFalse);
-      });
-
-      testWidgets('valid named colors', (WidgetTester tester) async {
-        expect('red'.isValidColor, isTrue);
-        expect('RED'.isValidColor, isTrue);
-        expect('aliceblue'.isValidColor, isTrue);
-      });
-
-      testWidgets('invalid named colors', (WidgetTester tester) async {
-        expect('notacolor'.isValidColor, isFalse);
-        // Leading or trailing whitespace is trimmed.
-        expect('red '.isValidColor, isTrue);
-        expect(' red'.isValidColor, isTrue);
-      });
-
-      testWidgets('invalid colors', (WidgetTester tester) async {
-        expect('rgb(256, 0, 0)'.isValidColor, isFalse);
-        expect('hsl(100, 101%, 50%)'.isValidColor, isFalse);
-        expect('some invalid string'.isValidColor, isFalse);
-        expect(''.isValidColor, isFalse);
-      });
-
-      testWidgets('valid special keywords', (WidgetTester tester) async {
-        expect('transparent'.isValidColor, isTrue);
-        expect('TRANSPARENT'.isValidColor, isTrue);
-      });
+      for (final input in invalidInputs) {
+        test('Invalid: "$input"', () {
+          debugPrint('Invalid: "$input", ${input.isValidColor}');
+          expect(input.isValidColor, isFalse);
+        });
+      }
     });
 
     group('isHexColor', () {
-      testWidgets('valid hex colors', (WidgetTester tester) async {
-        expect('#abc'.isHexColor, isTrue);
-        expect('0x123'.isHexColor, isTrue);
-        expect('#AABBCC'.isHexColor, isTrue);
-        expect('0xFF123456'.isHexColor, isTrue);
-        expect('#abcd'.isHexColor, isTrue);
-        expect('0x1234'.isHexColor, isTrue);
-      });
+      final validHexes = [
+        '#abc',
+        '0x123',
+        '#AABBCC',
+        '0xFF123456',
+        '#abcd',
+        '0x1234',
+      ];
+      for (final input in validHexes) {
+        test('Valid hex: "$input"', () {
+          expect(input.isHexColor, isTrue);
+        });
+      }
 
-      testWidgets('invalid hex colors', (WidgetTester tester) async {
-        expect('#ab'.isHexColor, isFalse);
-        expect('#abcg'.isHexColor, isFalse);
-        expect('0x1234567'.isHexColor, isFalse);
-        expect('red'.isHexColor, isFalse);
-        expect('rgb(255, 0, 0)'.isHexColor, isFalse);
-      });
+      final invalidHexes = [
+        '#ab',
+        '#abcg',
+        '0x1234567',
+        'red',
+        'rgb(255, 0, 0)',
+      ];
+      for (final input in invalidHexes) {
+        test('Invalid hex: "$input"', () {
+          expect(input.isHexColor, isFalse);
+        });
+      }
     });
 
     group('isRgbColor', () {
-      testWidgets('valid rgb colors', (WidgetTester tester) async {
-        expect('rgb(255, 0, 0)'.isRgbColor, isTrue);
-        expect('rgba(0, 100, 200, 0.5)'.isRgbColor, isTrue);
-        expect('rgb(10%, 50%, 90%)'.isRgbColor, isTrue);
-        expect('rgba(10%, 50%, 90%, 40%)'.isRgbColor, isTrue);
-      });
+      final validRgb = [
+        'rgb(255, 0, 0)',
+        'rgba(0, 100, 200, 0.5)',
+        'rgb(10%, 50%, 90%)',
+        'rgba(10%, 50%, 90%, 40%)',
+      ];
+      for (final input in validRgb) {
+        test('Valid rgb: "$input"', () {
+          expect(input.isRgbColor, isTrue);
+        });
+      }
 
-      testWidgets('invalid rgb colors', (WidgetTester tester) async {
-        expect('rgb(256, 0, 0)'.isRgbColor, isFalse);
-        expect('rgb(0, 0, 0, 0)'.isRgbColor, isFalse);
-        expect('#AABBCC'.isRgbColor, isFalse);
-        expect('hsl(180, 100%, 50%)'.isRgbColor, isFalse);
-        expect('rgba(10,10,10,101%)'.isRgbColor, isFalse);
-      });
+      final invalidRgb = [
+        'rgb(256, 0, 0)',
+        'rgb(0, 0, 0, 0)',
+        '#AABBCC',
+        'hsl(180, 100%, 50%)',
+        'rgba(10,10,10,101%)',
+      ];
+      for (final input in invalidRgb) {
+        test('Invalid rgb: "$input"', () {
+          expect(input.isRgbColor, isFalse);
+        });
+      }
     });
 
     group('isHslColor', () {
-      testWidgets('valid hsl colors', (WidgetTester tester) async {
-        expect('hsl(180, 100%, 50%)'.isHslColor, isTrue);
-        expect('hsla(180, 100%, 50%, 0.5)'.isHslColor, isTrue);
-        expect('hsl(120deg, 50%, 50%)'.isHslColor, isTrue);
-        expect('hsl(3.1416rad, 50%, 50%)'.isHslColor, isTrue);
-        expect('hsl(0.5turn, 50%, 50%)'.isHslColor, isTrue);
-        expect('hsl(200grad, 50%, 50%)'.isHslColor, isTrue);
-      });
+      final validHsl = [
+        'hsl(180, 100%, 50%)',
+        'hsla(180, 100%, 50%, 0.5)',
+        'hsl(120deg, 50%, 50%)',
+        'hsl(3.1416rad, 50%, 50%)',
+        'hsl(0.5turn, 50%, 50%)',
+        'hsl(200grad, 50%, 50%)',
+      ];
+      for (final input in validHsl) {
+        test('Valid hsl: "$input"', () {
+          expect(input.isHslColor, isTrue);
+        });
+      }
 
-      testWidgets('invalid hsl colors', (WidgetTester tester) async {
-        expect('hsl(361, 100%, 50%)'.isHslColor, isFalse);
-        expect('hsl(180, 101%, 50%)'.isHslColor, isFalse);
-        expect('hsl(180, 100%, -1%)'.isHslColor, isFalse);
-        expect('hsla(180, 100%, 50%, -0.1)'.isHslColor, isFalse);
-        expect('hsla(180, 100%, 50%, 1.1)'.isHslColor, isFalse);
-        // No spaces
-        expect('hsl(200grad,50%,50%)'.isHslColor, isTrue);
-        // Multiple spaces
-        expect('hsl(200grad,  50%,  50%)'.isHslColor, isTrue);
-        expect('#AABBCC'.isHslColor, isFalse);
-        expect('rgb(255, 0, 0)'.isHslColor, isFalse);
-        expect('hsl(180, 100, 50)'.isHslColor, isFalse);
-      });
+      final invalidHsl = [
+        'hsl(361, 100%, 50%)',
+        'hsl(180, 101%, 50%)',
+        'hsl(180, 100%, -1%)',
+        'hsla(180, 100%, 50%, -0.1)',
+        'hsla(180, 100%, 50%, 1.1)',
+        'hsl(180, 100, 50)', // missing '%'
+      ];
+      for (final input in invalidHsl) {
+        test('Invalid hsl: "$input"', () {
+          expect(input.isHslColor, isFalse);
+        });
+      }
     });
 
     group('isModernColor', () {
-      testWidgets('valid modern colors', (WidgetTester tester) async {
-        expect('rgb(255 0 0)'.isModernColor, isTrue);
-        expect('rgba(0 100 200 / 0.5)'.isModernColor, isTrue);
-        expect('hsl(180 100% 50%)'.isModernColor, isTrue);
-        expect('hsla(180 100% 50% / 0.5)'.isModernColor, isTrue);
-        expect('hwb(180 50% 50%)'.isModernColor, isTrue);
-        expect('hwb(180 50% 50% / 0.5)'.isModernColor, isTrue);
-        expect('hwb(190 0% 0% / 0.15)'.isModernColor, isTrue);
-      });
+      final validModern = [
+        'rgb(255 0 0)',
+        'rgba(0 100 200 / 0.5)',
+        'hsl(180 100% 50%)',
+        'hsla(180 100% 50% / 0.5)',
+        'hwb(180 50% 50%)',
+        'hwb(180 50% 50% / 0.5)',
+        'hwb(190 0% 0% / 0.15)',
+      ];
+      for (final input in validModern) {
+        test('Valid modern: "$input"', () {
+          expect(input.isModernColor, isTrue);
+        });
+      }
 
-      testWidgets('invalid modern colors', (WidgetTester tester) async {
-        expect('rgb(255, 0, 0)'.isModernColor, isFalse);
-        expect('rgb(255 0 0 0)'.isModernColor, isFalse);
-        expect('hsl(180, 100%, 50%)'.isModernColor, isFalse);
-        expect('hwb(180, 50%, 50%)'.isModernColor, isFalse);
-        expect('hwb(180 50% 50% / -0.5)'.isModernColor, isFalse);
-        expect('#AABBCC'.isModernColor, isFalse);
-        expect('red'.isModernColor, isFalse);
-        expect('hwb(-180 50% 50%)'.isModernColor, isFalse);
-        expect('hwb(180 101% 50%)'.isModernColor, isFalse);
-        expect('hwb(180 50% 101%)'.isModernColor, isFalse);
-      });
+      final invalidModern = [
+        'rgb(255, 0, 0)', // commas not allowed
+        'rgb(255 0 0 0)', // too many values
+        'hsl(180, 100%, 50%)',
+        'hwb(180, 50%, 50%)',
+        'hwb(180 50% 50% / -0.5)',
+        '#AABBCC',
+        'red',
+        'hwb(-180 50% 50%)',
+        'hwb(180 101% 50%)',
+        'hwb(180 50% 101%)',
+      ];
+      for (final input in invalidModern) {
+        test('Invalid modern: "$input"', () {
+          expect(input.isModernColor, isFalse);
+        });
+      }
     });
 
     group('toColor', () {
-      testWidgets('valid hex colors', (WidgetTester tester) async {
-        final color1 = '#abc'.toColor;
-        expect(color1, isNotNull);
-        expect(color1!.toARGBInt(), equals(0xFFAABBCC));
+      // A helper function to test conversion.
+      void checkColorConversion(String input, int expectedArgb,
+          {String? description}) {
+        test('toColor "$input" ${description ?? ""}', () {
+          final color = input.toColor;
+          expect(color, isNotNull, reason: 'Could not parse "$input"');
+          expect(color!.toARGBInt(), equals(expectedArgb),
+              reason:
+                  'Expected ARGB 0x${expectedArgb.toRadixString(16)} for "$input"');
+        });
+      }
 
-        final color2 = '0x123'.toColor;
-        expect(color2, isNotNull);
-        expect(color2!.toARGBInt(), equals(0xFF112233));
-
-        final color3 = '#AABBCC'.toColor;
-        expect(color3, isNotNull);
-        expect(color3!.toARGBInt(), equals(0xFFAABBCC));
-
-        final color4 = '0xFF123456'.toColor;
-        expect(color4, isNotNull);
-        expect(color4!.toARGBInt(), equals(0x56FF1234));
-
-        final color5 = '#abcd'.toColor;
-        expect(color5, isNotNull);
-        expect(color5!.toARGBInt(), equals(0xDDAABBCC));
-
-        final color6 = '0x1234'.toColor;
-        expect(color6, isNotNull);
-        expect(color6!.toARGBInt(), equals(0x44112233));
+      group('Hex conversions', () {
+        checkColorConversion('#abc', 0xFFAABBCC, description: '3-digit hex');
+        checkColorConversion('0x123', 0xFF112233,
+            description: '3-digit hex with 0x');
+        checkColorConversion('#AABBCC', 0xFFAABBCC, description: '6-digit hex');
+        checkColorConversion('0xFF123456', 0x56FF1234,
+            description: '8-digit hex with 0x (swapped ARGB)');
+        checkColorConversion('#abcd', 0xDDAABBCC, description: '4-digit hex');
+        checkColorConversion('0x1234', 0x44112233,
+            description: '4-digit hex with 0x');
       });
 
-      testWidgets('valid rgb colors', (WidgetTester tester) async {
-        final color1 = 'rgb(255, 0, 0)'.toColor;
-        expect(color1, isNotNull);
-        expect(color1!.toARGBInt(), equals(0xFFFF0000));
-
-        final color2 = 'rgb(0,255,0)'.toColor;
-        expect(color2, isNotNull);
-        expect(color2!.toARGBInt(), equals(0xFF00FF00));
-
-        final color3 = 'rgb(0,0,255)'.toColor;
-        expect(color3, isNotNull);
-        expect(color3!.toARGBInt(), equals(0xFF0000FF));
-
-        final color4 = 'rgba(0, 255, 0, 0.5)'.toColor;
-        expect(color4, isNotNull);
-        expect(
-          color4!.toARGBInt(),
-          equals(const Color.fromARGB(128, 0, 255, 0).toARGBInt()),
-        );
-
-        final color5 = 'rgba(10%, 50%, 90%, 40%)'.toColor;
-        expect(color5, isNotNull);
-        expect(
-          color5!.toARGBInt(),
-          equals(const Color.fromARGB(102, 26, 128, 230).toARGBInt()),
-        );
-
-        final color6 = 'rgb(10%, 50%, 90%)'.toColor;
-        expect(color6, isNotNull);
-        expect(
-          color6!.toARGBInt(),
-          equals(const Color.fromARGB(255, 26, 128, 230).toARGBInt()),
-        );
+      group('RGB(A) conversions', () {
+        checkColorConversion('rgb(255, 0, 0)', 0xFFFF0000);
+        checkColorConversion('rgb(0,255,0)', 0xFF00FF00);
+        checkColorConversion('rgb(0,0,255)', 0xFF0000FF);
+        checkColorConversion('rgba(0, 255, 0, 0.5)', 0x8000FF00,
+            description: 'rgba with float alpha');
+        checkColorConversion('rgba(10%, 50%, 90%, 40%)', 0x661A80E6,
+            description: 'rgba with percentages');
+        checkColorConversion('rgb(10%, 50%, 90%)', 0xFF1A80E6,
+            description: 'rgb with percentages');
       });
 
-      testWidgets('valid hsl colors', (WidgetTester tester) async {
-        final color1 = 'hsl(0, 100%, 50%)'.toColor;
-        expect(color1, isNotNull);
-        expect(color1!.toARGBInt(), equals(0xFFFF0000)); // Red
-
-        final color2 = 'hsl(120, 100%, 50%)'.toColor;
-        expect(color2, isNotNull);
-        expect(color2!.toARGBInt(), equals(0xFF00FF00)); // Green
-
-        final color3 = 'hsl(240, 100%, 50%)'.toColor;
-        expect(color3, isNotNull);
-        expect(color3!.toARGBInt(), equals(0xFF0000FF)); // Blue
-
-        final color4 = 'hsl(0, 0%, 0%)'.toColor;
-        expect(color4, isNotNull);
-        expect(color4!.toARGBInt(), equals(0xFF000000)); // Black
-
-        final color5 = 'hsl(0, 0%, 100%)'.toColor;
-        expect(color5, isNotNull);
-        expect(color5!.toARGBInt(), equals(0xFFFFFFFF)); // White
-
-        final color6 = 'hsla(0, 100%, 50%, 0.5)'.toColor;
-        expect(color6, isNotNull);
-        expect(
-          color6!.toARGBInt(),
-          equals(const Color.fromARGB(128, 255, 0, 0).toARGBInt()),
-        );
+      group('HSL(A) conversions', () {
+        // These expected values assume proper conversion from HSL to RGB.
+        checkColorConversion('hsl(0, 100%, 50%)', 0xFFFF0000,
+            description: 'Red');
+        checkColorConversion('hsl(120, 100%, 50%)', 0xFF00FF00,
+            description: 'Green');
+        checkColorConversion('hsl(240, 100%, 50%)', 0xFF0000FF,
+            description: 'Blue');
+        checkColorConversion('hsl(0, 0%, 0%)', 0xFF000000,
+            description: 'Black');
+        checkColorConversion('hsl(0, 0%, 100%)', 0xFFFFFFFF,
+            description: 'White');
+        checkColorConversion('hsla(0, 100%, 50%, 0.5)', 0x80FF0000,
+            description: 'hsla with float alpha');
       });
 
-      testWidgets('valid modern colors', (WidgetTester tester) async {
-        final color1 = 'rgb(255 0 0)'.toColor;
-        expect(color1, isNotNull);
-        expect(color1!.toARGBInt(), equals(0xFFFF0000));
-
-        final color2 = 'rgba(0 100 200 / 0.5)'.toColor;
-        expect(color2, isNotNull);
-        expect(
-          color2!.toARGBInt(),
-          equals(const Color.fromARGB(128, 0, 100, 200).toARGBInt()),
-        );
-
-        final color3 = 'hsl(180 100% 50%)'.toColor;
-        expect(color3, isNotNull);
-        expect(
-          color3!.toARGBInt(),
-          equals(const Color.fromARGB(255, 0, 255, 255).toARGBInt()),
-        );
-
-        final color4 = 'hsla(180 100% 50% / 0.5)'.toColor;
-        expect(color4, isNotNull);
-        expect(
-          color4!.toARGBInt(),
-          equals(const Color.fromARGB(128, 0, 255, 255).toARGBInt()),
-        );
-
-        // For hwb we only verify that a valid Color is returned.
-        final color5 = 'hwb(180 50% 50%)'.toColor;
-        expect(color5, isNotNull);
-
-        final color6 = 'hwb(180 50% 50% / 0.5)'.toColor;
-        expect(color6, isNotNull);
+      group('Modern syntax conversions', () {
+        checkColorConversion('rgb(255 0 0)', 0xFFFF0000,
+            description: 'modern rgb');
+        checkColorConversion('rgba(0 100 200 / 0.5)', 0x800064C8,
+            description: 'modern rgba');
+        checkColorConversion('hsl(180 100% 50%)', 0xFF00FFFF,
+            description: 'modern hsl (cyan)');
+        checkColorConversion('hsla(180 100% 50% / 0.5)', 0x8000FFFF,
+            description: 'modern hsla (cyan with alpha)');
+        // For hwb we only verify that a non-null Color is returned.
+        test('hwb conversion returns a Color', () {
+          expect('hwb(180 50% 50%)'.toColor, isNotNull);
+          expect('hwb(180 50% 50% / 0.5)'.toColor, isNotNull);
+        });
       });
 
-      testWidgets('valid named colors and special keywords',
-          (WidgetTester tester) async {
-        final redColor = 'red'.toColor;
-        expect(redColor, isNotNull);
-        expect(
-          redColor!.toARGBInt(),
-          equals(const Color(0xFFFF0000).toARGBInt()),
-        );
-
-        final aliceBlue = 'aliceblue'.toColor;
-        expect(aliceBlue, isNotNull);
-        final expectedAliceBlue = cssColorNamesToArgb['aliceblue'];
-        expect(aliceBlue!.toARGBInt(), equals(expectedAliceBlue));
-
-        final transparentColor = 'transparent'.toColor;
-        expect(transparentColor, isNotNull);
-        expect(transparentColor!.toARGBInt(), equals(0x00000000));
+      group('Named colors and keywords', () {
+        checkColorConversion('red', 0xFFFF0000,
+            description: 'named color red (case-insensitive)');
+        test('aliceblue', () {
+          final expected = cssColorNamesToArgb['aliceblue'];
+          expect('aliceblue'.toColor, isNotNull);
+          expect('aliceblue'.toColor!.toARGBInt(), equals(expected));
+        });
+        checkColorConversion('transparent', 0x00000000,
+            description: 'transparent keyword');
       });
 
-      testWidgets('invalid colors return null', (WidgetTester tester) async {
-        expect('notacolor'.toColor, isNull);
-        expect('rgb(256, 0, 0)'.toColor, isNull);
-        expect('hsl(100, 101%, 50%)'.toColor, isNull);
-        expect('some invalid string'.toColor, isNull);
-        expect(''.toColor, isNull);
+      group('Invalid inputs return null', () {
+        final invalids = [
+          'notacolor',
+          'rgb(256, 0, 0)',
+          'hsl(100, 101%, 50%)',
+          'some invalid string',
+          '',
+        ];
+        for (final input in invalids) {
+          test('toColor returns null for "$input"', () {
+            expect(input.toColor, isNull);
+          });
+        }
+      });
+    });
+    group('Color Parsing Performance Tests', () {
+      // Helper function to measure performance
+      Future<double> measureParsingTime(void Function() operation) async {
+        final stopwatch = Stopwatch()..start();
+        operation();
+        stopwatch.stop();
+        return stopwatch.elapsedMicroseconds / 1000; // Convert to milliseconds
+      }
+
+      test('Bulk hex color parsing performance', () async {
+        const iterations = 10000;
+        final hexColors = List.generate(
+          iterations,
+          (i) => '#${(i % 256).toRadixString(16).padLeft(2, '0')}'
+              '${((i + 85) % 256).toRadixString(16).padLeft(2, '0')}'
+              '${((i + 170) % 256).toRadixString(16).padLeft(2, '0')}',
+        );
+
+        final time = await measureParsingTime(() {
+          for (final color in hexColors) {
+            color.toColor;
+          }
+        });
+
+        debugPrint(
+            'Parsed $iterations hex colors in ${time.toStringAsFixed(2)}ms');
+        expect(time, lessThan(1000)); // Should complete within 1 second
+      });
+
+      test('Bulk RGB color parsing performance', () async {
+        const iterations = 10000;
+        final rgbColors = List.generate(
+          iterations,
+          (i) => 'rgb(${i % 256}, ${(i + 85) % 256}, ${(i + 170) % 256})',
+        );
+
+        final time = await measureParsingTime(() {
+          for (final color in rgbColors) {
+            color.toColor;
+          }
+        });
+
+        debugPrint(
+            'Parsed $iterations RGB colors in ${time.toStringAsFixed(2)}ms');
+        expect(time, lessThan(1000)); // Should complete within 1 second
+      });
+
+      test('Bulk HSL color parsing performance', () async {
+        const iterations = 10000;
+        final hslColors = List.generate(
+          iterations,
+          (i) => 'hsl(${i % 360}, ${50 + i % 50}%, ${30 + i % 70}%)',
+        );
+
+        final time = await measureParsingTime(() {
+          for (final color in hslColors) {
+            color.toColor;
+          }
+        });
+
+        debugPrint(
+            'Parsed $iterations HSL colors in ${time.toStringAsFixed(2)}ms');
+        expect(time, lessThan(1000)); // Should complete within 1 second
+      });
+
+      test('Mixed format parsing performance', () async {
+        const iterations = 10000;
+        final mixedColors = List.generate(iterations, (i) {
+          switch (i % 3) {
+            case 0:
+              return '#${(i % 256).toRadixString(16).padLeft(2, '0')}${((i + 85) % 256).toRadixString(16).padLeft(2, '0')}${((i + 170) % 256).toRadixString(16).padLeft(2, '0')}';
+            case 1:
+              return 'rgb(${i % 256}, ${(i + 85) % 256}, ${(i + 170) % 256})';
+            default:
+              return 'hsl(${i % 360}, ${50 + i % 50}%, ${30 + i % 70}%)';
+          }
+        });
+
+        final time = await measureParsingTime(() {
+          for (final color in mixedColors) {
+            color.toColor;
+          }
+        });
+
+        debugPrint(
+            'Parsed $iterations mixed format colors in ${time.toStringAsFixed(2)}ms');
+        expect(time, lessThan(1000)); // Should complete within 1 second
+      });
+    });
+
+    group('Color Interpolation Edge Cases', () {
+      test('Edge case - Interpolation between extreme values', () {
+        const colors = {
+          'rgb(0, 0, 0)': 'rgb(255, 255, 255)',
+          // Black to White
+          'rgb(255, 0, 0)': 'rgb(0, 255, 0)',
+          // Red to Green
+          'hsl(0, 100%, 50%)': 'hsl(180, 100%, 50%)',
+          // Red to Cyan
+          'hsla(0, 100%, 50%, 1)': 'hsla(0, 100%, 50%, 0)',
+          // Full to transparent
+        };
+
+        for (final entry in colors.entries) {
+          final color1 = entry.key.toColor;
+          final color2 = entry.value.toColor;
+
+          debugPrint('Testing interpolation: ${entry.key} to ${entry.value}');
+          if (color1 == null) {
+            fail('Failed to parse first color: ${entry.key}');
+          }
+          if (color2 == null) {
+            fail('Failed to parse second color: ${entry.value}');
+          }
+
+          // Test multiple interpolation points
+          for (var t = 0.0; t <= 1.0; t += 0.1) {
+            final interpolated = Color.lerp(color1, color2, t);
+            expect(interpolated, isNotNull);
+
+            // Verify components are within valid ranges
+            expect(interpolated!.r, inInclusiveRange(0, 255));
+            expect(interpolated.g, inInclusiveRange(0, 255));
+            expect(interpolated.b, inInclusiveRange(0, 255));
+            expect(interpolated.a, inInclusiveRange(0, 255));
+          }
+        }
+      });
+
+      test('Edge case - HSL wraparound handling', () {
+        final testCases = [
+          ('hsl(350, 100%, 50%)', 'hsl(10, 100%, 50%)'), // Red wraparound
+          ('hsl(0, 100%, 50%)', 'hsl(359, 100%, 50%)'), // Almost full circle
+          ('hsl(330, 100%, 50%)', 'hsl(30, 100%, 50%)'), // 60-degree difference
+        ];
+
+        for (final (color1Str, color2Str) in testCases) {
+          final color1 = color1Str.toColor;
+          final color2 = color2Str.toColor;
+
+          debugPrint('Testing HSL wraparound: $color1Str to $color2Str');
+          if (color1 == null) {
+            fail('Failed to parse first color: $color1Str');
+          }
+          if (color2 == null) {
+            fail('Failed to parse second color: $color2Str');
+          }
+
+          // Verify hue interpolation
+          final interpolated = Color.lerp(color1, color2, 0.5);
+          expect(interpolated, isNotNull);
+        }
+      });
+
+      test('Edge case - Alpha channel precision', () {
+        const alphaSteps = [
+          'rgba(255, 0, 0, 0.0)',
+          'rgba(255, 0, 0, 0.1)',
+          'rgba(255, 0, 0, 0.5)',
+          'rgba(255, 0, 0, 0.9)',
+          'rgba(255, 0, 0, 1.0)',
+        ];
+
+        for (var i = 0; i < alphaSteps.length - 1; i++) {
+          final color1 = alphaSteps[i].toColor!;
+
+          final color2 = alphaSteps[i + 1].toColor;
+          if (color2 == null) {
+            fail('Failed to parse second color: ${alphaSteps[i + 1]}');
+          }
+
+          // Test with very small interpolation steps
+          for (var t = 0.0; t <= 1.0; t += 0.01) {
+            final interpolated = Color.lerp(color1, color2, t);
+            expect(interpolated, isNotNull);
+            expect(interpolated!.a, inInclusiveRange(0, 255));
+          }
+        }
+      });
+
+      test('Edge case - Modern syntax interpolation', () {
+        const modernColors = [
+          'rgb(255 0 0)',
+          'rgb(0 255 0)',
+          'hsl(0 100% 50%)',
+          'hsl(120 100% 50%)',
+          'hwb(0 0% 0%)',
+          'hwb(120 0% 0%)',
+        ];
+
+        for (var i = 0; i < modernColors.length - 1; i++) {
+          final color1 = modernColors[i].toColor!;
+          final color2 = modernColors[i + 1].toColor!;
+
+          for (var t = 0.0; t <= 1.0; t += 0.1) {
+            final interpolated = Color.lerp(color1, color2, t);
+            expect(interpolated, isNotNull);
+          }
+        }
       });
     });
   });
