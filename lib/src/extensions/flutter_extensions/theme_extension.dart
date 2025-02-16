@@ -1,53 +1,89 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/src/extensions/flutter_extensions/flutter_extensions.dart';
 
+/// Provides extensions on [BuildContext] to easily access theme data and custom theme extensions.
 extension FHUThemeExtension on BuildContext {
+  /// Returns the [ThemeData] of the nearest [Theme] ancestor.
   ThemeData get themeData => Theme.of(this);
 
+  /// Added new themeExtension which returns a custom theme extension of type [T] from the nearest [Theme] ancestor.
+  /// Returns a custom theme extension of type [T] from the nearest [Theme] ancestor.
+  T? themeExtension<T>() => Theme.of(this).extension<T>();
+
+  /// Added new `themeWithExtension` which Returns a tuple containing the [ThemeData] and a custom theme extension of type [T].
+  /// Returns a tuple containing the [ThemeData] and a custom theme extension of type [T].
+  (ThemeData theme, T? extension) themeWithExtension<T>() {
+    final theme = themeData;
+    return (theme, theme.extension());
+  }
+
+  /// Returns the platform's brightness setting (light or dark).
   Brightness get sysBrightness => mq.platformBrightness;
 
+  /// Returns the [TextTheme] from the current theme.
   TextTheme get txtTheme => themeData.textTheme;
 
+  /// Returns the [Brightness] of the current theme.
   Brightness get brightness => themeData.brightness;
 
+  /// Returns `true` if the current theme's brightness is dark.
   bool get isDark => brightness == Brightness.dark;
 
+  /// Returns `true` if the current theme's brightness is light.
   bool get isLight => brightness == Brightness.light;
 }
 
+/// Provides extensions on [ThemeData] to easily access text styles and check brightness.
 extension FHUThemeDataExtension on ThemeData {
+  /// Returns `true` if the theme's brightness is dark.
   bool get isDark => brightness == Brightness.dark;
 
+  /// Returns `true` if the theme's brightness is light.
   bool get isLight => brightness == Brightness.light;
 
+  /// Returns the `displayLarge` text style from the theme's [TextTheme].
   TextStyle? get displayLarge => textTheme.displayLarge;
 
+  /// Returns the `displayMedium` text style from the theme's [TextTheme].
   TextStyle? get displayMedium => textTheme.displayMedium;
 
+  /// Returns the `displaySmall` text style from the theme's [TextTheme].
   TextStyle? get displaySmall => textTheme.displaySmall;
 
+  /// Returns the `headlineLarge` text style from the theme's [TextTheme].
   TextStyle? get headlineLarge => textTheme.headlineLarge;
 
+  /// Returns the `headlineMedium` text style from the theme's [TextTheme].
   TextStyle? get headlineMedium => textTheme.headlineMedium;
 
+  /// Returns the `headlineSmall` text style from the theme's [TextTheme].
   TextStyle? get headlineSmall => textTheme.headlineSmall;
 
+  /// Returns the `titleLarge` text style from the theme's [TextTheme].
   TextStyle? get titleLarge => textTheme.titleLarge;
 
+  /// Returns the `titleMedium` text style from the theme's [TextTheme].
   TextStyle? get titleMedium => textTheme.titleMedium;
 
+  /// Returns the `titleSmall` text style from the theme's [TextTheme].
   TextStyle? get titleSmall => textTheme.titleSmall;
 
+  /// Returns the `bodyLarge` text style from the theme's [TextTheme].
   TextStyle? get bodyLarge => textTheme.bodyLarge;
 
+  /// Returns the `bodyMedium` text style from the theme's [TextTheme].
   TextStyle? get bodyMedium => textTheme.bodyMedium;
 
+  /// Returns the `bodySmall` text style from the theme's [TextTheme].
   TextStyle? get bodySmall => textTheme.bodySmall;
 
+  /// Returns the `labelLarge` text style from the theme's [TextTheme].
   TextStyle? get labelLarge => textTheme.labelLarge;
 
+  /// Returns the `labelMedium` text style from the theme's [TextTheme].
   TextStyle? get labelMedium => textTheme.labelMedium;
 
+  /// Returns the `labelSmall` text style from the theme's [TextTheme].
   TextStyle? get labelSmall => textTheme.labelSmall;
 
   TextStyle? displayLargeCopy({

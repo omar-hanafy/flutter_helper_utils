@@ -4,6 +4,44 @@
 
 ### Features & Enhances
 
+#### New Locale & Directionality Utilities
+
+- Added convenient RTL/LTR direction checking utilities
+- Added rich context helpers for:
+    - Directionality management (`directionality`, `isLTR`, `isRTL`)
+    - Locale access and formatting (`locale`, `localeString`, `languageCode`)
+    - Language, script, and country code validation.
+- Added direction-aware layout utilities:
+    - Logical padding and margin helpers.
+    - RTL-aware alignment and positioning.
+    - Direction-sensitive offsets and sizing.
+- Added common language detection (Arabic, English, Persian, etc.)
+- Added utilities for RTL-aware list ordering and manipulation.
+
+#### CarouselController Extension
+
+- Added an extension on `CarouselController` with utilities for controlling carousel behavior.
+    - Supports both fixed and weighted item extents.
+    - Includes methods to animate or jump to items, move next/previous, and navigate by a relative number of items.
+    - Wraps indices for seamless looping.
+    - Supports rounding modes (`round`, `floor`, `ceil`) and snapping behavior.
+    - Moves based on scroll velocity for smoother interactions.
+    - Allows overriding default calculations for more flexibility.
+
+#### Widget
+
+- Added `SingleAxisWrap`: Adaptive single-axis layout that automatically switches between row and column based on
+  available space
+    - Unlike `Wrap`, maintains all children in the same axis (no wrapping to new lines/columns)
+    - Configurable preferred direction with automatic fallback
+    - Independent row/column configurations for spacing and alignment
+
+#### Theme
+
+- Added new `themeExtension` which returns a custom theme extension of type `T` from the nearest `Theme` ancestor.
+- Added new `themeWithExtension` which Returns a tuple containing the `ThemeData` and a custom theme extension of type
+  `T`.
+
 #### Colors
 
 - **Color Utilities**
@@ -77,6 +115,7 @@ All getter methods have been converted to regular method calls:
 
 - Updated to `dart_helper_utils` v4.0.0 (contains breaking changes)
     - For details: [dart_helper_utils changelog](https://pub.dev/packages/dart_helper_utils/changelog#400)
+- **Flutter SDK:** Enforced minimum version to `>=3.29.0`.
 
 ## v6.10.0
 

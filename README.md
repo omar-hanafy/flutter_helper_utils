@@ -32,7 +32,6 @@ import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 You’ll also automatically get the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) exports, so everything’s in one place.
 
 # Highlights
-
 ## PlatformEnv
 
 A modern Web-compatible replacement for `dart:io`'s `Platform` class that works seamlessly across all platforms, including web. The `PlatformEnv` class provides:
@@ -99,6 +98,30 @@ TypedListView<Product>(
   padding: EdgeInsets.all(16),
   onScrollEnd: () => loadMoreProducts(),
 );
+```
+
+## SingleAxisWrap Widget
+SingleAxisWrap arranges its children in a row or a column based on available space.
+Unlike the standard Wrap widget, it uses a single layout axis instead of wrapping items onto multiple lines.
+
+Usage Example
+```dart
+SingleAxisWrap(
+  preferredDirection: Axis.horizontal,
+  rowSpacing: 8.0,
+  columnSpacing: 12.0,
+  // A callback notifies you when the effective layout mode changes.
+  onLayoutModeChanged: (axis) {
+    print('Switched layout to: $axis');
+  },
+  rowMainAxisAlignment: MainAxisAlignment.center,
+  columnMainAxisAlignment: MainAxisAlignment.start,
+  children: [
+    Container(width: 100, height: 50, color: Colors.red),
+    Container(width: 120, height: 50, color: Colors.blue),
+    Container(width: 80, height: 50, color: Colors.green),
+  ],
+)
 ```
 
 ## Adaptive UI
