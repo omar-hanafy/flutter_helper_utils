@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Version 7.0.1
+ 
+- **Chore**: `dart_helper_util` upgraded to [v4.0.1](https://pub.dev/packages/dart_helper_utils/changelog#401) to fix Builder conflict.
+
 ## Version 7.0.0
 
 ### Features & Enhances
