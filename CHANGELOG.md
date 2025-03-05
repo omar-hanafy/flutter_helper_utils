@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Version 8.0.0
+
+- **Chore**: `dart_helper_util` upgraded to [v5.0.0](https://pub.dev/packages/dart_helper_utils/changelog#500) to fix Builder conflict.
+
+this version concederd breaking chnages cuz it exports dart_helper_utils whihc in this version addss breakiung chagnes see read me here...
+
+
 ## Version 7.0.1
  
 - **Chore**: `dart_helper_util` upgraded to [v4.0.1](https://pub.dev/packages/dart_helper_utils/changelog#401) to fix Builder conflict.
