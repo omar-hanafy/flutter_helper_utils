@@ -47,6 +47,13 @@ extension FHUNavigatorExtension on BuildContext {
   void popPage<T extends Object?>([T? result]) =>
       Navigator.pop<T>(this, result);
 
+  /// pops the current route only if [canPop]
+  void tryPop<T extends Object?>([T? result]) {
+    if (canPop) {
+      Navigator.pop<T>(this, result);
+    }
+  }
+
   /// This method allows for popping dialogs by calling
   /// the pop method with the rootNavigator parameter set to true.
   /// This feature proves to be useful in scenarios where dialogs need to be dismissed.

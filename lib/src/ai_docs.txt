@@ -1,0 +1,635 @@
+import 'package:flutter_helper_utils/flutter_helper_utils.dart';
+
+# Flutter Helper Utils - AI Documentation
+- extension on int
+  - color: converts integer to Color
+
+- extension on Size
+  - conversion: toSizedBox, scaled, withWidth, withHeight, transpose, toPadding, toAspectRatio
+  - checks: isEmpty, isLargerThan, isSmallerThan
+  - dimensions: maxDimension, minDimension
+  - operations: aspectRatio, scaleIndependently, clamp, expand, reduce, increaseBy, decreaseBy, fitWithin
+
+- extension on List<Widget>
+  - layout converters: toRow, toStack, toColumn, toList, toListView
+
+- extension on Color
+  - opacity: addOpacity(double), scaleOpacity(double), addAlpha(int)
+  - channels: addRed(int), addGreen(int), addBlue(int)
+  - brightness: darken(amount), lighten(amount), shade(amount), tint(amount)
+  - contrast: contrastColor({light, dark, threshold}), isDark({threshold}), isLight({threshold}), contrast(other)
+  - conversion: toHex({leadingHashSign, includeAlpha, omitAlphaIfFullOpacity, uppercase}), toARGBInt()
+  - blending: blend(other, t), complementary()
+  - effects: grayscale(), invert()
+
+- extension on String
+  - color conversion: isValidColor, isHexColor, isRgbColor, isHslColor, isModernColor, toColor
+
+- extension on BuildContext
+  - theme access: themeData, txtTheme, brightness, isDark, isLight
+  - color scheme shortcuts: primary, onPrimary, secondary, onSecondary, surface, onSurface
+  - theme extension access: themeExtension<T>(), themeWithExtension<T>()
+  - media query: mq, sizePx, widthPx, heightPx, padding, viewInsets, deviceOrientation
+  - directionality: directionality, isRTL, isLTR
+  - navigation: navigator, canPop, pushPage, pReplacement, pAndRemoveUntil, popPage, popRoot
+  - focus: focusScope, unFocus, requestFocus, hasFocus, hasPrimaryFocus
+  - platform detection: targetPlatform, isIOS, isAndroid, isDesktop, isMacOS, isWindows, isLinux
+  - scaffold messenger: scaffoldMessenger, showSnackBar, showMaterialBanner
+
+- extension on ScrollController
+  - scroll actions: animateToPosition, animateToBottom, animateToTop, smoothScrollTo, pageScroll, scrollToPercentage
+  - scroll state: isAtEdge, isAtBottom, isAtTop, scrollProgress, isNearTop, isNearBottom, canScroll
+  - scroll direction: isScrollReverse, isScrollIdle, isScrollForward
+
+- extension on CarouselController
+  - control: animateToItem, jumpToItem, animateToNextItem, animateToPreviousItem, snapToNearestItem
+  - state: getCurrentIndex, canGoNext, canGoPrevious, getMaxItems, getCurrentFractionalItem
+  - advanced: animateToInfiniteItem, jumpToInfiniteItem, animateByItems, jumpByItems
+
+- extension on Future<T>
+  - widget building: builder, buildWidget
+  - transformation: map
+
+- extension on AsyncSnapshot<T>
+  - state checking: isNone, isWaiting, isActive, isDone, isSuccess, hasErrorAndDone
+  - data handling: dataOr, mapData, dataWhen, buildWidget
+
+- extension on ThemeData
+  - Direct TextStyle access: displayLarge, displayMedium, displaySmall, headlineLarge, headlineMedium, headlineSmall, titleLarge, titleMedium, titleSmall, bodyLarge, bodyMedium, bodySmall, labelLarge, labelMedium, labelSmall
+  - Direct TextStyle modification: displayLargeCopy, displayMediumCopy, displaySmallCopy, etc.
+  - Direct ColorScheme shortcuts: primary, onPrimary, primaryContainer, onPrimaryContainer, secondary, onSecondary, etc.
+  - visual effects: withoutEffects({noSplashColor, noHighlightColor, noHoverColor, noDividerColor, noFocusColor, noSplashFactory})
+
+- extension on TextDirection
+  - properties: isRTL, isLTR, name, opposite, multiplier
+
+- extension on ColorScheme
+  - conversion: toThemeData
+
+- utility classes
+  - ThemeWithoutEffects: removes splashes and other visual feedback from a subtree
+---
+
+PlatformEnv
+- Abstract cross-platform environment access via conditional exports
+- Automatically selects platform_env_io.dart (dart:io) or platform_env_web.dart (web)
+
+Static Getters
+- targetPlatform: TargetPlatform enum value for current platform
+- Platform detection (all bool): isLinux, isMacOS, isWindows, isAndroid, isIOS, isWeb, isFuchsia
+- operatingSystem: OS name string
+- operatingSystemVersion: OS version string
+- numberOfProcessors: processor count (0 on web)
+- pathSeparator: OS path separator character
+- localHostname: device hostname
+- version: Dart runtime version
+- localeName: current locale identifier
+- environment: Map<String, String> of environment variables (empty on web)
+- executable: path to running executable
+- resolvedExecutable: resolved executable path
+- script: Uri of running script
+- executableArguments: List<String> of command-line args
+- packageConfig: String? value of --packages flag
+- lineTerminator: OS-specific line ending
+
+Static Methods
+- report(): Map<String, String> containing all platform information
+
+Implementation Note
+- Web implementation provides sensible defaults where platform values aren't applicable
+---
+# flutter_helper_utils/value_notifier
+
+- Extensions on ValueNotifier/ValueListenable
+  - v: shorthand getter/setter for value
+  - onChange(action): register callback on value change
+  - debounce(duration, action): run action only after value remains stable
+  - stream: convert ValueListenable to Stream
+
+- FHUListenableExtension on Listenable
+  - builder(Function): create ListenableBuilder widget
+
+- FHUListenablesExtension on List<Listenable>
+  - builder(Function, {buildWhen, threshold}): create widget responding to multiple listenables
+
+- FHUValueListenableExtension<T> on ValueListenable<T>
+  - builder(Function): create ValueListenableBuilder widget
+
+- FHUStreamToValueNotifier<T> on Stream<T>
+  - toValueNotifier(initialValue, {onDone, onError}): convert stream to ValueNotifier
+
+- Object.notifier extension
+  - notifier: creates ValueNotifier<T> for any object/value
+
+- Type-specific notifier extensions
+  - bool.notifier, int.notifier, double.notifier, etc.
+  - T.notifier: creates appropriate typed notifier
+
+- Typed notifier classes
+  - BoolNotifier, IntNotifier, NumNotifier, etc.
+  - Implement both ValueNotifier<T> and type interfaces
+  - All include refresh() and update(newValue) methods
+  - Provide type-specific operations (toggle for bool, increment for int, etc.)
+
+- Collection notifiers (ListNotifier, MapNotifier, SetNotifier)
+  - Implement ValueNotifier<Collection> and Collection interfaces
+  - Trigger notifyListeners after any mutation
+
+- Widgets
+  - ListenablesBuilder: rebuilds when any listenable changes
+    - listenables: List<Listenable>
+    - builder: Widget Function(BuildContext)
+    - buildWhen: optional condition for rebuilding
+    - threshold: optional minimum interval between rebuilds
+
+- Type-specific extensions
+  - BoolValueNotifierExtension: toggle(), setTrue(), setFalse(), conditionalToggle()
+  - IntValueNotifierExtension: increment(), decrement(), bitwise operations
+  - DoubleValueNotifierExtension: math operations (round, abs, etc.)
+  - StringValueNotifier: string manipulation methods
+  - Collections: mutation methods that automatically refresh UI
+
+- Implementation notes
+  - All notifiers catch exceptions in notifyListeners
+  - refresh() method forces UI update
+  - update(newValue) updates value and ensures notification
+
+- Pattern for collection notifiers
+  - _updateOnAction() pattern to ensure UI updates after collection mutations
+  - Proxied operations that trigger UI refresh
+---
+
+# flutter_helper_utils Widgets Documentation
+- GradientWidget
+  - Purpose: Apply gradient effects to child widget using ShaderMask
+  - Properties:
+    - `child`: Target widget
+    - `gradient`: Gradient to apply (LinearGradient, RadialGradient, etc.)
+    - `blendMode`: How gradient blends with child (default: BlendMode.srcIn)
+    - `gradientAlignment`: Gradient position relative to bounds
+    - `opacity`: Opacity of gradient (0.0-1.0)
+    - `childAlignment`: Child alignment within widget
+
+- MultiTapDetector
+  - Purpose: Detect multiple taps on child within specified duration
+  - Properties:
+    - `child`: Widget to detect taps on
+    - `onTap`: Callback when tap pattern detected
+    - `tapCount`: Number of taps required (default: 3)
+    - `duration`: Maximum time between taps (default: 300ms)
+  - Implementation: Uses SerialTapGestureRecognizer to track tap sequence
+
+- SingleAxisWrap
+  - Purpose: Adaptive layout that automatically switches between row/column based on constraints
+  - Behavior: Tries preferred direction first, falls back if constraints don't fit
+  - Properties:
+    - `children`: Widgets to arrange
+    - `preferredDirection`: Primary layout direction (default: Axis.horizontal)
+    - `onLayoutModeChanged`: Callback when layout direction changes
+    - Row/Column Configuration: Separate alignment, sizing and spacing parameters for each direction
+  - Advantages: Single widget handles responsive layout without media queries
+
+- TypedListView<E>
+  - Purpose: Type-safe ListView with consistent widget composition
+  - Properties:
+    - `items`: Strongly-typed list of data items
+    - `itemBuilder`: Builder function receiving both index AND typed item `(int, E) => Widget`
+    - `header`, `footer`: Optional widgets at start/end
+    - `separatorBuilder`: Optional builder for dividers
+    - `paginationWidget`: Optional widget before footer
+  - Extensions:
+    - `Iterable<E>.buildListView()`: Create TypedListView directly from any iterable
+  - Advantages: Handles composition logic internally (no manual index shifting for headers)
+---
+
+Dart Related
+
+# dart_helper_utils Documentation
+
+## Core Type Conversions
+
+- Object Conversion
+  - toNum, toInt, toDouble, toBool, toString1, toList<T>, toSet<T>, toMap<K,V>
+  - All have nullable counterparts (tryToX)
+  - Common params: mapKey, listIndex, defaultValue, format, locale
+  - Special DateTime params: autoDetectFormat, useCurrentLocale, utc
+  - Custom converters: converter, keyConverter, valueConverter, elementConverter
+
+- Safe Data Extraction (extension on Map/List)
+  - getString, getNum, getInt, getBigInt, getDouble, getBool, getDateTime, getUri, getMap, getSet, getList
+  - All have nullable tryGetX versions
+  - innerKey/innerMapKey for nested access: map.getInt('user', innerKey: 'details.address.zipcode')
+  - Type-safe extraction from dynamic data
+  - Automatic JSON decoding for complex types
+
+## Boolean Extensions
+
+- Extension on bool
+  - toggled: Negates boolean value
+
+- Extension on bool?
+  - isTrue, isFalse: Safe checks without null checks
+  - val: Safe value access (false if null)
+  - binary: 1 if true, 0 if false/null
+  - binaryText: "1" if true, "0" if false/null
+  - toggled: Nullable negation
+
+## String Transformations
+
+- Case Conversions (extension on String)
+  - toPascalCase, toCamelCase, toSnakeCase, toKebabCase, toScreamingSnakeCase
+  - toPascalSnakeCase, toDotCase, toFlatCase, toScreamingCase, toTrainCase
+  - capitalizeFirstLetter, lowercaseFirstLetter, capitalizeFirstLowerRest
+  - toTitle: Capitalizes each word while maintaining separators
+  - shouldIgnoreCapitalization: Detects when to skip capitalization
+  - toWords: Splits string into list based on case, underscores, hyphens, spaces
+
+- String Utilities
+  - nullIfEmpty, nullIfBlank: Returns null for empty/blank strings
+  - removeEmptyLines, toOneLine, removeWhiteSpaces, clean
+  - base64Encode, base64Decode: Encoding/decoding
+  - compareWith: String similarity (using StringSimilarity algorithms)
+  - isEmptyOrNull, isBlank, isPalindrome, isBool, equalsIgnoreCase
+  - anyChar: Tests if any character matches a predicate
+  - toCharArray: Converts to list of characters
+  - wrapString: Wraps to specified word count
+  - orEmpty: Returns empty string if null
+  - lastIndex: Last character
+  - insert, replaceAfter, replaceBefore, removeSurrounding, limitFromEnd, limitFromStart
+
+- Pattern Matching
+  - isAlphanumeric, hasSpecialChars, hasNoSpecialChars, startsWithNumber
+  - containsDigits, isValidUsername, isValidCurrency, isValidPhoneNumber
+  - isValidEmail, isValidHTML, isValidIp4, isValidIp6, isValidUrl
+  - isNumeric, isAlphabet, hasCapitalLetter
+  - hasMatch: Generic regex pattern matching
+
+- Parsing
+  - toNum, toDouble, toInt: Parse numbers (non-nullable)
+  - tryToNum, tryToDouble, tryToInt: Parse numbers (nullable)
+  - decode, tryDecode: Parse JSON with optional reviver
+  - asBool: Flexible boolean conversion
+  - asRomanNumeralToInt: Convert Roman numerals
+
+## Date/Time Utilities
+
+- String/String? Extensions
+  - toDateTime, timestampToDate: Parse to DateTime
+  - tryToDateTime, tryTimestampToDate: Parse to DateTime?
+  - Format Helpers: toDateAutoFormat, toDateFormatted, toDateFormattedUtc
+  - Nullable versions: tryToDateAutoFormat, tryToDateFormattedX
+  - parseHttpDate: Parse HTTP date headers
+
+- DateTime Extensions
+  - local: Convert to local time
+  - httpFormat, toUtcIso, toIso: Format as string
+  - +/-(Duration): Arithmetic operations
+  - passedDuration, remainingDuration: Time differences
+  - passedDays, remainingDays: Day differences
+  - Comparisons: isAtSameYearAs, isAtSameMonthAs, isAtSameDayAs, etc.
+  - Special dates: startOfDay, startOfMonth, startOfYear, tomorrow, yesterday
+  - dateOnly, previousDay, nextDay, previousWeek, nextWeek
+  - firstDayOfMonth, lastDayOfMonth, daysInMonth
+  - firstDayOfWeek, lastDayOfWeek, previousMonth, nextMonth
+  - addOrRemoveYears, addOrRemoveMonths, addOrRemoveDays, etc.
+  - min, max: Compare DateTimes
+  - addDays, addHours: Add time spans
+  - isSameHourAs, isSameDayAs, isSameWeekAs: Compare time elements
+  - isBetween: Check if between two dates
+  - daysDifferenceTo, daysUpTo: Get days between dates
+  - calculateAge: Calculate years/months/days
+
+- DateTime? Extensions
+  - local: Convert to local time (nullable)
+  - toUtcIso: Format as string (nullable)
+  - Boolean checks: isTomorrow, isToday, isYesterday, isPresent, isPast
+  - isInPastWeek, isInThisYear, isInThisMonth, isLeapYear
+  - isBetween: Check if between two dates
+  - passedDuration, remainingDuration: Time differences (nullable)
+  - remainingDays, passedDays: Day differences (nullable)
+  - tryFormat, tryDateFormatUtc: Format with patterns
+
+- Formatting Extensions
+  - format, dateFormatUtc: Format with pattern
+  - formatAsyMMMMd, formatAsEEEE, formatAsEEEEE: Predefined formats
+  - Many predefined formats (covering most intl formats)
+
+- Static Date Helpers
+  - isSameHour, isSameDay, isSameWeek: Static comparisons
+  - diffInDays: Calculate day difference
+  - daysInRange: Get days between dates
+
+- Duration Extensions
+  - fromNow: DateTime in the future
+  - ago: DateTime in the past
+  - delayed<T>: Create Future.delayed with this duration
+
+## Numeric Extensions
+
+- HTTP Status Extensions (on num?)
+  - isSuccessCode, isOkCode, isCreatedCode, isAcceptedCode, isNoContentCode
+  - isClientErrorCode, isServerErrorCode, isRedirectionCode
+  - isTemporaryRedirect, isPermanentRedirect, isAuthenticationError
+  - isValidationError, isRateLimitError, isTimeoutError, isConflictError
+  - isNotFoundError, isRetryableError
+  - statusCodeRetryDelay: Suggested retry duration
+  - toHttpStatusMessage, toHttpStatusUserMessage, toHttpStatusDevMessage
+
+- General num Extensions
+  - isPositive, isNegative, isZero: Value checks
+  - numberOfDigits: Count digits
+  - removeTrailingZero: Formatting
+  - roundToFiftyOrHundred, roundToTenth: Rounding
+  - getRandom, random: Random number generation
+  - asGreeks: Format with Greek suffixes (K, M, B, etc.)
+  - Duration helpers: daysDelay, hoursDelay, minutesDelay, secondsDelay
+  - Duration creation: asMilliseconds, asSeconds, asMinutes, asHours, asDays
+  - sqrt: Square root
+  - until: Range iteration
+  - safeDivide: Division with zero handling
+  - Round helpers: roundToNearestMultiple, roundUpToMultiple, roundDownToMultiple
+  - isBetween: Range check
+  - toPercent: Format as percentage
+  - isApproximatelyEqual, isCloseTo: Fuzzy comparisons
+  - scaleBetween: Scale to range
+  - toFractionString: Convert to fraction
+  - isInteger: Check if whole number
+  - toOrdinal: Convert to ordinal form
+
+- int Extensions
+  - inRangeOf: Clamp to range
+  - absolute, doubled, tripled, quadrupled, squared: Common operations
+  - factorial: Calculate factorial
+  - gcd, lcm: Greatest common divisor, least common multiple
+  - isPrime, isPerfectSquare, isPerfectCube, isFibonacci: Number properties
+  - isPowerOf: Check if power of a base
+  - primeFactors: Calculate prime factors
+  - toRomanNumeral, toBinaryString, toHexString: Conversions
+  - bitCount: Count set bits
+  - isDivisibleBy: Divisibility check
+
+- double Extensions
+  - inRangeOf: Clamp to range
+  - absolute, doubled, tripled, quadrupled, squared: Common operations
+  - roundToNearestMultiple, roundUpToMultiple, roundDownToMultiple
+  - toFractionString: Convert to fraction
+
+- num? Extensions
+  - tryToInt, tryToDouble: Safe type conversion
+  - percentage: Calculate percentage
+  - isNegative, isPositive, isZeroOrNull, asBool
+  - toDecimalString: Format with decimal places
+
+- Static NumbersHelper
+  - safeDivide: Division with zero handling
+  - mean, median, variance, standardDeviation: Statistical functions
+  - mode: Most frequent values
+  - percentile: Calculate percentile
+  - gcd: Greatest common divisor
+  - isPerfectSquare: Check if perfect square
+  - fromRomanNumeral: Parse Roman numeral
+
+- Numeric Collection Extensions (Iterable<num/int/double>)
+  - Statistical methods: mean, median, variance, standardDeviation
+  - mode: Most frequent values
+  - percentile: Calculate percentile
+  - total: Sum elements (handles nullable iterables)
+
+## Collection Utilities
+
+- Iterable<E>? Extensions
+  - toDoublyLinkedList: Convert to DoublyLinkedList
+  - of: Safe access by index
+  - isEmptyOrNull, isNotEmptyOrNull: Collection status
+  - firstOrNull, lastOrNull: Safe access
+  - firstWhereOrNull: Safe predicate search
+  - firstOrDefault, lastOrDefault: Access with default
+  - tryGetRandom: Safe random element
+  - isPrimitive: Check if contains primitives
+  - isEqual: Deep equality check
+  - totalBy: Sum by selector function
+
+- Iterable<E> Extensions
+  - toListConverted<R>, toSetConverted<R>: Convert elements
+  - orEmpty: Return empty if null
+  - concatWithSingleList, concatWithMultipleList: Combine
+  - toMutableSet: Convert to mutable set
+  - intersect: Set intersection
+  - groupBy<T,K>: Group elements by key
+  - filter, filterNot: Filter by predicate
+  - halfLength: Half of length
+  - takeOnly, drop: Take/skip elements
+  - mapList<E2>: Map to list
+  - firstHalf, secondHalf: Split in half
+  - mapIndexed<E2>, mapIndexedList<E2>: Map with index
+  - swap: Swap elements
+  - getRandom: Get random element
+  - whereIndexed: Filter with index
+  - forEachIndexed: Iterate with index
+  - sortedDescending: Sort descending
+  - containsAll: Check if contains all
+  - count: Count elements matching predicate
+  - distinctBy<R>: Distinct by key selector
+  - subtract: Remove elements
+  - find: Find element
+  - encodedJson: Serialize as JSON
+
+- List<E>? Extensions
+  - tryRemoveAt: Safe removal
+  - indexOfOrNull: Safe index lookup
+  - indexWhereOrNull: Safe predicate index
+  - tryRemoveWhere: Safe conditional removal
+
+- Set<E>? Extensions
+  - isEmptyOrNull, isNotEmptyOrNull: Set status
+  - convertTo<R>: Convert elements
+
+- List<E>? Extensions
+  - convertTo<R>: Convert elements
+
+- DoublyLinkedList<E>
+  - Full LinkedList implementation with node-level access
+  - append, prepend: Add at ends
+  - removeNode, removeByValue: Remove elements
+  - findNodeByElement: Find node with value
+  - insertAfter, insertBefore: Insert relative to node
+  - findNode, tryFindNode: Find by index
+  - nodesWhere: Find nodes matching predicate
+  - firstNodeWhere, lastNodeWhere, singleNodeWhere: Search nodes
+  - replaceNode: Update node value
+  - removeNodesWhere: Bulk removal
+  - swapNodes: Swap nodes
+  - reverse: Reverse order
+  - Standard list operations: add, remove, [], []= etc.
+
+## Map Utilities
+
+- Map<K,V> Extensions
+  - swapKeysWithValues: Create inverted map
+  - encodableCopy: Create JSON-serializable copy
+  - encodedJsonString: Serialize as JSON
+  - setIfMissing: Conditionally set value
+  - update: Update existing value
+  - keysWhere: Find keys by value predicate
+  - mapValues<V2>: Transform values
+  - filter: Filter by key/value predicate
+  - valuesList, keysList: Convert to lists
+  - valuesSet, keysSet: Convert to sets
+  - flatMap: Flatten nested map
+
+- Map<K,V>? Extensions
+  - isEqual: Deep equality check
+  - isPrimitive: Check if contains primitives
+  - isEmptyOrNull, isNotEmptyOrNull: Map status
+
+## URI Utilities
+
+- String Extensions
+  - toUri: Parse as URI
+  - toPhoneUri: Create tel:// URI
+
+- String? Extensions
+  - toUri: Safely parse as URI
+  - toPhoneUri: Safely create tel:// URI
+
+- URI Extensions
+  - domainName: Extract domain name
+  - rebuild: Modify parts of URI with builder functions
+
+## MIME Type Checks
+
+- Extension on String?
+  - mimeType: Get MIME type of file path/URL
+
+- Video MIME Checks
+  - isVideo: General video check
+  - isMP4, isMOV, isAVI, isWMV, isMKV, isWebM, isFLV: Specific formats
+
+- Image MIME Checks
+  - isImage: General image check
+  - isPNG, isJPEG, isJPG, isSVG, isGIF, isWebP, isBMP, isTIFF, isTIF
+  - isICO, isICNS, isHEIF, isHEIC, isIcon: Specific formats
+
+- Document MIME Checks
+  - isPDF: Check for PDF
+  - isDOCX, isDOC: Word documents
+  - isExcel, isXLSX, isXLS: Excel files
+  - isPowerPoint, isPPTX, isPPT: PowerPoint files
+  - isTXT, isMarkdown, isRTF: Text formats
+
+- Audio MIME Checks
+  - isAudio: General audio check
+  - isMP3, isWAV, isAAC, isFLAC, isOGG, isAIFF: Specific formats
+
+- Archive MIME Checks
+  - isArchive: General archive check
+  - isZIP, isDeb, isRAR, is7Z, isTAR, isGZIP, isGZ, isISO: Specific formats
+
+- Programming MIME Checks
+  - isHTML, isCSS, isPython, isJAVA, isPHP, isXML
+  - isJSON, isJavaScript, isTypeScript, isCSharp
+  - isCpp, isC, isGo, isRuby, isSwift, isKotlin: Language formats
+
+- Contact/Font MIME Checks
+  - isContact: Contact formats
+  - isFont, isTTF, isOTF, isWOFF, isWOFF2, isEOT: Font formats
+
+## Internationalization Utilities
+
+- BidiFormatter & Text Direction
+  - toBidiFormatter: Create BidiFormatter
+  - stripHtmlIfNeeded: Clean HTML
+  - Direction checks: startsWithLtr, startsWithRtl, hasAnyLtr, hasAnyRtl
+  - isRtlLanguage: Check language direction
+  - enforceRtlInHtml, enforceLtrInHtml: Force direction
+  - guardBracketInHtml: Handle bracket direction
+  - guessDirection: Detect text direction
+  - wrapWithSpan, wrapWithUnicode: Wrap with directional markers
+
+- Number Formatting
+  - numberFormat: Get NumberFormat
+  - toNumFormatted, toIntFormatted, toDoubleFormatted: Parse with format
+  - symbolCurrencyFormat, simpleCurrencyFormat: Currency formatters
+  - formatAsCurrency, formatAsSimpleCurrency: Format as currency
+  - formatAsCompact, formatAsCompactLong: Compact number format
+  - formatAsDecimal, formatAsPercentage: Standard formats
+  - formatAsReadableNumber: Human-readable formatting
+
+- Intl Pluralization & Selection
+  - intlSelectLogic, intlSelect: Selection logic for messages
+  - pluralize: Pluralize based on number
+  - getPluralCategory: Get plural category
+
+## Async & Stream Utilities
+
+- Debouncer
+  - Consolidates rapid events with configurable delay
+  - Options: delay, maxWait, immediate, onError, debugLabel
+  - State tracking: isRunning, executionCount, isPaused
+  - Methods: run, flush, cancel, pause, resume, dispose
+
+- StreamController Extensions
+  - safeAdd, safeAddError: Safe event addition
+  - safeClose: Safe controller closing
+  - safeAddAll, safeAddStream: Batch operations
+  - safeAddFuture: Add future result
+  - mergeStreams: Combine multiple streams
+  - asBroadcast: Convert to broadcast
+
+- Stream Transformations
+  - bufferCount: Group events by count
+  - window: Group events by time window
+  - rateLimit: Throttle event rate
+  - asPausable: Create pausable stream
+  - withLatestValue: Replay latest value
+
+- Stream Error Recovery
+  - retry: Retry on error with backoff
+  - replaceOnError: Replace errors with default
+  - completeOnError: Complete on error
+
+## String Similarity
+
+- Algorithms
+  - diceCoefficient, levenshteinDistance, jaro
+  - jaroWinkler, cosine, hammingDistance
+  - smithWaterman, soundex
+
+- StringSimilarityConfig
+  - Customization: normalize, removeSpaces, toLowerCase
+  - removeSpecialChars, removeAccents, trimWhitespace
+  - Algorithm parameters: swMatchScore, swMismatchScore, swGapScore
+  - jaroWinkixScale, caching options
+
+- Operations
+  - compare: Compare with any algorithm
+  - compareAsync: Asynchronous comparison
+  - compareBatch: Process multiple pairs
+  - generateReport: Create comparison report
+
+## Time Utilities
+
+- TimeUtils
+  - executionDuration: Measure task execution time
+  - executionDurations: Measure multiple tasks
+  - compareExecutionTimes: Compare two tasks
+  - throttle: Limit function call frequency
+  - runPeriodically: Execute at intervals
+  - runWithTimeout: Execute with timeout
+
+## Global Functions & Data
+
+- isValuePrimitive, isTypePrimitive: Type checks
+- isEqual: Deep equality comparison
+- currentMillisecondsSinceEpoch, now: Current time
+- randomInRange: Random number in range
+
+- Raw Data
+  - cssColorNamesToArgb: CSS color names map
+  - Regex patterns: regexValidHexColor and others
+  - getRawCountriesData: Country information
+  - greekNumberSuffixes: K, M, B, etc.
+  - Utility data: romanNumerals, weekdays, monthNames
+  - Time constants: oneSecond, oneMinute, oneHour, oneDay
+  - HTTP status messages
+  - Timezone data

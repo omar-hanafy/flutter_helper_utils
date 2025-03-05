@@ -137,7 +137,7 @@ extension FHUCarouselControllerExtension on CarouselController {
     double Function(ScrollPosition, double)? itemExtentBuilder,
   }) async {
     if (!hasClients || !canGoNext) return;
-    final nextIndex = getCurrentItem(
+    final nextIndex = getCurrentIndex(
           viewportFraction: viewportFraction,
           roundingMode: RoundingMode.floor,
           itemExtentBuilder: itemExtentBuilder,
@@ -163,7 +163,7 @@ extension FHUCarouselControllerExtension on CarouselController {
     double Function(ScrollPosition, double)? itemExtentBuilder,
   }) async {
     if (!hasClients || !canGoPrevious) return;
-    final prevIndex = getCurrentItem(
+    final prevIndex = getCurrentIndex(
           viewportFraction: viewportFraction,
           roundingMode: RoundingMode.ceil,
           itemExtentBuilder: itemExtentBuilder,
@@ -202,7 +202,30 @@ extension FHUCarouselControllerExtension on CarouselController {
   /// - [roundingMode]: Determines whether to round the fractional index (default: [RoundingMode.round]).
   /// - [viewportFraction]: The fraction of the viewport used for each item's extent.
   /// - [itemExtentBuilder]: Optional function to override the default item extent calculation.
+  @Deprecated(
+    'Use getCurrentIndex instead. This function will be removed in a future version.',
+  )
   int getCurrentItem({
+    double viewportFraction = 1.0,
+    RoundingMode roundingMode = RoundingMode.round,
+    double Function(ScrollPosition, double)? itemExtentBuilder,
+  }) {
+    final fractional = getCurrentFractionalItem(
+        viewportFraction: viewportFraction,
+        itemExtentBuilder: itemExtentBuilder);
+    return switch (roundingMode) {
+      RoundingMode.floor => fractional.floor(),
+      RoundingMode.ceil => fractional.ceil(),
+      RoundingMode.round => fractional.round(),
+    };
+  }
+
+  /// Returns the current item index as an integer, computed using the specified [roundingMode].
+  ///
+  /// - [roundingMode]: Determines whether to round the fractional index (default: [RoundingMode.round]).
+  /// - [viewportFraction]: The fraction of the viewport used for each item's extent.
+  /// - [itemExtentBuilder]: Optional function to override the default item extent calculation.
+  int getCurrentIndex({
     double viewportFraction = 1.0,
     RoundingMode roundingMode = RoundingMode.round,
     double Function(ScrollPosition, double)? itemExtentBuilder,
@@ -321,7 +344,7 @@ extension FHUCarouselControllerExtension on CarouselController {
     double viewportFraction = 1.0,
     double Function(ScrollPosition, double)? itemExtentBuilder,
   }) async {
-    final current = getCurrentItem(
+    final current = getCurrentIndex(
         viewportFraction: viewportFraction,
         itemExtentBuilder: itemExtentBuilder);
     var target = current + delta;
@@ -347,7 +370,7 @@ extension FHUCarouselControllerExtension on CarouselController {
     double viewportFraction = 1.0,
     double Function(ScrollPosition, double)? itemExtentBuilder,
   }) {
-    final current = getCurrentItem(
+    final current = getCurrentIndex(
         viewportFraction: viewportFraction,
         itemExtentBuilder: itemExtentBuilder);
     var target = current + delta;
@@ -376,7 +399,7 @@ extension FHUCarouselControllerExtension on CarouselController {
     RoundingMode roundingMode = RoundingMode.round,
     double Function(ScrollPosition, double)? itemExtentBuilder,
   }) async {
-    final targetIndex = getCurrentItem(
+    final targetIndex = getCurrentIndex(
       viewportFraction: viewportFraction,
       roundingMode: roundingMode,
       itemExtentBuilder: itemExtentBuilder,
@@ -414,7 +437,7 @@ extension FHUCarouselControllerExtension on CarouselController {
     double Function(ScrollPosition, double)? itemExtentBuilder,
   }) async {
     if (!hasClients) return;
-    final current = getCurrentItem(
+    final current = getCurrentIndex(
       viewportFraction: viewportFraction,
       roundingMode: roundingMode,
       itemExtentBuilder: itemExtentBuilder,

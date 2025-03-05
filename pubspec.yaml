@@ -16,7 +16,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  dart_helper_utils: ^4.0.1
+  dart_helper_utils: ^4.1.0
 
 dev_dependencies:
   flutter_test:
