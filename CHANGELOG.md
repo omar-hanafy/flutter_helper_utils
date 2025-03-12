@@ -1,11 +1,16 @@
 # CHANGELOG
 
 ## Version 8.0.0
+- Added `toEnum` in the intl `TextDirection` class to help us get the enum version of the material library.
+  - This will help avoid conflicts like "The argument type 'TextDirection' can't be assigned to the parameter type 'TextDirection?'". you can just do that TextDirection.RTl.toEnum in any Text widget.
 
-- **Chore**: `dart_helper_util` upgraded to [v5.0.0](https://pub.dev/packages/dart_helper_utils/changelog#500) to fix Builder conflict.
+- BREAKING CHANGE:
+    - The SingleAxisWrap widget has been moved to a separate [package](https://pub.dev/packages/single_axis_wrap) with
+      several enhancements, You can view the migration
+      guide [here](https://github.com/omar-hanafy/flutter_helper_utils/tree/main/migration_guides.md)
 
-this version concederd breaking chnages cuz it exports dart_helper_utils whihc in this version addss breakiung chagnes see read me here...
-
+- Updated to `dart_helper_utils` v5.0.0 (contains breaking changes)
+    - For details: [dart_helper_utils changelog](https://pub.dev/packages/dart_helper_utils/changelog#500)
 
 ## Version 7.0.1
  

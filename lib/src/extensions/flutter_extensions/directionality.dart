@@ -1,4 +1,14 @@
+// ignore_for_file: depend_on_referenced_packages
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as intl;
+
+/// DHUIntlTextDirectionExtensions
+extension DHUIntlTextDirectionExtensions on intl.TextDirection {
+  TextDirection get toEnum => switch (this) {
+        intl.TextDirection.RTL => TextDirection.rtl,
+        _ => TextDirection.ltr,
+      };
+}
 
 /// A collection of utility extensions for working with text directionality and localization.
 ///
