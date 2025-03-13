@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Version 8.0.1
+
+- CHORE: updated the [dart_helper_utils](https://pub.dev/packages/dart_helper_utils) to be ">=4.1.2 <6.0.0" for more flexibility.
+
 ## Version 8.0.0
 
 ### New Features
