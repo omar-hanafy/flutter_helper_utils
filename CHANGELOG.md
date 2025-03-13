@@ -1,16 +1,27 @@
 # CHANGELOG
 
 ## Version 8.0.0
-- Added `toEnum` in the intl `TextDirection` class to help us get the enum version of the material library.
-  - This will help avoid conflicts like "The argument type 'TextDirection' can't be assigned to the parameter type 'TextDirection?'". you can just do that TextDirection.RTl.toEnum in any Text widget.
 
-- BREAKING CHANGE:
-    - The SingleAxisWrap widget has been moved to a separate [package](https://pub.dev/packages/single_axis_wrap) with
-      several enhancements, You can view the migration
-      guide [here](https://github.com/omar-hanafy/flutter_helper_utils/tree/main/migration_guides.md)
+### New Features
 
-- Updated to `dart_helper_utils` v5.0.0 (contains breaking changes)
-    - For details: [dart_helper_utils changelog](https://pub.dev/packages/dart_helper_utils/changelog#500)
+- **Added `toEnum` to `TextDirection` in the `intl` module:**
+  - This utility converts the `TextDirection` type from the `intl` library to the corresponding `TextDirection` enum from the Material library.
+  - Solves type compatibility issues, such as "The argument type 'TextDirection' can't be assigned to the parameter type 'TextDirection?'". For example, use `TextDirection.RTL.toEnum` directly in any `Text` widget to ensure seamless integration.
+
+### Breaking Changes
+
+- **Relocation of `SingleAxisWrap` widget:**
+  - The `SingleAxisWrap` widget has been extracted into a standalone package: [single_axis_wrap](https://pub.dev/packages/single_axis_wrap).
+  - This move includes several enhancements to the widget’s functionality.
+  - Refer to the [migration guide](https://github.com/omar-hanafy/flutter_helper_utils/tree/main/migration_guides.md) for instructions on updating your code.
+
+- **Dependency Update: `dart_helper_utils` upgraded to v5.0.0:**
+  - This update introduces breaking changes from the `dart_helper_utils` package.
+  - Key changes include:
+    - Removal of conversion helpers on `Object` to reduce IDE suggestion clutter.
+    - Renaming of `DateTime` extension methods (e.g., `addOrRemoveYears` → `addOrSubtractYears`).
+    - New date manipulation methods and improved precision (e.g., millisecond/microsecond support).
+  - For a full list of changes, see the [dart_helper_utils v5.0.0 changelog](https://pub.dev/packages/dart_helper_utils/changelog#500).
 
 ## Version 7.0.1
  
