@@ -100,30 +100,6 @@ TypedListView<Product>(
 );
 ```
 
-## SingleAxisWrap Widget
-SingleAxisWrap arranges its children in a row or a column based on available space.
-Unlike the standard Wrap widget, it uses a single layout axis instead of wrapping items onto multiple lines.
-
-Usage Example
-```dart
-SingleAxisWrap(
-  preferredDirection: Axis.horizontal,
-  rowSpacing: 8.0,
-  columnSpacing: 12.0,
-  // A callback notifies you when the effective layout mode changes.
-  onLayoutModeChanged: (axis) {
-    print('Switched layout to: $axis');
-  },
-  rowMainAxisAlignment: MainAxisAlignment.center,
-  columnMainAxisAlignment: MainAxisAlignment.start,
-  children: [
-    Container(width: 100, height: 50, color: Colors.red),
-    Container(width: 120, height: 50, color: Colors.blue),
-    Container(width: 80, height: 50, color: Colors.green),
-  ],
-)
-```
-
 ## Adaptive UI
 
 Create responsive layouts for different screen sizes and platforms (mobile, tablet, desktop).
