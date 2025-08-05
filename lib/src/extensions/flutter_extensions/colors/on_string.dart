@@ -4,7 +4,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../../../../flutter_helper_utils.dart';
+import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
 typedef _ColorParser = Color? Function(List<String> values);
 

@@ -18,7 +18,7 @@ void main() {
   );
 }
 
-final themeModeNotifier = ThemeMode.system.notifier;
+final ThemeModeNotifier themeModeNotifier = ThemeMode.system.notifier;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

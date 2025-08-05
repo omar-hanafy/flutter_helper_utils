@@ -62,7 +62,7 @@ void main() {
 
     test('split complementary uses correct angles', () {
       const yellow = Color(0xFFFFFF00);
-      final split = yellow.splitComplementary(angle: 30);
+      final split = yellow.splitComplementary();
 
       expect(split.length, equals(3));
       expect(split[0], equals(yellow));
@@ -96,7 +96,7 @@ void main() {
 
     test('monochromatic harmony varies lightness', () {
       const orange = Color(0xFFFF8800);
-      final mono = orange.monochromatic(count: 5, lightnessRange: 0.6);
+      final mono = orange.monochromatic(lightnessRange: 0.6);
 
       expect(mono.length, equals(5));
 
@@ -147,8 +147,7 @@ void main() {
       expect(white.meetsWCAG(black, level: WCAGLevel.aaa), isTrue);
 
       // Gray on white - depends on level
-      expect(white.meetsWCAG(gray, level: WCAGLevel.aa),
-          isTrue); // Should be ~4.5:1
+      expect(white.meetsWCAG(gray), isTrue); // Should be ~4.5:1
       expect(white.meetsWCAG(gray, level: WCAGLevel.aaa), isFalse);
 
       // Light gray on white - fails normal text
@@ -400,7 +399,7 @@ void main() {
       // Generate full color scheme
       const primary = brandBlue;
       final complementary = brandBlue.splitComplementary(angle: 15);
-      final shades = brandBlue.monochromatic(count: 5, lightnessRange: 0.7);
+      final shades = brandBlue.monochromatic(lightnessRange: 0.7);
 
       // Verify all colors are accessible
       final background = shades.last; // Lightest shade
@@ -414,7 +413,7 @@ void main() {
         primary.isDistinguishableFor(
           complementary[1], // Use split complementary instead of analogous
           ColorBlindnessType.protanopia,
-          minContrast: 2.0, // Lower threshold for color pairs
+          minContrast: 2, // Lower threshold for color pairs
         ),
         isTrue,
       );

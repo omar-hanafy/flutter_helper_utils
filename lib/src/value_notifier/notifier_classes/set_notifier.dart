@@ -741,7 +741,6 @@ class SetNotifier<E> extends ValueNotifier<Set<E>> implements Set<E> {
   ///
   /// If the elements are maps, lists, sets, or other collections/composite
   /// objects, then the contents of those elements are not compared element by
-  /// element unless their equality operators ([Object.==]) do so. For checking
-  /// deep equality, consider using the [DeepCollectionEquality] class.
+  /// element unless their equality operators ([Object.==]) do so.
   bool isEqual(Set<E> other) => value.isEqual(other);
 }

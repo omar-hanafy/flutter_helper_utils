@@ -66,9 +66,7 @@ class _MultiTapDetectorState extends State<MultiTapDetector> {
       gestures: {
         SerialTapGestureRecognizer:
             GestureRecognizerFactoryWithHandlers<SerialTapGestureRecognizer>(
-          () => SerialTapGestureRecognizer(
-            supportedDevices: null, // Support all devices
-          ),
+          SerialTapGestureRecognizer.new,
           (SerialTapGestureRecognizer instance) {
             instance
               ..onSerialTapDown = (SerialTapDownDetails details) {

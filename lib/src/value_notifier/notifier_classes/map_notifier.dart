@@ -318,7 +318,6 @@ class MapNotifier<K, V> extends ValueNotifier<Map<K, V>> implements Map<K, V> {
   ///
   /// If the elements are maps, lists, sets, or other collections/composite
   /// objects, then the contents of those elements are not compared element by
-  /// element unless their equality operators ([Object.==]) do so. For checking
-  /// deep equality, consider using the [DeepCollectionEquality] class.
+  /// element unless their equality operators ([Object.==]) do so.
   bool isEqual(Map<K, V> other) => value.isEqual(other);
 }

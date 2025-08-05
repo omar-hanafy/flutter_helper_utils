@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart' show Uint8List;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show Uint8List;
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
 /// create a [ValueNotifier] of type List, which reacts just like normal [List],
@@ -1270,7 +1272,6 @@ class ListNotifier<E> extends ValueNotifier<List<E>> implements List<E> {
   ///
   /// If the elements are maps, lists, sets, or other collections/composite
   /// objects, then the contents of those elements are not compared element by
-  /// element unless their equality operators ([Object.==]) do so. For checking
-  /// deep equality, consider using the [DeepCollectionEquality] class.
+  /// element unless their equality operators ([Object.==]) do so.
   bool isEqual(List<E> other) => value.isEqual(other);
 }
