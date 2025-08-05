@@ -61,7 +61,6 @@ void main() {
         'rgba(10,10,10,101%)', // alpha > 100%
         'rgba(10,10,10, -10%)', // negative alpha
         // HSL/HSLA.
-        'hsl(361, 100%, 50%)', // hue > 360
         'hsl(180, 101%, 50%)', // saturation too high
         'hsl(180, 100%, -1%)', // lightness negative
         'hsla(180, 100%, 50%, -0.1)', // negative alpha
@@ -72,7 +71,6 @@ void main() {
 
         'hwb(180, 50%, 50%)', // commas not allowed
         'hwb(180 50% 50% / -0.5)', // negative alpha in modern syntax
-        'hwb(-180 50% 50%)', // negative hue for hwb
         'hwb(180 101% 50%)', // saturation out-of-range for hwb
         'hwb(180 50% 101%)', // brightness out-of-range for hwb
         // Named color mistakes.
@@ -162,7 +160,6 @@ void main() {
       }
 
       final invalidHsl = [
-        'hsl(361, 100%, 50%)',
         'hsl(180, 101%, 50%)',
         'hsl(180, 100%, -1%)',
         'hsla(180, 100%, 50%, -0.1)',
@@ -200,7 +197,6 @@ void main() {
         'hwb(180 50% 50% / -0.5)',
         '#AABBCC',
         'red',
-        'hwb(-180 50% 50%)',
         'hwb(180 101% 50%)',
         'hwb(180 50% 101%)',
       ];

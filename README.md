@@ -150,40 +150,83 @@ final onSurface = theme.onSurface;    // Instead of theme.colorScheme.onSurface
 final isLight = theme.isLight;        // Check if light theme
 ```
 
-## Color Extensions
+## 🎨 Color Extensions
 
-Comprehensive color manipulation with support for wide gamut colors and modern color operations:
+A comprehensive suite of tools for color manipulation, conversion, and accessibility.
 
-### New Color API
+### Chainable Channel Setters
 
 ```dart
-final color = Colors.blue;
-
-// New color operations
-final contrast = color.contrastColor;  // Gets contrasting color
-final isDark = color.isDark;  // Checks if color is dark
-final hex = color.toHex(
-  includeAlpha: true,
-  omitAlphaIfFullOpacity: true,
-  uppercase: true
-);
-
-// Color transformations
-final darker = color.darken(0.2);
-final lighter = color.lighten(0.3);
-final complementary = color.complementary;
+// Fluent API for modifying colors
+final modifiedColor = Colors.blue
+  .setOpacity(0.8)   // Set opacity from 0.0-1.0
+  .setRed(100)       // Set red channel from 0-255
+  .lighten(0.1);     // Lighten the result by 10%
 ```
 
-### Wide Gamut Support
+### Conversions & Checks
 
 ```dart
-// Modern color handling
-final wideColor = color.convertToColorSpace(ColorSpace.srgb);
-final isInSpace = color.isInColorSpace(ColorSpace.displayP3);
+// Convert any dynamic value to a Color
+final fromJson = tryToColor(json['user_color']) ?? Colors.grey;
 
-// Opacity operations
-final withOpacity = color.addOpacity(0.5); // replaces deprecated withOpacity form the FlutterSDK
-final scaled = color.scaleOpacity(0.8);
+// Get a hex string
+final hex = Colors.teal.toHex(includeAlpha: true); // #FF008080
+
+// Check contrast for accessibility
+final ratio = Colors.white.contrast(Colors.black); // 21.0
+final isDark = myColor.isDark();
+```
+
+## 🎨 Color Harmonies & Palettes
+
+Generate beautiful, theory-based color schemes directly from any color.
+
+```dart
+// Triadic: 3 vibrant, evenly spaced colors
+final triadicScheme = Colors.red.triadic();
+
+// Analogous: 5 harmonious, adjacent colors
+final analogousPalette = Colors.teal.analogous(count: 5, angle: 20);
+
+// Monochromatic: 7 shades of the same color
+final monoShades = Colors.indigo.monochromatic(count: 7);
+
+// Split-Complementary: A high-contrast but balanced scheme
+final splitComp = Colors.purple.splitComplementary();
+```
+
+## ♿ Accessibility & Color Blindness Simulation
+
+Design inclusive apps with powerful accessibility tools.
+
+### WCAG Compliance
+
+```dart
+// Check if text meets WCAG AA standard
+final isAccessible = background.meetsWCAG(
+  textColor,
+  level: WCAGLevel.aa,
+  context: WCAGContext.normalText,
+);
+
+// Get suggested accessible colors for a background
+final suggestions = Colors.deepPurple.suggestAccessibleColors();
+final accessibleTextColor = suggestions.normalText;
+final accessibleIconColor = suggestions.uiComponent;
+```
+
+### Color Blindness Simulation
+
+```dart
+// Simulate how a color appears with Protanopia (red-blindness)
+final simulatedColor = Colors.red.simulateColorBlindness(ColorBlindnessType.protanopia);
+
+// Check if two critical colors (e.g., for error/success states) are distinguishable
+final areColorsSafe = errorRed.isDistinguishableFor(
+  successGreen,
+  ColorBlindnessType.deuteranopia, // Green-blind
+);
 ```
 
 ## Scroll Extensions
@@ -490,6 +533,159 @@ final cleanTheme = themeData.withoutEffects(
 // Access theme colors directly
 final surface = theme.surface;  // Instead of theme.colorScheme.surface
 final primary = theme.primary;  // Instead of theme.colorScheme.primary
+```
+
+## Migration Guide
+
+### Color Extensions - v8.x
+
+The color channel modifier methods have been renamed for clarity:
+
+**Old API (Deprecated):**
+```dart
+color.addOpacity(0.5)   // Deprecated
+color.addAlpha(128)     // Deprecated
+color.addRed(255)       // Deprecated
+color.addGreen(128)     // Deprecated
+color.addBlue(64)       // Deprecated
+```
+
+**New API:**
+```dart
+color.setOpacity(0.5)   // ✅ Clear intent: sets opacity to 0.5
+color.setAlpha(128)     // ✅ Clear intent: sets alpha to 128
+color.setRed(255)       // ✅ Clear intent: sets red channel to 255
+color.setGreen(128)     // ✅ Clear intent: sets green channel to 128
+color.setBlue(64)       // ✅ Clear intent: sets blue channel to 64
+```
+
+**Migration Steps:**
+1. Update to latest v8.x - old methods will show deprecation warnings
+2. Replace all `add*` calls with `set*` equivalents
+3. The deprecated methods will be removed in v9.0
+
+**Why this change?**
+- **Clarity**: `setOpacity` clearly indicates replacement, not addition
+- **Consistency**: Aligns with Flutter's naming conventions
+- **Future-proof**: Prepares for Flutter's own API changes
+
+### Color Harmonies - v8.x
+
+Generate beautiful, harmonious color schemes based on color theory:
+
+**Available Harmonies:**
+
+```dart
+// Complementary - opposite on color wheel (180°)
+final opposite = Colors.blue.complementaryHarmony;
+
+// Triadic - 3 colors evenly spaced (120° apart)
+final triadic = Colors.red.triadic();
+// Returns approximately [red, green, blue]
+
+// Tetradic/Square - 4 colors evenly spaced (90° apart)
+final tetradic = Colors.orange.tetradic();
+
+// Split Complementary - base + 2 adjacent to complement
+final split = Colors.purple.splitComplementary(angle: 30);
+
+// Analogous - adjacent colors on the wheel
+final analogous = Colors.teal.analogous(
+  count: 5,      // Number of colors
+  angle: 30,     // Degrees between colors
+);
+
+// Monochromatic - shades of the same hue
+final mono = Colors.indigo.monochromatic(
+  count: 5,
+  lightnessRange: 0.7,  // Variation in lightness
+);
+```
+
+### WCAG Accessibility - v8.x
+
+Ensure your colors meet Web Content Accessibility Guidelines:
+
+**Contrast Checking:**
+
+```dart
+// Check if colors meet WCAG standards
+final meetsAA = background.meetsWCAG(
+  textColor,
+  level: WCAGLevel.aa,              // AA or AAA
+  context: WCAGContext.normalText,  // or largeText, uiComponent
+);
+
+// Get accessible color suggestions
+final suggestions = background.suggestAccessibleColors(
+  level: WCAGLevel.aaa,
+);
+
+// Use the suggestions
+Text(
+  'Important text',
+  style: TextStyle(color: suggestions.normalText),
+);
+
+IconButton(
+  icon: Icon(Icons.help, color: suggestions.uiComponent),
+  onPressed: () {},
+);
+```
+
+**WCAG Guidelines:**
+- Normal text: AA requires 4.5:1, AAA requires 7:1
+- Large text (18pt+/14pt+ bold): AA requires 3:1, AAA requires 4.5:1
+- UI components: 3:1 minimum
+
+### Color Blindness Support - v8.x
+
+Design inclusive interfaces that work for users with color vision deficiencies:
+
+```dart
+// Simulate how colors appear to users with color blindness
+final protanopia = color.simulateColorBlindness(
+  ColorBlindnessType.protanopia,    // Red-blind
+);
+final deuteranopia = color.simulateColorBlindness(
+  ColorBlindnessType.deuteranopia,  // Green-blind
+);
+final tritanopia = color.simulateColorBlindness(
+  ColorBlindnessType.tritanopia,    // Blue-blind
+);
+
+// Check if two colors are distinguishable
+if (!errorRed.isDistinguishableFor(
+  successGreen,
+  ColorBlindnessType.protanopia,
+  minContrast: 3.0,
+)) {
+  // Consider using different colors or additional indicators
+}
+
+// Real-world example: Status indicators
+final statusColors = {
+  'error': Colors.red,
+  'warning': Colors.orange,
+  'success': Colors.green,
+};
+
+// Verify all status colors are distinguishable
+for (final type in ColorBlindnessType.values) {
+  for (final entry1 in statusColors.entries) {
+    for (final entry2 in statusColors.entries) {
+      if (entry1.key != entry2.key) {
+        final distinguishable = entry1.value.isDistinguishableFor(
+          entry2.value,
+          type,
+        );
+        if (!distinguishable) {
+          print('${entry1.key} and ${entry2.key} may be confused by users with $type');
+        }
+      }
+    }
+  }
+}
 ```
 
 ## Contributions

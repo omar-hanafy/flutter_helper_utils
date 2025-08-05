@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
 /// A [GradientWidget] applies a gradient effect to its child widget
 /// and offers extensive customization options for blending, alignment,
@@ -70,7 +71,7 @@ class GradientWidget extends StatelessWidget {
 
   /// The alignment of the child within the widget. Useful if the child does not
   /// fill the entire available space. Defaults to [AlignmentDirectional.center].
-  final AlignmentDirectional childAlignment;
+  final AlignmentGeometry childAlignment;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +79,10 @@ class GradientWidget extends StatelessWidget {
       opacity: opacity,
       child: ShaderMask(
         blendMode: blendMode,
-        shaderCallback: gradient.createShader,
+        shaderCallback: (Rect bounds) => gradient.createShader(
+          bounds,
+          textDirection: context.directionality,
+        ),
         child: Align(
           alignment: childAlignment,
           child: child,
