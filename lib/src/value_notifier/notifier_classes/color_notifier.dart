@@ -68,7 +68,7 @@ extension FHUColorValueNotifierExtension on ValueListenable<Color> {
   /// replaced with the given `opacity` (which ranges from 0.0 to 1.0).
   ///
   /// Out of range values will have unexpected effects.
-  Color withOpacity(double opacity) => value.addOpacity(opacity);
+  Color withOpacity(double opacity) => value.setOpacity(opacity);
 
   /// Returns a new color that matches this color with the red channel replaced
   /// with `r` (which ranges from 0 to 255).

@@ -1,5 +1,28 @@
 # CHANGELOG
 
+## 8.1.0
+
+### Added
+- **Color Conversion Utilities**: Added `toColor()` and `tryToColor()` for robustly parsing colors from strings (Hex, CSS functions), integers, and other color types.
+- **Color Harmony Generation**: Added methods to generate theory-based color palettes: `monochromatic()`, `analogous()`, `triadic()`, `tetradic()`, and `splitComplementary()`.
+- **WCAG Accessibility Suite**:
+  - `meetsWCAG()`: Checks color contrast against AA/AAA standards.
+  - `suggestAccessibleColors()`: Provides accessible color alternatives for a given background.
+- **Color Blindness Simulation**:
+  - `simulateColorBlindness()`: Simulates how colors appear with various vision deficiencies.
+  - `isDistinguishableFor()`: Checks if two colors have enough contrast for colorblind users.
+
+### Changed
+- **API Clarity**: Renamed all `add*` color methods to `set*` (e.g., `addOpacity` to `setOpacity`) for clearer intent. Old methods are now deprecated and will be removed in v9.0.
+- **CSS Compliance**: HSL color parser now correctly handles hue angle wrapping as per the CSS Color Module Level 4 specification.
+
+## 8.0.2
+
+- Updated docs
+- Enhanced `MultiTapDetector` widget.
+- Deprecated gradientAlignment parameter from the `GradientWidget`.
+  Use the gradient's own positioning properties instead (like begin/end for LinearGradient).
+
 ## Version 8.0.1
 
 - CHORE: updated the [dart_helper_utils](https://pub.dev/packages/dart_helper_utils) to be ">=4.1.2 <6.0.0" for more flexibility.

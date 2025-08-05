@@ -300,17 +300,14 @@ extension FHUStringToColorExtension on String {
 
   static double? _parseHueValue(String v) {
     // Normalize the input: remove extra spaces, commas, etc.
-    final value = v
-        .trim()
-        .toLowerCase()
-        .replaceAll(RegExp('$regexComponentSeparator\$'), '');
+    final value = v.trim().toLowerCase().replaceAll(RegExp(r'[,\s]+'), '');
     try {
       double hue;
       if (value.endsWith('grad')) {
         // Check 'grad' first!
         final gradValue = double.parse(value.substring(0, value.length - 4));
         // 400 gradians = 360 degrees.
-        hue = (gradValue * 360 / 400) % 360;
+        hue = gradValue * 360 / 400;
       } else if (value.endsWith('rad')) {
         hue =
             double.parse(value.substring(0, value.length - 3)) * 180 / math.pi;
@@ -321,9 +318,15 @@ extension FHUStringToColorExtension on String {
       } else {
         hue = double.tryParse(value) ?? 0;
       }
-      if (hue < 0 || hue > 360) return null;
-      // Normalize so that 360° becomes 0°.
-      return (hue / 360) % 1;
+
+      // CSS Color Module Level 4 compliance: normalize hue to [0, 360)
+      hue %= 360;
+      if (hue < 0) {
+        hue += 360;
+      }
+
+      // Return as normalized value between 0.0 and 1.0
+      return hue / 360.0;
     } catch (_) {
       return null;
     }
