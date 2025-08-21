@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 8.3.0
+
+- Enhanced ParsingException to provide comprehensive debugging information with structured argument maps and filtered output.
+- CHORE: updated the [dart_helper_utils](https://pub.dev/packages/dart_helper_utils) to be ">=5.4.0 <6.0.0".
+
 ## 8.2.0
 
 ### Added

@@ -1,7 +1,7 @@
 name: flutter_helper_utils
 description: The Flutter Helper Utils Package offers various extensions and helper methods that can make development more efficient.
 repository: https://github.com/omar-hanafy/flutter_helper_utils
-version: 8.2.0
+version: 8.3.0
 topics:
   - utilities
   - helpers
@@ -16,7 +16,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  dart_helper_utils: ">=5.3.0 <6.0.0"
+  dart_helper_utils: ">=5.4.0 <6.0.0"
   intl: ">=0.19.0 <1.0.0"
 
 dev_dependencies:
