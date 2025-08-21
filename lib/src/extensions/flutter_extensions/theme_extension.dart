@@ -1118,6 +1118,96 @@ extension FHUThemeDataColorSchemeEx on ThemeData {
   /// calling `themeData.surfaceTint` is
   /// same as calling `themeData.colorScheme.surfaceTint`
   Color get surfaceTint => colorScheme.surfaceTint;
+
+  /// gets the primaryFixed from the ColorScheme of this ThemeData
+  /// calling `themeData.primaryFixed` is
+  /// same as calling `themeData.colorScheme.primaryFixed`
+  Color get primaryFixed => colorScheme.primaryFixed;
+
+  /// gets the primaryFixedDim from the ColorScheme of this ThemeData
+  /// calling `themeData.primaryFixedDim` is
+  /// same as calling `themeData.colorScheme.primaryFixedDim`
+  Color get primaryFixedDim => colorScheme.primaryFixedDim;
+
+  /// gets the onPrimaryFixed from the ColorScheme of this ThemeData
+  /// calling `themeData.onPrimaryFixed` is
+  /// same as calling `themeData.colorScheme.onPrimaryFixed`
+  Color get onPrimaryFixed => colorScheme.onPrimaryFixed;
+
+  /// gets the onPrimaryFixedVariant from the ColorScheme of this ThemeData
+  /// calling `themeData.onPrimaryFixedVariant` is
+  /// same as calling `themeData.colorScheme.onPrimaryFixedVariant`
+  Color get onPrimaryFixedVariant => colorScheme.onPrimaryFixedVariant;
+
+  /// gets the secondaryFixed from the ColorScheme of this ThemeData
+  /// calling `themeData.secondaryFixed` is
+  /// same as calling `themeData.colorScheme.secondaryFixed`
+  Color get secondaryFixed => colorScheme.secondaryFixed;
+
+  /// gets the secondaryFixedDim from the ColorScheme of this ThemeData
+  /// calling `themeData.secondaryFixedDim` is
+  /// same as calling `themeData.colorScheme.secondaryFixedDim`
+  Color get secondaryFixedDim => colorScheme.secondaryFixedDim;
+
+  /// gets the onSecondaryFixed from the ColorScheme of this ThemeData
+  /// calling `themeData.onSecondaryFixed` is
+  /// same as calling `themeData.colorScheme.onSecondaryFixed`
+  Color get onSecondaryFixed => colorScheme.onSecondaryFixed;
+
+  /// gets the onSecondaryFixedVariant from the ColorScheme of this ThemeData
+  /// calling `themeData.onSecondaryFixedVariant` is
+  /// same as calling `themeData.colorScheme.onSecondaryFixedVariant`
+  Color get onSecondaryFixedVariant => colorScheme.onSecondaryFixedVariant;
+
+  /// gets the tertiaryFixed from the ColorScheme of this ThemeData
+  /// calling `themeData.tertiaryFixed` is
+  /// same as calling `themeData.colorScheme.tertiaryFixed`
+  Color get tertiaryFixed => colorScheme.tertiaryFixed;
+
+  /// gets the tertiaryFixedDim from the ColorScheme of this ThemeData
+  /// calling `themeData.tertiaryFixedDim` is
+  /// same as calling `themeData.colorScheme.tertiaryFixedDim`
+  Color get tertiaryFixedDim => colorScheme.tertiaryFixedDim;
+
+  /// gets the onTertiaryFixed from the ColorScheme of this ThemeData
+  /// calling `themeData.onTertiaryFixed` is
+  /// same as calling `themeData.colorScheme.onTertiaryFixed`
+  Color get onTertiaryFixed => colorScheme.onTertiaryFixed;
+
+  /// gets the onTertiaryFixedVariant from the ColorScheme of this ThemeData
+  /// calling `themeData.onTertiaryFixedVariant` is
+  /// same as calling `themeData.colorScheme.onTertiaryFixedVariant`
+  Color get onTertiaryFixedVariant => colorScheme.onTertiaryFixedVariant;
+
+  /// gets the surfaceDim from the ColorScheme of this ThemeData
+  /// calling `themeData.surfaceDim` is
+  /// same as calling `themeData.colorScheme.surfaceDim`
+  Color get surfaceDim => colorScheme.surfaceDim;
+
+  /// gets the surfaceBright from the ColorScheme of this ThemeData
+  /// calling `themeData.surfaceBright` is
+  /// same as calling `themeData.colorScheme.surfaceBright`
+  Color get surfaceBright => colorScheme.surfaceBright;
+
+  /// gets the surfaceContainerLowest from the ColorScheme of this ThemeData
+  /// calling `themeData.surfaceContainerLowest` is
+  /// same as calling `themeData.colorScheme.surfaceContainerLowest`
+  Color get surfaceContainerLowest => colorScheme.surfaceContainerLowest;
+
+  /// gets the surfaceContainerLow from the ColorScheme of this ThemeData
+  /// calling `themeData.surfaceContainerLow` is
+  /// same as calling `themeData.colorScheme.surfaceContainerLow`
+  Color get surfaceContainerLow => colorScheme.surfaceContainerLow;
+
+  /// gets the surfaceContainer from the ColorScheme of this ThemeData
+  /// calling `themeData.surfaceContainer` is
+  /// same as calling `themeData.colorScheme.surfaceContainer`
+  Color get surfaceContainer => colorScheme.surfaceContainer;
+
+  /// gets the surfaceContainerHigh from the ColorScheme of this ThemeData
+  /// calling `themeData.surfaceContainerHigh` is
+  /// same as calling `themeData.colorScheme.surfaceContainerHigh`
+  Color get surfaceContainerHigh => colorScheme.surfaceContainerHigh;
 }
 
 extension FHUThemeModeEx on ThemeMode? {

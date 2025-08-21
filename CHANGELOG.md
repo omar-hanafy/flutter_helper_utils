@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 8.2.0
+
+### Added
+
+- Added missing `ColorScheme` properties to `ThemeData` extension including `primaryFixed`, `primaryFixedDim`,
+  `onPrimaryFixed`, `onPrimaryFixedVariant`, `secondaryFixed`, `secondaryFixedDim`, `onSecondaryFixed`, `onSecondaryFixedVariant`,
+  `tertiaryFixed`, `tertiaryFixedDim`, `onTertiaryFixed`, `onTertiaryFixedVariant`, `surfaceDim`, `surfaceBright`,
+  `surfaceContainerLowest`, `surfaceContainerLow`, `surfaceContainer`, and `surfaceContainerHigh`.
+
+- CHORE: updated the [dart_helper_utils](https://pub.dev/packages/dart_helper_utils) to be ">=5.3.0 <6.0.0".
+
 ## 8.1.0
 
 ### Added
