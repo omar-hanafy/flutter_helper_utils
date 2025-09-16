@@ -31,6 +31,16 @@ extension FHUThemeExtension on BuildContext {
 
   /// Returns `true` if the current theme's brightness is light.
   bool get isLight => brightness == Brightness.light;
+
+  /// Returns a color from the current theme's [ColorScheme] by its exact name.
+  ///
+  /// Example:
+  ///   `context.schemeColor('primary')`
+  ///
+  /// Set [caseSensitive] to `false` to allow case-insensitive lookup.
+  /// Returns `null` if the name does not match any color in the scheme.
+  Color? schemeColor(String name, {bool caseSensitive = true}) =>
+      themeData.colorFromScheme(name, caseSensitive: caseSensitive);
 }
 
 /// Provides extensions on [ThemeData] to easily access text styles and check brightness.
@@ -1208,6 +1218,27 @@ extension FHUThemeDataColorSchemeEx on ThemeData {
   /// calling `themeData.surfaceContainerHigh` is
   /// same as calling `themeData.colorScheme.surfaceContainerHigh`
   Color get surfaceContainerHigh => colorScheme.surfaceContainerHigh;
+
+  /// Looks up a color from this theme's [ColorScheme] by its exact property name.
+  ///
+  /// Example names include: `primary`, `onPrimary`, `primaryContainer`,
+  /// `onPrimaryContainer`, `secondary`, `onSecondary`, `secondaryContainer`,
+  /// `onSecondaryContainer`, `tertiary`, `onTertiary`, `tertiaryContainer`,
+  /// `onTertiaryContainer`, `error`, `onError`, `errorContainer`,
+  /// `onErrorContainer`, `surface`, `onSurface`, `surfaceContainerHighest`,
+  /// `onSurfaceVariant`, `outline`, `outlineVariant`, `shadow`, `scrim`,
+  /// `inverseSurface`, `onInverseSurface`, `inversePrimary`, `surfaceTint`,
+  /// `primaryFixed`, `primaryFixedDim`, `onPrimaryFixed`,
+  /// `onPrimaryFixedVariant`, `secondaryFixed`, `secondaryFixedDim`,
+  /// `onSecondaryFixed`, `onSecondaryFixedVariant`, `tertiaryFixed`,
+  /// `tertiaryFixedDim`, `onTertiaryFixed`, `onTertiaryFixedVariant`,
+  /// `surfaceDim`, `surfaceBright`, `surfaceContainerLowest`,
+  /// `surfaceContainerLow`, `surfaceContainer`, `surfaceContainerHigh`.
+  ///
+  /// Set [caseSensitive] to `false` for case-insensitive lookup.
+  /// Returns `null` if the name does not match any color.
+  Color? colorFromScheme(String name, {bool caseSensitive = true}) =>
+      colorScheme.colorByName(name, caseSensitive: caseSensitive);
 }
 
 extension FHUThemeModeEx on ThemeMode? {
@@ -1270,6 +1301,76 @@ extension FHUColorSchemeEx on ColorScheme {
       navigationBarTheme: navigationBarTheme,
       segmentedButtonTheme: segmentedButtonTheme,
     );
+  }
+
+  /// Returns a color from this [ColorScheme] by its property [name].
+  ///
+  /// Example: `scheme.colorByName('primary')`.
+  ///
+  /// Set [caseSensitive] to `false` to allow case-insensitive lookup.
+  /// Returns `null` if the name does not match any color in this scheme.
+  Color? colorByName(String name, {bool caseSensitive = true}) {
+    final key = caseSensitive ? name : name.toLowerCase();
+
+    // Build a lookup map from property names to their current values.
+    final m = <String, Color>{
+      'primary': primary,
+      'onPrimary': onPrimary,
+      'primaryContainer': primaryContainer,
+      'onPrimaryContainer': onPrimaryContainer,
+      'secondary': secondary,
+      'onSecondary': onSecondary,
+      'secondaryContainer': secondaryContainer,
+      'onSecondaryContainer': onSecondaryContainer,
+      'tertiary': tertiary,
+      'onTertiary': onTertiary,
+      'tertiaryContainer': tertiaryContainer,
+      'onTertiaryContainer': onTertiaryContainer,
+      'error': error,
+      'onError': onError,
+      'errorContainer': errorContainer,
+      'onErrorContainer': onErrorContainer,
+      'surface': surface,
+      'onSurface': onSurface,
+      'surfaceContainerHighest': surfaceContainerHighest,
+      'onSurfaceVariant': onSurfaceVariant,
+      'outline': outline,
+      'outlineVariant': outlineVariant,
+      'shadow': shadow,
+      'scrim': scrim,
+      'inverseSurface': inverseSurface,
+      'onInverseSurface': onInverseSurface,
+      'inversePrimary': inversePrimary,
+      'surfaceTint': surfaceTint,
+      'primaryFixed': primaryFixed,
+      'primaryFixedDim': primaryFixedDim,
+      'onPrimaryFixed': onPrimaryFixed,
+      'onPrimaryFixedVariant': onPrimaryFixedVariant,
+      'secondaryFixed': secondaryFixed,
+      'secondaryFixedDim': secondaryFixedDim,
+      'onSecondaryFixed': onSecondaryFixed,
+      'onSecondaryFixedVariant': onSecondaryFixedVariant,
+      'tertiaryFixed': tertiaryFixed,
+      'tertiaryFixedDim': tertiaryFixedDim,
+      'onTertiaryFixed': onTertiaryFixed,
+      'onTertiaryFixedVariant': onTertiaryFixedVariant,
+      'surfaceDim': surfaceDim,
+      'surfaceBright': surfaceBright,
+      'surfaceContainerLowest': surfaceContainerLowest,
+      'surfaceContainerLow': surfaceContainerLow,
+      'surfaceContainer': surfaceContainer,
+      'surfaceContainerHigh': surfaceContainerHigh,
+    };
+
+    if (!caseSensitive) {
+      // Build a lower-cased view for case-insensitive lookups.
+      final lowerMap = <String, Color>{
+        for (final entry in m.entries) entry.key.toLowerCase(): entry.value
+      };
+      return lowerMap[key];
+    }
+
+    return m[key];
   }
 }
 
