@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 8.4.0
+- Add color lookup by name to ColorScheme extensions
+
 ## 8.3.0
 
 - Enhanced ParsingException to provide comprehensive debugging information with structured argument maps and filtered output.
