@@ -217,8 +217,9 @@ class TypedSliverList<E> extends StatelessWidget {
 
     Widget composed = SliverMainAxisGroup(slivers: group);
     if (useSliverSafeArea) composed = SliverSafeArea(sliver: composed);
-    if (padding != null)
+    if (padding != null) {
       composed = SliverPadding(padding: padding!, sliver: composed);
+    }
     return composed;
   }
 
