@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## 8.5.0
+
+### Breaking
+- `TypedListViewBuilder` now uses the `itemBuilder(context, index, item)` signature for idiomatic Flutter access to `BuildContext`.
+
+### Added
+- New list quality-of-life options: `spacing`, `emptyBuilder`, `showScrollbar`, and pull-to-refresh support.
+- Infinite scroll helpers via `onEndReached`, `onEndReachedThreshold`, and `isLoadingMore`.
+- `itemKeyBuilder` for stable keyed items when combining headers, separators, or pagination widgets.
+- Introduced `TypedSliverList` with matching builder ergonomics for `CustomScrollView` usage.
+
+### Changed
+- Simplified header/footer/pagination configuration on `TypedListView`, replacing `headerBuilder`/`footerBuilder` with direct widget slots.
+
 ## 8.4.0
 - Add color lookup by name to ColorScheme extensions
 

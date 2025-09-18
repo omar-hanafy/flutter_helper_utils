@@ -1,16 +1,33 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-typedef TypedListViewBuilder<T> = Widget Function(int index, T item);
+/// Item builder for [TypedListView]. Includes [BuildContext] for idiomatic Flutter
+/// usage and access to inherited widgets, plus the item index and value.
+typedef TypedListViewBuilder<T> = Widget Function(
+  BuildContext context,
+  int index,
+  T item,
+);
+
+/// Builder that returns a stable key for an item. Used to compute a correct
+/// flattened index for keyed children when headers/separators/etc. are present.
+typedef ItemKeyBuilder<T> = Key Function(T item);
 
 /// Extension on [Iterable] to build a [TypedListView] directly.
 extension IterableTypedListViewExtension<E> on Iterable<E> {
   Widget buildListView({
+    // Content
     required TypedListViewBuilder<E> itemBuilder,
     Widget? header,
     Widget? footer,
+
+    // Decorations
     IndexedWidgetBuilder? separatorBuilder,
+    double? spacing,
     Widget? paginationWidget,
+    WidgetBuilder? emptyBuilder,
+
+    // Scrolling/behavior
     Key? key,
     EdgeInsetsGeometry? padding,
     ScrollPhysics? physics,
@@ -24,7 +41,7 @@ extension IterableTypedListViewExtension<E> on Iterable<E> {
     bool? primary,
     double? itemExtent,
     Widget? prototypeItem,
-    ChildIndexGetter? findChildIndexCallback,
+    ItemKeyBuilder<E>? itemKeyBuilder,
     double? cacheExtent,
     int? semanticChildCount,
     DragStartBehavior dragStartBehavior = DragStartBehavior.start,
@@ -32,15 +49,29 @@ extension IterableTypedListViewExtension<E> on Iterable<E> {
         ScrollViewKeyboardDismissBehavior.manual,
     String? restorationId,
     Clip clipBehavior = Clip.hardEdge,
+
+    // Quality-of-life
+    bool showScrollbar = false,
+    Future<void> Function()? onRefresh,
+    Future<void> Function()? onEndReached,
+    double onEndReachedThreshold = 200,
+    bool isLoadingMore = false,
   }) {
     return TypedListView<E>(
+      // Content
       items: toList(),
       // Convert to List for efficient access
       itemBuilder: itemBuilder,
       header: header,
       footer: footer,
+
+      // Decorations
       separatorBuilder: separatorBuilder,
+      spacing: spacing,
       paginationWidget: paginationWidget,
+      emptyBuilder: emptyBuilder,
+
+      // Scrolling/behavior
       key: key,
       padding: padding,
       physics: physics,
@@ -54,54 +85,49 @@ extension IterableTypedListViewExtension<E> on Iterable<E> {
       primary: primary,
       itemExtent: itemExtent,
       prototypeItem: prototypeItem,
-      findChildIndexCallback: findChildIndexCallback,
+      itemKeyBuilder: itemKeyBuilder,
       cacheExtent: cacheExtent,
       semanticChildCount: semanticChildCount,
       dragStartBehavior: dragStartBehavior,
       keyboardDismissBehavior: keyboardDismissBehavior,
       restorationId: restorationId,
       clipBehavior: clipBehavior,
+
+      // QoL
+      showScrollbar: showScrollbar,
+      onRefresh: onRefresh,
+      onEndReached: onEndReached,
+      onEndReachedThreshold: onEndReachedThreshold,
+      isLoadingMore: isLoadingMore,
     );
   }
 }
 
-/// A type-safe ListView that allows for easy customization with headers,
-/// footers, separators, and pagination.
+/// A type-safe ListView with optional header, footer, separators/spacing,
+/// empty state, pagination widget, and end-reached callback.
 ///
-/// This widget extends Flutter's `ListView.builder` and provides a convenient
-/// way to build lists with optional headers, footers, separators, and a
-/// pagination widget.
-///
-/// The `itemBuilder` is a required parameter that takes the current index and
-/// item as arguments and returns a widget to be displayed at that position.
-///
-/// The `header`, `footer`, and `paginationWidget` parameters are optional and
-/// allow you to add widgets at the beginning, end, or before the last item
-/// of the list, respectively.
-///
-/// The `separatorBuilder` parameter is also optional and allows you to add
-/// separators between items in the list.
-///
-/// Example usage:
-/// ```dart
-/// TypedListView<String>(
-///   items: ['Item 1', 'Item 2', 'Item 3'],
-///   itemBuilder: (index, item) => ListTile(title: Text(item)),
-///   header: const Text('Header'),
-///   footer: const Text('Footer'),
-///   separatorBuilder: (context, index) => const Divider(),
-///   paginationWidget: const CircularProgressIndicator(),
-/// )
-/// ```
+/// Notes and best practices:
+/// - `itemBuilder` includes `BuildContext` for idiomatic Flutter usage.
+/// - `itemKeyBuilder` enables stable keys and a correct flattened
+///   `findChildIndexCallback` under the hood, even with header/separators/etc.
+/// - `itemExtent`/`prototypeItem` must only be used when every child has the
+///   same extent (no header/footer/separators/pagination/spacing).
 class TypedListView<E> extends StatelessWidget {
   const TypedListView({
+    // Content
     required List<E> items,
     required TypedListViewBuilder<E> itemBuilder,
     super.key,
     Widget? header,
     Widget? footer,
+
+    // Decorations
     IndexedWidgetBuilder? separatorBuilder,
+    double? spacing,
     Widget? paginationWidget,
+    WidgetBuilder? emptyBuilder,
+
+    // Scrolling/behavior
     EdgeInsetsGeometry? padding,
     ScrollPhysics? physics,
     bool shrinkWrap = false,
@@ -114,7 +140,7 @@ class TypedListView<E> extends StatelessWidget {
     bool? primary,
     double? itemExtent,
     Widget? prototypeItem,
-    ChildIndexGetter? findChildIndexCallback,
+    ItemKeyBuilder<E>? itemKeyBuilder,
     double? cacheExtent,
     int? semanticChildCount,
     DragStartBehavior dragStartBehavior = DragStartBehavior.start,
@@ -122,12 +148,43 @@ class TypedListView<E> extends StatelessWidget {
         ScrollViewKeyboardDismissBehavior.manual,
     String? restorationId,
     Clip clipBehavior = Clip.hardEdge,
-  })  : _items = items,
+
+    // Quality-of-life
+    bool showScrollbar = false,
+    Future<void> Function()? onRefresh,
+    Future<void> Function()? onEndReached,
+    double onEndReachedThreshold = 200,
+    bool isLoadingMore = false,
+  })  : assert(!(separatorBuilder != null && spacing != null),
+            'Provide either separatorBuilder or spacing, not both.'),
+        assert(itemExtent == null || prototypeItem == null,
+            'Use either itemExtent or prototypeItem, not both.'),
+        assert(
+          itemExtent == null ||
+              (header == null &&
+                  footer == null &&
+                  paginationWidget == null &&
+                  separatorBuilder == null &&
+                  spacing == null),
+          'itemExtent cannot be used with header/footer/separators/pagination/spacing.',
+        ),
+        assert(
+          prototypeItem == null ||
+              (header == null &&
+                  footer == null &&
+                  paginationWidget == null &&
+                  separatorBuilder == null &&
+                  spacing == null),
+          'prototypeItem cannot be used with header/footer/separators/pagination/spacing.',
+        ),
+        _items = items,
         _itemBuilder = itemBuilder,
         _header = header,
         _footer = footer,
         _separatorBuilder = separatorBuilder,
+        _spacing = spacing,
         _paginationWidget = paginationWidget,
+        _emptyBuilder = emptyBuilder,
         _padding = padding,
         _physics = physics,
         _shrinkWrap = shrinkWrap,
@@ -140,21 +197,32 @@ class TypedListView<E> extends StatelessWidget {
         _primary = primary,
         _itemExtent = itemExtent,
         _prototypeItem = prototypeItem,
-        _findChildIndexCallback = findChildIndexCallback,
+        _itemKeyBuilder = itemKeyBuilder,
         _cacheExtent = cacheExtent,
         _semanticChildCount = semanticChildCount,
         _dragStartBehavior = dragStartBehavior,
         _keyboardDismissBehavior = keyboardDismissBehavior,
         _restorationId = restorationId,
-        _clipBehavior = clipBehavior;
+        _clipBehavior = clipBehavior,
+        _showScrollbar = showScrollbar,
+        _onRefresh = onRefresh,
+        _onEndReached = onEndReached,
+        _onEndReachedThreshold = onEndReachedThreshold,
+        _isLoadingMore = isLoadingMore;
 
+  // Content
   final List<E> _items;
   final TypedListViewBuilder<E> _itemBuilder;
   final Widget? _header;
   final Widget? _footer;
-  final IndexedWidgetBuilder? _separatorBuilder;
-  final Widget? _paginationWidget;
 
+  // Decorations
+  final IndexedWidgetBuilder? _separatorBuilder;
+  final double? _spacing;
+  final Widget? _paginationWidget;
+  final WidgetBuilder? _emptyBuilder;
+
+  // Scrolling/behavior
   final EdgeInsetsGeometry? _padding;
   final ScrollPhysics? _physics;
   final bool _shrinkWrap;
@@ -167,7 +235,7 @@ class TypedListView<E> extends StatelessWidget {
   final bool? _primary;
   final double? _itemExtent;
   final Widget? _prototypeItem;
-  final ChildIndexGetter? _findChildIndexCallback;
+  final ItemKeyBuilder<E>? _itemKeyBuilder;
   final double? _cacheExtent;
   final int? _semanticChildCount;
   final DragStartBehavior _dragStartBehavior;
@@ -175,10 +243,43 @@ class TypedListView<E> extends StatelessWidget {
   final String? _restorationId;
   final Clip _clipBehavior;
 
+  // QoL
+  final bool _showScrollbar;
+  final Future<void> Function()? _onRefresh;
+  final Future<void> Function()? _onEndReached;
+  final double _onEndReachedThreshold;
+  final bool _isLoadingMore;
+
+  bool get _hasSeparators =>
+      (_separatorBuilder != null || _spacing != null) && _items.length > 1;
+
+  IndexedWidgetBuilder? get _effectiveSeparatorBuilder {
+    if (_separatorBuilder != null) return _separatorBuilder;
+    if (_spacing == null) return null;
+    return (context, _) => _scrollDirection == Axis.vertical
+        ? SizedBox(height: _spacing)
+        : SizedBox(width: _spacing);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      key: key,
+    final showEmpty = _items.isEmpty && _emptyBuilder != null;
+
+    // Build a flattened findChildIndexCallback that accounts for header/separators/etc.
+    ChildIndexGetter? effectiveFindChildIndexCallback;
+    if (_itemKeyBuilder != null) {
+      effectiveFindChildIndexCallback = (key) {
+        for (var i = 0; i < _items.length; i++) {
+          if (_itemKeyBuilder(_items[i]) == key) {
+            return _flattenedIndexForItem(i);
+          }
+        }
+        return null;
+      };
+    }
+
+    Widget list = ListView.builder(
+      // Do not forward this widget's key; it's the identity of the parent.
       padding: _padding,
       physics: _physics,
       shrinkWrap: _shrinkWrap,
@@ -186,8 +287,9 @@ class TypedListView<E> extends StatelessWidget {
         _items.length,
         header: _header,
         footer: _footer,
-        separatorBuilder: _separatorBuilder,
+        separatorBuilder: _effectiveSeparatorBuilder,
         paginationWidget: _paginationWidget,
+        showEmpty: showEmpty,
       ),
       itemBuilder: (context, index) => _buildItem(
         context,
@@ -196,8 +298,11 @@ class TypedListView<E> extends StatelessWidget {
         itemBuilder: _itemBuilder,
         header: _header,
         footer: _footer,
-        separatorBuilder: _separatorBuilder,
+        separatorBuilder: _effectiveSeparatorBuilder,
         paginationWidget: _paginationWidget,
+        emptyBuilder: _emptyBuilder,
+        scrollDirection: _scrollDirection,
+        itemKeyBuilder: _itemKeyBuilder,
       ),
       addAutomaticKeepAlives: _addAutomaticKeepAlives,
       addRepaintBoundaries: _addRepaintBoundaries,
@@ -208,7 +313,7 @@ class TypedListView<E> extends StatelessWidget {
       primary: _primary,
       itemExtent: _itemExtent,
       prototypeItem: _prototypeItem,
-      findChildIndexCallback: _findChildIndexCallback,
+      findChildIndexCallback: effectiveFindChildIndexCallback,
       cacheExtent: _cacheExtent,
       semanticChildCount: _semanticChildCount,
       dragStartBehavior: _dragStartBehavior,
@@ -216,89 +321,141 @@ class TypedListView<E> extends StatelessWidget {
       restorationId: _restorationId,
       clipBehavior: _clipBehavior,
     );
-  }
 
-  /// Calculates the total number of items in the list, including headers,
-  /// footers, separators, and pagination widgets.
-  static int _calculateItemCount(
-    int itemCount, {
-    Widget? header,
-    Widget? footer,
-    IndexedWidgetBuilder? separatorBuilder,
-    Widget? paginationWidget,
-  }) {
-    // Start with the base item count
-    var count = itemCount;
-
-    // Add separators between items if there are at least two items
-    if (separatorBuilder != null && itemCount > 1) {
-      count += itemCount - 1;
+    // Compose QoL wrappers
+    if (_onEndReached != null) {
+      list = NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          final metrics = notification.metrics;
+          if (metrics.extentAfter <= _onEndReachedThreshold &&
+              !_isLoadingMore) {
+            _onEndReached.call();
+          }
+          return false;
+        },
+        child: list,
+      );
     }
 
-    // Add header, footer, and paginationWidget if they exist
+    if (_onRefresh != null) {
+      list = RefreshIndicator(onRefresh: _onRefresh, child: list);
+    }
+
+    if (_showScrollbar) {
+      list = Scrollbar(controller: _controller, child: list);
+    }
+
+    return list;
+  }
+
+  int _flattenedIndexForItem(int itemIndex) {
+    final headerOffset = _header != null ? 1 : 0;
+    final sepStride = _hasSeparators ? 2 : 1;
+    return headerOffset + itemIndex * sepStride;
+  }
+
+  /// Calculates the total item count, including headers, footers, separators,
+  /// pagination, and empty state.
+  static int _calculateItemCount(
+    int itemCount, {
+    required Widget? header,
+    required Widget? footer,
+    required IndexedWidgetBuilder? separatorBuilder,
+    required Widget? paginationWidget,
+    required bool showEmpty,
+  }) {
+    var count = 0;
+
     if (header != null) count += 1;
+
+    if (itemCount > 0) {
+      count += itemCount;
+      if (separatorBuilder != null && itemCount > 1) {
+        count += itemCount - 1;
+      }
+    } else if (showEmpty) {
+      count += 1; // the empty widget
+    }
+
     if (paginationWidget != null) count += 1;
     if (footer != null) count += 1;
 
     return count;
   }
 
-  /// Builds the appropriate widget for the given index, handling headers,
-  /// footers, separators, and pagination widgets.
+  /// Builds header, items, separators, empty, pagination, and footer.
   static Widget _buildItem<E>(
     BuildContext context,
     int index, {
     required List<E> items,
     required TypedListViewBuilder<E> itemBuilder,
-    Widget? header,
-    Widget? footer,
-    IndexedWidgetBuilder? separatorBuilder,
-    Widget? paginationWidget,
+    required Widget? header,
+    required Widget? footer,
+    required IndexedWidgetBuilder? separatorBuilder,
+    required Widget? paginationWidget,
+    required WidgetBuilder? emptyBuilder,
+    required Axis scrollDirection,
+    required ItemKeyBuilder<E>? itemKeyBuilder,
   }) {
+    final hasSeparators = separatorBuilder != null && items.length > 1;
+
     final headerOffset = header != null ? 1 : 0;
     final footerOffset = footer != null ? 1 : 0;
     final paginationOffset = paginationWidget != null ? 1 : 0;
-    final separatorCount =
-        (separatorBuilder != null && items.length > 1) ? items.length - 1 : 0;
-    final totalItemCount = headerOffset +
-        items.length +
-        separatorCount +
-        paginationOffset +
-        footerOffset;
+    final separatorCount = hasSeparators ? items.length - 1 : 0;
+    final showEmpty = items.isEmpty && emptyBuilder != null;
 
-    // Handle header
+    final contentCount =
+        items.isEmpty ? (showEmpty ? 1 : 0) : items.length + separatorCount;
+
+    final totalItemCount =
+        headerOffset + contentCount + paginationOffset + footerOffset;
+
+    // Header
     if (header != null && index == 0) return header;
 
-    // Handle footer
-    if (footer != null && index == totalItemCount - 1) {
-      return footer;
-    }
+    // Footer
+    if (footer != null && index == totalItemCount - 1) return footer;
 
-    // Handle paginationWidget
+    // Pagination (always placed before footer if present)
     if (paginationWidget != null &&
         index == totalItemCount - footerOffset - 1) {
       return paginationWidget;
     }
 
-    // Adjust index for header
+    // Empty state (placed right after header)
+    if (showEmpty && index == headerOffset) {
+      return emptyBuilder(context);
+    }
+
+    // Adjust for header
     var adjustedIndex = index - headerOffset;
 
-    // Handle separators
-    if (separatorBuilder != null && items.length > 1) {
+    // Adjust for empty slot if present
+    if (showEmpty) {
+      adjustedIndex -= 1; // consume the empty slot
+    }
+
+    // Separators (odd indices)
+    if (hasSeparators) {
       if (adjustedIndex.isOdd) {
-        // This is a separator
         return separatorBuilder(context, adjustedIndex ~/ 2);
       }
-      // This is an item
       adjustedIndex = adjustedIndex ~/ 2;
     }
 
     // Build item
     if (adjustedIndex >= 0 && adjustedIndex < items.length) {
-      return itemBuilder(adjustedIndex, items[adjustedIndex]);
+      var child = itemBuilder(context, adjustedIndex, items[adjustedIndex]);
+      if (itemKeyBuilder != null) {
+        child = KeyedSubtree(
+          key: itemKeyBuilder(items[adjustedIndex]),
+          child: child,
+        );
+      }
+      return child;
     }
 
-    // Return an empty widget if index is out of bounds
     return const SizedBox.shrink();
   }
 }

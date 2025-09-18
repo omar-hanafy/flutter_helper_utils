@@ -20,7 +20,7 @@ Add the dependency in your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  flutter_helper_utils: <latest_version>
+  flutter_helper_utils: <latest_version>a
 ```
 
 Then import it into your Dart code:
@@ -30,6 +30,16 @@ import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 ```
 
 You’ll also automatically get the [`dart_helper_utils`](https://pub.dev/packages/dart_helper_utils) exports, so everything’s in one place.
+
+## Table of Contents
+
+- [Highlights](#highlights)
+- [Extensions](#extensions)
+- [Widgets](#widgets)
+- [Utilities](#utilities)
+- [Migration Guide](#migration-guide)
+- [Contributions](#contributions)
+- [License](#license)
 
 # Highlights
 ## PlatformEnv
@@ -79,26 +89,13 @@ items.add('New Item');  // Notifies listeners automatically
 
 ## TypedListView Widget
 
-A powerful, type-safe list view widget with built-in support for headers, footers, separators, and pagination:
+A powerful, type-safe list view widget that scales from simple lists to fully featured infinite feeds.
 
-- Type safety for list items
-- Optional headers and footers
-- Custom separators
-- Built-in pagination support
-- Optimized performance
-
-```dart
-TypedListView<Product>(
-  items: products,
-  itemBuilder: (context, product) => ProductCard(product: product),
-  headerBuilder: (context) => CategoryHeader(),
-  footerBuilder: (context) => LoadMoreButton(),
-  separatorBuilder: (context) => Divider(),
-  paginationWidget: CircularProgressIndicator(),
-  padding: EdgeInsets.all(16),
-  onScrollEnd: () => loadMoreProducts(),
-);
-```
+- Idiomatic `itemBuilder(context, index, item)` signature with optional `itemKeyBuilder`
+- Header/footer slots, separators or spacing, empty state builder, and pagination widget support
+- Infinite-scroll helpers (`onEndReached`, threshold, loading state) plus optional refresh indicator and scrollbar
+- Need a sliver? Use [TypedSliverList](#typedsilverlist) for `CustomScrollView` integrations
+- Deep dive ➜ [TypedListView](#typedlistview)
 
 ## Adaptive UI
 
@@ -132,6 +129,10 @@ to explore more.
 
 ## Theme Extensions
 
+- Access `ThemeData` straight from the context
+- Material 3 color getters (e.g. `surfaceContainerHigh`, `primaryFixedDim`) exposed as direct properties
+- Case-sensitive/insensitive lookup with `theme.colorFromScheme('primaryFixed')`
+
 ```dart
 // Get theme instance
 final theme = context.themeData;
@@ -148,13 +149,19 @@ Text('Some Text', style: theme.labelSmallCopy(color: theme.primary))
 final primary = theme.primary;        // Instead of theme.colorScheme.primary
 final onSurface = theme.onSurface;    // Instead of theme.colorScheme.onSurface
 final isLight = theme.isLight;        // Check if light theme
+
+// Lookup by name (case-insensitive optional)
+final surfaceContainerHighest =
+    theme.colorFromScheme('surfaceContainerHighest');
+final inversePrimary =
+    theme.colorFromScheme('InversePrimary', caseSensitive: false);
 ```
 
-## 🎨 Color Extensions
+## Color Toolkit
 
-A comprehensive suite of tools for color manipulation, conversion, and accessibility.
+A comprehensive suite of tools for color manipulation, palette generation, and accessibility.
 
-### Chainable Channel Setters
+### Channel Setters
 
 ```dart
 // Fluent API for modifying colors
@@ -178,7 +185,7 @@ final ratio = Colors.white.contrast(Colors.black); // 21.0
 final isDark = myColor.isDark();
 ```
 
-## 🎨 Color Harmonies & Palettes
+### Harmonies & Palettes
 
 Generate beautiful, theory-based color schemes directly from any color.
 
@@ -196,11 +203,11 @@ final monoShades = Colors.indigo.monochromatic(count: 7);
 final splitComp = Colors.purple.splitComplementary();
 ```
 
-## ♿ Accessibility & Color Blindness Simulation
+### Accessibility & Color Blindness
 
 Design inclusive apps with powerful accessibility tools.
 
-### WCAG Compliance
+#### WCAG Compliance
 
 ```dart
 // Check if text meets WCAG AA standard
@@ -216,7 +223,7 @@ final accessibleTextColor = suggestions.normalText;
 final accessibleIconColor = suggestions.uiComponent;
 ```
 
-### Color Blindness Simulation
+#### Color Blindness Simulation
 
 ```dart
 // Simulate how a color appears with Protanopia (red-blindness)
@@ -358,20 +365,56 @@ A type-safe, high-performance list view widget with built-in support for headers
 // Basic usage
 TypedListView<Product>(
   items: products,
-  itemBuilder: (context, product) => ProductCard(product),
+  itemBuilder: (context, index, product) => ProductCard(product: product),
 );
 
 // Advanced usage with all features
 TypedListView<Product>(
   items: products,
-  itemBuilder: (context, product) => ProductCard(product),
-  headerBuilder: (context) => CategoryHeader(),
-  footerBuilder: (context) => LoadMoreButton(),
-  separatorBuilder: (context) => const Divider(),
+  itemBuilder: (context, index, product) => ProductCard(product: product),
+  header: CategoryHeader(),
+  footer: LoadMoreButton(),
+  // use either separatorBuilder or simple spacing
+  // separatorBuilder: (context, _) => const Divider(),
+  spacing: 12,
   paginationWidget: const CircularProgressIndicator(),
-  padding: 16.edgeInsetsAll,
-  onScrollEnd: () => loadMoreProducts(),
+  padding: const EdgeInsets.all(16),
+  onEndReached: () => loadMoreProducts(),
+  onEndReachedThreshold: 300,
 );
+```
+
+## TypedSliverList
+
+TypedListView's sliver companion for `CustomScrollView` or `NestedScrollView` layouts. It keeps the same typed builder API while adding sliver-only conveniences like sliver headers/footers and `SliverFillRemaining` empty states.
+
+```dart
+class ProductsPage extends StatelessWidget {
+  const ProductsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final products = context.watch<ProductStore>().items;
+    final isFetchingMore = context.watch<ProductStore>().isLoadingMore;
+
+    return CustomScrollView(
+      slivers: [
+        const SliverAppBar(title: Text('Products'), floating: true),
+        products.buildSliverList(
+          itemBuilder: (context, index, product) => ProductTile(product: product),
+          sliverHeader: const SliverPadding(padding: EdgeInsets.all(16)),
+          spacing: 12,
+          paginationSliver: const SliverPadding(
+            padding: EdgeInsets.symmetric(vertical: 24),
+            sliver: SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
+          ),
+          onEndReached: context.read<ProductStore>().fetchNextPage,
+          isLoadingMore: isFetchingMore,
+        ),
+      ],
+    );
+  }
+}
 ```
 
 ## GradientWidget
@@ -569,124 +612,9 @@ color.setBlue(64)       // ✅ Clear intent: sets blue channel to 64
 - **Consistency**: Aligns with Flutter's naming conventions
 - **Future-proof**: Prepares for Flutter's own API changes
 
-### Color Harmonies - v8.x
+### Color Harmonies & Accessibility - v8.x
 
-Generate beautiful, harmonious color schemes based on color theory:
-
-**Available Harmonies:**
-
-```dart
-// Complementary - opposite on color wheel (180°)
-final opposite = Colors.blue.complementaryHarmony;
-
-// Triadic - 3 colors evenly spaced (120° apart)
-final triadic = Colors.red.triadic();
-// Returns approximately [red, green, blue]
-
-// Tetradic/Square - 4 colors evenly spaced (90° apart)
-final tetradic = Colors.orange.tetradic();
-
-// Split Complementary - base + 2 adjacent to complement
-final split = Colors.purple.splitComplementary(angle: 30);
-
-// Analogous - adjacent colors on the wheel
-final analogous = Colors.teal.analogous(
-  count: 5,      // Number of colors
-  angle: 30,     // Degrees between colors
-);
-
-// Monochromatic - shades of the same hue
-final mono = Colors.indigo.monochromatic(
-  count: 5,
-  lightnessRange: 0.7,  // Variation in lightness
-);
-```
-
-### WCAG Accessibility - v8.x
-
-Ensure your colors meet Web Content Accessibility Guidelines:
-
-**Contrast Checking:**
-
-```dart
-// Check if colors meet WCAG standards
-final meetsAA = background.meetsWCAG(
-  textColor,
-  level: WCAGLevel.aa,              // AA or AAA
-  context: WCAGContext.normalText,  // or largeText, uiComponent
-);
-
-// Get accessible color suggestions
-final suggestions = background.suggestAccessibleColors(
-  level: WCAGLevel.aaa,
-);
-
-// Use the suggestions
-Text(
-  'Important text',
-  style: TextStyle(color: suggestions.normalText),
-);
-
-IconButton(
-  icon: Icon(Icons.help, color: suggestions.uiComponent),
-  onPressed: () {},
-);
-```
-
-**WCAG Guidelines:**
-- Normal text: AA requires 4.5:1, AAA requires 7:1
-- Large text (18pt+/14pt+ bold): AA requires 3:1, AAA requires 4.5:1
-- UI components: 3:1 minimum
-
-### Color Blindness Support - v8.x
-
-Design inclusive interfaces that work for users with color vision deficiencies:
-
-```dart
-// Simulate how colors appear to users with color blindness
-final protanopia = color.simulateColorBlindness(
-  ColorBlindnessType.protanopia,    // Red-blind
-);
-final deuteranopia = color.simulateColorBlindness(
-  ColorBlindnessType.deuteranopia,  // Green-blind
-);
-final tritanopia = color.simulateColorBlindness(
-  ColorBlindnessType.tritanopia,    // Blue-blind
-);
-
-// Check if two colors are distinguishable
-if (!errorRed.isDistinguishableFor(
-  successGreen,
-  ColorBlindnessType.protanopia,
-  minContrast: 3.0,
-)) {
-  // Consider using different colors or additional indicators
-}
-
-// Real-world example: Status indicators
-final statusColors = {
-  'error': Colors.red,
-  'warning': Colors.orange,
-  'success': Colors.green,
-};
-
-// Verify all status colors are distinguishable
-for (final type in ColorBlindnessType.values) {
-  for (final entry1 in statusColors.entries) {
-    for (final entry2 in statusColors.entries) {
-      if (entry1.key != entry2.key) {
-        final distinguishable = entry1.value.isDistinguishableFor(
-          entry2.value,
-          type,
-        );
-        if (!distinguishable) {
-          print('${entry1.key} and ${entry2.key} may be confused by users with $type');
-        }
-      }
-    }
-  }
-}
-```
+All harmony generators, WCAG helpers, and color blindness utilities introduced in v8.x are documented in the [Color Toolkit](#color-toolkit). No additional migration is required—existing APIs remain stable once you adopt the new `set*` method names.
 
 ## Contributions
 
