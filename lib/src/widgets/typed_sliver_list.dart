@@ -130,7 +130,9 @@ class TypedSliverList<E> extends StatelessWidget {
             'Provide either footer or sliverFooter, not both.'),
         assert(
           (separatorBuilder == null && spacing == null) ||
-              (itemExtent == null && prototypeItem == null && itemExtentBuilder == null),
+              (itemExtent == null &&
+                  prototypeItem == null &&
+                  itemExtentBuilder == null),
           'Separators/spacing cannot be combined with itemExtent/prototypeItem/itemExtentBuilder.',
         );
 
@@ -171,7 +173,8 @@ class TypedSliverList<E> extends StatelessWidget {
   final FutureOr<void> Function()? onEndReached;
   final bool isLoadingMore;
 
-  bool get _hasSeparators => (separatorBuilder != null || spacing != null) && _items.length > 1;
+  bool get _hasSeparators =>
+      (separatorBuilder != null || spacing != null) && _items.length > 1;
 
   IndexedWidgetBuilder? get _effectiveSeparatorBuilder {
     if (separatorBuilder != null) return separatorBuilder;
@@ -214,7 +217,8 @@ class TypedSliverList<E> extends StatelessWidget {
 
     Widget composed = SliverMainAxisGroup(slivers: group);
     if (useSliverSafeArea) composed = SliverSafeArea(sliver: composed);
-    if (padding != null) composed = SliverPadding(padding: padding!, sliver: composed);
+    if (padding != null)
+      composed = SliverPadding(padding: padding!, sliver: composed);
     return composed;
   }
 
@@ -333,8 +337,8 @@ class _SliverOnEndReachedState extends State<_SliverOnEndReached> {
   Widget build(BuildContext context) {
     return SliverLayoutBuilder(
       builder: (ctx, constraints) {
-        final visibleOrCached =
-            constraints.remainingPaintExtent > 0 || constraints.remainingCacheExtent > 0;
+        final visibleOrCached = constraints.remainingPaintExtent > 0 ||
+            constraints.remainingCacheExtent > 0;
 
         if (visibleOrCached && _armed && !widget.isLoadingMore) {
           _armed = false;
@@ -343,8 +347,8 @@ class _SliverOnEndReachedState extends State<_SliverOnEndReached> {
           });
         } else if (!visibleOrCached) {
           _armed = true;
-}
- 
+        }
+
         return const SliverToBoxAdapter(child: SizedBox.shrink());
       },
     );
