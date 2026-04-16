@@ -1,0 +1,16 @@
+name: Publish to pub.dev
+
+on:
+  push:
+    tags:
+      - 'flutter_helper_utils-v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    permissions:
+      id-token: write
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1

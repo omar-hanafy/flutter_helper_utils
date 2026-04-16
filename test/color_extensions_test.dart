@@ -46,8 +46,11 @@ void main() {
 
     test('chaining set* methods works correctly', () {
       const color = Color(0xFF000000); // Black
-      final result =
-          color.setRed(255).setGreen(128).setBlue(64).setOpacity(0.75);
+      final result = color
+          .setRed(255)
+          .setGreen(128)
+          .setBlue(64)
+          .setOpacity(0.75);
 
       expect(result.r, closeTo(1.0, 0.001));
       expect(result.g, closeTo(0.502, 0.01));
@@ -62,43 +65,6 @@ void main() {
 
       final quarterOpacity = halfOpacity.scaleOpacity(0.5);
       expect(quarterOpacity.a, closeTo(0.25, 0.001));
-    });
-  });
-
-  group('FHUColorExt - Deprecated Methods', () {
-    test('deprecated addOpacity still works', () {
-      const color = Color(0xFFFF0000);
-      // ignore: deprecated_member_use_from_same_package
-      final result = color.addOpacity(0.5);
-      expect(result.a, closeTo(0.5, 0.001));
-    });
-
-    test('deprecated addAlpha still works', () {
-      const color = Color(0xFFFF0000);
-      // ignore: deprecated_member_use_from_same_package
-      final result = color.addAlpha(128);
-      expect(result.a, closeTo(0.502, 0.01));
-    });
-
-    test('deprecated addRed still works', () {
-      const color = Color(0xFF000000);
-      // ignore: deprecated_member_use_from_same_package
-      final result = color.addRed(255);
-      expect(result.r, closeTo(1.0, 0.001));
-    });
-
-    test('deprecated addGreen still works', () {
-      const color = Color(0xFF000000);
-      // ignore: deprecated_member_use_from_same_package
-      final result = color.addGreen(255);
-      expect(result.g, closeTo(1.0, 0.001));
-    });
-
-    test('deprecated addBlue still works', () {
-      const color = Color(0xFF000000);
-      // ignore: deprecated_member_use_from_same_package
-      final result = color.addBlue(255);
-      expect(result.b, closeTo(1.0, 0.001));
     });
   });
 

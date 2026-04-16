@@ -7,17 +7,25 @@ void main() {
     group('Direct conversion', () {
       test('converts hex strings', () {
         expect(
-            FConvertObject.toColor('#FF0000'), equals(const Color(0xFFFF0000)));
-        expect(FConvertObject.toColor('0xFF0000'),
-            equals(const Color(0xFFFF0000)));
+          FConvertObject.toColor('#FF0000'),
+          equals(const Color(0xFFFF0000)),
+        );
+        expect(
+          FConvertObject.toColor('0xFF0000'),
+          equals(const Color(0xFFFF0000)),
+        );
         expect(FConvertObject.toColor('#F00'), equals(const Color(0xFFFF0000)));
       });
 
       test('converts integers', () {
-        expect(FConvertObject.toColor(0xFFFF0000),
-            equals(const Color(0xFFFF0000)));
-        expect(FConvertObject.toColor(4294901760),
-            equals(const Color(0xFFFF0000)));
+        expect(
+          FConvertObject.toColor(0xFFFF0000),
+          equals(const Color(0xFFFF0000)),
+        );
+        expect(
+          FConvertObject.toColor(4294901760),
+          equals(const Color(0xFFFF0000)),
+        );
       });
 
       test('converts Color objects', () {
@@ -36,17 +44,25 @@ void main() {
       test('converts named colors', () {
         expect(FConvertObject.toColor('red'), equals(const Color(0xFFFF0000)));
         expect(FConvertObject.toColor('blue'), equals(const Color(0xFF0000FF)));
-        expect(FConvertObject.toColor('transparent'),
-            equals(const Color(0x00000000)));
+        expect(
+          FConvertObject.toColor('transparent'),
+          equals(const Color(0x00000000)),
+        );
       });
 
       test('converts rgb/hsl functions', () {
-        expect(FConvertObject.toColor('rgb(255, 0, 0)'),
-            equals(const Color(0xFFFF0000)));
-        expect(FConvertObject.toColor('rgba(255, 0, 0, 0.5)'),
-            equals(const Color(0x80FF0000)));
-        expect(FConvertObject.toColor('hsl(120, 100%, 50%)'),
-            equals(const Color(0xFF00FF00)));
+        expect(
+          FConvertObject.toColor('rgb(255, 0, 0)'),
+          equals(const Color(0xFFFF0000)),
+        );
+        expect(
+          FConvertObject.toColor('rgba(255, 0, 0, 0.5)'),
+          equals(const Color(0x80FF0000)),
+        );
+        expect(
+          FConvertObject.toColor('hsl(120, 100%, 50%)'),
+          equals(const Color(0xFF00FF00)),
+        );
       });
     });
 
@@ -117,12 +133,7 @@ void main() {
       });
 
       test('retrieves and converts from lists with mixed types', () {
-        final list = [
-          '#FF0000',
-          0xFF00FF00,
-          Colors.blue,
-          'rgb(255, 255, 0)',
-        ];
+        final list = ['#FF0000', 0xFF00FF00, Colors.blue, 'rgb(255, 255, 0)'];
 
         expect(list.getColor(0), equals(const Color(0xFFFF0000)));
         expect(list.getColor(1), equals(const Color(0xFF00FF00)));
@@ -184,13 +195,17 @@ void main() {
     group('Edge cases', () {
       test('handles numeric strings correctly', () {
         // This was the bug - numeric strings like "4294901760" should now work
-        expect(FConvertObject.toColor('4294901760'),
-            equals(const Color(0xFFFF0000)));
+        expect(
+          FConvertObject.toColor('4294901760'),
+          equals(const Color(0xFFFF0000)),
+        );
       });
 
       test('handles invalid inputs', () {
-        expect(() => FConvertObject.toColor(null),
-            throwsA(isA<ParsingException>()));
+        expect(
+          () => FConvertObject.toColor(null),
+          throwsA(isA<ConversionException>()),
+        );
         expect(FConvertObject.tryToColor('invalid'), isNull);
         expect(FConvertObject.tryToColor(''), isNull);
       });

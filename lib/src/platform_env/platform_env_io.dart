@@ -4,26 +4,11 @@ import 'package:flutter/foundation.dart';
 
 /// A platform-independent class providing information about the operating system,
 /// with web compatibility considerations.
-abstract class PlatformEnv {
-  /// Returns the `TargetPlatform` corresponding to the current operating system.
-  static TargetPlatform get targetPlatform {
-    switch (operatingSystem) {
-      case 'android':
-        return TargetPlatform.android;
-      case 'fuchsia':
-        return TargetPlatform.fuchsia;
-      case 'ios':
-        return TargetPlatform.iOS;
-      case 'linux':
-        return TargetPlatform.linux;
-      case 'macos':
-        return TargetPlatform.macOS;
-      case 'windows':
-        return TargetPlatform.windows;
-      default:
-        return defaultTargetPlatform;
-    }
-  }
+abstract final class PlatformEnv {
+  /// Returns Flutter's [defaultTargetPlatform].
+  ///
+  /// This respects Flutter test behavior and any debug platform override.
+  static TargetPlatform get targetPlatform => defaultTargetPlatform;
 
   /// Returns `true` if the current platform is Linux.
   static bool get isLinux => Platform.isLinux;
@@ -40,11 +25,42 @@ abstract class PlatformEnv {
   /// Returns `true` if the current platform is iOS.
   static bool get isIOS => Platform.isIOS;
 
-  /// Returns `true` if the current platform is not web.
+  /// Returns `false` since this is not a Web runtime.
   static bool get isWeb => false;
 
   /// Returns `true` if the current platform is Fuchsia.
   static bool get isFuchsia => Platform.isFuchsia;
+
+  /// Returns `true` if the current platform is a desktop OS (Linux, macOS, or Windows).
+  static bool get isDesktop =>
+      Platform.isLinux || Platform.isMacOS || Platform.isWindows;
+
+  /// Returns `true` if the current platform is a mobile OS (Android or iOS).
+  static bool get isMobile => Platform.isAndroid || Platform.isIOS;
+
+  /// Returns `true` if the current platform is an Apple OS (macOS or iOS).
+  static bool get isApple => Platform.isMacOS || Platform.isIOS;
+
+  /// Returns `false` since this is not a Web runtime.
+  static bool get isWasm => false;
+
+  /// Returns 'N/A' since user agent is not available on non-web platforms.
+  static String get userAgent => 'N/A';
+
+  /// Returns 'N/A' since browser engine detection is not applicable on native platforms.
+  static String get browserEngine => 'N/A';
+
+  /// Returns `false` since browser engine detection is not applicable on native platforms.
+  static bool get isChromium => false;
+
+  /// Returns `false` since browser engine detection is not applicable on native platforms.
+  static bool get isSafari => false;
+
+  /// Returns `false` since browser engine detection is not applicable on native platforms.
+  static bool get isFirefox => false;
+
+  /// Returns `false` since browser engine detection is not applicable on native platforms.
+  static bool get isEdge => false;
 
   /// Returns the name of the operating system.
   static String get operatingSystem => Platform.operatingSystem;
@@ -86,30 +102,44 @@ abstract class PlatformEnv {
   static String? get packageConfig => Platform.packageConfig;
 
   /// Returns the system's default line terminator.
-  static String get lineTerminator => Platform.isWindows ? '\r\n' : '\n';
+  static String get lineTerminator => Platform.lineTerminator;
 
-  static Map<String, String> report() => {
-        'targetPlatform': targetPlatform.name,
-        'isLinux': '$isLinux',
-        'isMacOS': '$isMacOS',
-        'isWindows': '$isWindows',
-        'isAndroid': '$isAndroid',
-        'isIOS': '$isIOS',
-        'isWeb': '$isWeb',
-        'isFuchsia': '$isFuchsia',
-        'operatingSystem': operatingSystem,
-        'operatingSystemVersion': operatingSystemVersion,
-        'numberOfProcessors': '$numberOfProcessors',
-        'pathSeparator': pathSeparator,
-        'localHostname': localHostname,
-        'version': version,
-        'localeName': localeName,
-        ...environment,
-        'executable': executable,
-        'resolvedExecutable': resolvedExecutable,
-        'script': '$script',
-        'executableArguments': '$executableArguments',
-        'packageConfig': '$packageConfig',
-        'lineTerminator': lineTerminator,
-      };
+  /// Returns a diagnostic map that is safe to log by default.
+  ///
+  /// Set [includeEnvironment] to `true` only if you are sure it will not leak
+  /// secrets in logs.
+  static Map<String, Object?> report({bool includeEnvironment = false}) => {
+    'targetPlatform': targetPlatform.name,
+    'isLinux': isLinux,
+    'isMacOS': isMacOS,
+    'isWindows': isWindows,
+    'isAndroid': isAndroid,
+    'isIOS': isIOS,
+    'isWeb': isWeb,
+    'isFuchsia': isFuchsia,
+    'isDesktop': isDesktop,
+    'isMobile': isMobile,
+    'isApple': isApple,
+    'isWasm': isWasm,
+    'userAgent': userAgent,
+    'browserEngine': browserEngine,
+    'isChromium': isChromium,
+    'isSafari': isSafari,
+    'isFirefox': isFirefox,
+    'isEdge': isEdge,
+    'operatingSystem': operatingSystem,
+    'operatingSystemVersion': operatingSystemVersion,
+    'numberOfProcessors': numberOfProcessors,
+    'pathSeparator': pathSeparator,
+    'localHostname': localHostname,
+    'version': version,
+    'localeName': localeName,
+    'executable': executable,
+    'resolvedExecutable': resolvedExecutable,
+    'script': script.toString(),
+    'executableArguments': executableArguments,
+    'packageConfig': packageConfig,
+    'lineTerminator': lineTerminator,
+    if (includeEnvironment) 'environment': environment,
+  };
 }

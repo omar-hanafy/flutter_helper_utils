@@ -3,10 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show ItemExtentBuilder;
 
-import 'typed_list_view.dart' show ItemKeyBuilder, TypedListViewBuilder;
+import 'package:flutter_helper_utils/src/widgets/typed_list_view.dart'
+    show ItemKeyBuilder, TypedListViewBuilder;
 
 /// Sugar: build a typed sliver list directly from an Iterable.
 extension IterableTypedSliverListExtension<E> on Iterable<E> {
+  /// Builds a [TypedSliverList] from this iterable.
+  ///
+  /// The iterable is eagerly converted to a list so the sliver can access items
+  /// by index and keep stable ordering for keyed children.
   Widget buildSliverList({
     // Content
     required TypedListViewBuilder<E> itemBuilder,
@@ -28,7 +33,7 @@ extension IterableTypedSliverListExtension<E> on Iterable<E> {
     bool addRepaintBoundaries = true,
     bool addSemanticIndexes = true,
     ItemKeyBuilder<E>? itemKeyBuilder,
-    ChildIndexGetter? findChildIndexCallback,
+    ChildIndexGetter? findItemIndexCallback,
 
     // Extent options (cannot be combined with separators/spacing)
     double? itemExtent,
@@ -61,7 +66,7 @@ extension IterableTypedSliverListExtension<E> on Iterable<E> {
       addRepaintBoundaries: addRepaintBoundaries,
       addSemanticIndexes: addSemanticIndexes,
       itemKeyBuilder: itemKeyBuilder,
-      findChildIndexCallback: findChildIndexCallback,
+      findItemIndexCallback: findItemIndexCallback,
       itemExtent: itemExtent,
       prototypeItem: prototypeItem,
       itemExtentBuilder: itemExtentBuilder,
@@ -80,6 +85,7 @@ extension IterableTypedSliverListExtension<E> on Iterable<E> {
 /// extent variants), empty state, optional pagination widget/sliver, and
 /// optional sliver/box footer.
 class TypedSliverList<E> extends StatelessWidget {
+  /// Creates a typed sliver section with optional headers, footers, and loading UI.
   const TypedSliverList({
     // Content
     required List<E> items,
@@ -103,7 +109,7 @@ class TypedSliverList<E> extends StatelessWidget {
     this.addRepaintBoundaries = true,
     this.addSemanticIndexes = true,
     this.itemKeyBuilder,
-    this.findChildIndexCallback,
+    this.findItemIndexCallback,
 
     // Extent options (exclusive with separators/spacing)
     this.itemExtent,
@@ -118,59 +124,113 @@ class TypedSliverList<E> extends StatelessWidget {
     // Infinite scroll sentinel
     this.onEndReached,
     this.isLoadingMore = false,
-  })  : _items = items,
-        _itemBuilder = itemBuilder,
-        assert(!(separatorBuilder != null && spacing != null),
-            'Provide either separatorBuilder or spacing, not both.'),
-        assert(!(paginationWidget != null && paginationSliver != null),
-            'Provide either paginationWidget or paginationSliver, not both.'),
-        assert(!(header != null && sliverHeader != null),
-            'Provide either header or sliverHeader, not both.'),
-        assert(!(footer != null && sliverFooter != null),
-            'Provide either footer or sliverFooter, not both.'),
-        assert(
-          (separatorBuilder == null && spacing == null) ||
-              (itemExtent == null &&
-                  prototypeItem == null &&
-                  itemExtentBuilder == null),
-          'Separators/spacing cannot be combined with itemExtent/prototypeItem/itemExtentBuilder.',
-        );
+  }) : _items = items,
+       _itemBuilder = itemBuilder,
+       assert(
+         !(separatorBuilder != null && spacing != null),
+         'Provide either separatorBuilder or spacing, not both.',
+       ),
+       assert(
+         !(paginationWidget != null && paginationSliver != null),
+         'Provide either paginationWidget or paginationSliver, not both.',
+       ),
+       assert(
+         !(header != null && sliverHeader != null),
+         'Provide either header or sliverHeader, not both.',
+       ),
+       assert(
+         !(footer != null && sliverFooter != null),
+         'Provide either footer or sliverFooter, not both.',
+       ),
+       assert(
+         (separatorBuilder == null && spacing == null) ||
+             (itemExtent == null &&
+                 prototypeItem == null &&
+                 itemExtentBuilder == null),
+         'Separators/spacing cannot be combined with itemExtent/prototypeItem/itemExtentBuilder.',
+       );
 
   // Content
   final List<E> _items;
   final TypedListViewBuilder<E> _itemBuilder;
+
+  /// Optional box widget inserted before the item sliver.
   final Widget? header;
+
+  /// Optional box widget inserted after the item sliver.
   final Widget? footer;
+
+  /// Optional sliver inserted before the item sliver.
   final Widget? sliverHeader;
+
+  /// Optional sliver inserted after the item sliver.
   final Widget? sliverFooter;
 
   // Decorations
+
+  /// Builder used to insert separators between items.
   final IndexedWidgetBuilder? separatorBuilder;
+
+  /// Fixed gap inserted between items when [separatorBuilder] is null.
   final double? spacing;
+
+  /// Box widget shown after the items, typically for pagination UI.
   final Widget? paginationWidget;
+
+  /// Sliver shown after the items, typically for pagination UI.
   final Widget? paginationSliver;
+
+  /// Builder used when the item list is empty.
   final WidgetBuilder? emptyBuilder;
+
+  /// Whether the empty state should occupy the remaining viewport space.
   final bool fillRemainingWhenEmpty;
 
   // Behavior / perf
+
+  /// Whether item children should keep their state alive when offscreen.
   final bool addAutomaticKeepAlives;
+
+  /// Whether item children should be wrapped in repaint boundaries.
   final bool addRepaintBoundaries;
+
+  /// Whether semantic indexes should be assigned to item children.
   final bool addSemanticIndexes;
+
+  /// Stable key builder used to preserve child identity across rebuilds.
   final ItemKeyBuilder<E>? itemKeyBuilder;
-  final ChildIndexGetter? findChildIndexCallback;
+
+  /// Optional key-to-index lookup for custom child indexing.
+  final ChildIndexGetter? findItemIndexCallback;
 
   // Extent options
+
+  /// Fixed extent used for every item when no separators are present.
   final double? itemExtent;
+
+  /// Prototype widget used to estimate a shared item extent.
   final Widget? prototypeItem;
+
+  /// Per-index extent builder used by sliver extent list variants.
   final ItemExtentBuilder? itemExtentBuilder;
 
   // Layout niceties
+
+  /// Main scroll axis used to interpret [spacing].
   final Axis mainAxis;
+
+  /// Optional padding applied around the composed sliver group.
   final EdgeInsetsGeometry? padding;
+
+  /// Whether to wrap the composed sliver group in [SliverSafeArea].
   final bool useSliverSafeArea;
 
   // Infinite scroll
+
+  /// Callback triggered when the end-reached sentinel becomes visible.
   final FutureOr<void> Function()? onEndReached;
+
+  /// Whether additional content is currently loading after the last item.
   final bool isLoadingMore;
 
   bool get _hasSeparators =>
@@ -201,10 +261,12 @@ class TypedSliverList<E> extends StatelessWidget {
     } else {
       group.add(_buildItemsSliver());
       if (onEndReached != null) {
-        group.add(_SliverOnEndReached(
-          onEndReached: onEndReached!,
-          isLoadingMore: isLoadingMore,
-        ));
+        group.add(
+          _SliverOnEndReached(
+            onEndReached: onEndReached!,
+            isLoadingMore: isLoadingMore,
+          ),
+        );
       }
       if (paginationSliver != null) group.add(paginationSliver!);
       if (paginationWidget != null) {
@@ -231,23 +293,19 @@ class TypedSliverList<E> extends StatelessWidget {
       return KeyedSubtree(key: itemKeyBuilder!(_items[index]), child: child);
     }
 
-    // Child index getter based on keys -> flattened index when needed.
+    // Item index getter based on keys.
     ChildIndexGetter? effectiveIndexGetter;
     if (itemKeyBuilder != null) {
       effectiveIndexGetter = (Key key) {
         for (var i = 0; i < _items.length; i++) {
           if (itemKeyBuilder!(_items[i]) == key) {
-            return _hasSeparators ? i * 2 : i;
+            return i;
           }
         }
         return null;
       };
-    } else if (findChildIndexCallback != null) {
-      effectiveIndexGetter = (Key key) {
-        final itemIndex = findChildIndexCallback!(key);
-        if (itemIndex == null) return null;
-        return _hasSeparators ? itemIndex * 2 : itemIndex;
-      };
+    } else if (findItemIndexCallback != null) {
+      effectiveIndexGetter = findItemIndexCallback;
     }
 
     // Separated list
@@ -257,7 +315,7 @@ class TypedSliverList<E> extends StatelessWidget {
         itemBuilder: itemBuilder,
         separatorBuilder: sep,
         itemCount: _items.length,
-        findChildIndexCallback: effectiveIndexGetter,
+        findItemIndexCallback: effectiveIndexGetter,
         addAutomaticKeepAlives: addAutomaticKeepAlives,
         addRepaintBoundaries: addRepaintBoundaries,
         addSemanticIndexes: addSemanticIndexes,
@@ -338,7 +396,8 @@ class _SliverOnEndReachedState extends State<_SliverOnEndReached> {
   Widget build(BuildContext context) {
     return SliverLayoutBuilder(
       builder: (ctx, constraints) {
-        final visibleOrCached = constraints.remainingPaintExtent > 0 ||
+        final visibleOrCached =
+            constraints.remainingPaintExtent > 0 ||
             constraints.remainingCacheExtent > 0;
 
         if (visibleOrCached && _armed && !widget.isLoadingMore) {

@@ -1,5 +1,45 @@
 # CHANGELOG
 
+## 9.0.0
+
+Version 9 is a surface cleanup release.
+
+For full migration details, see `migration_guides.md`.
+
+### Breaking
+- Updated the package to align with `dart_helper_utils` v6.
+- Notifier utilities were moved out to the dedicated
+  `better_value_notifier` package.
+- Removed deprecated color aliases:
+  - `addOpacity`
+  - `addAlpha`
+  - `addRed`
+  - `addGreen`
+  - `addBlue`
+- Removed `GradientWidget.gradientAlignment`.
+- Removed low-value widget sugar:
+  - `align.dart`
+  - `padding.dart`
+  - `list_widget.dart`
+- Removed extra root entrypoints that were not needed:
+  - `core.dart`
+  - `colors.dart`
+  - `widgets.dart`
+- Navigation, focus, and `AsyncSnapshot` helpers now use the finalized v9 API
+  naming.
+
+### Fixed
+- `PlatformTypeProvider` is now safe to place above `MaterialApp` at the app
+  root.
+- Color parsing semantics were corrected for 4-digit and 8-digit hex input and
+  for `hwb(...)`.
+- `TypedSliverList` now follows the current Flutter sliver API.
+
+### Added
+- Rebuilt the example app for the v9 surface.
+- Added tests for the root-safe adaptive UI provider and the new color and
+  carousel behavior.
+
 ## 8.5.0
 
 ### Breaking

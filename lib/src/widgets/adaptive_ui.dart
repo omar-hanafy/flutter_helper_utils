@@ -1,8 +1,15 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
+/// Default mobile breakpoint constant used throughout the package.
 const mobileBreakPoint = Breakpoint.mobile();
+
+/// Default tablet breakpoint constant used throughout the package.
 const tabletBreakPoint = Breakpoint.tablet();
+
+/// Default desktop breakpoint constant used throughout the package.
 const desktopBreakPoint = Breakpoint.desktop();
 
 /// Base class for defining breakpoints.
@@ -17,22 +24,13 @@ class Breakpoint {
   const Breakpoint({required this.width, required this.name});
 
   /// Creates a mobile breakpoint with a default width of 600.
-  const Breakpoint.mobile({
-    this.width = 600,
-    this.name = 'mobile',
-  });
+  const Breakpoint.mobile({this.width = 600, this.name = 'mobile'});
 
   /// Creates a tablet breakpoint with a default width of 1200.
-  const Breakpoint.tablet({
-    this.width = 1200,
-    this.name = 'tablet',
-  });
+  const Breakpoint.tablet({this.width = 1200, this.name = 'tablet'});
 
   /// Creates a desktop breakpoint with a default width of 1800.
-  const Breakpoint.desktop({
-    this.width = 1800,
-    this.name = 'desktop',
-  });
+  const Breakpoint.desktop({this.width = 1800, this.name = 'desktop'});
 
   /// The minimum width of the breakpoint.
   final double width;
@@ -111,14 +109,8 @@ class Breakpoint {
   ///
   /// You can provide a new [name] and/or [width] to create a new instance
   /// of [Breakpoint] with the updated values.
-  Breakpoint copyWith({
-    required String name,
-    double? width,
-  }) {
-    return Breakpoint(
-      width: width ?? this.width,
-      name: name,
-    );
+  Breakpoint copyWith({required String name, double? width}) {
+    return Breakpoint(width: width ?? this.width, name: name);
   }
 
   /// Retrieves the active breakpoint from the context.
@@ -132,8 +124,8 @@ class Breakpoint {
   /// Throws a [FlutterError] if the context does not contain a `PlatformTypeProvider`.
   static Breakpoint of(BuildContext context, {bool listen = true}) {
     if (listen) {
-      final result =
-          context.dependOnInheritedWidgetOfExactType<_PlatformTypeInherited>();
+      final result = context
+          .dependOnInheritedWidgetOfExactType<_PlatformTypeInherited>();
       if (result == null) {
         throw FlutterError(
           'Breakpoint.of() called with a context that does not contain a PlatformTypeProvider.',
@@ -158,6 +150,7 @@ class Breakpoint {
   /// e.g. "mobile: 600".
   String toPrettyString() => '$name: $width';
 
+  /// Default breakpoint set used by [PlatformTypeProvider].
   static const List<Breakpoint> defaults = [
     mobileBreakPoint,
     tabletBreakPoint,
@@ -187,8 +180,13 @@ class PlatformSizeInfo {
     required this.orientation,
   });
 
+  /// Active breakpoint selected for the current width.
   final Breakpoint breakpoint;
+
+  /// Current device orientation from the surrounding layout context.
   final Orientation orientation;
+
+  /// Target platform reported by Flutter for the current app.
   final TargetPlatform platform;
 }
 
@@ -219,7 +217,7 @@ class _PlatformTypeInherited extends InheritedWidget {
 ///     child: MyApp(),
 /// ));
 /// ```
-class PlatformTypeProvider extends StatefulWidget {
+class PlatformTypeProvider extends StatelessWidget {
   /// Creates an instance of [PlatformTypeProvider].
   ///
   /// [child] - The widget below this widget in the tree.
@@ -236,49 +234,55 @@ class PlatformTypeProvider extends StatefulWidget {
   /// Defines the breakpoints used for platform type detection.
   final List<Breakpoint> breakpoints;
 
-  @override
-  State<PlatformTypeProvider> createState() => _PlatformTypeProviderState();
-}
-
-class _PlatformTypeProviderState extends State<PlatformTypeProvider> {
-  late Breakpoint _currentBreakpoint;
-  final List<Breakpoint> breakpoints = [];
-
-  @override
-  void initState() {
-    super.initState();
-    breakpoints
-      ..clear()
-      ..addAll(widget.breakpoints)
-      ..sort((a, b) {
-        return a.width.compareTo(b.width);
-      });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updatePlatformType();
-    });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _updatePlatformType();
-  }
-
-  void _updatePlatformType() {
-    setState(() {
-      _currentBreakpoint = getBreakpoint(context.sizePx, breakpoints);
-    });
-  }
+  List<Breakpoint> get _sortedBreakpoints =>
+      [...breakpoints]..sort((a, b) => a.width.compareTo(b.width));
 
   @override
   Widget build(BuildContext context) {
-    return _PlatformTypeInherited(
-      breakpoint: _currentBreakpoint,
-      child: widget.child,
+    final sortedBreakpoints = _sortedBreakpoints;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = _resolveAvailableSize(context, constraints);
+        return _PlatformTypeInherited(
+          breakpoint: getBreakpoint(size, sortedBreakpoints),
+          child: child,
+        );
+      },
     );
   }
 }
 
+Size _resolveAvailableSize(BuildContext context, BoxConstraints constraints) {
+  final maxWidth = constraints.maxWidth;
+  final maxHeight = constraints.maxHeight;
+  if (maxWidth.isFinite &&
+      maxHeight.isFinite &&
+      maxWidth > 0 &&
+      maxHeight > 0) {
+    return Size(maxWidth, maxHeight);
+  }
+
+  final mediaQuerySize = MediaQuery.maybeSizeOf(context);
+  if (mediaQuerySize != null &&
+      mediaQuerySize.width > 0 &&
+      mediaQuerySize.height > 0) {
+    return mediaQuerySize;
+  }
+
+  final FlutterView? view = View.maybeOf(context);
+  if (view != null &&
+      view.physicalSize.width > 0 &&
+      view.physicalSize.height > 0) {
+    return view.physicalSize / view.devicePixelRatio;
+  }
+
+  return Size.zero;
+}
+
+/// Returns the first breakpoint whose width is greater than or equal to [size].
+///
+/// If [size] exceeds every configured width, the last breakpoint is returned.
 Breakpoint getBreakpoint(Size size, List<Breakpoint> breakpoints) {
   for (final breakpoint in breakpoints) {
     if (size.width <= breakpoint.width) {
@@ -304,22 +308,21 @@ extension FHUBuildContextPlatformExtension on BuildContext {
 
   /// Gets the current [PlatformSizeInfo] for the given [BuildContext].
   PlatformSizeInfo get platformSizeInfo => PlatformSizeInfo(
-        breakpoint: watchBreakpoint,
-        orientation: deviceOrientation,
-        platform: PlatformEnv.targetPlatform,
-      );
+    breakpoint: watchBreakpoint,
+    orientation: deviceOrientation,
+    platform: PlatformEnv.targetPlatform,
+  );
 }
 
+/// Builds with the current [PlatformSizeInfo] from the nearest provider.
 class PlatformInfoLayoutBuilder extends StatelessWidget {
   /// Creates an instance of [PlatformInfoLayoutBuilder].
   ///
   /// [builder] - A function that takes the [BuildContext] and [PlatformSizeInfo] to build the widget.
   /// [breakpoints] - Defines the breakpoints used for platform type detection.
-  const PlatformInfoLayoutBuilder({
-    required this.builder,
-    super.key,
-  });
+  const PlatformInfoLayoutBuilder({required this.builder, super.key});
 
+  /// Builds a widget from the current [PlatformSizeInfo].
   final Widget Function(BuildContext, PlatformSizeInfo) builder;
 
   @override
@@ -328,15 +331,14 @@ class PlatformInfoLayoutBuilder extends StatelessWidget {
   }
 }
 
+/// Builds with the active [Breakpoint] from the nearest provider.
 class BreakpointLayoutBuilder extends StatelessWidget {
   /// Creates an instance of [BreakpointLayoutBuilder].
   ///
   /// [builder] - A function that takes the [BuildContext] and [Breakpoint] to build the widget.
-  const BreakpointLayoutBuilder({
-    required this.builder,
-    super.key,
-  });
+  const BreakpointLayoutBuilder({required this.builder, super.key});
 
+  /// Builds a widget from the current [Breakpoint].
   final Widget Function(BuildContext, Breakpoint) builder;
 
   @override

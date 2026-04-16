@@ -11,7 +11,7 @@ enum WCAGLevel {
   aa,
 
   /// AAA level: 7:1 for normal text, 4.5:1 for large text
-  aaa
+  aaa,
 }
 
 /// Context for WCAG contrast evaluation
@@ -23,7 +23,7 @@ enum WCAGContext {
   largeText,
 
   /// UI components and graphical objects
-  uiComponent
+  uiComponent,
 }
 
 /// Types of color blindness (color vision deficiency)
@@ -47,6 +47,10 @@ enum ColorBlindnessType {
 /// consistent behavior (for example, when computing luminance or performing
 /// HSL transformations).
 extension FHUColorExt on Color {
+  /// Wraps this color in a constant [WidgetStateProperty].
+  ///
+  /// Use this when an API expects a state property but the color should stay
+  /// the same for every widget state.
   WidgetStateProperty<Color> get toWidgetStateProperty =>
       WidgetStateProperty.all(this);
 
@@ -160,8 +164,10 @@ extension FHUColorExt on Color {
 
   /// Darkens the color in sRGB HSL by the given [amount], from 0.0 to 1.0.
   Color darken([double amount = 0.1]) {
-    assert(amount >= 0 && amount <= 1,
-        'Darken amount must be between 0.0 and 1.0');
+    assert(
+      amount >= 0 && amount <= 1,
+      'Darken amount must be between 0.0 and 1.0',
+    );
     final hsl = HSLColor.fromColor(_toSRGB());
     final newLightness = (hsl.lightness - amount).clamp(0.0, 1.0);
     return hsl.withLightness(newLightness).toColor()._toSRGB();
@@ -169,8 +175,10 @@ extension FHUColorExt on Color {
 
   /// Lightens the color in sRGB HSL by the given [amount], from 0.0 to 1.0.
   Color lighten([double amount = 0.1]) {
-    assert(amount >= 0 && amount <= 1,
-        'Lighten amount must be between 0.0 and 1.0');
+    assert(
+      amount >= 0 && amount <= 1,
+      'Lighten amount must be between 0.0 and 1.0',
+    );
     final hsl = HSLColor.fromColor(_toSRGB());
     final newLightness = (hsl.lightness + amount).clamp(0.0, 1.0);
     return hsl.withLightness(newLightness).toColor()._toSRGB();
@@ -180,7 +188,9 @@ extension FHUColorExt on Color {
   /// [amount] indicates how much black is mixed in.
   Color shade([double amount = 0.1]) {
     assert(
-        amount >= 0 && amount <= 1, 'Shade amount must be between 0.0 and 1.0');
+      amount >= 0 && amount <= 1,
+      'Shade amount must be between 0.0 and 1.0',
+    );
     return Color.lerp(_toSRGB(), Colors.black._toSRGB(), amount)!._toSRGB();
   }
 
@@ -188,7 +198,9 @@ extension FHUColorExt on Color {
   /// [amount] indicates how much white is mixed in.
   Color tint([double amount = 0.1]) {
     assert(
-        amount >= 0 && amount <= 1, 'Tint amount must be between 0.0 and 1.0');
+      amount >= 0 && amount <= 1,
+      'Tint amount must be between 0.0 and 1.0',
+    );
     return Color.lerp(_toSRGB(), Colors.white._toSRGB(), amount)!._toSRGB();
   }
 
@@ -263,8 +275,10 @@ extension FHUColorExt on Color {
   /// final semiTransparent = Colors.red.setOpacity(0.5);
   /// ```
   Color setOpacity(double opacity) {
-    assert(opacity >= 0.0 && opacity <= 1.0,
-        'Opacity must be between 0.0 and 1.0.');
+    assert(
+      opacity >= 0.0 && opacity <= 1.0,
+      'Opacity must be between 0.0 and 1.0.',
+    );
     return withValues(alpha: opacity);
   }
 
@@ -299,37 +313,12 @@ extension FHUColorExt on Color {
 
   /// Scales the current alpha by [factor], keeping the same color space.
   Color scaleOpacity(double factor) {
-    assert(factor >= 0.0 && factor <= 1.0,
-        'Scale factor must be between 0.0 and 1.0.');
+    assert(
+      factor >= 0.0 && factor <= 1.0,
+      'Scale factor must be between 0.0 and 1.0.',
+    );
     return withValues(alpha: a * factor);
   }
-
-  // ===============================================
-  //        Migration Helpers (Deprecated)
-  // ===============================================
-
-  /// **DEPRECATED**: Use [setOpacity] instead.
-  ///
-  /// This method exists only to help migrate from Flutter's deprecated
-  /// `withOpacity` method. It will be removed in version 2.0.
-  ///
-  /// Migration guide:
-  /// - Replace `color.withOpacity(0.5)` with `color.setOpacity(0.5)`
-  /// - Or use Flutter's `color.withValues(alpha: 0.5)`
-  @Deprecated('Use setOpacity() instead. Will be removed in the future')
-  Color addOpacity(double opacity) => setOpacity(opacity);
-
-  @Deprecated('Use setAlpha() instead. Will be removed in the future')
-  Color addAlpha(int alpha) => setAlpha(alpha);
-
-  @Deprecated('Use setRed() instead. Will be removed in the future')
-  Color addRed(int red) => setRed(red);
-
-  @Deprecated('Use setGreen() instead. Will be removed in the future')
-  Color addGreen(int green) => setGreen(green);
-
-  @Deprecated('Use setBlue() instead. Will be removed in the future')
-  Color addBlue(int blue) => setBlue(blue);
 
   // ------------------------------------------------------
   //        Color Harmonies
@@ -358,22 +347,18 @@ extension FHUColorExt on Color {
   /// final colors = Colors.red.triadic();
   /// // Returns [red, green, blue] approximately
   /// ```
-  List<Color> triadic() => [
-        this,
-        _rotateHue(120),
-        _rotateHue(240),
-      ];
+  List<Color> triadic() => [this, _rotateHue(120), _rotateHue(240)];
 
   /// Generates a tetradic (square) color harmony.
   ///
   /// Returns 4 colors evenly spaced around the color wheel (90° apart).
   /// This creates a rich, varied color scheme with two complementary pairs.
   List<Color> tetradic() => [
-        this,
-        _rotateHue(90),
-        _rotateHue(180),
-        _rotateHue(270),
-      ];
+    this,
+    _rotateHue(90),
+    _rotateHue(180),
+    _rotateHue(270),
+  ];
 
   /// Generates a split-complementary color harmony.
   ///
@@ -382,13 +367,11 @@ extension FHUColorExt on Color {
   ///
   /// The [angle] parameter controls the split (default 30°).
   List<Color> splitComplementary({double angle = 30.0}) {
-    assert(angle > 0 && angle < 90,
-        'Split angle must be between 0 and 90 degrees');
-    return [
-      this,
-      _rotateHue(180 - angle),
-      _rotateHue(180 + angle),
-    ];
+    assert(
+      angle > 0 && angle < 90,
+      'Split angle must be between 0 and 90 degrees',
+    );
+    return [this, _rotateHue(180 - angle), _rotateHue(180 + angle)];
   }
 
   /// Generates an analogous color harmony.
@@ -407,8 +390,10 @@ extension FHUColorExt on Color {
   /// ```
   List<Color> analogous({int count = 3, double angle = 30.0}) {
     assert(count >= 2, 'Count must be at least 2');
-    assert(angle > 0 && angle <= 60,
-        'Angle must be between 0 and 60 degrees for analogous harmony');
+    assert(
+      angle > 0 && angle <= 60,
+      'Angle must be between 0 and 60 degrees for analogous harmony',
+    );
 
     final colors = <Color>[];
     final halfCount = count ~/ 2;
@@ -431,26 +416,36 @@ extension FHUColorExt on Color {
   /// - [lightnessRange]: Range of lightness variation (0.0 to 1.0)
   List<Color> monochromatic({int count = 5, double lightnessRange = 0.5}) {
     assert(count >= 2, 'Count must be at least 2');
-    assert(lightnessRange > 0 && lightnessRange <= 1.0,
-        'Lightness range must be between 0 and 1');
+    assert(
+      lightnessRange > 0 && lightnessRange <= 1.0,
+      'Lightness range must be between 0 and 1',
+    );
 
     final srgb = _toSRGB();
     final hsl = HSLColor.fromColor(srgb);
     final colors = <Color>[];
 
     final currentLightness = hsl.lightness;
-    final minLightness =
-        (currentLightness - lightnessRange / 2).clamp(0.0, 1.0);
-    final maxLightness =
-        (currentLightness + lightnessRange / 2).clamp(0.0, 1.0);
+    final minLightness = (currentLightness - lightnessRange / 2).clamp(
+      0.0,
+      1.0,
+    );
+    final maxLightness = (currentLightness + lightnessRange / 2).clamp(
+      0.0,
+      1.0,
+    );
     final step = (maxLightness - minLightness) / (count - 1);
 
     for (var i = 0; i < count; i++) {
       final lightness = minLightness + (i * step);
       final color = hsl.withLightness(lightness).toColor();
-      colors.add(colorSpace == ColorSpace.sRGB
-          ? color.withAlpha((a * 255).round())
-          : color.withAlpha((a * 255).round()).convertToColorSpace(colorSpace));
+      colors.add(
+        colorSpace == ColorSpace.sRGB
+            ? color.withAlpha((a * 255).round())
+            : color
+                  .withAlpha((a * 255).round())
+                  .convertToColorSpace(colorSpace),
+      );
     }
 
     return colors;
@@ -498,13 +493,8 @@ extension FHUColorExt on Color {
   /// Returns a record with suggested colors for different contexts.
   /// If the default black/white suggestions don't meet requirements,
   /// it attempts to find the best alternatives.
-  ({
-    Color normalText,
-    Color largeText,
-    Color uiComponent,
-  }) suggestAccessibleColors({
-    WCAGLevel level = WCAGLevel.aa,
-  }) {
+  ({Color normalText, Color largeText, Color uiComponent})
+  suggestAccessibleColors({WCAGLevel level = WCAGLevel.aa}) {
     // Start with simple black or white
     final black = Colors.black._toSRGB();
     final white = Colors.white._toSRGB();
@@ -660,12 +650,7 @@ extension FHUColorExt on Color {
     final g = toSRGB(ng).clamp(0.0, 1.0);
     final b = toSRGB(nb).clamp(0.0, 1.0);
 
-    final simulated = Color.from(
-      alpha: srgb.a,
-      red: r,
-      green: g,
-      blue: b,
-    );
+    final simulated = Color.from(alpha: srgb.a, red: r, green: g, blue: b);
 
     // Preserve original color space
     return colorSpace == ColorSpace.sRGB
