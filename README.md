@@ -1,14 +1,33 @@
-# Flutter Helper Utils
-
-`flutter_helper_utils` is a curated Flutter utility package focused on a few
-high-value areas:
-
-- adaptive UI and breakpoint helpers
-- color parsing, transformation, and accessibility utilities
-- typed list and sliver list widgets
-- focused `BuildContext` and UI sugar when you want it
-- `dart_helper_utils` re-exported for the Dart-only helpers that still fit the
-  package surface
+<table style="border:none;">
+  <tr style="border:none;">
+    <td style="vertical-align:top; border:none; min-width:400px;">
+      <h1 style="border:none;">Flutter Helper Utils</h1>
+      <p>
+        <code>flutter_helper_utils</code> is a curated Flutter utility package
+        focused on a few high-value areas:
+      </p>
+      <ul>
+        <li>adaptive UI and breakpoint helpers</li>
+        <li>color parsing, transformation, and accessibility utilities</li>
+        <li>typed list and sliver list widgets</li>
+        <li>focused <code>BuildContext</code> and UI extensions</li>
+        <li>
+          <code>dart_helper_utils</code> re-exported for the Dart-only helpers
+          that still fit the package surface
+        </li>
+      </ul>
+    </td>
+    <td style="vertical-align:top; border:none;">
+      <a href="https://pub.dev/packages/flutter_helper_utils" target="_blank">
+        <img
+          src="https://raw.githubusercontent.com/omar-hanafy/flutter_helper_utils/main/dash-tools.png"
+          alt="Flutter Helper Utils Logo"
+          style="max-width:220px;"
+        />
+      </a>
+    </td>
+  </tr>
+</table>
 
 Version 9 intentionally makes the package smaller and more deliberate.
 
@@ -37,16 +56,7 @@ import 'package:flutter_helper_utils/sugar.dart';
 
 Notifier utilities were extracted from this package in v9.
 
-If you need the old notifier-style workflows, use:
-
-```yaml
-dependencies:
-  better_value_notifier: <latest_version>
-```
-
-```dart
-import 'package:better_value_notifier/better_value_notifier.dart';
-```
+If you need the old notifier-style workflows, use [`better_value_notifier`](https://pub.dev/packages/better_value_notifier)
 
 ## Highlights
 
@@ -173,7 +183,6 @@ Included widgets and widget systems:
 Version 9 includes several breaking changes:
 
 - notifier utilities moved to `better_value_notifier`
-- root exports simplified
 - deprecated `Color.add*` aliases removed
 - `GradientWidget.gradientAlignment` removed
 - explicit navigation naming finalized

@@ -3,3 +3,6 @@ version_9_guide.md
 v9_changelog
 .idea/
 .DS_Store
+build/
+example/build/
+example/**/build/

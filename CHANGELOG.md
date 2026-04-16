@@ -2,31 +2,14 @@
 
 ## 9.0.0
 
-## 9.0.0-dev.2
-
-- Temporary prerelease bridge for the `9.0.0` release train.
-- See the `9.0.0` notes below for the actual release details.
-
-A curation release focused on shrinking the public surface, removing deprecated
-APIs, and moving notifier utilities into a dedicated package.
+Version 9 is a surface cleanup release.
 
 For full migration details, see `migration_guides.md`.
 
 ### Breaking
 - Updated the package to align with `dart_helper_utils` v6.
-- Simplified the top-level exports. `flutter_helper_utils.dart` remains the
-  compatibility/full-surface import, and `sugar.dart` is the only extra opt-in
-  top-level entrypoint.
-- Notifier utilities were extracted out of `flutter_helper_utils`.
-  Use the dedicated `better_value_notifier` package instead.
-- Removed the extra root export files that were not pulling their weight:
-  `core.dart`, `colors.dart`, and `widgets.dart`.
-- `flutter_helper_utils.dart` no longer exports notifier APIs.
-- `int.color` now lives in the opt-in `sugar.dart` surface only.
-- Removed low-value widget sugar that was already mid-migration in the repo:
-  - `align.dart`
-  - `padding.dart`
-  - `list_widget.dart`
+- Notifier utilities were moved out to the dedicated
+  `better_value_notifier` package.
 - Removed deprecated color aliases:
   - `addOpacity`
   - `addAlpha`
@@ -34,17 +17,28 @@ For full migration details, see `migration_guides.md`.
   - `addGreen`
   - `addBlue`
 - Removed `GradientWidget.gradientAlignment`.
-- Navigation helpers now use the explicit v9 names on `BuildContext` and no longer expose the old `State` and `StatelessWidget` wrappers.
-- Focus helpers use `unfocus` and `unfocusCall` and no longer expose the old `unFocus` and request-focus wrapper APIs.
-- `AsyncSnapshot` helper usage is now based on `when` and `maybeWhen`, replacing the older snapshot sugar APIs.
-- Color parsing semantics were corrected for 4-digit and 8-digit hex input and for `hwb(...)`.
+- Removed low-value widget sugar:
+  - `align.dart`
+  - `padding.dart`
+  - `list_widget.dart`
+- Removed extra root entrypoints that were not needed:
+  - `core.dart`
+  - `colors.dart`
+  - `widgets.dart`
+- Navigation, focus, and `AsyncSnapshot` helpers now use the finalized v9 API
+  naming.
 
 ### Fixed
-- `PlatformTypeProvider` is now safe to place above `MaterialApp` at the app root. It no longer depends on an existing `MediaQuery` to resolve the active breakpoint.
-- `TypedSliverList` now follows the current Flutter sliver API and no longer relies on the deprecated separated-list callback contract.
+- `PlatformTypeProvider` is now safe to place above `MaterialApp` at the app
+  root.
+- Color parsing semantics were corrected for 4-digit and 8-digit hex input and
+  for `hwb(...)`.
+- `TypedSliverList` now follows the current Flutter sliver API.
 
 ### Added
-- Added tests for the root-safe adaptive UI provider.
+- Rebuilt the example app for the v9 surface.
+- Added tests for the root-safe adaptive UI provider and the new color and
+  carousel behavior.
 
 ## 8.5.0
 
