@@ -107,8 +107,9 @@ void main() {
       }
 
       // Lightness should vary
-      final lightnesses =
-          mono.map((c) => HSLColor.fromColor(c).lightness).toList();
+      final lightnesses = mono
+          .map((c) => HSLColor.fromColor(c).lightness)
+          .toList();
       expect(lightnesses.first, lessThan(lightnesses.last));
 
       // Check range (with small tolerance for floating point)
@@ -200,10 +201,7 @@ void main() {
       );
 
       // Verify AA suggestions meet AA requirements
-      expect(
-        lightBackground.meetsWCAG(suggestionsAA.normalText),
-        isTrue,
-      );
+      expect(lightBackground.meetsWCAG(suggestionsAA.normalText), isTrue);
 
       // Verify AAA suggestions meet AAA requirements
       expect(
@@ -235,8 +233,9 @@ void main() {
       const green = Color(0xFF00FF00);
 
       final redSim = red.simulateColorBlindness(ColorBlindnessType.protanopia);
-      final greenSim =
-          green.simulateColorBlindness(ColorBlindnessType.protanopia);
+      final greenSim = green.simulateColorBlindness(
+        ColorBlindnessType.protanopia,
+      );
 
       // Red and green should appear more similar
       final normalContrast = red.contrast(green);
@@ -249,10 +248,12 @@ void main() {
       const red = Color(0xFFFF0000);
       const green = Color(0xFF00FF00);
 
-      final redSim =
-          red.simulateColorBlindness(ColorBlindnessType.deuteranopia);
-      final greenSim =
-          green.simulateColorBlindness(ColorBlindnessType.deuteranopia);
+      final redSim = red.simulateColorBlindness(
+        ColorBlindnessType.deuteranopia,
+      );
+      final greenSim = green.simulateColorBlindness(
+        ColorBlindnessType.deuteranopia,
+      );
 
       // Similar to protanopia, red-green distinction reduced
       final normalContrast = red.contrast(green);
@@ -265,10 +266,12 @@ void main() {
       const blue = Color(0xFF0000FF);
       const yellow = Color(0xFFFFFF00);
 
-      final blueSim =
-          blue.simulateColorBlindness(ColorBlindnessType.tritanopia);
-      final yellowSim =
-          yellow.simulateColorBlindness(ColorBlindnessType.tritanopia);
+      final blueSim = blue.simulateColorBlindness(
+        ColorBlindnessType.tritanopia,
+      );
+      final yellowSim = yellow.simulateColorBlindness(
+        ColorBlindnessType.tritanopia,
+      );
 
       // Blue-yellow distinction should be reduced
       final normalContrast = blue.contrast(yellow);
@@ -350,36 +353,18 @@ void main() {
       const color = Color(0xFF0000FF);
 
       // Invalid split angle
-      expect(
-        () => color.splitComplementary(angle: 0),
-        throwsAssertionError,
-      );
-      expect(
-        () => color.splitComplementary(angle: 90),
-        throwsAssertionError,
-      );
+      expect(() => color.splitComplementary(angle: 0), throwsAssertionError);
+      expect(() => color.splitComplementary(angle: 90), throwsAssertionError);
 
       // Invalid analogous count
-      expect(
-        () => color.analogous(count: 1),
-        throwsAssertionError,
-      );
+      expect(() => color.analogous(count: 1), throwsAssertionError);
 
       // Invalid analogous angle
-      expect(
-        () => color.analogous(angle: 0),
-        throwsAssertionError,
-      );
-      expect(
-        () => color.analogous(angle: 61),
-        throwsAssertionError,
-      );
+      expect(() => color.analogous(angle: 0), throwsAssertionError);
+      expect(() => color.analogous(angle: 61), throwsAssertionError);
 
       // Invalid monochromatic count
-      expect(
-        () => color.monochromatic(count: 1),
-        throwsAssertionError,
-      );
+      expect(() => color.monochromatic(count: 1), throwsAssertionError);
 
       // Invalid lightness range
       expect(

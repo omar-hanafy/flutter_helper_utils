@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 
 /// Item builder for [TypedListView]. Includes [BuildContext] for idiomatic Flutter
 /// usage and access to inherited widgets, plus the item index and value.
-typedef TypedListViewBuilder<T> = Widget Function(
-  BuildContext context,
-  int index,
-  T item,
-);
+typedef TypedListViewBuilder<T> =
+    Widget Function(BuildContext context, int index, T item);
 
 /// Builder that returns a stable key for an item. Used to compute a correct
 /// flattened index for keyed children when headers/separators/etc. are present.
@@ -15,6 +12,10 @@ typedef ItemKeyBuilder<T> = Key Function(T item);
 
 /// Extension on [Iterable] to build a [TypedListView] directly.
 extension IterableTypedListViewExtension<E> on Iterable<E> {
+  /// Builds a [TypedListView] from this iterable.
+  ///
+  /// The iterable is eagerly converted to a list so the resulting widget can
+  /// access items by index and keep stable child ordering.
   Widget buildListView({
     // Content
     required TypedListViewBuilder<E> itemBuilder,
@@ -113,6 +114,7 @@ extension IterableTypedListViewExtension<E> on Iterable<E> {
 /// - `itemExtent`/`prototypeItem` must only be used when every child has the
 ///   same extent (no header/footer/separators/pagination/spacing).
 class TypedListView<E> extends StatelessWidget {
+  /// Creates a typed [ListView] with optional chrome and loading helpers.
   const TypedListView({
     // Content
     required List<E> items,
@@ -155,60 +157,64 @@ class TypedListView<E> extends StatelessWidget {
     Future<void> Function()? onEndReached,
     double onEndReachedThreshold = 200,
     bool isLoadingMore = false,
-  })  : assert(!(separatorBuilder != null && spacing != null),
-            'Provide either separatorBuilder or spacing, not both.'),
-        assert(itemExtent == null || prototypeItem == null,
-            'Use either itemExtent or prototypeItem, not both.'),
-        assert(
-          itemExtent == null ||
-              (header == null &&
-                  footer == null &&
-                  paginationWidget == null &&
-                  separatorBuilder == null &&
-                  spacing == null),
-          'itemExtent cannot be used with header/footer/separators/pagination/spacing.',
-        ),
-        assert(
-          prototypeItem == null ||
-              (header == null &&
-                  footer == null &&
-                  paginationWidget == null &&
-                  separatorBuilder == null &&
-                  spacing == null),
-          'prototypeItem cannot be used with header/footer/separators/pagination/spacing.',
-        ),
-        _items = items,
-        _itemBuilder = itemBuilder,
-        _header = header,
-        _footer = footer,
-        _separatorBuilder = separatorBuilder,
-        _spacing = spacing,
-        _paginationWidget = paginationWidget,
-        _emptyBuilder = emptyBuilder,
-        _padding = padding,
-        _physics = physics,
-        _shrinkWrap = shrinkWrap,
-        _addAutomaticKeepAlives = addAutomaticKeepAlives,
-        _addRepaintBoundaries = addRepaintBoundaries,
-        _addSemanticIndexes = addSemanticIndexes,
-        _scrollDirection = scrollDirection,
-        _reverse = reverse,
-        _controller = controller,
-        _primary = primary,
-        _itemExtent = itemExtent,
-        _prototypeItem = prototypeItem,
-        _itemKeyBuilder = itemKeyBuilder,
-        _cacheExtent = cacheExtent,
-        _semanticChildCount = semanticChildCount,
-        _dragStartBehavior = dragStartBehavior,
-        _keyboardDismissBehavior = keyboardDismissBehavior,
-        _restorationId = restorationId,
-        _clipBehavior = clipBehavior,
-        _showScrollbar = showScrollbar,
-        _onRefresh = onRefresh,
-        _onEndReached = onEndReached,
-        _onEndReachedThreshold = onEndReachedThreshold,
-        _isLoadingMore = isLoadingMore;
+  }) : assert(
+         !(separatorBuilder != null && spacing != null),
+         'Provide either separatorBuilder or spacing, not both.',
+       ),
+       assert(
+         itemExtent == null || prototypeItem == null,
+         'Use either itemExtent or prototypeItem, not both.',
+       ),
+       assert(
+         itemExtent == null ||
+             (header == null &&
+                 footer == null &&
+                 paginationWidget == null &&
+                 separatorBuilder == null &&
+                 spacing == null),
+         'itemExtent cannot be used with header/footer/separators/pagination/spacing.',
+       ),
+       assert(
+         prototypeItem == null ||
+             (header == null &&
+                 footer == null &&
+                 paginationWidget == null &&
+                 separatorBuilder == null &&
+                 spacing == null),
+         'prototypeItem cannot be used with header/footer/separators/pagination/spacing.',
+       ),
+       _items = items,
+       _itemBuilder = itemBuilder,
+       _header = header,
+       _footer = footer,
+       _separatorBuilder = separatorBuilder,
+       _spacing = spacing,
+       _paginationWidget = paginationWidget,
+       _emptyBuilder = emptyBuilder,
+       _padding = padding,
+       _physics = physics,
+       _shrinkWrap = shrinkWrap,
+       _addAutomaticKeepAlives = addAutomaticKeepAlives,
+       _addRepaintBoundaries = addRepaintBoundaries,
+       _addSemanticIndexes = addSemanticIndexes,
+       _scrollDirection = scrollDirection,
+       _reverse = reverse,
+       _controller = controller,
+       _primary = primary,
+       _itemExtent = itemExtent,
+       _prototypeItem = prototypeItem,
+       _itemKeyBuilder = itemKeyBuilder,
+       _cacheExtent = cacheExtent,
+       _semanticChildCount = semanticChildCount,
+       _dragStartBehavior = dragStartBehavior,
+       _keyboardDismissBehavior = keyboardDismissBehavior,
+       _restorationId = restorationId,
+       _clipBehavior = clipBehavior,
+       _showScrollbar = showScrollbar,
+       _onRefresh = onRefresh,
+       _onEndReached = onEndReached,
+       _onEndReachedThreshold = onEndReachedThreshold,
+       _isLoadingMore = isLoadingMore;
 
   // Content
   final List<E> _items;
@@ -405,8 +411,9 @@ class TypedListView<E> extends StatelessWidget {
     final separatorCount = hasSeparators ? items.length - 1 : 0;
     final showEmpty = items.isEmpty && emptyBuilder != null;
 
-    final contentCount =
-        items.isEmpty ? (showEmpty ? 1 : 0) : items.length + separatorCount;
+    final contentCount = items.isEmpty
+        ? (showEmpty ? 1 : 0)
+        : items.length + separatorCount;
 
     final totalItemCount =
         headerOffset + contentCount + paginationOffset + footerOffset;

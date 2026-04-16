@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+/// Converts raw ARGB integers into Flutter [Color] values.
 extension FHUIntExtensions on int {
   /// Construct a color from the lower 32 bits of an [int].
   ///

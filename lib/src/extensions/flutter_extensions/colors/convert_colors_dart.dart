@@ -13,7 +13,7 @@ typedef ColorConverter = Color? Function(Object? element);
 /// providing seamless integration for Flutter developers familiar with DHU.
 /// since we cannot inject this directly into dart_helper_utils package, because dart_helper_utils are meant for pure dart only, we had to do it this way.
 abstract class FConvertObject {
-  /// Build standardized args map for rich [ParsingException]s.
+  /// Build standardized args map for rich [ConversionException]s.
   @visibleForTesting
   static Map<String, Object?> buildParsingInfo({
     required String method,
@@ -29,10 +29,10 @@ abstract class FConvertObject {
       'targetType': 'Color',
       'object': object,
       'objectType': object?.runtimeType.toString(),
-      if (mapKey != null) 'mapKey': mapKey,
-      if (listIndex != null) 'listIndex': listIndex,
-      if (defaultValue != null) 'defaultValue': defaultValue,
-      if (converter != null) 'converter': converter.runtimeType.toString(),
+      'mapKey': mapKey,
+      'listIndex': listIndex,
+      'defaultValue': defaultValue,
+      'converter': converter?.runtimeType.toString(),
     };
     // Merge debugInfo if provided
     if (debugInfo != null) {
@@ -64,7 +64,7 @@ abstract class FConvertObject {
   /// );
   /// ```
   ///
-  /// Throws a [ParsingException] if the object is `null` or cannot be converted.
+  /// Throws a [ConversionException] if the object is `null` or cannot be converted.
   static Color toColor(
     Object? object, {
     Object? mapKey,
@@ -83,8 +83,8 @@ abstract class FConvertObject {
 
     if (data == null) {
       if (defaultValue != null) return defaultValue;
-      throw ParsingException.nullObject(
-        parsingInfo: buildParsingInfo(
+      throw ConversionException.nullObject(
+        context: buildParsingInfo(
           method: 'toColor',
           object: object,
           mapKey: mapKey,
@@ -130,8 +130,8 @@ abstract class FConvertObject {
     return (targetObject is Color)
         ? targetObject
         : converter?.call(targetObject) ??
-            _defaultColorConverter(targetObject) ??
-            defaultValue;
+              _defaultColorConverter(targetObject) ??
+              defaultValue;
   }
 
   /// Helper to extract nested objects from maps/lists
@@ -204,15 +204,14 @@ Color toColor(
   Color? defaultValue,
   ColorConverter? converter,
   Map<String, dynamic>? debugInfo,
-}) =>
-    FConvertObject.toColor(
-      object,
-      mapKey: mapKey,
-      listIndex: listIndex,
-      defaultValue: defaultValue,
-      converter: converter,
-      debugInfo: debugInfo,
-    );
+}) => FConvertObject.toColor(
+  object,
+  mapKey: mapKey,
+  listIndex: listIndex,
+  defaultValue: defaultValue,
+  converter: converter,
+  debugInfo: debugInfo,
+);
 
 /// Attempts to convert an object to a [Color]. See [FConvertObject.tryToColor] for details.
 Color? tryToColor(
@@ -222,22 +221,38 @@ Color? tryToColor(
   Color? defaultValue,
   ColorConverter? converter,
   Map<String, dynamic>? debugInfo,
-}) =>
-    FConvertObject.tryToColor(
-      object,
-      mapKey: mapKey,
-      listIndex: listIndex,
-      defaultValue: defaultValue,
-      converter: converter,
-      debugInfo: debugInfo,
-    );
+}) => FConvertObject.tryToColor(
+  object,
+  mapKey: mapKey,
+  listIndex: listIndex,
+  defaultValue: defaultValue,
+  converter: converter,
+  debugInfo: debugInfo,
+);
 
 // --- Extensions for Maps ---
 
 /// Extension methods for Maps to provide easy access to Flutter-specific type conversions.
 extension FHUConvertMapEx<K, V> on Map<K, V> {
+  V? _lookupValue(K key, {List<K>? alternativeKeys}) {
+    final directValue = this[key];
+    if (directValue != null ||
+        alternativeKeys == null ||
+        alternativeKeys.isEmpty) {
+      return directValue;
+    }
+
+    for (final alternativeKey in alternativeKeys) {
+      if (containsKey(alternativeKey)) {
+        return this[alternativeKey];
+      }
+    }
+
+    return null;
+  }
+
   /// Retrieves a value by [key] (or [alternativeKeys]) and converts it to a [Color].
-  /// Throws a [ParsingException] if the value is null or conversion fails.
+  /// Throws a [ConversionException] if the value is null or conversion fails.
   Color getColor(
     K key, {
     List<K>? alternativeKeys,
@@ -245,19 +260,18 @@ extension FHUConvertMapEx<K, V> on Map<K, V> {
     int? innerListIndex,
     Color? defaultValue,
     ColorConverter? converter,
-  }) =>
-      FConvertObject.toColor(
-        firstValueForKeys(key, alternativeKeys: alternativeKeys),
-        mapKey: innerMapKey,
-        listIndex: innerListIndex,
-        defaultValue: defaultValue,
-        converter: converter,
-        debugInfo: {
-          'key': key,
-          if (alternativeKeys != null && alternativeKeys.isNotEmpty)
-            'altKeys': alternativeKeys,
-        },
-      );
+  }) => FConvertObject.toColor(
+    _lookupValue(key, alternativeKeys: alternativeKeys),
+    mapKey: innerMapKey,
+    listIndex: innerListIndex,
+    defaultValue: defaultValue,
+    converter: converter,
+    debugInfo: {
+      'key': key,
+      if (alternativeKeys != null && alternativeKeys.isNotEmpty)
+        'altKeys': alternativeKeys,
+    },
+  );
 
   /// Attempts to retrieve a value by [key] (or [alternativeKeys]) and convert it to a [Color].
   /// Returns `null` if the key doesn't exist or if the conversion fails.
@@ -268,23 +282,44 @@ extension FHUConvertMapEx<K, V> on Map<K, V> {
     int? innerListIndex,
     Color? defaultValue,
     ColorConverter? converter,
-  }) =>
-      FConvertObject.tryToColor(
-        firstValueForKeys(key, alternativeKeys: alternativeKeys),
-        mapKey: innerMapKey,
-        listIndex: innerListIndex,
-        defaultValue: defaultValue,
-        converter: converter,
-        debugInfo: {
-          'key': key,
-          if (alternativeKeys != null && alternativeKeys.isNotEmpty)
-            'altKeys': alternativeKeys,
-        },
-      );
+  }) => FConvertObject.tryToColor(
+    _lookupValue(key, alternativeKeys: alternativeKeys),
+    mapKey: innerMapKey,
+    listIndex: innerListIndex,
+    defaultValue: defaultValue,
+    converter: converter,
+    debugInfo: {
+      'key': key,
+      if (alternativeKeys != null && alternativeKeys.isNotEmpty)
+        'altKeys': alternativeKeys,
+    },
+  );
 }
 
 /// Extension methods for nullable Maps.
 extension FHUConvertMapNEx<K, V> on Map<K, V>? {
+  V? _lookupValue(K key, {List<K>? alternativeKeys}) {
+    final map = this;
+    if (map == null) {
+      return null;
+    }
+
+    final directValue = map[key];
+    if (directValue != null ||
+        alternativeKeys == null ||
+        alternativeKeys.isEmpty) {
+      return directValue;
+    }
+
+    for (final alternativeKey in alternativeKeys) {
+      if (map.containsKey(alternativeKey)) {
+        return map[alternativeKey];
+      }
+    }
+
+    return null;
+  }
+
   /// Attempts to retrieve a value by [key] (or [alternativeKeys]) and convert it to a [Color].
   /// Returns `null` if the map is null, key doesn't exist, or conversion fails.
   Color? tryGetColor(
@@ -294,19 +329,18 @@ extension FHUConvertMapNEx<K, V> on Map<K, V>? {
     int? innerListIndex,
     Color? defaultValue,
     ColorConverter? converter,
-  }) =>
-      FConvertObject.tryToColor(
-        this?.firstValueForKeys(key, alternativeKeys: alternativeKeys),
-        mapKey: innerMapKey,
-        listIndex: innerListIndex,
-        defaultValue: defaultValue,
-        converter: converter,
-        debugInfo: {
-          'key': key,
-          if (alternativeKeys != null && alternativeKeys.isNotEmpty)
-            'altKeys': alternativeKeys,
-        },
-      );
+  }) => FConvertObject.tryToColor(
+    _lookupValue(key, alternativeKeys: alternativeKeys),
+    mapKey: innerMapKey,
+    listIndex: innerListIndex,
+    defaultValue: defaultValue,
+    converter: converter,
+    debugInfo: {
+      'key': key,
+      if (alternativeKeys != null && alternativeKeys.isNotEmpty)
+        'altKeys': alternativeKeys,
+    },
+  );
 }
 
 // --- Extensions for Iterables ---
@@ -314,22 +348,21 @@ extension FHUConvertMapNEx<K, V> on Map<K, V>? {
 /// Extension methods for Iterables to provide easy access to Flutter-specific type conversions.
 extension FHUConvertIterableEx<E> on Iterable<E> {
   /// Retrieves an element by [index] and converts it to a [Color].
-  /// Throws a [ParsingException] if the element is null or conversion fails.
+  /// Throws a [ConversionException] if the element is null or conversion fails.
   Color getColor(
     int index, {
     Object? innerMapKey,
     int? innerListIndex,
     Color? defaultValue,
     ColorConverter? converter,
-  }) =>
-      FConvertObject.toColor(
-        elementAt(index),
-        mapKey: innerMapKey,
-        listIndex: innerListIndex,
-        defaultValue: defaultValue,
-        converter: converter,
-        debugInfo: {'index': index},
-      );
+  }) => FConvertObject.toColor(
+    elementAt(index),
+    mapKey: innerMapKey,
+    listIndex: innerListIndex,
+    defaultValue: defaultValue,
+    converter: converter,
+    debugInfo: {'index': index},
+  );
 
   /// Attempts to retrieve an element by [index] and convert it to a [Color].
   /// Returns `null` if the index is out of bounds or if the conversion fails.
@@ -357,6 +390,42 @@ extension FHUConvertIterableEx<E> on Iterable<E> {
 
 /// Extension methods for nullable Iterables.
 extension FHUConvertIterableNEx<E> on Iterable<E>? {
+  E? _lookupValue(int index, {List<int>? alternativeIndices}) {
+    final iterable = this;
+    if (iterable == null) {
+      return null;
+    }
+
+    if (index >= 0) {
+      var currentIndex = 0;
+      for (final element in iterable) {
+        if (currentIndex == index) {
+          return element;
+        }
+        currentIndex++;
+      }
+    }
+
+    if (alternativeIndices == null || alternativeIndices.isEmpty) {
+      return null;
+    }
+
+    for (final alternativeIndex in alternativeIndices) {
+      if (alternativeIndex < 0) {
+        continue;
+      }
+      var currentIndex = 0;
+      for (final element in iterable) {
+        if (currentIndex == alternativeIndex) {
+          return element;
+        }
+        currentIndex++;
+      }
+    }
+
+    return null;
+  }
+
   /// Attempts to retrieve an element by [index] (or [alternativeIndices]) and convert it to a [Color].
   /// Returns `null` if the iterable is null, index is out of bounds, or conversion fails.
   Color? tryGetColor(
@@ -366,18 +435,16 @@ extension FHUConvertIterableNEx<E> on Iterable<E>? {
     int? innerListIndex,
     Color? defaultValue,
     ColorConverter? converter,
-  }) =>
-      FConvertObject.tryToColor(
-        this?.firstElementForIndices(index,
-            alternativeIndices: alternativeIndices),
-        mapKey: innerMapKey,
-        listIndex: innerListIndex,
-        defaultValue: defaultValue,
-        converter: converter,
-        debugInfo: {
-          'index': index,
-          if (alternativeIndices != null && alternativeIndices.isNotEmpty)
-            'altIndexes': alternativeIndices,
-        },
-      );
+  }) => FConvertObject.tryToColor(
+    _lookupValue(index, alternativeIndices: alternativeIndices),
+    mapKey: innerMapKey,
+    listIndex: innerListIndex,
+    defaultValue: defaultValue,
+    converter: converter,
+    debugInfo: {
+      'index': index,
+      if (alternativeIndices != null && alternativeIndices.isNotEmpty)
+        'altIndexes': alternativeIndices,
+    },
+  );
 }

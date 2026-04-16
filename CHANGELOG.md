@@ -1,5 +1,46 @@
 # CHANGELOG
 
+## 9.0.0
+
+A curation release focused on shrinking the public surface, removing deprecated
+APIs, and moving notifier utilities into a dedicated package.
+
+For full migration details, see `migration_guides.md`.
+
+### Breaking
+- Updated the package to align with `dart_helper_utils` v6.
+- Simplified the top-level exports. `flutter_helper_utils.dart` remains the
+  compatibility/full-surface import, and `sugar.dart` is the only extra opt-in
+  top-level entrypoint.
+- Notifier utilities were extracted out of `flutter_helper_utils`.
+  Use the dedicated `better_value_notifier` package instead.
+- Removed the extra root export files that were not pulling their weight:
+  `core.dart`, `colors.dart`, and `widgets.dart`.
+- `flutter_helper_utils.dart` no longer exports notifier APIs.
+- `int.color` now lives in the opt-in `sugar.dart` surface only.
+- Removed low-value widget sugar that was already mid-migration in the repo:
+  - `align.dart`
+  - `padding.dart`
+  - `list_widget.dart`
+- Removed deprecated color aliases:
+  - `addOpacity`
+  - `addAlpha`
+  - `addRed`
+  - `addGreen`
+  - `addBlue`
+- Removed `GradientWidget.gradientAlignment`.
+- Navigation helpers now use the explicit v9 names on `BuildContext` and no longer expose the old `State` and `StatelessWidget` wrappers.
+- Focus helpers use `unfocus` and `unfocusCall` and no longer expose the old `unFocus` and request-focus wrapper APIs.
+- `AsyncSnapshot` helper usage is now based on `when` and `maybeWhen`, replacing the older snapshot sugar APIs.
+- Color parsing semantics were corrected for 4-digit and 8-digit hex input and for `hwb(...)`.
+
+### Fixed
+- `PlatformTypeProvider` is now safe to place above `MaterialApp` at the app root. It no longer depends on an existing `MediaQuery` to resolve the active breakpoint.
+- `TypedSliverList` now follows the current Flutter sliver API and no longer relies on the deprecated separated-list callback contract.
+
+### Added
+- Added tests for the root-safe adaptive UI provider.
+
 ## 8.5.0
 
 ### Breaking

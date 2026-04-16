@@ -1,13 +1,20 @@
-// ignore_for_file: depend_on_referenced_packages
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 
-/// DHUIntlTextDirectionExtensions
-extension DHUIntlTextDirectionExtensions on intl.TextDirection {
-  TextDirection get toEnum => switch (this) {
-        intl.TextDirection.RTL => TextDirection.rtl,
-        _ => TextDirection.ltr,
-      };
+/// Interop helpers between `package:intl` bidi APIs and Flutter's [TextDirection].
+extension FHUIntlTextDirection on intl.TextDirection {
+  /// Converts an `intl.TextDirection` to Flutter's [TextDirection].
+  ///
+  /// `intl.TextDirection.UNKNOWN` falls back to [onUnknown], which defaults to
+  /// [TextDirection.ltr].
+  TextDirection toFlutterTextDirection({
+    TextDirection onUnknown = TextDirection.ltr,
+  }) => switch (this) {
+    intl.TextDirection.LTR => TextDirection.ltr,
+    intl.TextDirection.RTL => TextDirection.rtl,
+    intl.TextDirection.UNKNOWN => onUnknown,
+    _ => onUnknown,
+  };
 }
 
 /// A collection of utility extensions for working with text directionality and localization.
@@ -105,11 +112,10 @@ extension FHUContextDirectionality on BuildContext {
 
   /// Returns an RTL-aware alignment for logical start position.
   AlignmentGeometry get logicalStartAlignment =>
-      isRTL ? AlignmentDirectional.centerEnd : AlignmentDirectional.centerStart;
+      AlignmentDirectional.centerStart;
 
   /// Returns an RTL-aware alignment for logical end position.
-  AlignmentGeometry get logicalEndAlignment =>
-      isRTL ? AlignmentDirectional.centerStart : AlignmentDirectional.centerEnd;
+  AlignmentGeometry get logicalEndAlignment => AlignmentDirectional.centerEnd;
 
   /// Creates RTL-aware directional padding.
   ///
@@ -125,8 +131,7 @@ extension FHUContextDirectionality on BuildContext {
     double end = 0.0,
     double top = 0.0,
     double bottom = 0.0,
-  }) =>
-      EdgeInsetsDirectional.fromSTEB(start, top, end, bottom);
+  }) => EdgeInsetsDirectional.fromSTEB(start, top, end, bottom);
 
   /// Creates RTL-aware directional margin.
   EdgeInsetsGeometry logicalMargin({
@@ -134,34 +139,13 @@ extension FHUContextDirectionality on BuildContext {
     double end = 0.0,
     double top = 0.0,
     double bottom = 0.0,
-  }) =>
-      EdgeInsetsDirectional.fromSTEB(start, top, end, bottom);
-
-  /// Common language checks
-  bool get isArabic => languageCode == 'ar';
-
-  bool get isEnglish => languageCode == 'en';
-
-  bool get isPersian => languageCode == 'fa';
-
-  bool get isHebrew => languageCode == 'he';
-
-  bool get isUrdu => languageCode == 'ur';
-
-  /// Returns true if the current language is typically written RTL.
-  bool get isRTLLanguage => isArabic || isPersian || isHebrew || isUrdu;
+  }) => EdgeInsetsDirectional.fromSTEB(start, top, end, bottom);
 
   /// Returns a direction-aware translation offset.
   ///
   /// Useful for animations and positioning that need to respect text direction.
   Offset directionAwareOffset(double x, double y) =>
       Offset(x * directionality.multiplier, y);
-
-  /// Returns a size adjusted for text direction.
-  ///
-  /// Useful when you need to flip dimensions based on text direction.
-  Size directionAwareSize(double width, double height) =>
-      isRTL ? Size(height, width) : Size(width, height);
 }
 
 /// Extension for RTL-aware list operations.

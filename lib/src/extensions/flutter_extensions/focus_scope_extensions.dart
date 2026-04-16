@@ -1,30 +1,34 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
+/// Focus helpers for reading and updating the nearest [FocusScopeNode].
 extension FHUFocusScopeExtension on BuildContext {
-  /// Returns the [FocusNode.nearestScope] of the [Focus] or [FocusScope] that
-  /// most tightly encloses the given [context].
+  /// Returns the nearest [FocusScopeNode] that encloses this context.
   ///
-  /// If this node doesn't have a [Focus] or [FocusScope] widget ancestor, then
-  /// the [FocusManager.rootScope] is returned.
+  /// If there is no [Focus] or [FocusScope] ancestor, [FocusManager.rootScope]
+  /// is returned.
   FocusScopeNode get focusScope => FocusScope.of(this);
 
-  /// Removes the focus on this node by moving the primary focus to another node.
+  /// Same as [focusScope], but does not register an inherited dependency.
   ///
-  /// This method removes focus from a node that has the primary focus, cancels
-  /// any outstanding requests to focus it, while setting the primary focus to
-  /// another node according to the `disposition`.
+  /// Prefer this in callbacks (for example, `onTap`) to avoid triggering
+  /// rebuilds when focus changes.
+  FocusScopeNode get focusScopeNoDependency =>
+      FocusScope.of(this, createDependency: false);
+
+  /// Removes focus from the currently focused node.
   ///
-  /// It is safe to call regardless of whether this node has ever requested
-  /// focus or not. If this node doesn't have focus or primary focus, nothing
-  /// happens.
-  void unFocus() => focusScope.unfocus();
+  /// This cancels any outstanding request to focus it, and moves focus
+  /// according to [disposition].
+  ///
+  /// It is safe to call even if nothing is focused.
+  void unfocus({UnfocusDisposition disposition = UnfocusDisposition.scope}) {
+    FocusManager.instance.primaryFocus?.unfocus(disposition: disposition);
+  }
 
-  /// is commonly used to hide keyboard on onTap/onPress call. Usage could be
-  /// `onTap: () => context.requestFocus` or `onTap: context.requestFocusCall`.
-  void requestFocus() => focusScope.requestFocus(FocusNode());
-
-  GestureTapCallback get requestFocusCall =>
-      () => focusScope.requestFocus(FocusNode());
+  /// A callback that calls [unfocus].
+  ///
+  /// Useful for `onTap: context.unfocusCall`.
+  VoidCallback get unfocusCall => unfocus;
 
   /// Whether this node has input focus.
   ///
