@@ -1,5 +1,106 @@
 # CHANGELOG
 
+## 9.0.0
+
+A curation release focused on shrinking the public surface, removing deprecated
+APIs, and moving notifier utilities into a dedicated package.
+
+For full migration details, see `migration_guides.md`.
+
+### Breaking
+- Updated the package to align with `dart_helper_utils` v6.
+- Simplified the top-level exports. `flutter_helper_utils.dart` remains the
+  compatibility/full-surface import, and `sugar.dart` is the only extra opt-in
+  top-level entrypoint.
+- Notifier utilities were extracted out of `flutter_helper_utils`.
+  Use the dedicated `better_value_notifier` package instead.
+- Removed the extra root export files that were not pulling their weight:
+  `core.dart`, `colors.dart`, and `widgets.dart`.
+- `flutter_helper_utils.dart` no longer exports notifier APIs.
+- `int.color` now lives in the opt-in `sugar.dart` surface only.
+- Removed low-value widget sugar that was already mid-migration in the repo:
+  - `align.dart`
+  - `padding.dart`
+  - `list_widget.dart`
+- Removed deprecated color aliases:
+  - `addOpacity`
+  - `addAlpha`
+  - `addRed`
+  - `addGreen`
+  - `addBlue`
+- Removed `GradientWidget.gradientAlignment`.
+- Navigation helpers now use the explicit v9 names on `BuildContext` and no longer expose the old `State` and `StatelessWidget` wrappers.
+- Focus helpers use `unfocus` and `unfocusCall` and no longer expose the old `unFocus` and request-focus wrapper APIs.
+- `AsyncSnapshot` helper usage is now based on `when` and `maybeWhen`, replacing the older snapshot sugar APIs.
+- Color parsing semantics were corrected for 4-digit and 8-digit hex input and for `hwb(...)`.
+
+### Fixed
+- `PlatformTypeProvider` is now safe to place above `MaterialApp` at the app root. It no longer depends on an existing `MediaQuery` to resolve the active breakpoint.
+- `TypedSliverList` now follows the current Flutter sliver API and no longer relies on the deprecated separated-list callback contract.
+
+### Added
+- Added tests for the root-safe adaptive UI provider.
+
+## 8.5.0
+
+### Breaking
+- `TypedListViewBuilder` now uses the `itemBuilder(context, index, item)` signature for idiomatic Flutter access to `BuildContext`.
+
+### Added
+- New list quality-of-life options: `spacing`, `emptyBuilder`, `showScrollbar`, and pull-to-refresh support.
+- Infinite scroll helpers via `onEndReached`, `onEndReachedThreshold`, and `isLoadingMore`.
+- `itemKeyBuilder` for stable keyed items when combining headers, separators, or pagination widgets.
+- Introduced `TypedSliverList` with matching builder ergonomics for `CustomScrollView` usage.
+
+### Changed
+- Simplified header/footer/pagination configuration on `TypedListView`, replacing `headerBuilder`/`footerBuilder` with direct widget slots.
+
+## 8.4.0
+- Add color lookup by name to ColorScheme extensions
+
+## 8.3.0
+
+- Enhanced ParsingException to provide comprehensive debugging information with structured argument maps and filtered output.
+- CHORE: updated the [dart_helper_utils](https://pub.dev/packages/dart_helper_utils) to be ">=5.4.0 <6.0.0".
+
+## 8.2.0
+
+### Added
+
+- Added missing `ColorScheme` properties to `ThemeData` extension including `primaryFixed`, `primaryFixedDim`,
+  `onPrimaryFixed`, `onPrimaryFixedVariant`, `secondaryFixed`, `secondaryFixedDim`, `onSecondaryFixed`, `onSecondaryFixedVariant`,
+  `tertiaryFixed`, `tertiaryFixedDim`, `onTertiaryFixed`, `onTertiaryFixedVariant`, `surfaceDim`, `surfaceBright`,
+  `surfaceContainerLowest`, `surfaceContainerLow`, `surfaceContainer`, and `surfaceContainerHigh`.
+
+- CHORE: updated the [dart_helper_utils](https://pub.dev/packages/dart_helper_utils) to be ">=5.3.0 <6.0.0".
+
+## 8.1.0
+
+### Added
+- **Color Conversion Utilities**: Added `toColor()` and `tryToColor()` for robustly parsing colors from strings (Hex, CSS functions), integers, and other color types.
+- **Color Harmony Generation**: Added methods to generate theory-based color palettes: `monochromatic()`, `analogous()`, `triadic()`, `tetradic()`, and `splitComplementary()`.
+- **WCAG Accessibility Suite**:
+  - `meetsWCAG()`: Checks color contrast against AA/AAA standards.
+  - `suggestAccessibleColors()`: Provides accessible color alternatives for a given background.
+- **Color Blindness Simulation**:
+  - `simulateColorBlindness()`: Simulates how colors appear with various vision deficiencies.
+  - `isDistinguishableFor()`: Checks if two colors have enough contrast for colorblind users.
+
+### Changed
+- **API Clarity**: Renamed all `add*` color methods to `set*` (e.g., `addOpacity` to `setOpacity`) for clearer intent. Old methods are now deprecated and will be removed in v9.0.
+- **CSS Compliance**: HSL color parser now correctly handles hue angle wrapping as per the CSS Color Module Level 4 specification.
+
+## 8.0.2
+
+- Updated docs
+- Enhanced `MultiTapDetector` widget.
+- Deprecated gradientAlignment parameter from the `GradientWidget`.
+  Use the gradient's own positioning properties instead (like begin/end for LinearGradient).
+
+## Version 8.0.1
+
+- CHORE: updated the [dart_helper_utils](https://pub.dev/packages/dart_helper_utils) to be ">=4.1.2 <6.0.0" for more flexibility.
+
 ## Version 8.0.0
 
 ### New Features

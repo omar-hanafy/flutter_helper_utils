@@ -61,7 +61,6 @@ void main() {
         'rgba(10,10,10,101%)', // alpha > 100%
         'rgba(10,10,10, -10%)', // negative alpha
         // HSL/HSLA.
-        'hsl(361, 100%, 50%)', // hue > 360
         'hsl(180, 101%, 50%)', // saturation too high
         'hsl(180, 100%, -1%)', // lightness negative
         'hsla(180, 100%, 50%, -0.1)', // negative alpha
@@ -72,7 +71,6 @@ void main() {
 
         'hwb(180, 50%, 50%)', // commas not allowed
         'hwb(180 50% 50% / -0.5)', // negative alpha in modern syntax
-        'hwb(-180 50% 50%)', // negative hue for hwb
         'hwb(180 101% 50%)', // saturation out-of-range for hwb
         'hwb(180 50% 101%)', // brightness out-of-range for hwb
         // Named color mistakes.
@@ -162,7 +160,6 @@ void main() {
       }
 
       final invalidHsl = [
-        'hsl(361, 100%, 50%)',
         'hsl(180, 101%, 50%)',
         'hsl(180, 100%, -1%)',
         'hsla(180, 100%, 50%, -0.1)',
@@ -200,7 +197,6 @@ void main() {
         'hwb(180 50% 50% / -0.5)',
         '#AABBCC',
         'red',
-        'hwb(-180 50% 50%)',
         'hwb(180 101% 50%)',
         'hwb(180 50% 101%)',
       ];
@@ -213,83 +209,178 @@ void main() {
 
     group('toColor', () {
       // A helper function to test conversion.
-      void checkColorConversion(String input, int expectedArgb,
-          {String? description}) {
+      void checkColorConversion(
+        String input,
+        int expectedArgb, {
+        String? description,
+      }) {
         test('toColor "$input" ${description ?? ""}', () {
           final color = input.toColor;
           expect(color, isNotNull, reason: 'Could not parse "$input"');
-          expect(color!.toARGBInt(), equals(expectedArgb),
-              reason:
-                  'Expected ARGB 0x${expectedArgb.toRadixString(16)} for "$input"');
+          expect(
+            color!.toARGBInt(),
+            equals(expectedArgb),
+            reason:
+                'Expected ARGB 0x${expectedArgb.toRadixString(16)} for "$input"',
+          );
         });
       }
 
       group('Hex conversions', () {
         checkColorConversion('#abc', 0xFFAABBCC, description: '3-digit hex');
-        checkColorConversion('0x123', 0xFF112233,
-            description: '3-digit hex with 0x');
+        checkColorConversion(
+          '0x123',
+          0xFF112233,
+          description: '3-digit hex with 0x',
+        );
         checkColorConversion('#AABBCC', 0xFFAABBCC, description: '6-digit hex');
-        checkColorConversion('0xFF123456', 0x56FF1234,
-            description: '8-digit hex with 0x (swapped ARGB)');
+        checkColorConversion(
+          '#11223344',
+          0x44112233,
+          description: '8-digit hex with # (CSS RGBA)',
+        );
+        checkColorConversion(
+          '11223344',
+          0x44112233,
+          description: '8-digit hex without prefix (CSS RGBA)',
+        );
+        checkColorConversion(
+          '0xFF123456',
+          0xFF123456,
+          description: '8-digit hex with 0x (Dart ARGB)',
+        );
         checkColorConversion('#abcd', 0xDDAABBCC, description: '4-digit hex');
-        checkColorConversion('0x1234', 0x44112233,
-            description: '4-digit hex with 0x');
+        checkColorConversion(
+          '0x1234',
+          0x11223344,
+          description: '4-digit hex with 0x (Dart ARGB shorthand)',
+        );
       });
 
       group('RGB(A) conversions', () {
         checkColorConversion('rgb(255, 0, 0)', 0xFFFF0000);
         checkColorConversion('rgb(0,255,0)', 0xFF00FF00);
         checkColorConversion('rgb(0,0,255)', 0xFF0000FF);
-        checkColorConversion('rgba(0, 255, 0, 0.5)', 0x8000FF00,
-            description: 'rgba with float alpha');
-        checkColorConversion('rgba(10%, 50%, 90%, 40%)', 0x661A80E6,
-            description: 'rgba with percentages');
-        checkColorConversion('rgb(10%, 50%, 90%)', 0xFF1A80E6,
-            description: 'rgb with percentages');
+        checkColorConversion(
+          'rgba(0, 255, 0, 0.5)',
+          0x8000FF00,
+          description: 'rgba with float alpha',
+        );
+        checkColorConversion(
+          'rgba(10%, 50%, 90%, 40%)',
+          0x661A80E6,
+          description: 'rgba with percentages',
+        );
+        checkColorConversion(
+          'rgb(10%, 50%, 90%)',
+          0xFF1A80E6,
+          description: 'rgb with percentages',
+        );
       });
 
       group('HSL(A) conversions', () {
         // These expected values assume proper conversion from HSL to RGB.
-        checkColorConversion('hsl(0, 100%, 50%)', 0xFFFF0000,
-            description: 'Red');
-        checkColorConversion('hsl(120, 100%, 50%)', 0xFF00FF00,
-            description: 'Green');
-        checkColorConversion('hsl(240, 100%, 50%)', 0xFF0000FF,
-            description: 'Blue');
-        checkColorConversion('hsl(0, 0%, 0%)', 0xFF000000,
-            description: 'Black');
-        checkColorConversion('hsl(0, 0%, 100%)', 0xFFFFFFFF,
-            description: 'White');
-        checkColorConversion('hsla(0, 100%, 50%, 0.5)', 0x80FF0000,
-            description: 'hsla with float alpha');
+        checkColorConversion(
+          'hsl(0, 100%, 50%)',
+          0xFFFF0000,
+          description: 'Red',
+        );
+        checkColorConversion(
+          'hsl(120, 100%, 50%)',
+          0xFF00FF00,
+          description: 'Green',
+        );
+        checkColorConversion(
+          'hsl(240, 100%, 50%)',
+          0xFF0000FF,
+          description: 'Blue',
+        );
+        checkColorConversion(
+          'hsl(0, 0%, 0%)',
+          0xFF000000,
+          description: 'Black',
+        );
+        checkColorConversion(
+          'hsl(0, 0%, 100%)',
+          0xFFFFFFFF,
+          description: 'White',
+        );
+        checkColorConversion(
+          'hsla(0, 100%, 50%, 0.5)',
+          0x80FF0000,
+          description: 'hsla with float alpha',
+        );
       });
 
       group('Modern syntax conversions', () {
-        checkColorConversion('rgb(255 0 0)', 0xFFFF0000,
-            description: 'modern rgb');
-        checkColorConversion('rgba(0 100 200 / 0.5)', 0x800064C8,
-            description: 'modern rgba');
-        checkColorConversion('hsl(180 100% 50%)', 0xFF00FFFF,
-            description: 'modern hsl (cyan)');
-        checkColorConversion('hsla(180 100% 50% / 0.5)', 0x8000FFFF,
-            description: 'modern hsla (cyan with alpha)');
-        // For hwb we only verify that a non-null Color is returned.
-        test('hwb conversion returns a Color', () {
-          expect('hwb(180 50% 50%)'.toColor, isNotNull);
-          expect('hwb(180 50% 50% / 0.5)'.toColor, isNotNull);
-        });
+        checkColorConversion(
+          'rgb(255 0 0)',
+          0xFFFF0000,
+          description: 'modern rgb',
+        );
+        checkColorConversion(
+          'rgba(0 100 200 / 0.5)',
+          0x800064C8,
+          description: 'modern rgba',
+        );
+        checkColorConversion(
+          'hsl(180 100% 50%)',
+          0xFF00FFFF,
+          description: 'modern hsl (cyan)',
+        );
+        checkColorConversion(
+          'hsla(180 100% 50% / 0.5)',
+          0x8000FFFF,
+          description: 'modern hsla (cyan with alpha)',
+        );
+        checkColorConversion(
+          'hwb(0 0% 0%)',
+          0xFFFF0000,
+          description: 'hwb pure red',
+        );
+        checkColorConversion(
+          'hwb(180 0% 0%)',
+          0xFF00FFFF,
+          description: 'hwb pure cyan',
+        );
+        checkColorConversion(
+          'hwb(0 100% 0%)',
+          0xFFFFFFFF,
+          description: 'hwb white',
+        );
+        checkColorConversion(
+          'hwb(0 0% 100%)',
+          0xFF000000,
+          description: 'hwb black',
+        );
+        checkColorConversion(
+          'hwb(0 50% 50%)',
+          0xFF808080,
+          description: 'hwb gray',
+        );
+        checkColorConversion(
+          'hwb(0 0% 0% / 0.5)',
+          0x80FF0000,
+          description: 'hwb alpha',
+        );
       });
 
       group('Named colors and keywords', () {
-        checkColorConversion('red', 0xFFFF0000,
-            description: 'named color red (case-insensitive)');
+        checkColorConversion(
+          'red',
+          0xFFFF0000,
+          description: 'named color red (case-insensitive)',
+        );
         test('aliceblue', () {
           final expected = cssColorNamesToArgb['aliceblue'];
           expect('aliceblue'.toColor, isNotNull);
           expect('aliceblue'.toColor!.toARGBInt(), equals(expected));
         });
-        checkColorConversion('transparent', 0x00000000,
-            description: 'transparent keyword');
+        checkColorConversion(
+          'transparent',
+          0x00000000,
+          description: 'transparent keyword',
+        );
       });
 
       group('Invalid inputs return null', () {
@@ -320,7 +411,8 @@ void main() {
         const iterations = 10000;
         final hexColors = List.generate(
           iterations,
-          (i) => '#${(i % 256).toRadixString(16).padLeft(2, '0')}'
+          (i) =>
+              '#${(i % 256).toRadixString(16).padLeft(2, '0')}'
               '${((i + 85) % 256).toRadixString(16).padLeft(2, '0')}'
               '${((i + 170) % 256).toRadixString(16).padLeft(2, '0')}',
         );
@@ -332,7 +424,8 @@ void main() {
         });
 
         debugPrint(
-            'Parsed $iterations hex colors in ${time.toStringAsFixed(2)}ms');
+          'Parsed $iterations hex colors in ${time.toStringAsFixed(2)}ms',
+        );
         expect(time, lessThan(1000)); // Should complete within 1 second
       });
 
@@ -350,7 +443,8 @@ void main() {
         });
 
         debugPrint(
-            'Parsed $iterations RGB colors in ${time.toStringAsFixed(2)}ms');
+          'Parsed $iterations RGB colors in ${time.toStringAsFixed(2)}ms',
+        );
         expect(time, lessThan(1000)); // Should complete within 1 second
       });
 
@@ -368,7 +462,8 @@ void main() {
         });
 
         debugPrint(
-            'Parsed $iterations HSL colors in ${time.toStringAsFixed(2)}ms');
+          'Parsed $iterations HSL colors in ${time.toStringAsFixed(2)}ms',
+        );
         expect(time, lessThan(1000)); // Should complete within 1 second
       });
 
@@ -392,7 +487,8 @@ void main() {
         });
 
         debugPrint(
-            'Parsed $iterations mixed format colors in ${time.toStringAsFixed(2)}ms');
+          'Parsed $iterations mixed format colors in ${time.toStringAsFixed(2)}ms',
+        );
         expect(time, lessThan(1000)); // Should complete within 1 second
       });
     });

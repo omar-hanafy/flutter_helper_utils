@@ -3,7 +3,15 @@ import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-/// Extension for accessing various `MediaQueryData` properties easily.
+/// Exposes frequently used [MediaQuery] values on [BuildContext].
+///
+/// These getters fall into two groups:
+/// - strict accessors, which throw when no [MediaQuery] is in scope
+/// - nullable accessors, which return `null` instead
+///
+/// Prefer the nullable variants when calling from code that may execute above
+/// `MaterialApp`, during tests, or inside utilities that should degrade
+/// gracefully when layout data is unavailable.
 extension FHUMediaQueryExtension on BuildContext {
   /// The data from the closest instance of `MediaQuery` that encloses the given context.
   ///
@@ -49,6 +57,14 @@ extension FHUMediaQueryExtension on BuildContext {
   /// ```
   EdgeInsets get padding => MediaQuery.paddingOf(this);
 
+  /// Returns [MediaQueryData.padding] for the nearest [MediaQuery] ancestor or null if none exists.
+  ///
+  /// Example:
+  /// ```dart
+  /// EdgeInsets? padding = context.nullablePadding;
+  /// ```
+  EdgeInsets? get nullablePadding => MediaQuery.maybePaddingOf(this);
+
   /// The parts of the display that are completely obscured by system UI, typically by the device's keyboard.
   ///
   /// Example:
@@ -56,6 +72,14 @@ extension FHUMediaQueryExtension on BuildContext {
   /// EdgeInsets viewInsets = context.viewInsets;
   /// ```
   EdgeInsets get viewInsets => MediaQuery.viewInsetsOf(this);
+
+  /// Returns [MediaQueryData.viewInsets] for the nearest [MediaQuery] ancestor or null if none exists.
+  ///
+  /// Example:
+  /// ```dart
+  /// EdgeInsets? viewInsets = context.nullableViewInsets;
+  /// ```
+  EdgeInsets? get nullableViewInsets => MediaQuery.maybeViewInsetsOf(this);
 
   /// The area of the display that is obscured by system UI or device features.
   ///
@@ -93,19 +117,47 @@ extension FHUMediaQueryExtension on BuildContext {
 
   /// The horizontal extent of this size.
   ///
+  /// Uses [MediaQuery.widthOf] so the widget only rebuilds when the width
+  /// changes, not when height changes.
+  ///
   /// Example:
   /// ```dart
   /// double width = context.widthPx;
   /// ```
-  double get widthPx => sizePx.width;
+  double get widthPx => MediaQuery.widthOf(this);
+
+  /// Returns the width from the nearest [MediaQuery] ancestor or null if none exists.
+  ///
+  /// Uses [MediaQuery.maybeWidthOf] so the widget only rebuilds when the width
+  /// changes, not when height changes.
+  ///
+  /// Example:
+  /// ```dart
+  /// double? width = context.nullableWidthPx;
+  /// ```
+  double? get nullableWidthPx => MediaQuery.maybeWidthOf(this);
 
   /// The vertical extent of this size.
+  ///
+  /// Uses [MediaQuery.heightOf] so the widget only rebuilds when the height
+  /// changes, not when width changes.
   ///
   /// Example:
   /// ```dart
   /// double height = context.heightPx;
   /// ```
-  double get heightPx => sizePx.height;
+  double get heightPx => MediaQuery.heightOf(this);
+
+  /// Returns the height from the nearest [MediaQuery] ancestor or null if none exists.
+  ///
+  /// Uses [MediaQuery.maybeHeightOf] so the widget only rebuilds when the height
+  /// changes, not when width changes.
+  ///
+  /// Example:
+  /// ```dart
+  /// double? height = context.nullableHeightPx;
+  /// ```
+  double? get nullableHeightPx => MediaQuery.maybeHeightOf(this);
 
   /// The lesser of the magnitudes of the width and height.
   ///
@@ -203,6 +255,25 @@ extension FHUMediaQueryExtension on BuildContext {
   bool? get nullableOnOffSwitchLabels =>
       MediaQuery.maybeOnOffSwitchLabelsOf(this);
 
+  /// Whether accessibility announcements (like `SemanticsService.announce`)
+  /// are supported on the current platform.
+  ///
+  /// Example:
+  /// ```dart
+  /// bool supportsAnnounce = context.supportsAnnounce;
+  /// ```
+  bool get supportsAnnounce => MediaQuery.supportsAnnounceOf(this);
+
+  /// Returns whether accessibility announcements are supported for the nearest
+  /// `MediaQuery` ancestor or null if none exists.
+  ///
+  /// Example:
+  /// ```dart
+  /// bool? supportsAnnounce = context.nullableSupportsAnnounce;
+  /// ```
+  bool? get nullableSupportsAnnounce =>
+      MediaQuery.maybeSupportsAnnounceOf(this);
+
   /// Returns whether to always use the 24-hour format for the nearest `MediaQuery` ancestor or null if none exists.
   ///
   /// Example:
@@ -243,7 +314,7 @@ extension FHUMediaQueryExtension on BuildContext {
   Brightness? get nullablePlatformBrightness =>
       MediaQuery.maybePlatformBrightnessOf(this);
 
-  /// quick way to provide access to `maybeOrientationOf`.
+  /// Returns the current [Orientation], or `null` when no [MediaQuery] exists.
   ///
   /// Example:
   /// ```dart
@@ -252,7 +323,7 @@ extension FHUMediaQueryExtension on BuildContext {
   Orientation? get nullableDeviceOrientation =>
       MediaQuery.maybeOrientationOf(this);
 
-  /// quick way to provide access to `maybeDevicePixelRatioOf`.
+  /// Returns the device pixel ratio, or `null` when no [MediaQuery] exists.
   ///
   /// Example:
   /// ```dart
@@ -260,7 +331,7 @@ extension FHUMediaQueryExtension on BuildContext {
   /// ```
   double? get nullablePixelRatio => MediaQuery.maybeDevicePixelRatioOf(this);
 
-  /// quick way to provide access to `maybeTextScalerOf`.
+  /// Returns the current [TextScaler], or `null` when no [MediaQuery] exists.
   ///
   /// Example:
   /// ```dart
@@ -268,7 +339,10 @@ extension FHUMediaQueryExtension on BuildContext {
   /// ```
   TextScaler? get nullableTextScaler => MediaQuery.maybeTextScalerOf(this);
 
-  /// quick way to provide access to `platformBrightnessOf`.
+  /// Returns the platform brightness from the nearest [MediaQuery].
+  ///
+  /// This reflects the current system light or dark preference rather than the
+  /// app's themed brightness.
   ///
   /// Example:
   /// ```dart
@@ -276,7 +350,7 @@ extension FHUMediaQueryExtension on BuildContext {
   /// ```
   Brightness get platformBrightness => MediaQuery.platformBrightnessOf(this);
 
-  /// quick way to provide access to `maybeSystemGestureInsetsOf`.
+  /// Returns system gesture insets, or `null` when no [MediaQuery] exists.
   ///
   /// Example:
   /// ```dart
@@ -285,7 +359,7 @@ extension FHUMediaQueryExtension on BuildContext {
   EdgeInsets? get nullableSystemGestureInsets =>
       MediaQuery.maybeSystemGestureInsetsOf(this);
 
-  /// quick way to provide access to `maybeViewPaddingOf`.
+  /// Returns view padding, or `null` when no [MediaQuery] exists.
   ///
   /// Example:
   /// ```dart
@@ -293,7 +367,7 @@ extension FHUMediaQueryExtension on BuildContext {
   /// ```
   EdgeInsets? get nullableViewPadding => MediaQuery.maybeViewPaddingOf(this);
 
-  /// quick way to provide access to `alwaysUse24HourFormatOf`.
+  /// Returns whether the platform prefers 24-hour time formatting.
   ///
   /// Example:
   /// ```dart
@@ -301,7 +375,10 @@ extension FHUMediaQueryExtension on BuildContext {
   /// ```
   bool get alwaysUse24HourFormat => MediaQuery.alwaysUse24HourFormatOf(this);
 
-  /// quick way to provide access to `accessibleNavigationOf`.
+  /// Returns whether accessible navigation is enabled.
+  ///
+  /// Use this to reduce motion or simplify interactions when assistive
+  /// navigation features are active.
   ///
   /// Example:
   /// ```dart
@@ -309,7 +386,7 @@ extension FHUMediaQueryExtension on BuildContext {
   /// ```
   bool get accessibleNavigation => MediaQuery.accessibleNavigationOf(this);
 
-  /// quick way to provide access to `invertColorsOf`.
+  /// Returns whether platform color inversion is enabled.
   ///
   /// Example:
   /// ```dart
@@ -317,7 +394,7 @@ extension FHUMediaQueryExtension on BuildContext {
   /// ```
   bool get invertColors => MediaQuery.invertColorsOf(this);
 
-  /// quick way to provide access to `highContrastOf`.
+  /// Returns whether the platform requests higher contrast rendering.
   ///
   /// Example:
   /// ```dart
@@ -325,7 +402,7 @@ extension FHUMediaQueryExtension on BuildContext {
   /// ```
   bool get highContrast => MediaQuery.highContrastOf(this);
 
-  /// quick way to provide access to `onOffSwitchLabelsOf`.
+  /// Returns whether switches should show explicit on and off labels.
   ///
   /// Example:
   /// ```dart
@@ -333,7 +410,7 @@ extension FHUMediaQueryExtension on BuildContext {
   /// ```
   bool get onOffSwitchLabels => MediaQuery.onOffSwitchLabelsOf(this);
 
-  /// quick way to provide access to `disableAnimationsOf`.
+  /// Returns whether non-essential animations should be reduced or disabled.
   ///
   /// Example:
   /// ```dart
@@ -341,7 +418,7 @@ extension FHUMediaQueryExtension on BuildContext {
   /// ```
   bool get disableAnimations => MediaQuery.disableAnimationsOf(this);
 
-  /// quick way to provide access to `boldTextOf`.
+  /// Returns whether the platform requests bolder text rendering.
   ///
   /// Example:
   /// ```dart
@@ -349,7 +426,7 @@ extension FHUMediaQueryExtension on BuildContext {
   /// ```
   bool get boldText => MediaQuery.boldTextOf(this);
 
-  /// quick way to provide access to `gestureSettingsOf`.
+  /// Returns gesture settings from the nearest [MediaQuery].
   ///
   /// Example:
   /// ```dart
@@ -358,7 +435,7 @@ extension FHUMediaQueryExtension on BuildContext {
   DeviceGestureSettings get gestureSettings =>
       MediaQuery.gestureSettingsOf(this);
 
-  /// quick way to provide access to `displayFeaturesOf`.
+  /// Returns display features such as folds, hinges, or cutout regions.
   ///
   /// Example:
   /// ```dart
@@ -367,7 +444,7 @@ extension FHUMediaQueryExtension on BuildContext {
   List<DisplayFeature> get displayFeatures =>
       MediaQuery.displayFeaturesOf(this);
 
-  /// quick way to provide access to `supportsShowingSystemContextMenu`.
+  /// Returns whether the platform can show the native system context menu.
   ///
   /// Example:
   /// ```dart
@@ -376,7 +453,8 @@ extension FHUMediaQueryExtension on BuildContext {
   bool get supportsShowingSystemContextMenu =>
       MediaQuery.supportsShowingSystemContextMenu(this);
 
-  /// quick way to provide access to `maybeSupportsShowingSystemContextMenu`.
+  /// Returns whether the platform can show the native context menu, or `null`
+  /// when no [MediaQuery] exists.
   ///
   /// Example:
   /// ```dart
@@ -386,11 +464,11 @@ extension FHUMediaQueryExtension on BuildContext {
       MediaQuery.maybeSupportsShowingSystemContextMenu(this);
 }
 
-/// Extension for orientation utilities.
+/// Adds orientation predicates for layout branching.
 extension FHUOrientationEx on Orientation {
-  /// Checks if the device is in landscape mode.
+  /// Returns `true` when width is the dominant axis.
   bool get isLandscape => this == Orientation.landscape;
 
-  /// Checks if the device is in portrait mode.
+  /// Returns `true` when height is the dominant axis.
   bool get isPortrait => this == Orientation.portrait;
 }

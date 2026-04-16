@@ -4,20 +4,29 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../../../../flutter_helper_utils.dart';
+import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
 typedef _ColorParser = Color? Function(List<String> values);
 
+/// Parses CSS-like color strings into Flutter [Color] values.
 extension FHUStringToColorExtension on String {
   // Precompiled regexes.
-  static final RegExp _hexColorRegex =
-      RegExp(regexValidHexColor, caseSensitive: false);
-  static final RegExp _rgbColorRegex =
-      RegExp(regexValidRgbColor, caseSensitive: false);
-  static final RegExp _hslColorRegex =
-      RegExp(regexValidHslColor, caseSensitive: false);
-  static final RegExp _modernColorRegex =
-      RegExp(regexValidModernColorFunc, caseSensitive: false);
+  static final RegExp _hexColorRegex = RegExp(
+    regexValidHexColor,
+    caseSensitive: false,
+  );
+  static final RegExp _rgbColorRegex = RegExp(
+    regexValidRgbColor,
+    caseSensitive: false,
+  );
+  static final RegExp _hslColorRegex = RegExp(
+    regexValidHslColor,
+    caseSensitive: false,
+  );
+  static final RegExp _modernColorRegex = RegExp(
+    regexValidModernColorFunc,
+    caseSensitive: false,
+  );
 
   /// Whether the string represents a valid color.
   bool get isValidColor => isNotEmptyOrNull && (isHexColor || toColor != null);
@@ -25,8 +34,10 @@ extension FHUStringToColorExtension on String {
   /// Checks if the string is a valid hex color code.
   bool get isHexColor => isNotEmptyOrNull && _hexColorRegex.hasMatch(trim());
 
+  /// Whether this string parses successfully as an `rgb(...)` or `rgba(...)` color.
   bool get isRgbColor => isNotEmptyOrNull && _parseRgbColor(trim()) != null;
 
+  /// Whether this string parses successfully as an `hsl(...)` or `hsla(...)` color.
   bool get isHslColor => isNotEmptyOrNull && _parseHslColor(trim()) != null;
 
   /// For modern syntax we additionally require that parsing returns a non-null Color.
@@ -57,10 +68,9 @@ extension FHUStringToColorExtension on String {
   // -------------------------
 
   Color? _parseHexColor(String input) {
-    var hex = input.trim().replaceFirst(
-          RegExp('^(#|0x)', caseSensitive: false),
-          '',
-        );
+    final trimmed = input.trim();
+    final has0xPrefix = trimmed.toLowerCase().startsWith('0x');
+    var hex = trimmed.replaceFirst(RegExp('^(#|0x)', caseSensitive: false), '');
 
     // Normalize the hex string into ARGB format.
     if (hex.length == 3) {
@@ -68,15 +78,23 @@ extension FHUStringToColorExtension on String {
       hex = hex.split('').map((c) => c * 2).join();
       hex = 'FF$hex';
     } else if (hex.length == 4) {
-      // e.g. "abcd" -> duplicate then swap (assuming rgba → argb).
+      // 4-digit hex:
+      // - CSS style (e.g. #RGBA or "RGBA" without prefix): duplicate then swap
+      // - Dart style (0xARGB): duplicate with no swap
       hex = hex.split('').map((c) => c * 2).join();
-      hex = hex.substring(6, 8) + hex.substring(0, 6);
+      if (!has0xPrefix) {
+        hex = hex.substring(6, 8) + hex.substring(0, 6);
+      }
     } else if (hex.length == 6) {
       // e.g. "aabbcc" → add full opacity.
       hex = 'FF$hex';
     } else if (hex.length == 8) {
-      // e.g. "aabbccdd" → swap to ARGB order.
-      hex = hex.substring(6, 8) + hex.substring(0, 6);
+      // 8-digit hex:
+      // - CSS style (#RRGGBBAA or "RRGGBBAA" without prefix): swap
+      // - Dart style (0xAARRGGBB): no swap
+      if (!has0xPrefix) {
+        hex = hex.substring(6, 8) + hex.substring(0, 6);
+      }
     } else {
       return null;
     }
@@ -107,8 +125,9 @@ extension FHUStringToColorExtension on String {
     for (var i = 1; i <= 3; i++) {
       final group = match.group(i)!;
       if (group.endsWith('%')) {
-        final percentage =
-            double.tryParse(group.substring(0, group.length - 1));
+        final percentage = double.tryParse(
+          group.substring(0, group.length - 1),
+        );
         if (percentage == null || percentage < 0 || percentage > 100) {
           return null;
         }
@@ -126,8 +145,9 @@ extension FHUStringToColorExtension on String {
     if (match.group(4) != null) {
       final alphaGroup = match.group(4)!;
       if (alphaGroup.trim().endsWith('%')) {
-        final percentage =
-            double.tryParse(alphaGroup.substring(0, alphaGroup.length - 1));
+        final percentage = double.tryParse(
+          alphaGroup.substring(0, alphaGroup.length - 1),
+        );
         if (percentage == null || percentage < 0 || percentage > 100) {
           return null;
         }
@@ -176,8 +196,9 @@ extension FHUStringToColorExtension on String {
         if (alpha == null || alpha < 0 || alpha > 1) return null;
         components.add(alpha);
       } else if (group.trim().endsWith('%')) {
-        final percentage =
-            double.tryParse(group.substring(0, group.length - 1).trim());
+        final percentage = double.tryParse(
+          group.substring(0, group.length - 1).trim(),
+        );
         if (percentage == null || percentage < 0 || percentage > 100) {
           return null;
         }
@@ -188,8 +209,12 @@ extension FHUStringToColorExtension on String {
     }
 
     return isHsla
-        ? _hslToColor(components[0], components[1], components[2],
-            (components[3] * 255).round())
+        ? _hslToColor(
+            components[0],
+            components[1],
+            components[2],
+            (components[3] * 255).round(),
+          )
         : _hslToColor(components[0], components[1], components[2], 255);
   }
 
@@ -300,17 +325,14 @@ extension FHUStringToColorExtension on String {
 
   static double? _parseHueValue(String v) {
     // Normalize the input: remove extra spaces, commas, etc.
-    final value = v
-        .trim()
-        .toLowerCase()
-        .replaceAll(RegExp('$regexComponentSeparator\$'), '');
+    final value = v.trim().toLowerCase().replaceAll(RegExp(r'[,\s]+'), '');
     try {
       double hue;
       if (value.endsWith('grad')) {
         // Check 'grad' first!
         final gradValue = double.parse(value.substring(0, value.length - 4));
         // 400 gradians = 360 degrees.
-        hue = (gradValue * 360 / 400) % 360;
+        hue = gradValue * 360 / 400;
       } else if (value.endsWith('rad')) {
         hue =
             double.parse(value.substring(0, value.length - 3)) * 180 / math.pi;
@@ -319,11 +341,19 @@ extension FHUStringToColorExtension on String {
       } else if (value.endsWith('turn')) {
         hue = double.parse(value.substring(0, value.length - 4)) * 360;
       } else {
-        hue = double.tryParse(value) ?? 0;
+        final parsed = double.tryParse(value);
+        if (parsed == null) return null;
+        hue = parsed;
       }
-      if (hue < 0 || hue > 360) return null;
-      // Normalize so that 360° becomes 0°.
-      return (hue / 360) % 1;
+
+      // CSS Color Module Level 4 compliance: normalize hue to [0, 360)
+      hue %= 360;
+      if (hue < 0) {
+        hue += 360;
+      }
+
+      // Return as normalized value between 0.0 and 1.0
+      return hue / 360.0;
     } catch (_) {
       return null;
     }
@@ -338,6 +368,8 @@ extension FHUStringToColorExtension on String {
   }
 
   static Color _hslToColor(double h, double s, double l, int alpha) {
+    int to8Bit(double channel) => (channel * 255).round().clamp(0, 255).toInt();
+
     double r;
     double g;
     double b;
@@ -363,12 +395,7 @@ extension FHUStringToColorExtension on String {
       g = hue2rgb(p, q, h);
       b = hue2rgb(p, q, h - 1 / 3);
     }
-    return Color.fromARGB(
-      alpha,
-      (r * 255).round(),
-      (g * 255).round(),
-      (b * 255).round(),
-    );
+    return Color.fromARGB(alpha, to8Bit(r), to8Bit(g), to8Bit(b));
   }
 
   static Color _hwbToColor(double h, double w, double b, int alpha) {
@@ -382,9 +409,9 @@ extension FHUStringToColorExtension on String {
     final pureColor = _hslToColor(h, 1, 0.5, 255);
     // using new getters for red, green, blue in Color object
     // now they are .r, .g, .b, instead of .red, .green, .blue.
-    final rPure = pureColor.r / 255;
-    final gPure = pureColor.g / 255;
-    final bPure = pureColor.b / 255;
+    final rPure = pureColor.r;
+    final gPure = pureColor.g;
+    final bPure = pureColor.b;
     final rFinal = ((1 - white - black) * rPure + white) * 255;
     final gFinal = ((1 - white - black) * gPure + white) * 255;
     final bFinal = ((1 - white - black) * bPure + white) * 255;

@@ -1,0 +1,73 @@
+name: Auto release
+
+on:
+  push:
+    branches: [main, dev]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.TAG_PUSH_PAT }}
+
+      - name: Check pubspec change
+        id: changes
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^pubspec.yaml$'; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Compute tag
+        id: tag
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          package=$(awk '/^name:/ {print $2}' pubspec.yaml)
+          version=$(awk '/^version:/ {print $2}' pubspec.yaml)
+          if [[ -z "$package" || -z "$version" ]]; then
+            echo "Failed to read package name or version from pubspec.yaml"
+            exit 1
+          fi
+          if [[ "${GITHUB_REF_NAME}" == "main" && "$version" == *-* ]]; then
+            echo "Main requires a stable version (no pre-release suffix)."
+            exit 1
+          fi
+          if [[ "${GITHUB_REF_NAME}" == "dev" && "$version" != *-* ]]; then
+            echo "Dev requires a pre-release version suffix (e.g. -dev.1)."
+            exit 1
+          fi
+          echo "tag=${package}-v${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Fail if tag exists
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          tag="${{ steps.tag.outputs.tag }}"
+          if git rev-parse "$tag" >/dev/null 2>&1; then
+            echo "Tag $tag already exists. Bump version and re-run."
+            exit 1
+          fi
+
+      - name: Create and push tag
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          tag="${{ steps.tag.outputs.tag }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "$tag"
+          git push origin "$tag"
+
+      - name: Create GitHub release
+        if: steps.changes.outputs.changed == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          generate_release_notes: true
+          prerelease: ${{ github.ref_name == 'dev' }}
