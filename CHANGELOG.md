@@ -2,6 +2,11 @@
 
 ## 9.0.0
 
+## 9.0.0-dev.2
+
+- Temporary prerelease bridge for the `9.0.0` release train.
+- See the `9.0.0` notes below for the actual release details.
+
 A curation release focused on shrinking the public surface, removing deprecated
 APIs, and moving notifier utilities into a dedicated package.
 
