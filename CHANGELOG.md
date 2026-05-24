@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 9.1.0
+
+### Added
+- Added `scrollCacheExtent` to `TypedListView` and `Iterable.buildListView`
+  so callers can use Flutter's typed cache extent API, including
+  viewport-relative caching with `ScrollCacheExtent.viewport(...)`.
+
+### Deprecated
+- Deprecated `cacheExtent` on `TypedListView` and `Iterable.buildListView`.
+  Existing numeric values remain backward compatible and are treated as
+  `ScrollCacheExtent.pixels(cacheExtent)`.
+
 ## 9.0.0
 
 Version 9 is a surface cleanup release.

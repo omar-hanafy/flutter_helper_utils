@@ -9,6 +9,8 @@
 .history
 .svn/
 migrate_working_dir/
+.antigravitycli/
+diff.txt
 
 # IntelliJ related
 *.iml

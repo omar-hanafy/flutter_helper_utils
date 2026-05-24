@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show ScrollCacheExtent;
 
 /// Item builder for [TypedListView]. Includes [BuildContext] for idiomatic Flutter
 /// usage and access to inherited widgets, plus the item index and value.
@@ -10,12 +11,25 @@ typedef TypedListViewBuilder<T> =
 /// flattened index for keyed children when headers/separators/etc. are present.
 typedef ItemKeyBuilder<T> = Key Function(T item);
 
+ScrollCacheExtent? _resolveScrollCacheExtent({
+  required double? cacheExtent,
+  required ScrollCacheExtent? scrollCacheExtent,
+}) {
+  return scrollCacheExtent ??
+      (cacheExtent != null ? ScrollCacheExtent.pixels(cacheExtent) : null);
+}
+
 /// Extension on [Iterable] to build a [TypedListView] directly.
 extension IterableTypedListViewExtension<E> on Iterable<E> {
   /// Builds a [TypedListView] from this iterable.
   ///
   /// The iterable is eagerly converted to a list so the resulting widget can
   /// access items by index and keep stable child ordering.
+  ///
+  /// Use `scrollCacheExtent` to choose either fixed pixel caching or
+  /// viewport-relative caching. The deprecated `cacheExtent` argument remains
+  /// available for compatibility and is treated as
+  /// `ScrollCacheExtent.pixels(cacheExtent)`.
   Widget buildListView({
     // Content
     required TypedListViewBuilder<E> itemBuilder,
@@ -43,7 +57,12 @@ extension IterableTypedListViewExtension<E> on Iterable<E> {
     double? itemExtent,
     Widget? prototypeItem,
     ItemKeyBuilder<E>? itemKeyBuilder,
+    @Deprecated(
+      'Use scrollCacheExtent instead. This parameter maps to '
+      'ScrollCacheExtent.pixels(cacheExtent).',
+    )
     double? cacheExtent,
+    ScrollCacheExtent? scrollCacheExtent,
     int? semanticChildCount,
     DragStartBehavior dragStartBehavior = DragStartBehavior.start,
     ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
@@ -58,6 +77,11 @@ extension IterableTypedListViewExtension<E> on Iterable<E> {
     double onEndReachedThreshold = 200,
     bool isLoadingMore = false,
   }) {
+    assert(
+      cacheExtent == null || scrollCacheExtent == null,
+      'Provide either cacheExtent or scrollCacheExtent, not both.',
+    );
+
     return TypedListView<E>(
       // Content
       items: toList(),
@@ -87,7 +111,10 @@ extension IterableTypedListViewExtension<E> on Iterable<E> {
       itemExtent: itemExtent,
       prototypeItem: prototypeItem,
       itemKeyBuilder: itemKeyBuilder,
-      cacheExtent: cacheExtent,
+      scrollCacheExtent: _resolveScrollCacheExtent(
+        cacheExtent: cacheExtent,
+        scrollCacheExtent: scrollCacheExtent,
+      ),
       semanticChildCount: semanticChildCount,
       dragStartBehavior: dragStartBehavior,
       keyboardDismissBehavior: keyboardDismissBehavior,
@@ -115,6 +142,11 @@ extension IterableTypedListViewExtension<E> on Iterable<E> {
 ///   same extent (no header/footer/separators/pagination/spacing).
 class TypedListView<E> extends StatelessWidget {
   /// Creates a typed [ListView] with optional chrome and loading helpers.
+  ///
+  /// Use `scrollCacheExtent` to choose either fixed pixel caching or
+  /// viewport-relative caching. The deprecated `cacheExtent` argument remains
+  /// available for compatibility and is treated as
+  /// `ScrollCacheExtent.pixels(cacheExtent)`.
   const TypedListView({
     // Content
     required List<E> items,
@@ -143,7 +175,12 @@ class TypedListView<E> extends StatelessWidget {
     double? itemExtent,
     Widget? prototypeItem,
     ItemKeyBuilder<E>? itemKeyBuilder,
+    @Deprecated(
+      'Use scrollCacheExtent instead. This parameter maps to '
+      'ScrollCacheExtent.pixels(cacheExtent).',
+    )
     double? cacheExtent,
+    ScrollCacheExtent? scrollCacheExtent,
     int? semanticChildCount,
     DragStartBehavior dragStartBehavior = DragStartBehavior.start,
     ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
@@ -183,6 +220,10 @@ class TypedListView<E> extends StatelessWidget {
                  spacing == null),
          'prototypeItem cannot be used with header/footer/separators/pagination/spacing.',
        ),
+       assert(
+         cacheExtent == null || scrollCacheExtent == null,
+         'Provide either cacheExtent or scrollCacheExtent, not both.',
+       ),
        _items = items,
        _itemBuilder = itemBuilder,
        _header = header,
@@ -205,6 +246,7 @@ class TypedListView<E> extends StatelessWidget {
        _prototypeItem = prototypeItem,
        _itemKeyBuilder = itemKeyBuilder,
        _cacheExtent = cacheExtent,
+       _scrollCacheExtent = scrollCacheExtent,
        _semanticChildCount = semanticChildCount,
        _dragStartBehavior = dragStartBehavior,
        _keyboardDismissBehavior = keyboardDismissBehavior,
@@ -243,6 +285,7 @@ class TypedListView<E> extends StatelessWidget {
   final Widget? _prototypeItem;
   final ItemKeyBuilder<E>? _itemKeyBuilder;
   final double? _cacheExtent;
+  final ScrollCacheExtent? _scrollCacheExtent;
   final int? _semanticChildCount;
   final DragStartBehavior _dragStartBehavior;
   final ScrollViewKeyboardDismissBehavior _keyboardDismissBehavior;
@@ -270,6 +313,9 @@ class TypedListView<E> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final showEmpty = _items.isEmpty && _emptyBuilder != null;
+    final effectiveScrollCacheExtent =
+        _scrollCacheExtent ??
+        (_cacheExtent != null ? ScrollCacheExtent.pixels(_cacheExtent) : null);
 
     // Build a flattened findChildIndexCallback that accounts for header/separators/etc.
     ChildIndexGetter? effectiveFindChildIndexCallback;
@@ -320,7 +366,7 @@ class TypedListView<E> extends StatelessWidget {
       itemExtent: _itemExtent,
       prototypeItem: _prototypeItem,
       findChildIndexCallback: effectiveFindChildIndexCallback,
-      cacheExtent: _cacheExtent,
+      scrollCacheExtent: effectiveScrollCacheExtent,
       semanticChildCount: _semanticChildCount,
       dragStartBehavior: _dragStartBehavior,
       keyboardDismissBehavior: _keyboardDismissBehavior,
