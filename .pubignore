@@ -3,6 +3,8 @@ version_9_guide.md
 v9_changelog
 .idea/
 .DS_Store
+.antigravitycli/
 build/
+diff.txt
 example/build/
 example/**/build/
