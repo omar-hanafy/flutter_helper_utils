@@ -717,7 +717,7 @@ class FeatureDetailsPage extends StatelessWidget {
             ),
             const Spacer(),
             FilledButton.icon(
-              onPressed: () => context.popPage(),
+              onPressed: () => context.forcePopPage(),
               icon: const Icon(Icons.arrow_back_rounded),
               label: const Text('Back to showcase'),
             ),

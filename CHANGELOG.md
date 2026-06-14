@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 9.2.0
+
+- Added clearer `BuildContext` page pop helpers where `context.popPage()` respects `PopScope` guards and `context.forcePopPage()` directly pops the screen regardless of those guards.
+- Deprecated `context.maybePopPage()` in favor of `context.popPage()`; use `context.forcePopPage()` for the previous direct-pop behavior.
+
 ## 9.1.0
 
 ### Added

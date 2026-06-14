@@ -35,7 +35,7 @@ Version 9 intentionally makes the package smaller and more deliberate.
 
 ```yaml
 dependencies:
-  flutter_helper_utils: ^9.0.0
+  flutter_helper_utils: ^9.2.0
 ```
 
 ## Imports
@@ -144,8 +144,12 @@ CustomScrollView(
 
 ### BuildContext and UI Helpers
 
+Use `context.popPage()` for guarded back navigation and
+`context.forcePopPage()` when the current route should be removed directly.
+
 ```dart
 context.pushPage(const DetailsPage());
+await context.popPage();
 context.showSnackBar(const SnackBar(content: Text('Saved')));
 context.unfocus();
 

@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 /// **Naming convention:** Methods that wrap [MaterialPageRoute] use "Page"
 /// (e.g. [pushPage], [pushReplacementPage]). Methods that accept a [Route]
 /// object use "Route" (e.g. [pushRoute]). Named-route methods use
-/// "NamedRoute" (e.g. [pushNamedRoute]). This avoids collisions with
-/// go_router's extension methods on [BuildContext].
+/// "NamedRoute" (e.g. [pushNamedRoute]). The [popPage] and [forcePopPage]
+/// aliases distinguish a normal back request from a direct route removal.
 ///
 /// Note: Navigation helpers are exposed only on [BuildContext] to avoid
 /// duplicated APIs on `State` and `StatelessWidget`.
@@ -89,9 +89,26 @@ extension FHUNavigatorExtension on BuildContext {
       maybeNavigator(rootNavigator: true)?.canPop() ?? false;
 
   // Pop helpers.
-  /// Pops the current route, optionally returning [result].
-  void popPage<T extends Object?>([T? result]) =>
-      Navigator.pop<T>(this, result);
+  /// Requests that the current route handle a back navigation.
+  ///
+  /// Delegates to [NavigatorState.maybePop], so route-level guards such as
+  /// [PopScope] and [Page.canPop] can block route removal. The returned future
+  /// completes with `true` when the request was handled, including when a route
+  /// chooses not to pop. It completes with `false` when the request bubbles out
+  /// of the navigator, such as on the first route.
+  ///
+  /// Use [forcePopPage] when the route should be removed through
+  /// [NavigatorState.pop] without asking [Route.popDisposition] first.
+  Future<bool> popPage<T extends Object?>([T? result]) =>
+      navigator().maybePop<T>(result);
+
+  /// Removes the current route through [NavigatorState.pop].
+  ///
+  /// This bypasses the [Route.popDisposition] check used by [popPage], so pop
+  /// guards such as [PopScope] are not asked before removal begins. The route
+  /// can still handle the pop internally from [Route.didPop].
+  void forcePopPage<T extends Object?>([T? result]) =>
+      navigator().pop<T>(result);
 
   /// Pops only if [canPopPage] is `true`.
   void tryPopPage<T extends Object?>([T? result]) {
@@ -111,12 +128,17 @@ extension FHUNavigatorExtension on BuildContext {
     rootNav.pop<T>(result);
   }
 
-  /// Delegates to [NavigatorState.maybePop]: consults the current route's
-  /// [Route.popDisposition] before deciding whether to pop.
+  /// Requests that the current route handle a back navigation.
+  ///
+  /// Deprecated in favor of [popPage], which keeps the safer maybe-pop behavior
+  /// under the shorter default name.
+  @Deprecated(
+    'Use popPage instead. This compatibility alias will be removed in v10.0.0.',
+  )
   Future<bool> maybePopPage<T extends Object?>([T? result]) =>
-      navigator().maybePop<T>(result);
+      popPage<T>(result);
 
-  /// Like [maybePopPage], but targets the root navigator.
+  /// Like [popPage], but targets the root navigator.
   Future<bool> maybePopRootPage<T extends Object?>([T? result]) =>
       maybeNavigator(rootNavigator: true)?.maybePop<T>(result) ??
       Future<bool>.value(false);
