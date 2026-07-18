@@ -28,7 +28,7 @@ steps live in [../SKILL.md](../SKILL.md).
 | `addRed(int)` | `setRed(int)` |
 | `addGreen(int)` | `setGreen(int)` |
 | `addBlue(int)` | `setBlue(int)` |
-| `int.color` (main import) | `int.color` (sugar import only) |
+| `int.color` (main import) | unchanged (sugar surface; the main import re-exports sugar) |
 
 v9 additions with no v8 equivalent: `scaleOpacity(factor)`, harmonies
 (`triadic`, `tetradic`, `splitComplementary`, `analogous`, `monochromatic`),

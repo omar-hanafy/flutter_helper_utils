@@ -61,7 +61,7 @@ import 'package:better_value_notifier/better_value_notifier.dart';
 | `color.addOpacity(0.5)` | `color.setOpacity(0.5)` |
 | `color.addAlpha(128)` | `color.setAlpha(128)` |
 | `color.addRed(255)` / `addGreen` / `addBlue` | `color.setRed(255)` / `setGreen` / `setBlue` |
-| `int.color` via main import | still exists, but only via `import 'package:flutter_helper_utils/sugar.dart';` |
+| `int.color` | unchanged - lives in the sugar surface, which the main import re-exports |
 
 SILENT behavior change: v9 corrected string color parsing for 4-digit and
 8-digit hex and for `hwb(...)`. `#RGBA`/`#RRGGBBAA` are now parsed in CSS
