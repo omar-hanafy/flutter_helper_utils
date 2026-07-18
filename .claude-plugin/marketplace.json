@@ -1,0 +1,16 @@
+{
+  "name": "flutter-helper-utils-tools",
+  "owner": {
+    "name": "Omar Hanafy"
+  },
+  "description": "AI coding-assistant plugins for the flutter_helper_utils Flutter package",
+  "plugins": [
+    {
+      "name": "flutter-helper-utils",
+      "source": "./tooling/ai/flutter-helper-utils",
+      "description": "Package-specific skills for the flutter_helper_utils Flutter package: exact BuildContext/theme/navigation APIs, color parsing and accessibility helpers, adaptive breakpoint UI, TypedListView/TypedSliverList widgets, the v8-to-v9 breaking migration, and version upgrades.",
+      "category": "developer-tools",
+      "tags": ["flutter", "dart", "utilities", "extensions", "adaptive-ui", "colors"]
+    }
+  ]
+}

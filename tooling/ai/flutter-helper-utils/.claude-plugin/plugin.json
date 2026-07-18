@@ -1,0 +1,23 @@
+{
+  "name": "flutter-helper-utils",
+  "displayName": "Flutter Helper Utils",
+  "version": "9.2.1",
+  "description": "Package-specific skills for the flutter_helper_utils Flutter package: exact BuildContext/theme/navigation APIs, color parsing and accessibility helpers, adaptive breakpoint UI, TypedListView/TypedSliverList widgets, the v8-to-v9 breaking migration, and version upgrades.",
+  "author": {
+    "name": "Omar Hanafy",
+    "url": "https://github.com/omar-hanafy"
+  },
+  "homepage": "https://github.com/omar-hanafy/flutter_helper_utils#ai-coding-assistant-support",
+  "repository": "https://github.com/omar-hanafy/flutter_helper_utils",
+  "license": "MIT",
+  "keywords": [
+    "flutter",
+    "dart",
+    "flutter-helper-utils",
+    "extensions",
+    "adaptive-ui",
+    "colors",
+    "navigation",
+    "utilities"
+  ]
+}

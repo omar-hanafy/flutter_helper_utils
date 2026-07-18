@@ -1,0 +1,19 @@
+{
+  "name": "flutter-helper-utils-tools",
+  "interface": {
+    "displayName": "Flutter Helper Utils Tools"
+  },
+  "plugins": [
+    {
+      "name": "flutter-helper-utils",
+      "source": {
+        "source": "local",
+        "path": "./tooling/ai/flutter-helper-utils"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
