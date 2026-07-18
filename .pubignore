@@ -8,3 +8,9 @@ build/
 diff.txt
 example/build/
 example/**/build/
+
+# AI assistant plugin + maintainer-only files (repo-hosted, not part of the pub archive)
+tooling/
+tool/
+AGENTS.md
+CLAUDE.md

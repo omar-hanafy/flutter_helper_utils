@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 9.2.1
+
+No Dart API changes.
+
+- Added an installable AI coding-assistant plugin for Claude Code and
+  OpenAI Codex (repo-hosted at `tooling/ai/flutter-helper-utils/`; install
+  via `/plugin marketplace add omar-hanafy/flutter_helper_utils` +
+  `/plugin install flutter-helper-utils@flutter-helper-utils-tools`, or
+  the equivalent `codex plugin` commands). Five skills cover the exact
+  context/theme/navigation APIs, breakpoint/adaptive-UI and
+  TypedListView contracts, color parsing/WCAG helpers, the v8-to-v9
+  migration, and version-aware upgrades.
+- Added `tool/validate_agent_plugin.dart` (run in CI) to keep the plugin
+  manifests, marketplace catalogs, and skills consistent with the
+  package version.
+- Excluded the plugin tree and maintainer files from the pub.dev archive
+  via `.pubignore`; documented the plugin in the README.
+
 ## 9.2.0
 
 - Added clearer `BuildContext` page pop helpers where `context.popPage()` respects `PopScope` guards and `context.forcePopPage()` directly pops the screen regardless of those guards.

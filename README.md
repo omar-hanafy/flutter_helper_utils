@@ -31,6 +31,43 @@
 
 Version 9 intentionally makes the package smaller and more deliberate.
 
+## AI coding-assistant support
+
+This repository ships a package-specific **agent plugin** for
+**Claude Code** and **OpenAI Codex** (this is tooling for coding agents,
+not a runtime feature of the Flutter package). It teaches the agent the
+exact flutter_helper_utils APIs - breakpoint/adaptive-UI semantics,
+TypedListView contracts, color parsing and WCAG helpers, navigation and
+theme member names, the v8-to-v9 breaking migration, and version-aware
+upgrades.
+
+Install in **Claude Code**:
+
+```
+/plugin marketplace add omar-hanafy/flutter_helper_utils
+/plugin install flutter-helper-utils@flutter-helper-utils-tools
+```
+
+Install in **OpenAI Codex** (CLI; the IDE extension does not support
+plugins - use its `$skill-installer` there instead):
+
+```
+codex plugin marketplace add omar-hanafy/flutter_helper_utils
+codex plugin add flutter-helper-utils@flutter-helper-utils-tools
+```
+
+Start a new agent session after installing so the skills load. Then try
+prompts like "make this screen adaptive with flutter_helper_utils
+breakpoints" or "migrate this app from flutter_helper_utils 8.x to 9.x",
+or invoke a skill explicitly in Claude Code, e.g.
+`/flutter-helper-utils:use-flutter-helper-utils`.
+
+The plugin is installed from this Git repository (not from the pub.dev
+archive), contains markdown skills only - no hooks, no MCP servers, no
+telemetry - and its version tracks the package version. Details, the full
+capability list, updating, and uninstalling are in
+[tooling/ai/flutter-helper-utils/README.md](https://github.com/omar-hanafy/flutter_helper_utils/blob/main/tooling/ai/flutter-helper-utils/README.md).
+
 ## Install
 
 ```yaml
