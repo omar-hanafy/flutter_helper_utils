@@ -35,10 +35,11 @@ export default defineConfig({
           { text: 'Number Extension', link: '/documentation/number-extension' },
           { text: 'Bool Extension', link: '/documentation/bool-extension' },
           { text: 'Date-Time Extension', link: '/documentation/date-time-extension' },
-          { text: 'List & Iterable Extension', link: '/documentation/iterable-extension.md' },
+          { text: 'Duration Extension', link: '/documentation/duration-extension' },
           { text: 'Color Extension', link: '/documentation/color-extension' },
           { text: 'Theme Extension', link: '/documentation/theme-extension' },
           { text: 'Media Query Extension', link: '/documentation/media-query-extension' },
+          { text: 'Platform Extension', link: '/documentation/platform-extension' },
           { text: 'Focus Scope Extension', link: '/documentation/focus-scope-extension' },
           { text: 'Navigator Extension', link: '/documentation/navigator-extension' }
         ]

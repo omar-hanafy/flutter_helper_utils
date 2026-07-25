@@ -31,6 +31,13 @@
 
 Version 9 intentionally makes the package smaller and more deliberate.
 
+## Documentation
+
+Full documentation: **<https://omar-hanafy.github.io/flutter_helper_utils/>**
+
+The site is built from `site/` in this repository, so it ships with the
+package rather than trailing behind it.
+
 ## AI coding-assistant support
 
 This repository ships a package-specific **agent plugin** for
