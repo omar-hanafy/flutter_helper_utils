@@ -30,3 +30,10 @@ diff.txt
 .dart_tool/
 .packages
 build/
+
+# Documentation site (site/) - VitePress toolchain and build output.
+# Nothing built is committed; the Pages workflow rebuilds site/dist on every run.
+site/node_modules/
+site/dist/
+site/.vitepress/cache/
+site/.vitepress/dist/

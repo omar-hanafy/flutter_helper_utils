@@ -1,0 +1,145 @@
+name: Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - ".github/workflows/pages.yml"
+  pull_request:
+    paths:
+      - "site/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  # A project site is served from https://<user>.github.io/<repo>/, so the site
+  # must be built for that subpath. This must stay identical to `base` in
+  # site/.vitepress/config.mts; the guard below fails the build if it drifts.
+  BASE_PATH: /flutter_helper_utils/
+  # `outDir` in site/.vitepress/config.mts, relative to the repo root. The
+  # previous docs repo never deployed because its workflow uploaded a directory
+  # the build did not write to, so this path is asserted, not assumed.
+  DIST_DIR: site/dist
+  # Node 24 is the active LTS line. VitePress 1.6 supports ^18 || >=20.
+  NODE_VERSION: "24"
+
+jobs:
+  build:
+    name: Build docs site
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    concurrency:
+      # A new commit supersedes an older build of the same pull request. Main
+      # builds serialize so an older build cannot reach production after a
+      # newer one.
+      group: pages-build-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          # `defaults.run.working-directory` does not apply to an action's
+          # `with:` inputs, so this path is relative to the repository root.
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run docs:build
+
+      - name: Verify the built base path
+        # A wrong base is the failure mode for project sites: the page loads,
+        # then every asset 404s and nothing renders. Cheaper to fail here than
+        # to discover it as a blank page in production.
+        working-directory: .
+        run: |
+          set -euo pipefail
+          if [ ! -f "$DIST_DIR/index.html" ]; then
+            echo "The build did not produce $DIST_DIR/index.html."
+            echo "outDir in site/.vitepress/config.mts and DIST_DIR here must agree."
+            exit 1
+          fi
+          if ! grep -qE "src=\"${BASE_PATH}assets/app\.[^\"]+\.js\"" "$DIST_DIR/index.html"; then
+            echo "index.html does not load its app bundle from $BASE_PATH."
+            grep -oE '(href|src)="/[^"]*"' "$DIST_DIR/index.html" | sort -u
+            exit 1
+          fi
+          stray=$(grep -oE '(href|src)="/[^"]*"' "$DIST_DIR/index.html" \
+            | grep -v "\"${BASE_PATH}" || true)
+          if [ -n "$stray" ]; then
+            echo "These root-relative URLs are missing the $BASE_PATH prefix:"
+            echo "$stray"
+            exit 1
+          fi
+          echo "All root-relative URLs in index.html are prefixed with $BASE_PATH."
+
+      - name: Verify the docs content was built
+        # Guards against publishing an empty or half-built site: VitePress
+        # succeeds even when srcDir points somewhere with no pages.
+        #
+        # MARKER is a user-visible string that exists solely in these docs
+        # (site/index.md). If this step fails after a copy edit, update MARKER.
+        working-directory: .
+        run: |
+          set -euo pipefail
+          MARKER="Streamline data conversion with the ConvertObject class"
+          if ! grep -qF "$MARKER" "$DIST_DIR/index.html"; then
+            echo "Built home page does not contain the docs marker: $MARKER"
+            echo "Either site/index.md changed or the wrong sources were built."
+            exit 1
+          fi
+          pages=$(find "$DIST_DIR/documentation" -name '*.html' | wc -l)
+          if [ "$pages" -lt 14 ]; then
+            echo "Expected at least 14 documentation pages, built $pages."
+            exit 1
+          fi
+          echo "Marker present; $pages documentation pages built."
+
+      - name: Configure Pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+
+      - name: Upload Pages artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          # Relative to the repository root, not to `defaults.run`.
+          path: site/dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    # Pull requests and manual dispatches from non-main branches build and
+    # verify, but never publish.
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    concurrency:
+      # GitHub Pages has one production target. Serialize every deployment
+      # regardless of the triggering run or branch ref.
+      group: pages-production
+      cancel-in-progress: false
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0

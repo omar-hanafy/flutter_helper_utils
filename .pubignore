@@ -14,3 +14,7 @@ tooling/
 tool/
 AGENTS.md
 CLAUDE.md
+
+# Documentation site source (repo-hosted, published to GitHub Pages, not shipped
+# in the pub archive). `documentations/` and `migration_guides.md` stay in.
+site/
