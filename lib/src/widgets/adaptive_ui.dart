@@ -221,7 +221,7 @@ class PlatformTypeProvider extends StatelessWidget {
   /// Creates an instance of [PlatformTypeProvider].
   ///
   /// [child] - The widget below this widget in the tree.
-  /// Uses breakpoints configured by the nearest [PlatformTypeProvider].
+  /// [breakpoints] defines the breakpoints used for platform type detection.
   const PlatformTypeProvider({
     required this.child,
     this.breakpoints = Breakpoint.defaults,
@@ -319,7 +319,7 @@ class PlatformInfoLayoutBuilder extends StatelessWidget {
   /// Creates an instance of [PlatformInfoLayoutBuilder].
   ///
   /// [builder] - A function that takes the [BuildContext] and [PlatformSizeInfo] to build the widget.
-  /// [breakpoints] - Defines the breakpoints used for platform type detection.
+  /// Uses breakpoints configured by the nearest [PlatformTypeProvider].
   const PlatformInfoLayoutBuilder({required this.builder, super.key});
 
   /// Builds a widget from the current [PlatformSizeInfo].
