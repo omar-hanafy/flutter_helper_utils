@@ -136,18 +136,31 @@ class _ShowcaseHomePageState extends State<ShowcaseHomePage> {
               onScrollToBottom: _scrollToBottom,
             ),
           ),
-          _features.buildSliverList(
-            sliverHeader: const SliverToBoxAdapter(
-              child: _SectionShell(
-                title: 'Capability index',
-                subtitle: 'A sliver-powered feature list that opens focused detail screens with the v10 navigation helpers.',
-                child: SizedBox.shrink(),
-              ),
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const _SectionShell(
+                  title: 'Capability index',
+                  subtitle: 'A typed feature list that opens focused detail screens with the v10 navigation helpers.',
+                  child: SizedBox.shrink(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                  // This index is bounded to five features. Fully measuring it
+                  // keeps the outer scroll helpers accurate before any visit.
+                  child: _features.buildListView(
+                    itemBuilder: (context, index, feature) =>
+                        _FeatureRow(feature: feature, index: index),
+                    spacing: 12,
+                    shrinkWrap: true,
+                    primary: false,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                  ),
+                ),
+              ],
             ),
-            itemBuilder: (context, index, feature) =>
-                _FeatureRow(feature: feature, index: index),
-            spacing: 12,
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
           ),
           SliverToBoxAdapter(
             child: _SectionShell(

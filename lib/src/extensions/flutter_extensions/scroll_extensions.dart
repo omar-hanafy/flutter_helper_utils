@@ -154,6 +154,10 @@ extension ScrollControllerEx on ScrollController {
 
   /// Animates to the end (max scroll extent) for each attached position.
   ///
+  /// The target uses the current scroll metrics. Like
+  /// [ScrollPosition.animateTo], it does not follow extent changes during the
+  /// animation. Lazy lists can revise their estimated extent as children build.
+  ///
   /// Does nothing for positions that don't have content dimensions yet.
   Future<void> animateToEnd({
     Duration duration = const Duration(milliseconds: 500),

@@ -10,9 +10,12 @@ flutter run -d macos
 
 The native scaffolds follow the installed Flutter 3.47.7 templates: Android uses
 Gradle 9.3.1, AGP 9.1.0, Kotlin 2.4.0, and Java 17; iOS targets iOS 15 and uses
-`FlutterSceneDelegate`; macOS targets macOS 12. CocoaPods remains the Apple
-plugin integration path. Linux uses the current `runner/` layout and CMake 3.13,
-with its window shown after the first rendered frame. The Windows scaffold
+`FlutterSceneDelegate` with Swift Package Manager integration; macOS targets
+macOS 12. Swift Package Manager keeps Flutter's default enabled configuration.
+The iOS app no longer has redundant CocoaPods integration; the existing macOS
+CocoaPods scaffold remains available for plugins without a Swift package. Linux
+uses the current `runner/` layout and CMake 3.13, with its window shown after the
+first rendered frame. The Windows scaffold
 already matches these SDK templates. The web host uses `flutter_bootstrap.js`.
 
 ## Verification
@@ -27,7 +30,7 @@ flutter build apk --debug
 flutter build ios --simulator --no-codesign
 ```
 
-Six widget tests cover the showcase and the utility harnesses. The complete
+Seven widget tests cover the showcase and the utility harnesses. The complete
 showcase journey runs at the default size and at 320 x 568, 1024 x 768, and
 1440 x 900 with 1.5x text. Of four native integration tests, the first two start
 `main()` and repeat the journey in the actual window and in a 320 x 568
@@ -46,12 +49,14 @@ The journey verifies:
 - Official Material theme types and dark/light/system changes through the
   package's context/theme extensions.
 - Two triple-tap sequences, their hidden state, and snackbar messages.
-- All five typed sliver entries and their detail routes. A guarded back request
+- All five typed feature entries and their detail routes. A guarded back request
   stays on the route and shows feedback; force back exits; ordinary back exits
   routes that allow it.
 - Parsed palette output and the native platform report.
 - Text entry, focus dismissal, clearing the field, and snackbar feedback.
 - Middle, bottom, and top scroll helpers and their final scroll positions.
+  The bounded five-entry index uses a fully measured, non-scrolling typed list
+  inside a box sliver so lazy extent estimates cannot move the bottom target.
 - Nested-scroll pagination isolation, pending-request exclusion across parent
   rebuilds, and safe completion after disposal.
 - No layout exceptions throughout the journey, including narrow screens and

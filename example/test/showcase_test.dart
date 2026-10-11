@@ -8,6 +8,31 @@ import 'support/pagination_flows.dart';
 import 'support/showcase_flows.dart';
 
 void main() {
+  testWidgets('cold narrow showcase reaches the actual bottom in one action', (
+    tester,
+  ) async {
+    tester.view
+      ..physicalSize = const Size(320, 568)
+      ..devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(const PlatformTypeProvider(child: ShowcaseApp()));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Bottom'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Bottom'));
+    await tester.pumpAndSettle();
+    final controller = tester
+        .widget<CustomScrollView>(find.byKey(const ValueKey('showcase-scroll')))
+        .controller!;
+    expect(controller.offset, closeTo(controller.position.maxScrollExtent, 1));
+    expect(
+      find.textContaining('For migration specifics').hitTestable(),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('showcase utility journey uses official Material types', (
     tester,
   ) async {

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/rendering.dart' show ScrollCacheExtent;
+import 'package:flutter/rendering.dart' as rendering show ScrollCacheExtent;
 import 'package:material_ui/material_ui.dart' show RefreshIndicator, Scrollbar;
 
 /// Item builder for [TypedListView]. Includes [BuildContext] for idiomatic Flutter
@@ -17,12 +17,14 @@ typedef TypedListViewBuilder<T> = Widget Function(
 /// flattened index for keyed children when headers/separators/etc. are present.
 typedef ItemKeyBuilder<T> = Key Function(T item);
 
-ScrollCacheExtent? _resolveScrollCacheExtent({
+rendering.ScrollCacheExtent? _resolveScrollCacheExtent({
   required double? cacheExtent,
-  required ScrollCacheExtent? scrollCacheExtent,
+  required rendering.ScrollCacheExtent? scrollCacheExtent,
 }) {
   return scrollCacheExtent ??
-      (cacheExtent != null ? ScrollCacheExtent.pixels(cacheExtent) : null);
+      (cacheExtent != null
+          ? rendering.ScrollCacheExtent.pixels(cacheExtent)
+          : null);
 }
 
 /// Extension on [Iterable] to build a [TypedListView] directly.
@@ -68,7 +70,7 @@ extension IterableTypedListViewExtension<E> on Iterable<E> {
       'ScrollCacheExtent.pixels(cacheExtent).',
     )
     double? cacheExtent,
-    ScrollCacheExtent? scrollCacheExtent,
+    rendering.ScrollCacheExtent? scrollCacheExtent,
     int? semanticChildCount,
     DragStartBehavior dragStartBehavior = DragStartBehavior.start,
     ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
@@ -188,7 +190,7 @@ class TypedListView<E> extends StatelessWidget {
       'ScrollCacheExtent.pixels(cacheExtent).',
     )
     double? cacheExtent,
-    ScrollCacheExtent? scrollCacheExtent,
+    rendering.ScrollCacheExtent? scrollCacheExtent,
     this._semanticChildCount,
     this._dragStartBehavior = DragStartBehavior.start,
     this._keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
@@ -267,7 +269,7 @@ class TypedListView<E> extends StatelessWidget {
   final Widget? _prototypeItem;
   final ItemKeyBuilder<E>? _itemKeyBuilder;
   final double? _cacheExtent;
-  final ScrollCacheExtent? _scrollCacheExtent;
+  final rendering.ScrollCacheExtent? _scrollCacheExtent;
   final int? _semanticChildCount;
   final DragStartBehavior _dragStartBehavior;
   final ScrollViewKeyboardDismissBehavior _keyboardDismissBehavior;
@@ -297,7 +299,9 @@ class TypedListView<E> extends StatelessWidget {
     final showEmpty = _items.isEmpty && _emptyBuilder != null;
     final effectiveScrollCacheExtent =
         _scrollCacheExtent ??
-        (_cacheExtent != null ? ScrollCacheExtent.pixels(_cacheExtent) : null);
+        (_cacheExtent != null
+            ? rendering.ScrollCacheExtent.pixels(_cacheExtent)
+            : null);
 
     // Build a flattened findChildIndexCallback that accounts for header/separators/etc.
     ChildIndexGetter? effectiveFindChildIndexCallback;
