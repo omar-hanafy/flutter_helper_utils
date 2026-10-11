@@ -21,7 +21,7 @@ hero:
 
 features:
   - title: Converting Objects
-    details: Streamline data conversion with the ConvertObject class, resolving common issues when working with API data.
+    details: Convert API data with Convert and convertToX helpers, available through the main Flutter Helper Utils import.
   - title: Date and Time Extension
     details: Simplify date and time operations in your app, making it easier to handle date-related tasks.
   - title: String Extension

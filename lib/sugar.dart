@@ -1,3 +1,6 @@
+/// Opt-in convenience extensions for Flutter contexts, numbers, and strings.
+library;
+
 export 'src/extensions/flutter_extensions/carousel_controller.dart';
 export 'src/extensions/flutter_extensions/directionality.dart';
 export 'src/extensions/flutter_extensions/focus_scope_extensions.dart';

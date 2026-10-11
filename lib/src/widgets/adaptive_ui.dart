@@ -221,7 +221,7 @@ class PlatformTypeProvider extends StatelessWidget {
   /// Creates an instance of [PlatformTypeProvider].
   ///
   /// [child] - The widget below this widget in the tree.
-  /// [breakpoints] - Defines the breakpoints used for platform type detection.
+  /// Uses breakpoints configured by the nearest [PlatformTypeProvider].
   const PlatformTypeProvider({
     required this.child,
     this.breakpoints = Breakpoint.defaults,

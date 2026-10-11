@@ -9,9 +9,8 @@ typedef ColorConverter = Color? Function(Object? element);
 
 /// A utility class for converting objects to Flutter-specific types like [Color].
 ///
-/// This class follows the same pattern as [ConvertObject] from dart_helper_utils,
-/// providing seamless integration for Flutter developers familiar with DHU.
-/// since we cannot inject this directly into dart_helper_utils package, because dart_helper_utils are meant for pure dart only, we had to do it this way.
+/// Complements the [Convert] utilities re-exported from `dart_helper_utils`
+/// with conversions that depend on Flutter's color types.
 abstract class FConvertObject {
   /// Build standardized args map for rich [ConversionException]s.
   @visibleForTesting

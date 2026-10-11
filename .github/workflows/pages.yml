@@ -99,7 +99,7 @@ jobs:
         working-directory: .
         run: |
           set -euo pipefail
-          MARKER="Streamline data conversion with the ConvertObject class"
+          MARKER="Convert API data with Convert and convertToX helpers"
           if ! grep -qF "$MARKER" "$DIST_DIR/index.html"; then
             echo "Built home page does not contain the docs marker: $MARKER"
             echo "Either site/index.md changed or the wrong sources were built."
