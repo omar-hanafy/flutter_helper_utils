@@ -303,7 +303,8 @@ Removes all white spaces from the string.
 
 ## `textSize`
 
-Returns the size of the text using TextPainter.
+Measures a nullable string as a single line using left-to-right TextPainter
+layout without an ambient context. Null is treated as empty text.
 
   ```dart
   String example = "Hello";

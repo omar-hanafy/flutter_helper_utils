@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart' as intl;
 
 /// Interop helpers between `package:intl` bidi APIs and Flutter's [TextDirection].

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 /// Detects repeated taps on one child within a rolling time window.
 ///
@@ -42,7 +42,9 @@ class MultiTapDetector extends StatefulWidget {
   /// The number of consecutive taps required before [onTap] is called.
   final int tapCount;
 
-  /// The maximum allowed gap between taps before progress resets.
+  /// The maximum gap from one tap release to the next tap press.
+  ///
+  /// An in-progress tap does not expire while the pointer remains down.
   final Duration duration;
 
   @override
@@ -50,64 +52,188 @@ class MultiTapDetector extends StatefulWidget {
 }
 
 class _MultiTapDetectorState extends State<MultiTapDetector> {
-  Timer? _resetTimer;
-
-  @override
-  void dispose() {
-    _resetTimer?.cancel();
-    super.dispose();
-  }
-
-  void _startResetTimer() {
-    _resetTimer?.cancel();
-    _resetTimer = Timer(widget.duration, () {
-      // Reset timer expired without completing the sequence
-      if (widget.onTapProgress != null) {
-        widget.onTapProgress?.call(0);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return RawGestureDetector(
       gestures: {
-        SerialTapGestureRecognizer:
-            GestureRecognizerFactoryWithHandlers<SerialTapGestureRecognizer>(
-              SerialTapGestureRecognizer.new,
-              (SerialTapGestureRecognizer instance) {
-                instance
-                  ..onSerialTapDown = (SerialTapDownDetails details) {
-                    _startResetTimer();
-
-                    // Report progress if callback is provided
-                    if (widget.onTapProgress != null) {
-                      widget.onTapProgress?.call(details.count);
-                    }
-                  }
-                  ..onSerialTapUp = (SerialTapUpDetails details) {
-                    if (details.count == widget.tapCount) {
-                      _resetTimer?.cancel();
-                      widget.onTap();
-
-                      // Reset progress
-                      if (widget.onTapProgress != null) {
-                        widget.onTapProgress?.call(0);
-                      }
-                    }
-                  }
-                  ..onSerialTapCancel = (SerialTapCancelDetails details) {
-                    _resetTimer?.cancel();
-
-                    // Reset progress
-                    if (widget.onTapProgress != null) {
-                      widget.onTapProgress?.call(0);
-                    }
-                  };
-              },
+        _SequenceTapGestureRecognizer:
+            GestureRecognizerFactoryWithHandlers<_SequenceTapGestureRecognizer>(
+              _SequenceTapGestureRecognizer.new,
+              (instance) => instance.configure(
+                tapCount: widget.tapCount,
+                duration: widget.duration,
+                onTap: widget.onTap,
+                onTapProgress: widget.onTapProgress,
+              ),
             ),
       },
       child: widget.child,
     );
   }
+}
+
+// Owns the sequence and its gap timer while preserving the public serial-tap
+// contract: nearby taps with matching buttons, cancellation on movement or
+// arena rejection, and victory over competing tap recognizers on pointer-up.
+class _SequenceTapGestureRecognizer extends GestureRecognizer {
+  int _tapCount = 3;
+  Duration _duration = const Duration(milliseconds: 500);
+  VoidCallback? _onTap;
+  ValueChanged<int>? _onTapProgress;
+  int _completedCount = 0;
+  Timer? _gapTimer;
+  _SequenceTap? _pendingTap;
+  _SequenceTap? _lastTap;
+
+  void configure({
+    required int tapCount,
+    required Duration duration,
+    required VoidCallback onTap,
+    required ValueChanged<int>? onTapProgress,
+  }) {
+    if (_tapCount != tapCount || _duration != duration) {
+      _reset(reportProgress: false);
+    }
+    _tapCount = tapCount;
+    _duration = duration;
+    _onTap = onTap;
+    _onTapProgress = onTapProgress;
+  }
+
+  @override
+  void addAllowedPointer(PointerDownEvent event) {
+    if (_pendingTap != null) {
+      _reset();
+    } else if (_lastTap case final previous?) {
+      if (!previous.minimumTimeElapsed ||
+          previous.event.buttons != event.buttons ||
+          (previous.event.position - event.position).distance >
+              kDoubleTapSlop) {
+        _reset(reportProgress: false);
+      }
+    }
+    _gapTimer?.cancel();
+    _gapTimer = null;
+    final tap = _SequenceTap(
+      event,
+      GestureBinding.instance.gestureArena.add(event.pointer, this),
+    );
+    _pendingTap = tap;
+    GestureBinding.instance.pointerRouter.addRoute(
+      event.pointer,
+      _handleEvent,
+      event.transform,
+    );
+    _reportProgress(_completedCount + 1);
+  }
+
+  void _handleEvent(PointerEvent event) {
+    final tap = _pendingTap;
+    if (tap == null || tap.event.pointer != event.pointer) return;
+    if (event is PointerUpEvent) {
+      _registerTap(tap);
+    } else if (event is PointerCancelEvent ||
+        (event is PointerMoveEvent &&
+            (tap.event.position - event.position).distance >
+                kDoubleTapTouchSlop)) {
+      _reset();
+    }
+  }
+
+  @override
+  void acceptGesture(int pointer) {
+    final tap = _pendingTap;
+    if (tap != null && tap.event.pointer == pointer) {
+      tap.disposition = GestureDisposition.accepted;
+    }
+  }
+
+  @override
+  void rejectGesture(int pointer) {
+    final tap = _pendingTap;
+    if (tap != null && tap.event.pointer == pointer) {
+      tap.disposition = GestureDisposition.rejected;
+      _reset();
+    }
+  }
+
+  void _registerTap(_SequenceTap tap) {
+    if (tap.disposition == null) {
+      tap.entry.resolve(GestureDisposition.accepted);
+    }
+    if (_pendingTap != tap) return;
+    GestureBinding.instance.pointerRouter.removeRoute(
+      tap.event.pointer,
+      _handleEvent,
+    );
+    _pendingTap = null;
+    _lastTap?.dispose();
+    _lastTap = tap;
+    _completedCount++;
+    if (_completedCount == _tapCount) {
+      final onTap = _onTap;
+      final onTapProgress = _onTapProgress;
+      _reset(reportProgress: false);
+      if (onTap != null) invokeCallback<void>('onTap', onTap);
+      if (onTapProgress != null) {
+        invokeCallback<void>('onTapProgress', () => onTapProgress(0));
+      }
+    } else {
+      _gapTimer = Timer(_duration, _reset);
+    }
+  }
+
+  void _reportProgress(int count) {
+    final callback = _onTapProgress;
+    if (callback != null) {
+      invokeCallback<void>('onTapProgress', () => callback(count));
+    }
+  }
+
+  void _reset({bool reportProgress = true}) {
+    final tap = _pendingTap;
+    final hadProgress = tap != null || _completedCount > 0;
+    _pendingTap = null;
+    _completedCount = 0;
+    _gapTimer?.cancel();
+    _gapTimer = null;
+    _lastTap?.dispose();
+    _lastTap = null;
+    if (tap != null) {
+      GestureBinding.instance.pointerRouter.removeRoute(
+        tap.event.pointer,
+        _handleEvent,
+      );
+      tap.dispose();
+      if (tap.disposition == null) {
+        tap.entry.resolve(GestureDisposition.rejected);
+      }
+    }
+    if (reportProgress && hadProgress) _reportProgress(0);
+  }
+
+  @override
+  void dispose() {
+    _reset(reportProgress: false);
+    super.dispose();
+  }
+
+  @override
+  String get debugDescription => 'multi tap sequence';
+}
+
+class _SequenceTap {
+  _SequenceTap(this.event, this.entry) {
+    _minimumTimeTimer = Timer(kDoubleTapMinTime, () {
+      minimumTimeElapsed = true;
+    });
+  }
+
+  final PointerDownEvent event;
+  final GestureArenaEntry entry;
+  GestureDisposition? disposition;
+  late final Timer _minimumTimeTimer;
+  bool minimumTimeElapsed = false;
+
+  void dispose() => _minimumTimeTimer.cancel();
 }

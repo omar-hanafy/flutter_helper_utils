@@ -4,9 +4,13 @@ title: Navigator Extension
 
 # Navigator Extension
 
+Page helpers construct `material_ui.MaterialPageRoute`. Navigator and Route
+primitives remain shared Flutter types.
+
 ## popPage
 
-To pop the current page and optionally pass back a result.
+Request back navigation through `Navigator.maybePop`; `PopScope` may veto it.
+Use `context.forcePopPage()` for a direct `Navigator.pop` that bypasses the veto.
 
 ```dart
 context.popPage();
@@ -29,12 +33,12 @@ var navState = context.navigator();
 var rootNavState = context.navigator(rootNavigator: true);
 ```
 
-## canPop
+## canPopPage
 
 Check if the current route can be popped.
 
 ```dart
-bool canPop = context.canPop;
+bool canPop = context.canPopPage;
 ```
 
 ## pushPage
@@ -42,61 +46,61 @@ bool canPop = context.canPop;
 To push a new page onto the navigation stack.
 
 ```dart
-context.pPage(MyNewPage());
+context.pushPage(MyNewPage());
 ```
 
-## pushReplacement
+## pushReplacementPage
 
 To replace the current page with a new one.
 
 ```dart
-context.pReplacement(MyNewPage());
+context.pushReplacementPage(MyNewPage());
 ```
 
-## pushAndRemoveUntil
+## pushPageAndClearStack
 
 To push a page and remove all routes below it.
 
 ```dart
-context.pAndRemoveUntil(MyNewPage());
+context.pushPageAndClearStack(MyNewPage());
 ```
 
-## pushNamedAndRemoveUntil
+## pushNamedRouteAndClearStack
 
 To push a named route and remove all routes below it.
 
 ```dart
-context.pNamedAndRemoveUntil('/myNewPage');
+context.pushNamedRouteAndClearStack('/myNewPage');
 ```
 
-## pushNamed
+## pushNamedRoute
 
 To push a named route.
 
 ```dart
-context.pNamed('/myNewPage');
+context.pushNamedRoute('/myNewPage');
 ```
 
-## pushReplacementNamed
+## pushReplacementNamedRoute
 
 To replace the current route with a named one.
 
 ```dart
-context.pReplacementNamed('/myNewPage');
+context.pushReplacementNamedRoute('/myNewPage');
 ```
 
-## popUntil
+## popUntilNamed
 
 To pop routes until a specific named route is reached.
 
 ```dart
-context.popUntil('/home');
+context.popUntilNamed('/home');
 ```
 
-## dismissActivePopup
+## dismissAllPopups
 
 To dismiss any active pop-up like dialogs, modal bottom sheets, or Cupertino modal popups.
 
 ```dart
-context.dismissActivePopup();
+context.dismissAllPopups();
 ```

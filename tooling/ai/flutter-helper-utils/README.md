@@ -13,7 +13,8 @@ scripts, no telemetry.
 | `adaptive-ui-and-lists-with-flutter-helper-utils` | `PlatformTypeProvider` + `Breakpoint` semantics (upper-bound matching, watch vs read), `TypedListView`/`TypedSliverList`/`buildListView` parameter contracts, scroll-position helpers |
 | `colors-with-flutter-helper-utils` | String-to-Color parsing (CSS vs `0x` hex alpha order), `set*` channel APIs, darken/lighten/shade/tint, WCAG + color-blindness accessibility, reading Colors from Maps/JSON |
 | `migrate-flutter-helper-utils-v8-to-v9` | The v8-to-v9 breaking migration (notifier extraction, color/navigation renames, `dataWhen` to `when`, dart_helper_utils v6 cascade) with detection greps and rename tables |
-| `upgrade-flutter-helper-utils` | Version-aware upgrades: detects the installed version, sequences the v7/v8/v8.5/v9 hops, patch no-ops, future-version fallback |
+| `migrate-flutter-helper-utils-v9-to-v10` | Material UI type migration, minimum SDKs and dependency floors, ancestor lookup and legacy bridge limits |
+| `upgrade-flutter-helper-utils` | Version-aware upgrades: detects the installed version, sequences the v7/v8/v8.5/v9/v10 hops, patch no-ops, future-version fallback |
 
 ## Install - Claude Code
 
@@ -63,7 +64,7 @@ reference repository files and public pub.dev/GitHub URLs - nothing else.
 
 ## Compatibility
 
-- Skills document flutter_helper_utils 9.x (they detect and route older
+- Skills document flutter_helper_utils 10.x (they detect and route older
   versions to the migration skills).
 - Plugin version tracks the package version (`pubspec.yaml` ==
   `.claude-plugin/plugin.json` == `.codex-plugin/plugin.json`), enforced

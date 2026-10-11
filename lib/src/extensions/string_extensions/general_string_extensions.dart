@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 /// Nullable string helpers that derive layout information.
 extension FHUNullSafeStringExtensions on String? {
@@ -6,10 +6,16 @@ extension FHUNullSafeStringExtensions on String? {
   // String get withoutWhiteSpaces => isEmptyOrNull ? '' : this!.replaceAll(RegExp(r'\s+\b|\b\s'), '');
   /// Measures the rendered size of this string using a single-line [TextPainter].
   ///
-  /// A `null` value is treated as empty text.
+  /// A `null` value is treated as empty text. Measurement uses left-to-right
+  /// direction because this getter has no ambient `Directionality` context.
   Size get textSize {
-    final textPainter = TextPainter(text: TextSpan(text: this), maxLines: 1)
-      ..layout();
-    return textPainter.size;
+    final textPainter = TextPainter(
+      text: TextSpan(text: this),
+      textDirection: TextDirection.ltr,
+      maxLines: 1,
+    )..layout();
+    final size = textPainter.size;
+    textPainter.dispose();
+    return size;
   }
 }

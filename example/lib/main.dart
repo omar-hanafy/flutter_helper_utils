@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
+import 'package:material_ui/material_ui.dart';
 
-/// Launches the v9 example showcase.
+/// Launches the v10 example showcase.
 void main() {
   runApp(const PlatformTypeProvider(child: ShowcaseApp()));
 }
@@ -31,7 +31,7 @@ class _ShowcaseAppState extends State<ShowcaseApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'flutter_helper_utils v9',
+      title: 'flutter_helper_utils v10',
       debugShowCheckedModeBanner: false,
       themeMode: _themeMode,
       theme: ThemeData(
@@ -60,7 +60,7 @@ class _ShowcaseAppState extends State<ShowcaseApp> {
   }
 }
 
-/// Home screen that presents the main v9 showcase sections.
+/// Home screen that presents the main v10 showcase sections.
 class ShowcaseHomePage extends StatefulWidget {
   /// Creates the showcase home screen.
   const ShowcaseHomePage({
@@ -121,6 +121,7 @@ class _ShowcaseHomePageState extends State<ShowcaseHomePage> {
 
     return Scaffold(
       body: CustomScrollView(
+        key: const ValueKey('showcase-scroll'),
         controller: _scrollController,
         slivers: [
           SliverToBoxAdapter(
@@ -139,8 +140,7 @@ class _ShowcaseHomePageState extends State<ShowcaseHomePage> {
             sliverHeader: const SliverToBoxAdapter(
               child: _SectionShell(
                 title: 'Capability index',
-                subtitle:
-                    'A sliver-powered feature list that opens focused detail screens with the v9 navigation helpers.',
+                subtitle: 'A sliver-powered feature list that opens focused detail screens with the v10 navigation helpers.',
                 child: SizedBox.shrink(),
               ),
             ),
@@ -152,8 +152,7 @@ class _ShowcaseHomePageState extends State<ShowcaseHomePage> {
           SliverToBoxAdapter(
             child: _SectionShell(
               title: 'Parsed palette',
-              subtitle:
-                  'These swatches come from CSS-like color strings parsed by `tryToColor` and displayed with contrast-aware labels.',
+              subtitle: 'These swatches come from CSS-like color strings parsed by `tryToColor` and displayed with contrast-aware labels.',
               child: Wrap(
                 spacing: 16,
                 runSpacing: 16,
@@ -171,8 +170,7 @@ class _ShowcaseHomePageState extends State<ShowcaseHomePage> {
           SliverToBoxAdapter(
             child: _SectionShell(
               title: 'Context report',
-              subtitle:
-                  'Adaptive layout, platform reporting, and theme shortcuts all in one place.',
+              subtitle: 'Adaptive layout, platform reporting, and theme shortcuts all in one place.',
               child: PlatformInfoLayoutBuilder(
                 builder: (context, info) => _ContextBoard(info: info),
               ),
@@ -181,14 +179,14 @@ class _ShowcaseHomePageState extends State<ShowcaseHomePage> {
           SliverToBoxAdapter(
             child: _SectionShell(
               title: 'Tiny interaction lab',
-              subtitle:
-                  'A focused text field and a keyboard dismiss action using the current focus helper naming.',
+              subtitle: 'A focused text field and a keyboard dismiss action using the current focus helper naming.',
               child: ThemeWithoutEffects(
                 noHoverColor: false,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextField(
+                      key: const ValueKey('focus-demo-field'),
                       controller: _focusDemoController,
                       decoration: InputDecoration(
                         labelText: 'Type something, then dismiss focus',
@@ -242,7 +240,7 @@ class _ShowcaseHomePageState extends State<ShowcaseHomePage> {
               padding: const EdgeInsets.fromLTRB(24, 8, 24, 40),
               child: Text(
                 'For migration specifics, read migration_guides.md. '
-                'For everything else, this example is the current v9 reference.',
+                'For everything else, this example is the current v10 reference.',
                 style: theme.bodySmall,
               ),
             ),
@@ -374,7 +372,7 @@ class _HeroCopy extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'flutter_helper_utils v9',
+          'flutter_helper_utils v10',
           style: theme.labelLarge?.copyWith(
             letterSpacing: 1.4,
             color: theme.primary,
@@ -394,7 +392,7 @@ class _HeroCopy extends StatelessWidget {
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 520),
           child: Text(
-            'This example is a clean v9 showcase: adaptive layout, parsed colors, '
+            'This example is a clean v10 showcase: adaptive layout, parsed colors, '
             'typed sliver lists, focused BuildContext helpers, and a small opt-in '
             'sugar layer when you actually want it.',
             style: theme.titleMedium?.copyWith(height: 1.45),
@@ -470,7 +468,7 @@ class _HeroCopy extends StatelessWidget {
           duration: const Duration(milliseconds: 250),
           child: secretUnlocked
               ? Text(
-                  'Unlocked note: v9 is trying to feel smaller on purpose.',
+                  'Unlocked note: v10 is trying to feel smaller on purpose.',
                   key: const ValueKey('secret'),
                   style: theme.bodyMedium?.copyWith(
                     color: theme.primary,
@@ -589,6 +587,7 @@ class _FeatureRow extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
+        key: ValueKey('feature-$index'),
         borderRadius: 28.allCircular,
         onTap: () => context.pushPage(FeatureDetailsPage(feature: feature)),
         child: Ink(
@@ -664,7 +663,7 @@ class _FeatureRow extends StatelessWidget {
 }
 
 /// Detail page used to inspect a single showcased package capability.
-class FeatureDetailsPage extends StatelessWidget {
+class FeatureDetailsPage extends StatefulWidget {
   /// Creates the feature detail page.
   const FeatureDetailsPage({required this.feature, super.key});
 
@@ -672,37 +671,55 @@ class FeatureDetailsPage extends StatelessWidget {
   final DemoFeature feature;
 
   @override
+  State<FeatureDetailsPage> createState() => _FeatureDetailsPageState();
+}
+
+class _FeatureDetailsPageState extends State<FeatureDetailsPage> {
+  bool _allowPop = true;
+
+  @override
   Widget build(BuildContext context) {
     final theme = context.themeData;
-    final accent = tryToColor(feature.accentSpec) ?? theme.primary;
+    final accent = tryToColor(widget.feature.accentSpec) ?? theme.primary;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(feature.title)),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return PopScope<void>(
+      canPop: _allowPop,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          context.showSnackBar(
+            const SnackBar(content: Text('Back blocked by PopScope.')),
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: Text(widget.feature.title)),
+        body: ListView(
+          key: const ValueKey('feature-details-scroll'),
+          padding: const EdgeInsets.all(24),
           children: [
-            Container(
-              width: 72,
-              height: 72,
-              decoration: BoxDecoration(
-                color: accent.setOpacity(0.14),
-                borderRadius: 24.allCircular,
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: accent.setOpacity(0.14),
+                  borderRadius: 24.allCircular,
+                ),
+                child: Icon(widget.feature.icon, color: accent, size: 36),
               ),
-              child: Icon(feature.icon, color: accent, size: 36),
             ),
             20.heightBox(),
             Text(
-              feature.title,
+              widget.feature.title,
               style: theme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.w800,
               ),
             ),
             12.heightBox(),
-            Text(feature.summary, style: theme.titleMedium),
+            Text(widget.feature.summary, style: theme.titleMedium),
             20.heightBox(),
-            ...feature.highlights.map(
+            ...widget.feature.highlights.map(
               (highlight) => Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: Row(
@@ -715,11 +732,23 @@ class FeatureDetailsPage extends StatelessWidget {
                 ),
               ),
             ),
-            const Spacer(),
+            SwitchListTile(
+              title: const Text('Allow back navigation'),
+              subtitle: const Text('popPage respects the PopScope guard.'),
+              value: _allowPop,
+              onChanged: (value) => setState(() => _allowPop = value),
+            ),
+            20.heightBox(),
             FilledButton.icon(
-              onPressed: () => context.forcePopPage(),
+              onPressed: () => context.popPage(),
               icon: const Icon(Icons.arrow_back_rounded),
               label: const Text('Back to showcase'),
+            ),
+            12.heightBox(),
+            OutlinedButton.icon(
+              onPressed: () => context.forcePopPage(),
+              icon: const Icon(Icons.exit_to_app_rounded),
+              label: const Text('Force back to showcase'),
             ),
           ],
         ),
@@ -872,8 +901,7 @@ class PaletteEntry {
 const List<DemoFeature> _features = [
   DemoFeature(
     title: 'Adaptive UI',
-    summary:
-        'Breakpoints, platform info, and layout builders that work high in the tree.',
+    summary: 'Breakpoints, platform info, and layout builders that work high in the tree.',
     icon: Icons.devices_rounded,
     accentSpec: '#F97316',
     highlights: [
@@ -884,16 +912,14 @@ const List<DemoFeature> _features = [
   ),
   DemoFeature(
     title: 'Color toolkit',
-    summary:
-        'Parse, inspect, transform, and audit colors with one coherent surface.',
+    summary: 'Parse, inspect, transform, and audit colors with one coherent surface.',
     icon: Icons.palette_outlined,
     accentSpec: 'rgb(14 165 233)',
     highlights: ['tryToColor', 'toHex', 'contrastColor', 'WCAG utilities'],
   ),
   DemoFeature(
     title: 'Typed sliver lists',
-    summary:
-        'Typed builders for sliver-heavy screens without giving up layout control.',
+    summary: 'Typed builders for sliver-heavy screens without giving up layout control.',
     icon: Icons.view_stream_rounded,
     accentSpec: 'hsl(142 72% 40%)',
     highlights: [
@@ -912,8 +938,7 @@ const List<DemoFeature> _features = [
   ),
   DemoFeature(
     title: 'Scroll helpers',
-    summary:
-        'Readable scroll actions that help demos and product screens stay ergonomic.',
+    summary: 'Readable scroll actions that help demos and product screens stay ergonomic.',
     icon: Icons.swipe_vertical_rounded,
     accentSpec: '#0F766E',
     highlights: ['animateToStart', 'scrollToPercentage', 'animateToEnd'],

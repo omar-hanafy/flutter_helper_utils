@@ -223,9 +223,9 @@ void _checkSkillLinks(String skillDir, String mdPath, String content) {
       _fail('$mdPath: absolute link target "$target" is not portable.');
       continue;
     }
-    final normalized = Uri(
-      path: '${File(mdPath).parent.path}/$target',
-    ).normalizePath().path;
+    final normalized = Uri(path: '${File(mdPath).parent.path}/$target')
+        .normalizePath()
+        .path;
     if (!normalized.startsWith('$skillDir/')) {
       _fail(
         '$mdPath: link "$target" escapes the skill directory; skills must '

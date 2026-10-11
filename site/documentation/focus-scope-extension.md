@@ -1,5 +1,5 @@
 ---
-FocusScope Extension
+title: FocusScope Extension
 ---
 
 # FocusScope Extension
@@ -15,18 +15,18 @@ var nearestFocusScope = context.focusScope;
 
 To remove focus, you can use the following code:
 ```dart
-context.unFocus;
+context.unfocus();
 ```
 
 ## Requesting Focus
 
-You can request focus directly within a callback like this:
+Request focus for a `FocusNode` owned and disposed by your widget:
 ```dart
-onTap: () => context.requestFocus
+onTap: () => context.focusScopeNoDependency.requestFocus(targetNode),
 ```
-Or you can use the provided `GestureTapCallback`:
+Or use the node's callback directly:
 ```dart
-onTap: context.requestFocusCall
+onTap: targetNode.requestFocus,
 ```
 
 ## Checking if a Node Has Focus

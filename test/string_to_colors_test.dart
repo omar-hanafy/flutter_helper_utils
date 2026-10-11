@@ -1,5 +1,6 @@
 import 'package:dart_helper_utils/dart_helper_utils.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show debugPrint;
+import 'package:flutter/painting.dart';
 import 'package:flutter_helper_utils/src/extensions/flutter_extensions/colors/colors.dart';
 import 'package:flutter_test/flutter_test.dart';
 

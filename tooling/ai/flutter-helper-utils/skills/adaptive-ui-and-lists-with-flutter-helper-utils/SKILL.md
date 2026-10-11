@@ -79,9 +79,11 @@ Assert matrix (violations crash in debug):
 
 Behavior notes:
 
-- `onEndReached` fires on scroll notifications whenever remaining extent
-  <= threshold and `isLoadingMore` is false - keep `isLoadingMore` true
-  until the fetch settles or it will re-fire.
+- In v10, `onEndReached` responds only to the list's own scroll notifications
+  when remaining extent <= threshold and `isLoadingMore` is false. It prevents
+  another request while the callback's returned future is pending, including
+  across parent rebuilds. Return the complete fetch operation. In older
+  versions, set `isLoadingMore` before another scroll notification can arrive.
 - `showScrollbar: true` wraps in `Scrollbar` using the SAME `controller`
   you pass; provide one when you enable it.
 - `buildListView` eagerly copies the iterable to a list.
@@ -101,7 +103,7 @@ controllers with `hasSingleClient`.
 ## Step 0: Inspect the project first
 
 1. Resolved version: `grep -A2 'flutter_helper_utils' pubspec.lock`
-   (9.x documented here; `TypedListView` pre-8.5 had `itemBuilder(item)`
+   (10.x documented here; `TypedListView` pre-8.5 had `itemBuilder(item)`
    and `headerBuilder`/`footerBuilder` - see the migrate skill).
 2. Find existing providers: `grep -rn "PlatformTypeProvider" lib/` -
    nesting a second provider silently re-scopes breakpoints.
@@ -119,6 +121,7 @@ controllers with `hasSingleClient`.
   provider is missing or below the calling context - move it up.
 - List crashes with "Provide either separatorBuilder or spacing" (or the
   itemExtent variants): remove one side of the XOR pair.
-- `onEndReached` firing repeatedly: `isLoadingMore` is not being set.
+- `onEndReached` firing repeatedly: return the fetch future and keep
+  `isLoadingMore` true while any separately owned loading operation is active.
 - Theme/media-query/navigation helpers: use-flutter-helper-utils skill;
   color parsing: colors-with-flutter-helper-utils skill.

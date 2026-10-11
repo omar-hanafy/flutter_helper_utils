@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_private_typedef_functions
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
+import 'package:flutter/painting.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
 /// A callback function that converts an element to a [Color].

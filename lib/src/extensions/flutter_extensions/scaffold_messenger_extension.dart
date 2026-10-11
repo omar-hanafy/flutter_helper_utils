@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Convenience accessors and forwarding methods for [ScaffoldMessenger].
 extension FHUScaffoldMessengerExtension on BuildContext {

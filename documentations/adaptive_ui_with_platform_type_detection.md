@@ -157,7 +157,7 @@ if (breakpoint.isWatch) {
 ### Complete Example with customizations
 
 ```dart
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
 const watchBreakPoint = Breakpoint(size: Size(250, 250), name: 'watch');

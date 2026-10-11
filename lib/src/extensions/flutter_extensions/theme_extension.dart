@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_helper_utils/src/extensions/flutter_extensions/flutter_extensions.dart';
 
 /// Adds theme-focused convenience lookups to [BuildContext].

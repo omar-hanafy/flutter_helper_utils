@@ -16,7 +16,7 @@ never existed - use the exact names below instead of memory.
 1. FHU's own surface: context extensions, colors, widgets, `PlatformEnv`,
    AsyncSnapshot helpers, and everything in `sugar.dart`.
 2. ALL of `package:dart_helper_utils` (DHU) - which itself re-exports all
-   of `collection`, all of `convert_object`, and exactly five intl symbols
+   of `collection`, all of `convert_object`, all of `stringo`, and exactly five intl symbols
    (`Bidi`, `BidiFormatter`, `DateFormat`, `Intl`, `NumberFormat`).
 
 `import 'package:flutter_helper_utils/sugar.dart';` ALONE is the opt-in
@@ -26,7 +26,7 @@ colors, `PlatformEnv`, or widgets.
 
 Consequences:
 
-- Do NOT add `dart_helper_utils`, `collection`, or `convert_object` imports
+- Do NOT add `dart_helper_utils`, `collection`, `convert_object`, or `stringo` imports
   next to the main FHU import - it already provides them, and duplicates
   invite ambiguous-extension errors.
 - Layering: type conversion questions belong to convert_object; pure-Dart
@@ -36,10 +36,24 @@ Consequences:
 ## Step 0: Inspect the project first
 
 1. Resolved version: `grep -A2 'flutter_helper_utils' pubspec.lock`. This
-   skill documents 9.x. For 8.x-or-older projects, use the
+   skill documents 10.x. For 9.x projects, apply the
+   migrate-flutter-helper-utils-v9-to-v10 skill. For 8.x-or-older projects, use the
    migrate-flutter-helper-utils-v8-to-v9 skill before writing new code.
 2. Match existing style: `grep -rn "flutter_helper_utils" lib/ | head` to
    see which import the project uses; do not mix idioms in one file.
+
+## Material type identity
+
+Import `package:material_ui/material_ui.dart` directly alongside FHU when
+using Material UI. FHU does not re-export it. The theme, scaffold/messenger,
+feedback, carousel and page-route types belong to `material_ui` in 10.x;
+SDK Material types with identical names are distinct. Match MaterialApp,
+Theme, Scaffold, SnackBar and CarouselController ancestors/types together.
+Flutter BuildContext, Widget, Color, Navigator and Route remain shared.
+The deprecated MaterialUiCompatibilityBridge only supplies mapped legacy
+theme/localizations beneath a modern app. It does not convert objects or
+provide legacy scaffold/messenger states. Use the v9-to-v10 migration skill
+when an app still relies on SDK Material.
 
 ## Exact names agents get wrong (verified against source)
 
@@ -133,8 +147,12 @@ snapshot.maybeWhen(orElse: () => const SizedBox.shrink(), done: (d) => Result(d)
   `12.widthBox()`, `8.heightBox()`, `24.squareBox()`, `8.allCircular`
   (BorderRadius), `8.circular` (Radius), `size.toSizedBox()`,
   `0xFF2196F3.color` (sugar import surface).
+- `String?.textSize` measures one line with left-to-right direction and no
+  ambient context; null is empty text.
 - `MultiTapDetector(tapCount: 3, duration: ..., onTap: ..., child: ...)`
-  for hidden/debug gestures (tapCount must be > 1);
+  for hidden/debug gestures (tapCount must be > 1). Duration controls a
+  rolling maximum gap between taps; timeout/completion/cancellation resets
+  progress and reports 0. A competing scroll cancels the tap sequence;
   `GradientWidget(gradient: ..., blendMode: BlendMode.srcIn, child: ...)`
   masks the child's pixels with a gradient.
 
