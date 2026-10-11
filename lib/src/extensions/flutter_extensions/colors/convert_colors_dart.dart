@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_private_typedef_functions
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
+import 'package:flutter/painting.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
 /// A callback function that converts an element to a [Color].
@@ -9,9 +9,8 @@ typedef ColorConverter = Color? Function(Object? element);
 
 /// A utility class for converting objects to Flutter-specific types like [Color].
 ///
-/// This class follows the same pattern as [ConvertObject] from dart_helper_utils,
-/// providing seamless integration for Flutter developers familiar with DHU.
-/// since we cannot inject this directly into dart_helper_utils package, because dart_helper_utils are meant for pure dart only, we had to do it this way.
+/// Complements the [Convert] utilities re-exported from `dart_helper_utils`
+/// with conversions that depend on Flutter's color types.
 abstract class FConvertObject {
   /// Build standardized args map for rich [ConversionException]s.
   @visibleForTesting

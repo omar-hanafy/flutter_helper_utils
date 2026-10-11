@@ -2,7 +2,7 @@
 // ignore_for_file: avoid_private_typedef_functions
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 

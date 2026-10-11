@@ -1,8 +1,12 @@
 ---
-title: MediaQuery Extension
+title: Theme Extension
 ---
 
 # Theme Extension
+
+These helpers use `package:material_ui/material_ui.dart` theme types. Place
+your context below a `material_ui.MaterialApp` or matching `Theme`; SDK Material
+theme types are different.
 
 ## themeData
 
@@ -12,12 +16,12 @@ Quickly get the current `ThemeData` from the nearest `Theme` widget ancestor in 
 final theme = context.themeData;
 ```
 
-## txtTheme
+## textTheme
 
 Effortlessly obtain the `TextTheme` for your context.
 
 ```dart
-final textTheme = context.txtTheme;
+final textTheme = context.textTheme;
 ```
 
 ## brightness
@@ -61,12 +65,12 @@ class ThemedText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Access text theme and brightness
-    final textTheme = context.txtTheme;
+    final textTheme = context.textTheme;
     final isDarkMode = context.isDark;
 
     return Text(
       text,
-      style: textTheme.bodyText1?.copyWith(
+      style: textTheme.bodyLarge?.copyWith(
         color: isDarkMode ? Colors.white : Colors.black,
       ),
     );

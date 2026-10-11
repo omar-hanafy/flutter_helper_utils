@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart' show ItemExtentBuilder;
 
 import 'package:flutter_helper_utils/src/widgets/typed_list_view.dart'
@@ -88,8 +88,8 @@ class TypedSliverList<E> extends StatelessWidget {
   /// Creates a typed sliver section with optional headers, footers, and loading UI.
   const TypedSliverList({
     // Content
-    required List<E> items,
-    required TypedListViewBuilder<E> itemBuilder,
+    required this._items,
+    required this._itemBuilder,
     super.key,
     this.header,
     this.footer,
@@ -124,9 +124,7 @@ class TypedSliverList<E> extends StatelessWidget {
     // Infinite scroll sentinel
     this.onEndReached,
     this.isLoadingMore = false,
-  }) : _items = items,
-       _itemBuilder = itemBuilder,
-       assert(
+  }) : assert(
          !(separatorBuilder != null && spacing != null),
          'Provide either separatorBuilder or spacing, not both.',
        ),

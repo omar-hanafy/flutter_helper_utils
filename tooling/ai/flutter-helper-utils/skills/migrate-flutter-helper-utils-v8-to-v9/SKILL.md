@@ -87,8 +87,8 @@ on `BuildContext` now:
 | `context.pNamedAndRemoveUntil(name, pred)` | `context.pushNamedRouteAndRemoveUntil(name, pred)` |
 | `context.dismissActivePopup()` | `context.dismissAllPopups()` |
 
-Also in 9.2: `context.maybePopPage()` is DEPRECATED (removal planned for
-v10). Use `context.popPage()` (respects `PopScope` guards via `maybePop`)
+Also in 9.2: `context.maybePopPage()` is DEPRECATED; the alias remains
+available in v10. Use `context.popPage()` (respects `PopScope` guards via `maybePop`)
 or `context.forcePopPage()` (direct pop, bypasses guards).
 
 ## Step 6: Focus and AsyncSnapshot (detect: `grep -rnE "unFocus|dataWhen" lib/`)

@@ -1,3 +1,117 @@
+# Version 10.0.0
+
+Version 10 moves Material-specific APIs from Flutter's SDK Material library to
+[`material_ui`](https://pub.dev/packages/material_ui). Upgrade from the published
+9.2.1 release with Flutter **3.47.7 or newer** and Dart **3.13.5 or newer**.
+
+## Dependencies and imports
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_helper_utils: ^10.0.0
+  material_ui: ^1.6.0
+```
+
+Declare `material_ui` directly when your app imports it. Keep the existing FHU
+main or `sugar.dart` import, and replace SDK Material imports in migrated code:
+
+```dart
+import 'package:material_ui/material_ui.dart';
+import 'package:flutter_helper_utils/flutter_helper_utils.dart';
+```
+
+FHU exports its helpers and `dart_helper_utils`; it does **not** re-export the
+Material library. Avoid importing both Material libraries without prefixes in
+the same file. The shared Flutter `BuildContext`, `Widget`, `Color`,
+`TextStyle`, `Navigator`, and `Route` primitives retain their identity.
+
+## Material types and widget ancestors
+
+The similarly named Material types in the two libraries are different types.
+Switch explicit type annotations, theme construction, controllers, and widget
+ancestors together:
+
+| Affected surface | Version 10 contract |
+| --- | --- |
+| `context.themeData`, `textTheme`, `primaryTextTheme`, `colorScheme`, component theme getters | `material_ui` theme types and inherited widgets |
+| ThemeData, TextTheme, ColorScheme extensions and `toThemeData()` | Extend or produce `material_ui` types |
+| `ThemeMode` extensions, `context.targetPlatform`, nullable-context platform predicates | Read or extend `material_ui` themes and types |
+| `context.materialLocalizations` | Read `material_ui` localizations |
+| `context.defaultTabController`, `defaultTabControllerOrNull` | Return `material_ui.TabController` from a modern `DefaultTabController` |
+| `context.scaffold`, `scaffoldOrNull` | `material_ui.ScaffoldState` from a `material_ui.Scaffold` |
+| Scaffold messenger helpers, `showSnackBar`, `showMaterialBanner` | `material_ui` state, widgets, controllers, and close-reason enums |
+| `context.pushPage` and other widget-to-page helpers | Construct `material_ui.MaterialPageRoute` |
+| Carousel helpers | Extend `material_ui.CarouselController` |
+| `ThemeWithoutEffects`, typed-list scrollbars, and `TypedListView(onRefresh:)` | Use `material_ui` themes, Scrollbar, and RefreshIndicator |
+
+For example, `ThemeData theme = context.themeData` compiles when `ThemeData`
+comes from `material_ui`. It cannot be assigned to an SDK Material `ThemeData`.
+An SDK Material `CarouselController` no longer receives FHU carousel extensions.
+Use a `material_ui.MaterialApp` and migrate the `Scaffold`, theme, and feedback
+widgets that participate in these helpers. An SDK Material app cannot provide
+these Material-specific ancestors merely by changing an import in a leaf file.
+
+`context.popPage()` still requests `Navigator.maybePop`, so `PopScope` may veto
+it. The deprecated `context.maybePopPage()` alias remains available.
+`context.forcePopPage()` still calls `Navigator.pop`. Route-taking and
+named-route helpers continue to use Flutter's shared navigation primitives.
+
+## Temporary support for legacy widgets
+
+`material_ui` 1.6.0 includes `MaterialUiCompatibilityBridge` for third-party
+widgets that still use SDK Material. It wraps a subtree under a modern Material
+app with a mapped **legacy theme and legacy localizations**. The bridge is
+already deprecated and is intended only while dependencies migrate.
+
+It does not convert Material objects or controllers, supply a legacy Scaffold
+or ScaffoldMessenger state, make the two Material type systems interchangeable,
+or provide modern ancestors under a legacy app. Its theme mapping copies a
+subset of theme data; do not rely on it to preserve arbitrary theme extensions
+or every component theme. Migrate the app's own Material code, and verify any
+remaining legacy subtree on the platforms you support.
+
+## Dart helper dependency floor
+
+Version 10 requires `dart_helper_utils >=6.1.0 <7.0.0` and `intl >=0.20.3 <0.21.0`.
+The main FHU import continues to export the whole Dart helper surface, including
+`stringo` through `dart_helper_utils`. Version 9.2.1 already allowed resolving
+Dart Helper Utils 6.1.0, so this change raises the minimum rather than adding a
+new FHU string API.
+
+If your old lockfile used Dart Helper Utils 6.0.x, review its 6.1.0 migration:
+ordinary calls such as `'value'.toSnakeCase` stay available, but explicit
+extension names for moved string helpers now use `StringCaseExtensions`,
+`NullableStringCaseExtensions`, `StringTransformExtensions`,
+`NullableStringTransformExtensions`, and `StringChecksExtensions`.
+`toTitleCase`/`toTitle` now capitalize a leading stop word, and `mask` rejects
+negative visible counts with `ArgumentError`.
+
+## Corrected helper behavior
+
+`textSize` now works without an ambient context, using left-to-right,
+single-line text measurement and treating null as empty text. It no longer
+throws because TextPainter lacks a direction.
+
+`MultiTapDetector.duration` now controls the rolling gap between taps, including
+custom gaps shorter or longer than the SDK's default tap timeout. Progress
+resets after completion, timeout, or gesture cancellation, and reports `0` on
+reset. A competing scroll gesture can cancel the tap sequence.
+
+`TypedListView.onEndReached` ignores nested scrollables and serializes requests:
+another request cannot start until the returned future completes. The existing
+`isLoadingMore` flag also suppresses requests. Return the complete loading
+operation from the callback so the list can track it across rebuilds.
+
+## Verify the upgrade
+
+Run `flutter pub get`, `flutter analyze`, and your test suite after migrating.
+Exercise theme lookup, snackbars/banners, page transitions and back handling,
+carousels, tab controllers, refresh indicators, and typed-list pagination in a
+running app. Compilation alone cannot
+prove that migrated inherited widgets or legacy subtrees behave correctly.
+
 # Version 9.0.0
 
 ## Summary

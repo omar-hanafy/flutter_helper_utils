@@ -1,5 +1,33 @@
 # CHANGELOG
 
+## 10.0.0
+
+### Breaking
+
+- Require Flutter 3.47.7 and Dart 3.13.5 or newer.
+- Migrate Material helpers and widgets to `material_ui ^1.6.0`. Apps must
+  migrate their Material imports, types, themes, and widget ancestors together.
+  SDK Material types are not interchangeable with Material UI types. See
+  `migration_guides.md` for the affected APIs and bridge limitations.
+- Raise dependency floors to `dart_helper_utils ^6.1.0` and `intl ^0.20.3`.
+  The main library still re-exports Dart Helper Utils; users upgrading from
+  6.0.x should review the moved string extension names and title-casing changes.
+
+### Fixed
+
+- Make nullable-string `textSize` work without a context by supplying a text
+  direction and disposing the text painter after measurement.
+- Make `MultiTapDetector` honor custom gaps between taps, reset after completed
+  sequences, and cancel progress when a competing gesture wins. Preserve serial
+  tap behavior for interactive children, held taps, and mouse buttons.
+- Prevent overlapping `TypedListView.onEndReached` requests while a load is
+  pending, including across parent rebuilds, and ignore nested scrollables.
+
+### Documentation
+
+- Add v9-to-v10 migration instructions and a matching AI plugin migration skill.
+- Update the example app to demonstrate the standalone Material APIs.
+
 ## 9.2.1
 
 No Dart API changes.

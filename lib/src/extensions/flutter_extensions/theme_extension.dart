@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_helper_utils/src/extensions/flutter_extensions/flutter_extensions.dart';
 
 /// Adds theme-focused convenience lookups to [BuildContext].
@@ -1465,7 +1465,8 @@ extension FHUThemeDataColorSchemeEx on ThemeData {
 extension FHUThemeModeEx on ThemeMode? {
   /// Resolves this theme mode to an effective [Brightness].
   ///
-  /// `null` and [ThemeMode.system] both fall back to [BuildContext.sysBrightness].
+  /// `null` and [ThemeMode.system] both fall back to
+  /// [FHUThemeExtension.sysBrightness].
   Brightness getBrightness(BuildContext context) {
     switch (this) {
       case ThemeMode.light:

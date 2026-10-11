@@ -1,22 +1,30 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart' show ScrollCacheExtent;
+import 'package:flutter/widgets.dart';
+import 'package:flutter/rendering.dart' as rendering show ScrollCacheExtent;
+import 'package:material_ui/material_ui.dart' show RefreshIndicator, Scrollbar;
 
 /// Item builder for [TypedListView]. Includes [BuildContext] for idiomatic Flutter
 /// usage and access to inherited widgets, plus the item index and value.
-typedef TypedListViewBuilder<T> =
-    Widget Function(BuildContext context, int index, T item);
+typedef TypedListViewBuilder<T> = Widget Function(
+  BuildContext context,
+  int index,
+  T item,
+);
 
 /// Builder that returns a stable key for an item. Used to compute a correct
 /// flattened index for keyed children when headers/separators/etc. are present.
 typedef ItemKeyBuilder<T> = Key Function(T item);
 
-ScrollCacheExtent? _resolveScrollCacheExtent({
+rendering.ScrollCacheExtent? _resolveScrollCacheExtent({
   required double? cacheExtent,
-  required ScrollCacheExtent? scrollCacheExtent,
+  required rendering.ScrollCacheExtent? scrollCacheExtent,
 }) {
   return scrollCacheExtent ??
-      (cacheExtent != null ? ScrollCacheExtent.pixels(cacheExtent) : null);
+      (cacheExtent != null
+          ? rendering.ScrollCacheExtent.pixels(cacheExtent)
+          : null);
 }
 
 /// Extension on [Iterable] to build a [TypedListView] directly.
@@ -62,7 +70,7 @@ extension IterableTypedListViewExtension<E> on Iterable<E> {
       'ScrollCacheExtent.pixels(cacheExtent).',
     )
     double? cacheExtent,
-    ScrollCacheExtent? scrollCacheExtent,
+    rendering.ScrollCacheExtent? scrollCacheExtent,
     int? semanticChildCount,
     DragStartBehavior dragStartBehavior = DragStartBehavior.start,
     ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
@@ -140,6 +148,9 @@ extension IterableTypedListViewExtension<E> on Iterable<E> {
 ///   `findChildIndexCallback` under the hood, even with header/separators/etc.
 /// - `itemExtent`/`prototypeItem` must only be used when every child has the
 ///   same extent (no header/footer/separators/pagination/spacing).
+/// - `onEndReached` responds only to this list's scroll notifications. Another
+///   request cannot start while its returned future is pending or
+///   `isLoadingMore` is true.
 class TypedListView<E> extends StatelessWidget {
   /// Creates a typed [ListView] with optional chrome and loading helpers.
   ///
@@ -149,8 +160,8 @@ class TypedListView<E> extends StatelessWidget {
   /// `ScrollCacheExtent.pixels(cacheExtent)`.
   const TypedListView({
     // Content
-    required List<E> items,
-    required TypedListViewBuilder<E> itemBuilder,
+    required this._items,
+    required this._itemBuilder,
     super.key,
     Widget? header,
     Widget? footer,
@@ -159,41 +170,38 @@ class TypedListView<E> extends StatelessWidget {
     IndexedWidgetBuilder? separatorBuilder,
     double? spacing,
     Widget? paginationWidget,
-    WidgetBuilder? emptyBuilder,
+    this._emptyBuilder,
 
-    // Scrolling/behavior
-    EdgeInsetsGeometry? padding,
-    ScrollPhysics? physics,
-    bool shrinkWrap = false,
-    bool addAutomaticKeepAlives = true,
-    bool addRepaintBoundaries = true,
-    bool addSemanticIndexes = true,
-    Axis scrollDirection = Axis.vertical,
-    bool reverse = false,
-    ScrollController? controller,
-    bool? primary,
+    this._padding,
+    this._physics,
+    this._shrinkWrap = false,
+    this._addAutomaticKeepAlives = true,
+    this._addRepaintBoundaries = true,
+    this._addSemanticIndexes = true,
+    this._scrollDirection = Axis.vertical,
+    this._reverse = false,
+    this._controller,
+    this._primary,
     double? itemExtent,
     Widget? prototypeItem,
-    ItemKeyBuilder<E>? itemKeyBuilder,
+    this._itemKeyBuilder,
     @Deprecated(
       'Use scrollCacheExtent instead. This parameter maps to '
       'ScrollCacheExtent.pixels(cacheExtent).',
     )
     double? cacheExtent,
-    ScrollCacheExtent? scrollCacheExtent,
-    int? semanticChildCount,
-    DragStartBehavior dragStartBehavior = DragStartBehavior.start,
-    ScrollViewKeyboardDismissBehavior keyboardDismissBehavior =
-        ScrollViewKeyboardDismissBehavior.manual,
-    String? restorationId,
-    Clip clipBehavior = Clip.hardEdge,
+    rendering.ScrollCacheExtent? scrollCacheExtent,
+    this._semanticChildCount,
+    this._dragStartBehavior = DragStartBehavior.start,
+    this._keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
+    this._restorationId,
+    this._clipBehavior = Clip.hardEdge,
 
-    // Quality-of-life
-    bool showScrollbar = false,
-    Future<void> Function()? onRefresh,
-    Future<void> Function()? onEndReached,
-    double onEndReachedThreshold = 200,
-    bool isLoadingMore = false,
+    this._showScrollbar = false,
+    this._onRefresh,
+    this._onEndReached,
+    this._onEndReachedThreshold = 200,
+    this._isLoadingMore = false,
   }) : assert(
          !(separatorBuilder != null && spacing != null),
          'Provide either separatorBuilder or spacing, not both.',
@@ -224,39 +232,15 @@ class TypedListView<E> extends StatelessWidget {
          cacheExtent == null || scrollCacheExtent == null,
          'Provide either cacheExtent or scrollCacheExtent, not both.',
        ),
-       _items = items,
-       _itemBuilder = itemBuilder,
        _header = header,
        _footer = footer,
        _separatorBuilder = separatorBuilder,
        _spacing = spacing,
        _paginationWidget = paginationWidget,
-       _emptyBuilder = emptyBuilder,
-       _padding = padding,
-       _physics = physics,
-       _shrinkWrap = shrinkWrap,
-       _addAutomaticKeepAlives = addAutomaticKeepAlives,
-       _addRepaintBoundaries = addRepaintBoundaries,
-       _addSemanticIndexes = addSemanticIndexes,
-       _scrollDirection = scrollDirection,
-       _reverse = reverse,
-       _controller = controller,
-       _primary = primary,
        _itemExtent = itemExtent,
        _prototypeItem = prototypeItem,
-       _itemKeyBuilder = itemKeyBuilder,
        _cacheExtent = cacheExtent,
-       _scrollCacheExtent = scrollCacheExtent,
-       _semanticChildCount = semanticChildCount,
-       _dragStartBehavior = dragStartBehavior,
-       _keyboardDismissBehavior = keyboardDismissBehavior,
-       _restorationId = restorationId,
-       _clipBehavior = clipBehavior,
-       _showScrollbar = showScrollbar,
-       _onRefresh = onRefresh,
-       _onEndReached = onEndReached,
-       _onEndReachedThreshold = onEndReachedThreshold,
-       _isLoadingMore = isLoadingMore;
+       _scrollCacheExtent = scrollCacheExtent;
 
   // Content
   final List<E> _items;
@@ -285,7 +269,7 @@ class TypedListView<E> extends StatelessWidget {
   final Widget? _prototypeItem;
   final ItemKeyBuilder<E>? _itemKeyBuilder;
   final double? _cacheExtent;
-  final ScrollCacheExtent? _scrollCacheExtent;
+  final rendering.ScrollCacheExtent? _scrollCacheExtent;
   final int? _semanticChildCount;
   final DragStartBehavior _dragStartBehavior;
   final ScrollViewKeyboardDismissBehavior _keyboardDismissBehavior;
@@ -315,7 +299,9 @@ class TypedListView<E> extends StatelessWidget {
     final showEmpty = _items.isEmpty && _emptyBuilder != null;
     final effectiveScrollCacheExtent =
         _scrollCacheExtent ??
-        (_cacheExtent != null ? ScrollCacheExtent.pixels(_cacheExtent) : null);
+        (_cacheExtent != null
+            ? rendering.ScrollCacheExtent.pixels(_cacheExtent)
+            : null);
 
     // Build a flattened findChildIndexCallback that accounts for header/separators/etc.
     ChildIndexGetter? effectiveFindChildIndexCallback;
@@ -375,20 +361,6 @@ class TypedListView<E> extends StatelessWidget {
     );
 
     // Compose QoL wrappers
-    if (_onEndReached != null) {
-      list = NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          final metrics = notification.metrics;
-          if (metrics.extentAfter <= _onEndReachedThreshold &&
-              !_isLoadingMore) {
-            _onEndReached.call();
-          }
-          return false;
-        },
-        child: list,
-      );
-    }
-
     if (_onRefresh != null) {
       list = RefreshIndicator(onRefresh: _onRefresh, child: list);
     }
@@ -397,7 +369,12 @@ class TypedListView<E> extends StatelessWidget {
       list = Scrollbar(controller: _controller, child: list);
     }
 
-    return list;
+    return _EndReachedListener(
+      onEndReached: _onEndReached,
+      threshold: _onEndReachedThreshold,
+      isLoadingMore: _isLoadingMore,
+      child: list,
+    );
   }
 
   int _flattenedIndexForItem(int itemIndex) {
@@ -511,4 +488,51 @@ class TypedListView<E> extends StatelessWidget {
 
     return const SizedBox.shrink();
   }
+}
+
+class _EndReachedListener extends StatefulWidget {
+  const _EndReachedListener({
+    required this.onEndReached,
+    required this.threshold,
+    required this.isLoadingMore,
+    required this.child,
+  });
+
+  final Future<void> Function()? onEndReached;
+  final double threshold;
+  final bool isLoadingMore;
+  final Widget child;
+
+  @override
+  State<_EndReachedListener> createState() => _EndReachedListenerState();
+}
+
+class _EndReachedListenerState extends State<_EndReachedListener> {
+  bool _requestPending = false;
+
+  Future<void> _requestPage(Future<void> Function() load) async {
+    _requestPending = true;
+    try {
+      await load();
+    } finally {
+      _requestPending = false;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          final load = widget.onEndReached;
+          if (notification.depth == 0 &&
+              load != null &&
+              !_requestPending &&
+              !widget.isLoadingMore &&
+              notification.metrics.extentAfter <= widget.threshold) {
+            unawaited(_requestPage(load));
+          }
+          return false;
+        },
+        child: widget.child,
+      );
 }

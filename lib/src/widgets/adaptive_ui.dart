@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_helper_utils/flutter_helper_utils.dart';
 
 /// Default mobile breakpoint constant used throughout the package.
@@ -221,7 +221,7 @@ class PlatformTypeProvider extends StatelessWidget {
   /// Creates an instance of [PlatformTypeProvider].
   ///
   /// [child] - The widget below this widget in the tree.
-  /// [breakpoints] - Defines the breakpoints used for platform type detection.
+  /// [breakpoints] defines the breakpoints used for platform type detection.
   const PlatformTypeProvider({
     required this.child,
     this.breakpoints = Breakpoint.defaults,
@@ -319,7 +319,7 @@ class PlatformInfoLayoutBuilder extends StatelessWidget {
   /// Creates an instance of [PlatformInfoLayoutBuilder].
   ///
   /// [builder] - A function that takes the [BuildContext] and [PlatformSizeInfo] to build the widget.
-  /// [breakpoints] - Defines the breakpoints used for platform type detection.
+  /// Uses breakpoints configured by the nearest [PlatformTypeProvider].
   const PlatformInfoLayoutBuilder({required this.builder, super.key});
 
   /// Builds a widget from the current [PlatformSizeInfo].

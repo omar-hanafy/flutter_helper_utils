@@ -29,7 +29,8 @@
   </tr>
 </table>
 
-Version 9 intentionally makes the package smaller and more deliberate.
+Version 10 uses the extracted `material_ui` library for Material-specific helpers.
+Requires Flutter 3.47.7+ and Dart 3.13.5+.
 
 ## Documentation
 
@@ -45,7 +46,7 @@ This repository ships a package-specific **agent plugin** for
 not a runtime feature of the Flutter package). It teaches the agent the
 exact flutter_helper_utils APIs - breakpoint/adaptive-UI semantics,
 TypedListView contracts, color parsing and WCAG helpers, navigation and
-theme member names, the v8-to-v9 breaking migration, and version-aware
+theme member names, the v8-to-v9 and v9-to-v10 breaking migrations, and version-aware
 upgrades.
 
 Install in **Claude Code**:
@@ -79,7 +80,7 @@ capability list, updating, and uninstalling are in
 
 ```yaml
 dependencies:
-  flutter_helper_utils: ^9.2.0
+  flutter_helper_utils: ^10.0.0
 ```
 
 ## Imports
@@ -95,6 +96,12 @@ If you only want the shortcut-heavy surface, use the opt-in sugar import:
 ```dart
 import 'package:flutter_helper_utils/sugar.dart';
 ```
+
+For Material widgets and helpers, also depend on `material_ui: ^1.6.0` and import
+`package:material_ui/material_ui.dart`. FHU does not export Material types.
+Use a `material_ui.MaterialApp` with matching themes and Scaffold widgets.
+SDK Material theme, scaffold, snackbar, and carousel types are distinct; see
+[the v10 migration guide](migration_guides.md#version-1000).
 
 ## Notifiers
 
@@ -228,21 +235,14 @@ Included widgets and widget systems:
 
 ## Migration
 
-Version 9 includes several breaking changes:
-
-- notifier utilities moved to `better_value_notifier`
-- deprecated `Color.add*` aliases removed
-- `GradientWidget.gradientAlignment` removed
-- explicit navigation naming finalized
-- focus helper naming finalized
-
-For the full v9 migration guide, read
-[`migration_guides.md`](migration_guides.md).
+Version 10 changes Material-specific API types to `material_ui` and raises the
+SDK and dependency minimums. Read [`migration_guides.md`](migration_guides.md)
+for the v9-to-v10 migration, legacy widget bridge limitations, and earlier hops.
 
 ## Example
 
-The example app in `example/` was rebuilt for v9 and acts as the current visual
-reference for the package surface.
+The example app in `example/` demonstrates the current package surface with
+`material_ui`, including theme, navigation, colors, adaptive UI, and typed lists.
 
 ## License
 

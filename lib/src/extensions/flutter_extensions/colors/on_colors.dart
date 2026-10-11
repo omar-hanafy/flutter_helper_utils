@@ -3,7 +3,8 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart' show WidgetStateProperty;
 
 /// WCAG contrast level requirements
 enum WCAGLevel {
@@ -78,8 +79,8 @@ extension FHUColorExt on Color {
   /// - [threshold]: The WCAG luminance cutoff, above which this color
   ///   is considered "light." Defaults to 0.179 (commonly used in WCAG).
   Color contrastColor({
-    Color light = Colors.white,
-    Color dark = Colors.black,
+    Color light = const Color(0xFFFFFFFF),
+    Color dark = const Color(0xFF000000),
     double threshold = 0.179,
   }) {
     final aligned = _toSRGB();
@@ -191,7 +192,11 @@ extension FHUColorExt on Color {
       amount >= 0 && amount <= 1,
       'Shade amount must be between 0.0 and 1.0',
     );
-    return Color.lerp(_toSRGB(), Colors.black._toSRGB(), amount)!._toSRGB();
+    return Color.lerp(
+      _toSRGB(),
+      (const Color(0xFF000000))._toSRGB(),
+      amount,
+    )!._toSRGB();
   }
 
   /// Creates a "tint" by mixing the color with white in sRGB.
@@ -201,7 +206,11 @@ extension FHUColorExt on Color {
       amount >= 0 && amount <= 1,
       'Tint amount must be between 0.0 and 1.0',
     );
-    return Color.lerp(_toSRGB(), Colors.white._toSRGB(), amount)!._toSRGB();
+    return Color.lerp(
+      _toSRGB(),
+      (const Color(0xFFFFFFFF))._toSRGB(),
+      amount,
+    )!._toSRGB();
   }
 
   // ------------------------------------------------------
@@ -465,7 +474,7 @@ extension FHUColorExt on Color {
   ///
   /// Example:
   /// ```dart
-  /// final background = Colors.white;
+  /// final background = const Color(0xFFFFFFFF);
   /// final text = Colors.grey;
   /// if (!background.meetsWCAG(text)) {
   ///   print('Text color does not meet accessibility standards');
@@ -496,8 +505,8 @@ extension FHUColorExt on Color {
   ({Color normalText, Color largeText, Color uiComponent})
   suggestAccessibleColors({WCAGLevel level = WCAGLevel.aa}) {
     // Start with simple black or white
-    final black = Colors.black._toSRGB();
-    final white = Colors.white._toSRGB();
+    final black = (const Color(0xFF000000))._toSRGB();
+    final white = (const Color(0xFFFFFFFF))._toSRGB();
 
     final blackContrast = contrast(black);
     final whiteContrast = contrast(white);

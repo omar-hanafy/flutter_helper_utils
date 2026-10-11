@@ -1,4 +1,4 @@
-# flutter_helper_utils 9.x - API quick reference
+# flutter_helper_utils 10.x - API quick reference
 
 Complete per-domain member tables, verified against the package source.
 (g) marks getters. Workflow guidance lives in [../SKILL.md](../SKILL.md).
@@ -7,8 +7,12 @@ Complete per-domain member tables, verified against the package source.
 
 | Import | Contents |
 |---|---|
-| `package:flutter_helper_utils/flutter_helper_utils.dart` | everything: FHU + all of dart_helper_utils (which re-exports collection, convert_object, and `Bidi`/`BidiFormatter`/`DateFormat`/`Intl`/`NumberFormat` from intl) |
+| `package:flutter_helper_utils/flutter_helper_utils.dart` | everything: FHU + all of dart_helper_utils (which re-exports collection, convert_object, stringo, and `Bidi`/`BidiFormatter`/`DateFormat`/`Intl`/`NumberFormat` from intl) |
 | `package:flutter_helper_utils/sugar.dart` | opt-in subset: context extensions (carousel, directionality, focus, media query, navigation, on-numbers, scaffold messenger, scroll, theme), num/Size sugar, `int.color`, string `textSize`, platform checks |
+
+Material-specific types in this reference are from `material_ui`, imported
+directly by the consumer. SDK Material types are distinct. Shared Flutter
+primitives retain their identity.
 
 ## BuildContext - theme (FHUThemeExtension)
 
@@ -182,7 +186,8 @@ Size: `toSizedBox({child})`, `scaled(factor)`, `aspectRatio()`,
 `withWidth(w)`, `withHeight(h)`, `transpose()`, `isEmpty` (g),
 `maxDimension`/`minDimension` (g).
 int: `color` (g, `Color(this)` - sugar surface).
-String?: `textSize` (g, measured `Size` via TextPainter).
+String?: `textSize` (g, measured `Size` via single-line, left-to-right
+TextPainter; null is empty text; no ambient context needed).
 
 ## Widgets (non-list)
 
@@ -192,7 +197,8 @@ AlignmentDirectional.center})` - ShaderMask over the child; configure
 direction on the Gradient itself.
 `MultiTapDetector({required child, required onTap, tapCount = 3,
 duration = 500ms, onTapProgress})` - tapCount must be > 1;
-`onTapProgress` also fires 0 on reset.
+duration controls the rolling gap between taps. Completion, timeout or
+gesture cancellation resets progress; `onTapProgress` also fires 0 on reset.
 
 Adaptive UI (`PlatformTypeProvider`, `Breakpoint`, builders) and typed
 lists (`TypedListView`, `TypedSliverList`, `buildListView`) are covered in

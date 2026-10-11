@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Navigation extensions on [BuildContext] for Flutter Helper Utils.
 ///
@@ -132,9 +132,7 @@ extension FHUNavigatorExtension on BuildContext {
   ///
   /// Deprecated in favor of [popPage], which keeps the safer maybe-pop behavior
   /// under the shorter default name.
-  @Deprecated(
-    'Use popPage instead. This compatibility alias will be removed in v10.0.0.',
-  )
+  @Deprecated('Use popPage instead.')
   Future<bool> maybePopPage<T extends Object?>([T? result]) =>
       popPage<T>(result);
 
@@ -249,18 +247,18 @@ extension FHUNavigatorExtension on BuildContext {
     Route<T> route, {
     bool rootNavigator = false,
     TO? result,
-  }) => navigator(
-    rootNavigator: rootNavigator,
-  ).pushReplacement<T, TO>(route, result: result);
+  }) =>
+      navigator(rootNavigator: rootNavigator)
+          .pushReplacement<T, TO>(route, result: result);
 
   /// Pushes [route] and removes previous routes until [predicate] is `true`.
   Future<T?> pushRouteAndRemoveUntil<T extends Object?>(
     Route<T> route,
     RoutePredicate predicate, {
     bool rootNavigator = false,
-  }) => navigator(
-    rootNavigator: rootNavigator,
-  ).pushAndRemoveUntil<T>(route, predicate);
+  }) =>
+      navigator(rootNavigator: rootNavigator)
+          .pushAndRemoveUntil<T>(route, predicate);
 
   /// Pushes [route] and clears the entire stack below it.
   ///
@@ -280,9 +278,9 @@ extension FHUNavigatorExtension on BuildContext {
     String routeName, {
     bool rootNavigator = false,
     Object? arguments,
-  }) => navigator(
-    rootNavigator: rootNavigator,
-  ).pushNamed<T>(routeName, arguments: arguments);
+  }) =>
+      navigator(rootNavigator: rootNavigator)
+          .pushNamed<T>(routeName, arguments: arguments);
 
   /// Pushes a named route and replaces the current route.
   Future<T?> pushReplacementNamedRoute<T extends Object?, TO extends Object?>(
@@ -302,9 +300,8 @@ extension FHUNavigatorExtension on BuildContext {
     bool rootNavigator = false,
     TO? result,
     Object? arguments,
-  }) => navigator(
-    rootNavigator: rootNavigator,
-  ).popAndPushNamed<T, TO>(routeName, arguments: arguments, result: result);
+  }) => navigator(rootNavigator: rootNavigator)
+      .popAndPushNamed<T, TO>(routeName, arguments: arguments, result: result);
 
   /// Pushes a named route and removes previous routes until [predicate].
   Future<T?> pushNamedRouteAndRemoveUntil<T extends Object?>(
@@ -312,9 +309,8 @@ extension FHUNavigatorExtension on BuildContext {
     RoutePredicate predicate, {
     bool rootNavigator = false,
     Object? arguments,
-  }) => navigator(
-    rootNavigator: rootNavigator,
-  ).pushNamedAndRemoveUntil<T>(routeName, predicate, arguments: arguments);
+  }) => navigator(rootNavigator: rootNavigator)
+      .pushNamedAndRemoveUntil<T>(routeName, predicate, arguments: arguments);
 
   /// Pushes a named route and clears the entire stack below it.
   ///
@@ -341,9 +337,9 @@ extension FHUNavigatorExtension on BuildContext {
     required Route<dynamic> oldRoute,
     required Route<T> newRoute,
     bool rootNavigator = false,
-  }) => navigator(
-    rootNavigator: rootNavigator,
-  ).replace<T>(oldRoute: oldRoute, newRoute: newRoute);
+  }) =>
+      navigator(rootNavigator: rootNavigator)
+          .replace<T>(oldRoute: oldRoute, newRoute: newRoute);
 
   /// Replaces the route immediately below [anchorRoute] with [newRoute].
   ///
@@ -353,9 +349,9 @@ extension FHUNavigatorExtension on BuildContext {
     required Route<dynamic> anchorRoute,
     required Route<T> newRoute,
     bool rootNavigator = false,
-  }) => navigator(
-    rootNavigator: rootNavigator,
-  ).replaceRouteBelow<T>(anchorRoute: anchorRoute, newRoute: newRoute);
+  }) =>
+      navigator(rootNavigator: rootNavigator)
+          .replaceRouteBelow<T>(anchorRoute: anchorRoute, newRoute: newRoute);
 
   /// Immediately removes [route] from the navigator (no animation).
   ///
@@ -374,9 +370,9 @@ extension FHUNavigatorExtension on BuildContext {
     Route<T> anchorRoute, {
     bool rootNavigator = false,
     T? result,
-  }) => navigator(
-    rootNavigator: rootNavigator,
-  ).removeRouteBelow<T>(anchorRoute, result);
+  }) =>
+      navigator(rootNavigator: rootNavigator)
+          .removeRouteBelow<T>(anchorRoute, result);
 
   // Restorable navigation (Named routes).
   //
@@ -389,9 +385,9 @@ extension FHUNavigatorExtension on BuildContext {
     String routeName, {
     bool rootNavigator = false,
     Object? arguments,
-  }) => navigator(
-    rootNavigator: rootNavigator,
-  ).restorablePushNamed<T>(routeName, arguments: arguments);
+  }) =>
+      navigator(rootNavigator: rootNavigator)
+          .restorablePushNamed<T>(routeName, arguments: arguments);
 
   /// Restorable version of [pushReplacementNamedRoute].
   String
@@ -413,8 +409,8 @@ extension FHUNavigatorExtension on BuildContext {
     bool rootNavigator = false,
     TO? result,
     Object? arguments,
-  }) =>
-      navigator(rootNavigator: rootNavigator).restorablePopAndPushNamed<T, TO>(
+  }) => navigator(rootNavigator: rootNavigator)
+      .restorablePopAndPushNamed<T, TO>(
         routeName,
         result: result,
         arguments: arguments,
@@ -455,9 +451,9 @@ extension FHUNavigatorExtension on BuildContext {
     RestorableRouteBuilder<T> routeBuilder, {
     bool rootNavigator = false,
     Object? arguments,
-  }) => navigator(
-    rootNavigator: rootNavigator,
-  ).restorablePush<T>(routeBuilder, arguments: arguments);
+  }) =>
+      navigator(rootNavigator: rootNavigator)
+          .restorablePush<T>(routeBuilder, arguments: arguments);
 
   /// Restorable push-replacement with a [RestorableRouteBuilder].
   String restorablePushReplacementRoute<T extends Object?, TO extends Object?>(
@@ -465,8 +461,8 @@ extension FHUNavigatorExtension on BuildContext {
     bool rootNavigator = false,
     TO? result,
     Object? arguments,
-  }) =>
-      navigator(rootNavigator: rootNavigator).restorablePushReplacement<T, TO>(
+  }) => navigator(rootNavigator: rootNavigator)
+      .restorablePushReplacement<T, TO>(
         routeBuilder,
         result: result,
         arguments: arguments,
@@ -526,9 +522,8 @@ extension FHUNavigatorExtension on BuildContext {
   /// Uses the root navigator by default to catch overlays above nested
   /// navigators. Pass `rootNavigator: false` to target only the nearest.
   void dismissAllPopups({bool rootNavigator = true}) {
-    maybeNavigator(
-      rootNavigator: rootNavigator,
-    )?.popUntil((route) => route is! PopupRoute);
+    maybeNavigator(rootNavigator: rootNavigator)
+        ?.popUntil((route) => route is! PopupRoute);
   }
 
   // Gesture status.
